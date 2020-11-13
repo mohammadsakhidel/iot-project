@@ -1,0 +1,576 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AccountExpirationDate" xml:space="preserve">
+    <value>تاریخ اتمام اعتبار</value>
+  </data>
+  <data name="ActiveAccount" xml:space="preserve">
+    <value>حساب فعال</value>
+  </data>
+  <data name="Address" xml:space="preserve">
+    <value>آدرس</value>
+  </data>
+  <data name="ApiErrorMessage" xml:space="preserve">
+    <value>خطایی در ارتباط با سرور رخ داده است، لطفاً مجدداً تلاش کنید.</value>
+  </data>
+  <data name="AppName" xml:space="preserve">
+    <value>کوکید</value>
+  </data>
+  <data name="AreYouSure" xml:space="preserve">
+    <value>آیا اطمینان دارید؟</value>
+  </data>
+  <data name="BirthDate" xml:space="preserve">
+    <value>تاریخ تولد</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>انصراف</value>
+  </data>
+  <data name="Color" xml:space="preserve">
+    <value>رنگ</value>
+  </data>
+  <data name="ConfigTerminal" xml:space="preserve">
+    <value>پیکربندی دستگاه</value>
+  </data>
+  <data name="Confirm" xml:space="preserve">
+    <value>تأیید</value>
+  </data>
+  <data name="Customer" xml:space="preserve">
+    <value>مشتری</value>
+  </data>
+  <data name="Customers" xml:space="preserve">
+    <value>مشتریان</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>حذف</value>
+  </data>
+  <data name="Edit" xml:space="preserve">
+    <value>ویرایش</value>
+  </data>
+  <data name="EditCustomer" xml:space="preserve">
+    <value>ویرایش اطلاعات مشتری</value>
+  </data>
+  <data name="Email" xml:space="preserve">
+    <value>ایمیل</value>
+  </data>
+  <data name="ErrorMessageBoxCaption" xml:space="preserve">
+    <value>خطا</value>
+  </data>
+  <data name="Female" xml:space="preserve">
+    <value>زن</value>
+  </data>
+  <data name="Footer" xml:space="preserve">
+    <value>تمامی حقوق برای KOOKID محفوظ است.</value>
+  </data>
+  <data name="FullName" xml:space="preserve">
+    <value>نام و نام خانوادگی</value>
+  </data>
+  <data name="Gender" xml:space="preserve">
+    <value>جنسیت</value>
+  </data>
+  <data name="ID" xml:space="preserve">
+    <value>شناسه</value>
+  </data>
+  <data name="InitialValidity" xml:space="preserve">
+    <value>اعتبار اولیه</value>
+  </data>
+  <data name="InputRequiredFields" xml:space="preserve">
+    <value>لطفاً فیلدهای اجباری را مشخص نمایید.</value>
+  </data>
+  <data name="InvalidEmailAddress" xml:space="preserve">
+    <value>ایمیل وارد شده معتبر نیست.</value>
+  </data>
+  <data name="InvalidPasswordConfirm" xml:space="preserve">
+    <value>تکرار گذرواژه صحیح نیست</value>
+  </data>
+  <data name="InvalidPhoneNumber" xml:space="preserve">
+    <value>شماره همراه وارد شده معتبر نیست.</value>
+  </data>
+  <data name="Male" xml:space="preserve">
+    <value>مرد</value>
+  </data>
+  <data name="Manufacturer_DeviceID" xml:space="preserve">
+    <value>شناسه دستگاه / تولیدکننده</value>
+  </data>
+  <data name="Marketer" xml:space="preserve">
+    <value>بازاریاب</value>
+  </data>
+  <data name="MessageBoxCaption" xml:space="preserve">
+    <value>پیام سیستم</value>
+  </data>
+  <data name="Model" xml:space="preserve">
+    <value>مدل</value>
+  </data>
+  <data name="New" xml:space="preserve">
+    <value>جدید</value>
+  </data>
+  <data name="NewCustomer" xml:space="preserve">
+    <value>مشتری جدید</value>
+  </data>
+  <data name="NewTerminal" xml:space="preserve">
+    <value>ثبت دستگاه جدید</value>
+  </data>
+  <data name="No" xml:space="preserve">
+    <value>خیر</value>
+  </data>
+  <data name="NoLimitAccount" xml:space="preserve">
+    <value>نامحدود</value>
+  </data>
+  <data name="OneMonthAccount" xml:space="preserve">
+    <value>یک ماهه</value>
+  </data>
+  <data name="OneYearAccount" xml:space="preserve">
+    <value>یک ساله</value>
+  </data>
+  <data name="Password" xml:space="preserve">
+    <value>گذرواژه</value>
+  </data>
+  <data name="PasswordConfirm" xml:space="preserve">
+    <value>تکرار گذرواژه</value>
+  </data>
+  <data name="PhoneNumber" xml:space="preserve">
+    <value>شماره همراه</value>
+  </data>
+  <data name="PleaseWait" xml:space="preserve">
+    <value>لطفاً صبور باشید...</value>
+  </data>
+  <data name="PortNumber" xml:space="preserve">
+    <value>شماره پورت</value>
+  </data>
+  <data name="Product" xml:space="preserve">
+    <value>محصول</value>
+  </data>
+  <data name="product_kids_watch" xml:space="preserve">
+    <value>ساعت کودک</value>
+  </data>
+  <data name="product_model_q50" xml:space="preserve">
+    <value>مدل کیو 50</value>
+  </data>
+  <data name="product_model_variant_black" xml:space="preserve">
+    <value>سیاه</value>
+  </data>
+  <data name="product_model_variant_blue" xml:space="preserve">
+    <value>آبی</value>
+  </data>
+  <data name="product_model_variant_pink" xml:space="preserve">
+    <value>صورتی</value>
+  </data>
+  <data name="product_model_variant_yellow" xml:space="preserve">
+    <value>زرد</value>
+  </data>
+  <data name="Province_City" xml:space="preserve">
+    <value>استان / شهر</value>
+  </data>
+  <data name="QuestionMessageBoxCaption" xml:space="preserve">
+    <value>پرسش</value>
+  </data>
+  <data name="SaveTime" xml:space="preserve">
+    <value>زمان ثبت</value>
+  </data>
+  <data name="Server" xml:space="preserve">
+    <value>سرور</value>
+  </data>
+  <data name="Server_Port" xml:space="preserve">
+    <value>پورت : سرور</value>
+  </data>
+  <data name="SixMonthAccount" xml:space="preserve">
+    <value>6 ماهه</value>
+  </data>
+  <data name="Statements" xml:space="preserve">
+    <value>ملاحظات</value>
+  </data>
+  <data name="SuccessfullyDone" xml:space="preserve">
+    <value>با موفقیت انجام شد</value>
+  </data>
+  <data name="Terminals" xml:space="preserve">
+    <value>دستگاه ها</value>
+  </data>
+  <data name="TestTerminal" xml:space="preserve">
+    <value>تست دستگاه</value>
+  </data>
+  <data name="ThreeMonthAccount" xml:space="preserve">
+    <value>3 ماهه</value>
+  </data>
+  <data name="Type" xml:space="preserve">
+    <value>نوع</value>
+  </data>
+  <data name="UserName" xml:space="preserve">
+    <value>نام کاربری</value>
+  </data>
+  <data name="Variant" xml:space="preserve">
+    <value>نوع</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>بله</value>
+  </data>
+  <data name="EditTerminal" xml:space="preserve">
+    <value>ویرایش اطلاعات دستگاه</value>
+  </data>
+  <data name="Manufacturer" xml:space="preserve">
+    <value>تولیدکننده</value>
+  </data>
+  <data name="TerminalSearch" xml:space="preserve">
+    <value>جستجوی دستگاه</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>جستجو</value>
+  </data>
+  <data name="InvalidPortNumber" xml:space="preserve">
+    <value>شماره پورت وارد شده معتبر نیست.</value>
+  </data>
+  <data name="InvalidTerminalID" xml:space="preserve">
+    <value>شناسه دستگاه وارد شده صحیح نیست.</value>
+  </data>
+  <data name="CenterNumber" xml:space="preserve">
+    <value>شماره تلفن نظارت</value>
+  </data>
+  <data name="ChangeServer" xml:space="preserve">
+    <value>تغییر سرور</value>
+  </data>
+  <data name="Connect" xml:space="preserve">
+    <value>برقراری ارتباط</value>
+  </data>
+  <data name="ConnectToTerminal" xml:space="preserve">
+    <value>ارتباط با دستگاه</value>
+  </data>
+  <data name="Contact1Name" xml:space="preserve">
+    <value>نام مخاطب 1</value>
+  </data>
+  <data name="Contact2Name" xml:space="preserve">
+    <value>نام مخاطب 2</value>
+  </data>
+  <data name="Contact3Name" xml:space="preserve">
+    <value>نام مخاطب 3</value>
+  </data>
+  <data name="Contact4Name" xml:space="preserve">
+    <value>نام مخاطب 4</value>
+  </data>
+  <data name="Contact5Name" xml:space="preserve">
+    <value>نام مخاطب 5</value>
+  </data>
+  <data name="DeviceNotConnectedMessage" xml:space="preserve">
+    <value>ارتباط دستگاه با سرور برقرار نشده است، لطفاً از روشن بودن دستگاه و برقراری ارتباط اینترنت آن اطمینان حاصل کنید.</value>
+  </data>
+  <data name="English" xml:space="preserve">
+    <value>انگلیسی</value>
+  </data>
+  <data name="FactoryReset" xml:space="preserve">
+    <value>بازگشت به تنظیمات کارخانه</value>
+  </data>
+  <data name="FactoryResetWarning" xml:space="preserve">
+    <value>نسبت به بازگشت دستگاه به تنظیمات کارخانه اطمینان دارم</value>
+  </data>
+  <data name="Language" xml:space="preserve">
+    <value>زبان</value>
+  </data>
+  <data name="LanguageAndTimeZone" xml:space="preserve">
+    <value>زبان و منطقه زمانی</value>
+  </data>
+  <data name="LowBatterySms" xml:space="preserve">
+    <value>پیامک اتمام شارژ باتری</value>
+  </data>
+  <data name="LowBatterySmsStatusText" xml:space="preserve">
+    <value>ارسال پیامک اتمام شارژ باتری به شماره ناظر</value>
+  </data>
+  <data name="MakeCall" xml:space="preserve">
+    <value>برقراری تماس</value>
+  </data>
+  <data name="RemoveAlarm" xml:space="preserve">
+    <value>هشدار جداشدن ساعت</value>
+  </data>
+  <data name="RemoveAlarmSms" xml:space="preserve">
+    <value>پیامک جدا شدن ساعت</value>
+  </data>
+  <data name="RemoveAlarmSmsStatusText" xml:space="preserve">
+    <value>ارسال پیامک به شماره تلفن نظارت هنگام جدا شدن ساعت از دست کودک</value>
+  </data>
+  <data name="RemoveAlarmStatusText" xml:space="preserve">
+    <value>ارسال هشدار هنگام جدا شدن ساعت از دست کودک</value>
+  </data>
+  <data name="Seconds" xml:space="preserve">
+    <value>ثانیه</value>
+  </data>
+  <data name="SendCommand" xml:space="preserve">
+    <value>ارسال فرمان</value>
+  </data>
+  <data name="SmsToSOS" xml:space="preserve">
+    <value>پیامک زمان اضطرار</value>
+  </data>
+  <data name="SmsToSOSStatusText" xml:space="preserve">
+    <value>ارسال پیامک به شماره تلفن های تماس اضطراری در زمان اضطرار</value>
+  </data>
+  <data name="Sos1" xml:space="preserve">
+    <value>شماره تماس اضطراری اول</value>
+  </data>
+  <data name="Sos2" xml:space="preserve">
+    <value>شماره تماس اضطراری دوم</value>
+  </data>
+  <data name="Sos3" xml:space="preserve">
+    <value>شماره تماس اضطراری سوم</value>
+  </data>
+  <data name="SosNumbers" xml:space="preserve">
+    <value>شماره های تماس اضطراری</value>
+  </data>
+  <data name="Tehran" xml:space="preserve">
+    <value>تهران</value>
+  </data>
+  <data name="TerminalContacts" xml:space="preserve">
+    <value>مخاطبین دستگاه</value>
+  </data>
+  <data name="TerminalPassword" xml:space="preserve">
+    <value>گذرواژه دستگاه</value>
+  </data>
+  <data name="TimeZone" xml:space="preserve">
+    <value>منطقه زمانی</value>
+  </data>
+  <data name="UploadInterval" xml:space="preserve">
+    <value>فاصه زمانی بارگذاری</value>
+  </data>
+  <data name="InvalidNumber" xml:space="preserve">
+    <value>عدد وارد شده دارای فرمت صحیح نیست</value>
+  </data>
+  <data name="Command" xml:space="preserve">
+    <value>فرمان</value>
+  </data>
+  <data name="Count" xml:space="preserve">
+    <value>تعداد</value>
+  </data>
+  <data name="GetVersionCommand" xml:space="preserve">
+    <value>فرمان پرس و جوی ورژن نرم افزار دستگاه</value>
+  </data>
+  <data name="MakeCallCommand" xml:space="preserve">
+    <value>فرمان برقراری تماس توسط دستگاه</value>
+  </data>
+  <data name="MessageText" xml:space="preserve">
+    <value>متن پیام</value>
+  </data>
+  <data name="PowerOffCommand" xml:space="preserve">
+    <value>فرمان خاموش شدن دستگاه</value>
+  </data>
+  <data name="RestartCommand" xml:space="preserve">
+    <value>فرمان راه اندازی مجدد دستگاه</value>
+  </data>
+  <data name="SelectWavFile" xml:space="preserve">
+    <value>انتخاب فایل صوتی .wav</value>
+  </data>
+  <data name="SendCommandToTerminal" xml:space="preserve">
+    <value>ارسال فرمان به دستگاه</value>
+  </data>
+  <data name="SendFlowersCommand" xml:space="preserve">
+    <value>فرمان ارسال گل برای دستگاه</value>
+  </data>
+  <data name="SendMessageCommand" xml:space="preserve">
+    <value>فرمان ارسال پیام متنی به دستگاه</value>
+  </data>
+  <data name="SendVoiceCommand" xml:space="preserve">
+    <value>فرمان ارسال پیام صوتی به دستگاه</value>
+  </data>
+  <data name="PowerOffWarning" xml:space="preserve">
+    <value>در صورت خاموش کردن دستگاه شما قارد نخواهید بود از طریق نرم افزار آن را روشن کنید و حتما می بایست بصورت دستی روشن شود، آیا اطمینان دارید؟</value>
+  </data>
+  <data name="SelectFileRequired" xml:space="preserve">
+    <value>لطفاً یک فایل را انتخاب نمایید.</value>
+  </data>
+  <data name="AppNameDesc" xml:space="preserve">
+    <value>بچه من کجاست؟</value>
+  </data>
+  <data name="ContactUs" xml:space="preserve">
+    <value>ارتباط با ما</value>
+  </data>
+  <data name="DownloadApplication" xml:space="preserve">
+    <value>دانلود اپلیکیشن</value>
+  </data>
+  <data name="RememberMe" xml:space="preserve">
+    <value>مرا به خاطر بسپار</value>
+  </data>
+  <data name="SignIn" xml:space="preserve">
+    <value>ورود به سیستم</value>
+  </data>
+  <data name="AccountIsBlocked" xml:space="preserve">
+    <value>حساب کاربری شما مسدود شده است.</value>
+  </data>
+  <data name="IncorrectPassword" xml:space="preserve">
+    <value>گذرواژه وارد شده صحیح نیست.</value>
+  </data>
+  <data name="InvalidUserName" xml:space="preserve">
+    <value>نام کاربری وارد شده معتبر نیست.</value>
+  </data>
+  <data name="RequiredPassword" xml:space="preserve">
+    <value>گذرواژه را وارد کنید.</value>
+  </data>
+  <data name="RequiredUserName" xml:space="preserve">
+    <value>نام کاربری را وارد کنید.</value>
+  </data>
+  <data name="SignOut" xml:space="preserve">
+    <value>خروج</value>
+  </data>
+  <data name="SubscriberPanel" xml:space="preserve">
+    <value>امکانات</value>
+  </data>
+  <data name="SubscriberTerminals" xml:space="preserve">
+    <value>دستگاه های شما</value>
+  </data>
+  <data name="AccountSettings" xml:space="preserve">
+    <value>تنظیمات حساب</value>
+  </data>
+  <data name="DearUser" xml:space="preserve">
+    <value>مشترک گرامی</value>
+  </data>
+  <data name="Fence" xml:space="preserve">
+    <value>محدوده مجاز تردد</value>
+  </data>
+  <data name="RouteHistory" xml:space="preserve">
+    <value>تاریخچه مسیر</value>
+  </data>
+  <data name="TerminalConfiguration" xml:space="preserve">
+    <value>پیکربندی دستگاه</value>
+  </data>
+  <data name="Tracking" xml:space="preserve">
+    <value>مکان یابی</value>
+  </data>
+  <data name="User" xml:space="preserve">
+    <value>کاربر</value>
+  </data>
+  <data name="Welcome" xml:space="preserve">
+    <value>خوش آمدید</value>
+  </data>
+  <data name="ErrorConnectingToTheServer" xml:space="preserve">
+    <value>خطایی در ارتباط با سرور رخ داده است، لطفاً مجدداً تلاش کنید.</value>
+  </data>
+  <data name="WebConstantTitle" xml:space="preserve">
+    <value>کوکید | Kookid</value>
+  </data>
+  <data name="LastActivityTime" xml:space="preserve">
+    <value>آخرین فعالیت</value>
+  </data>
+  <data name="DisplayName" xml:space="preserve">
+    <value>عنوان نمایش</value>
+  </data>
+  <data name="Close" xml:space="preserve">
+    <value>بستن</value>
+  </data>
+  <data name="Offline" xml:space="preserve">
+    <value>آفلاین</value>
+  </data>
+  <data name="Online" xml:space="preserve">
+    <value>آنلاین</value>
+  </data>
+  <data name="TerminalsPageDesc" xml:space="preserve">
+    <value>لیست دستگاه های متعلق به شما به شرح زیر است، می توانید عنوان نمایش دستگاه ها را ویرایش نمایید.</value>
+  </data>
+</root>

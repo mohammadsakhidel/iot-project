@@ -1,0 +1,31 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!--Primary-->
+    <SolidColorBrush x:Key="color_primary" Color="#008751"/>
+    <SolidColorBrush x:Key="color_primary_light" Color="#d4f6d3"/>
+    <SolidColorBrush x:Key="color_primary_light_hover" Color="#93d991"/>
+    <SolidColorBrush x:Key="color_primary_dark" Color="#003520"/>
+    <SolidColorBrush x:Key="color_primary_contrast" Color="#ffffff"/>
+
+    <!--Accent-->
+    <SolidColorBrush x:Key="color_accent" Color="#fcd116"/>
+    <SolidColorBrush x:Key="color_accent_light" Color="#fee784" />
+    <SolidColorBrush x:Key="color_accent_dark" Color="#cda700"/>
+    <SolidColorBrush x:Key="color_accent_contrast" Color="#3f3300" />
+
+    <!--Neutral-->
+    <SolidColorBrush x:Key="color_neutral" Color="#ffffff"/>
+    <SolidColorBrush x:Key="color_neutral_light" Color="#ebebec"/>
+    <SolidColorBrush x:Key="color_neutral_dark" Color="#cacaca"/>
+    <SolidColorBrush x:Key="color_neutral_darker" Color="#ababab"/>
+    <SolidColorBrush x:Key="color_neutral_darkest" Color="#444444" />
+
+    <!--Others-->
+    <SolidColorBrush x:Key="color_disabled" Color="#e6e7e8"/>
+    <SolidColorBrush x:Key="color_disabled_contrast" Color="#676767"/>
+    <SolidColorBrush x:Key="color_required_field" Color="#df4242" />
+    <SolidColorBrush x:Key="color_player_bg" Color="#000" />
+    <SolidColorBrush x:Key="color_item_hover" Color="#fff8d9" />
+
+</ResourceDictionary>

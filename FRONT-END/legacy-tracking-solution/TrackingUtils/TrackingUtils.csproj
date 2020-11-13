@@ -1,0 +1,120 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{936BC705-9B90-44C8-9712-865CE5203618}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>TrackingUtils</RootNamespace>
+    <AssemblyName>TrackingUtils</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Constants\Collections.cs" />
+    <Compile Include="Constants\CommandTypes.cs" />
+    <Compile Include="Constants\Configs.cs" />
+    <Compile Include="Constants\Patterns.cs" />
+    <Compile Include="Constants\ProductBag.cs" />
+    <Compile Include="Constants\RoleNames.cs" />
+    <Compile Include="Constants\StringFormats.cs" />
+    <Compile Include="Enums\ApiErrorCode.cs" />
+    <Compile Include="Enums\InitialValidity.cs" />
+    <Compile Include="Objects\Exceptions\CommandFailedException.cs" />
+    <Compile Include="Objects\Exceptions\HttpException.cs" />
+    <Compile Include="Objects\Exceptions\InvalidCommandFormatException.cs" />
+    <Compile Include="Objects\Exceptions\NoConnectionException.cs" />
+    <Compile Include="Objects\Exceptions\NotSupportedCommandException.cs" />
+    <Compile Include="Objects\Exceptions\ValidationException.cs" />
+    <Compile Include="Objects\DataContracts\CommandResponse.cs" />
+    <Compile Include="Objects\Commands\BidirectionalSendVoiceCommand.cs" />
+    <Compile Include="Objects\Commands\Command.cs" />
+    <Compile Include="Objects\Commands\PlatformAllSOSSetCommand.cs" />
+    <Compile Include="Objects\Commands\PlatformCentralNumberSetCommand.cs" />
+    <Compile Include="Objects\Commands\PlatformFindCommand.cs" />
+    <Compile Include="Objects\Commands\PlatformGetTerminalVersionCommand.cs" />
+    <Compile Include="Objects\Commands\PlatformIPSetCommand.cs" />
+    <Compile Include="Objects\Commands\PlatformLanguageZoneSetCommand.cs" />
+    <Compile Include="Objects\Commands\PlatformLowMessageSetCommand.cs" />
+    <Compile Include="Objects\Commands\PlatformMakeCallCommand.cs" />
+    <Compile Include="Objects\Commands\PlatformMonitorCommand.cs" />
+    <Compile Include="Objects\Commands\PlatformPasswordSetCommand.cs" />
+    <Compile Include="Objects\Commands\PlatformPhoneBookFirst5SetCommand.cs" />
+    <Compile Include="Objects\Commands\PlatformPhoneBookLast5SetCommand.cs" />
+    <Compile Include="Objects\Commands\PlatformPowerOffCommand.cs" />
+    <Compile Include="Objects\Commands\PlatformReminderSetCommand.cs" />
+    <Compile Include="Objects\Commands\PlatformRemoveAlarmSetCommand.cs" />
+    <Compile Include="Objects\Commands\PlatformRemoveSMSAlarmSetCommand.cs" />
+    <Compile Include="Objects\Commands\PlatformResetCommand.cs" />
+    <Compile Include="Objects\Commands\PlatformResetFactoryCommand.cs" />
+    <Compile Include="Objects\Commands\PlatformSendMessageCommand.cs" />
+    <Compile Include="Objects\Commands\PlatformShowFlowersCommand.cs" />
+    <Compile Include="Objects\Commands\PlatformSilenceTimeSetCommand.cs" />
+    <Compile Include="Objects\Commands\PlatformSleepTimeSetCommand.cs" />
+    <Compile Include="Objects\Commands\PlatformSOS1SetCommand.cs" />
+    <Compile Include="Objects\Commands\PlatformSOS2SetCommand.cs" />
+    <Compile Include="Objects\Commands\PlatformSOS3SetCommand.cs" />
+    <Compile Include="Objects\Commands\PlatformSOSSMSSetCommand.cs" />
+    <Compile Include="Objects\Commands\PlatformStepFunctionSwitchCommand.cs" />
+    <Compile Include="Objects\Commands\PlatformUploadIntervalSetCommand.cs" />
+    <Compile Include="Objects\Commands\PlatformWakeupPositioningCommand.cs" />
+    <Compile Include="Objects\Commands\PlatformWalkTimeSetCommand.cs" />
+    <Compile Include="Objects\Commands\TerminalAlarmPositionCommand.cs" />
+    <Compile Include="Objects\Commands\TerminalBlindSpotCommand.cs" />
+    <Compile Include="Objects\Commands\TerminalLinkCommand.cs" />
+    <Compile Include="Objects\Commands\TerminalPositionCommand.cs" />
+    <Compile Include="Objects\LocationData.cs" />
+    <Compile Include="Objects\DataContracts\PhoneBookContact.cs" />
+    <Compile Include="Objects\Product.cs" />
+    <Compile Include="Objects\ProductModel.cs" />
+    <Compile Include="Objects\ProductModelVariant.cs" />
+    <Compile Include="Objects\TerminalState.cs" />
+    <Compile Include="Objects\DataContracts\TimePeriod.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Enums\CmdExecStatus.cs" />
+    <Compile Include="Enums\ReminderType.cs" />
+    <Compile Include="Utils\EnumUtil.cs" />
+    <Compile Include="Utils\HttpUtil.cs" />
+    <Compile Include="Utils\MappingUtil.cs" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

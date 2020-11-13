@@ -1,0 +1,365 @@
+﻿<UserControl x:Class="TrackingDesktop.Views.UserControls.ConfigTerminal"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:TrackingDesktop.Views.UserControls"
+             xmlns:toolkit="http://schemas.xceed.com/wpf/xaml/toolkit"
+             xmlns:ram="clr-namespace:RamancoCC;assembly=RamancoCC"
+             xmlns:vm="clr-namespace:TrackingDesktop.Code.ViewModels"
+             Loaded="UserControl_Loaded">
+    <UserControl.DataContext>
+        <vm:ConfigTerminalVM />
+    </UserControl.DataContext>
+
+    <toolkit:BusyIndicator x:Name="progress" BusyContent="{Binding Converter={StaticResource rc}, ConverterParameter=Strings.PleaseWait}">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <!--Page Header-->
+            <StackPanel Orientation="Vertical">
+                <Label Style="{StaticResource page_header}" Content="{Binding Converter={StaticResource rc}, ConverterParameter=Strings.ConfigTerminal}" />
+                <GroupBox Margin="{StaticResource padding_container_top}" Header="{Binding Converter={StaticResource rc}, ConverterParameter=Strings.ConnectToTerminal}">
+                    <StackPanel Orientation="Horizontal">
+                        <Label Content="{Binding Converter={StaticResource rc}, ConverterParameter=Strings.Manufacturer}"></Label>
+                        <ComboBox x:Name="cmbManufacturer" Width="130" SelectedValuePath="Key" DisplayMemberPath="Value" />
+                        <Label Content="{Binding Converter={StaticResource rc}, ConverterParameter=Strings.ID}" 
+                               Margin="{StaticResource padding_container_start}"></Label>
+                        <TextBox x:Name="tbDeviceID" Width="130"></TextBox>
+                        <ram:FlatButton x:Name="btnConnect" Style="{StaticResource flat_button_connect}" Margin="{StaticResource padding_container_start}"
+                                        Content="{Binding Converter={StaticResource rc}, ConverterParameter=Strings.Connect}"
+                                        Click="btnConnect_Click"/>
+                    </StackPanel>
+                </GroupBox>
+            </StackPanel>
+            
+            <!--Page Content-->
+            <ScrollViewer Grid.Row="1" IsEnabled="{Binding Connected}">
+                <StackPanel Orientation="Vertical" Margin="0 12 12 0">
+                    
+                    <!--TerminalPassword-->
+                    <Border Style="{StaticResource item}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Style="{StaticResource item_header}" Text="{Binding Converter={StaticResource rc}, ConverterParameter=Strings.TerminalPassword}"></TextBlock>
+
+                            <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center" Margin="{StaticResource padding_container_start}">
+                                <Label Content="{Binding Converter={StaticResource rc}, ConverterParameter=Strings.Password}"></Label>
+                                <TextBox x:Name="tbSetPasswordParameter" Width="180"></TextBox>
+                            </StackPanel>
+
+                            <ram:FlatButton Grid.Column="1" Style="{StaticResource flat_button_send}" VerticalAlignment="Center" HorizontalAlignment="Right"
+                                            Tag="SetPassword" Content="{Binding Converter={StaticResource rc}, ConverterParameter=Strings.SendCommand}"
+                                            Margin="{StaticResource padding_widget_ver}" Click="SendCommand_Click" />
+                        </Grid>
+                    </Border>
+
+                    <!--CenterNumber-->
+                    <Border Style="{StaticResource item}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Style="{StaticResource item_header}" Text="{Binding Converter={StaticResource rc}, ConverterParameter=Strings.CenterNumber}"></TextBlock>
+
+                            <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center" Margin="{StaticResource padding_container_start}">
+                                <Label Content="{Binding Converter={StaticResource rc}, ConverterParameter=Strings.PhoneNumber}"></Label>
+                                <TextBox x:Name="tbSetCenterNumberParameter" Width="180"></TextBox>
+                            </StackPanel>
+
+                            <ram:FlatButton Grid.Column="1" Style="{StaticResource flat_button_send}" VerticalAlignment="Center" HorizontalAlignment="Right"
+                                            Tag="SetCenterNumber" Content="{Binding Converter={StaticResource rc}, ConverterParameter=Strings.SendCommand}"
+                                            Margin="{StaticResource padding_widget_ver}" Click="SendCommand_Click"/>
+                        </Grid>
+                    </Border>
+
+                    <!--Server-->
+                    <Border Style="{StaticResource item}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Style="{StaticResource item_header}" Text="{Binding Converter={StaticResource rc}, ConverterParameter=Strings.ChangeServer}"></TextBlock>
+
+                            <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center" Margin="{StaticResource padding_container_start}">
+                                <Label Content="{Binding Converter={StaticResource rc}, ConverterParameter=Strings.Server_Port}"></Label>
+                                <StackPanel Orientation="Horizontal" FlowDirection="LeftToRight" HorizontalAlignment="Left">
+                                    <TextBox x:Name="tbServerAddress" Width="180"></TextBox>
+                                    <Label>:</Label>
+                                    <TextBox x:Name="tbServerPort" Width="70"></TextBox>
+                                </StackPanel>
+                                
+                            </StackPanel>
+
+                            <ram:FlatButton Grid.Column="1" Style="{StaticResource flat_button_send}" VerticalAlignment="Center" HorizontalAlignment="Right"
+                                            Tag="SetServer" Content="{Binding Converter={StaticResource rc}, ConverterParameter=Strings.SendCommand}"
+                                            Margin="{StaticResource padding_widget_ver}" Click="SendCommand_Click" />
+                        </Grid>
+                    </Border>
+
+                    <!--Upload Interval-->
+                    <Border Style="{StaticResource item}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Style="{StaticResource item_header}" Text="{Binding Converter={StaticResource rc}, ConverterParameter=Strings.UploadInterval}"></TextBlock>
+
+                            <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center" Margin="{StaticResource padding_container_start}">
+                                <Label Content="{Binding Converter={StaticResource rc}, ConverterParameter=Strings.UploadInterval}"></Label>
+                                <TextBox x:Name="tbUploadInterval" Width="50"></TextBox>
+                                <Label Content="{Binding Converter={StaticResource rc}, ConverterParameter=Strings.Seconds}"></Label>
+                            </StackPanel>
+
+                            <ram:FlatButton Grid.Column="1" Style="{StaticResource flat_button_send}" VerticalAlignment="Center" HorizontalAlignment="Right"
+                                            Tag="SetUploadInterval" Content="{Binding Converter={StaticResource rc}, ConverterParameter=Strings.SendCommand}"
+                                            Margin="{StaticResource padding_widget_ver}" Click="SendCommand_Click"/>
+                        </Grid>
+                    </Border>
+
+                    <!--Language & Time Zone-->
+                    <Border Style="{StaticResource item}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Style="{StaticResource item_header}" Text="{Binding Converter={StaticResource rc}, ConverterParameter=Strings.LanguageAndTimeZone}"></TextBlock>
+
+                            <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center" Margin="{StaticResource padding_container_start}">
+                                <Label Content="{Binding Converter={StaticResource rc}, ConverterParameter=Strings.Language}"></Label>
+                                <ComboBox x:Name="cmbLanguage" SelectedValuePath="Tag" Width="90">
+                                    <ComboBoxItem Content="{Binding Converter={StaticResource rc}, ConverterParameter=Strings.English}" Tag="0" />
+                                </ComboBox>
+                                <Label Content="{Binding Converter={StaticResource rc}, ConverterParameter=Strings.TimeZone}" Margin="{StaticResource padding_container_start}"></Label>
+                                <ComboBox x:Name="cmbTimeZone" SelectedValuePath="Tag" Width="90">
+                                    <ComboBoxItem Content="{Binding Converter={StaticResource rc}, ConverterParameter=Strings.Tehran}" Tag="3.50" />
+                                </ComboBox>
+                            </StackPanel>
+
+                            <ram:FlatButton Grid.Column="1" Style="{StaticResource flat_button_send}" VerticalAlignment="Center" HorizontalAlignment="Right"
+                                            Tag="SetLanguageAndTimeZone" Content="{Binding Converter={StaticResource rc}, ConverterParameter=Strings.SendCommand}"
+                                            Margin="{StaticResource padding_widget_ver}" Click="SendCommand_Click"/>
+                        </Grid>
+                    </Border>
+
+                    <!--SosNumbers-->
+                    <Border Style="{StaticResource item}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Style="{StaticResource item_header}" Text="{Binding Converter={StaticResource rc}, ConverterParameter=Strings.SosNumbers}"></TextBlock>
+
+                            <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center" Margin="{StaticResource padding_container_start}">
+                                <UniformGrid Columns="3">
+                                    <Label Content="{Binding Converter={StaticResource rc}, ConverterParameter=Strings.Sos1}" HorizontalContentAlignment="Center" />
+                                    <Label Content="{Binding Converter={StaticResource rc}, ConverterParameter=Strings.Sos2}" HorizontalContentAlignment="Center" />
+                                    <Label Content="{Binding Converter={StaticResource rc}, ConverterParameter=Strings.Sos3}" HorizontalContentAlignment="Center" />
+                                    <TextBox x:Name="tbSos1" Width="180"></TextBox>
+                                    <TextBox x:Name="tbSos2" Width="180" Margin="{StaticResource padding_container_start}"></TextBox>
+                                    <TextBox x:Name="tbSos3" Width="180" Margin="{StaticResource padding_container_start}"></TextBox>
+                                </UniformGrid>
+                            </StackPanel>
+
+                            <ram:FlatButton Grid.Column="1" Style="{StaticResource flat_button_send}" VerticalAlignment="Center" HorizontalAlignment="Right"
+                                            Tag="SetSosNumbers" Content="{Binding Converter={StaticResource rc}, ConverterParameter=Strings.SendCommand}"
+                                            Margin="{StaticResource padding_widget_ver}" Click="SendCommand_Click" />
+                        </Grid>
+                    </Border>
+                    
+                    <!--Contacts-->
+                    <Border Style="{StaticResource item}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Style="{StaticResource item_header}" Text="{Binding Converter={StaticResource rc}, ConverterParameter=Strings.TerminalContacts}"></TextBlock>
+
+                            <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center" Margin="{StaticResource padding_container_start}">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="auto" />
+                                        <ColumnDefinition Width="auto" />
+                                        <ColumnDefinition Width="auto" />
+                                        <ColumnDefinition Width="auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="{StaticResource grid_row_spacing}" />
+                                        <RowDefinition Height="auto" />
+                                        <RowDefinition Height="{StaticResource grid_row_spacing}" />
+                                        <RowDefinition Height="auto" />
+                                        <RowDefinition Height="{StaticResource grid_row_spacing}" />
+                                        <RowDefinition Height="auto" />
+                                        <RowDefinition Height="{StaticResource grid_row_spacing}" />
+                                        <RowDefinition Height="auto" />
+                                        <RowDefinition Height="{StaticResource grid_row_spacing}" />
+                                        <RowDefinition Height="auto" />
+                                        <RowDefinition Height="{StaticResource grid_row_spacing}" />
+                                    </Grid.RowDefinitions>
+
+                                    <Label Grid.Row="1" Grid.Column="0" Content="{Binding Converter={StaticResource rc}, ConverterParameter=Strings.Contact1Name}" />
+                                    <TextBox Grid.Row="1" Grid.Column="1" x:Name="tbContact1" Width="180"></TextBox>
+                                    <Label Grid.Row="1" Grid.Column="2" Margin="{StaticResource padding_container_start}"
+                                           Content="{Binding Converter={StaticResource rc}, ConverterParameter=Strings.PhoneNumber}" />
+                                    <TextBox Grid.Row="1" Grid.Column="3" x:Name="tbContact1PhoneNumber" Width="180"></TextBox>
+
+                                    <Label Grid.Row="3" Grid.Column="0" Content="{Binding Converter={StaticResource rc}, ConverterParameter=Strings.Contact2Name}" />
+                                    <TextBox Grid.Row="3" Grid.Column="1" x:Name="tbContact2" Width="180"></TextBox>
+                                    <Label Grid.Row="3" Grid.Column="2" Margin="{StaticResource padding_container_start}"
+                                           Content="{Binding Converter={StaticResource rc}, ConverterParameter=Strings.PhoneNumber}" />
+                                    <TextBox Grid.Row="3" Grid.Column="3" x:Name="tbContact2PhoneNumber" Width="180"></TextBox>
+
+                                    <Label Grid.Row="5" Grid.Column="0" Content="{Binding Converter={StaticResource rc}, ConverterParameter=Strings.Contact3Name}" />
+                                    <TextBox Grid.Row="5" Grid.Column="1" x:Name="tbContact3" Width="180"></TextBox>
+                                    <Label Grid.Row="5" Grid.Column="2" Margin="{StaticResource padding_container_start}"
+                                           Content="{Binding Converter={StaticResource rc}, ConverterParameter=Strings.PhoneNumber}" />
+                                    <TextBox Grid.Row="5" Grid.Column="3" x:Name="tbContact3PhoneNumber" Width="180"></TextBox>
+
+                                    <Label Grid.Row="7" Grid.Column="0" Content="{Binding Converter={StaticResource rc}, ConverterParameter=Strings.Contact4Name}" />
+                                    <TextBox Grid.Row="7" Grid.Column="1" x:Name="tbContact4" Width="180"></TextBox>
+                                    <Label Grid.Row="7" Grid.Column="2" Margin="{StaticResource padding_container_start}"
+                                           Content="{Binding Converter={StaticResource rc}, ConverterParameter=Strings.PhoneNumber}" />
+                                    <TextBox Grid.Row="7" Grid.Column="3" x:Name="tbContact4PhoneNumber" Width="180"></TextBox>
+
+                                    <Label Grid.Row="9" Grid.Column="0" Content="{Binding Converter={StaticResource rc}, ConverterParameter=Strings.Contact5Name}" />
+                                    <TextBox Grid.Row="9" Grid.Column="1" x:Name="tbContact5" Width="180"></TextBox>
+                                    <Label Grid.Row="9" Grid.Column="2" Margin="{StaticResource padding_container_start}"
+                                           Content="{Binding Converter={StaticResource rc}, ConverterParameter=Strings.PhoneNumber}" />
+                                    <TextBox Grid.Row="9" Grid.Column="3" x:Name="tbContact5PhoneNumber" Width="180"></TextBox>
+
+                                </Grid>
+                            </StackPanel>
+
+                            <ram:FlatButton Grid.Column="1" Style="{StaticResource flat_button_send}" VerticalAlignment="Center" HorizontalAlignment="Right"
+                                            Tag="SetContacts" Content="{Binding Converter={StaticResource rc}, ConverterParameter=Strings.SendCommand}"
+                                            Margin="{StaticResource padding_widget_ver}" Click="SendCommand_Click" />
+                        </Grid>
+                    </Border>
+
+                    <!--Low Batter SMS-->
+                    <Border Style="{StaticResource item}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Style="{StaticResource item_header}" Text="{Binding Converter={StaticResource rc}, ConverterParameter=Strings.LowBatterySms}"></TextBlock>
+
+                            <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center" Margin="{StaticResource padding_container_start}">
+                                <CheckBox x:Name="chLowBatterySms" Content="{Binding Converter={StaticResource rc}, ConverterParameter=Strings.LowBatterySmsStatusText}" IsChecked="False" />
+                            </StackPanel>
+
+                            <ram:FlatButton Grid.Column="1" Style="{StaticResource flat_button_send}" VerticalAlignment="Center" HorizontalAlignment="Right"
+                                            Tag="SetLowBatterySms" Content="{Binding Converter={StaticResource rc}, ConverterParameter=Strings.SendCommand}"
+                                            Margin="{StaticResource padding_widget_ver}" Click="SendCommand_Click" />
+                        </Grid>
+                    </Border>
+
+                    <!--SMS To SOS-->
+                    <Border Style="{StaticResource item}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Style="{StaticResource item_header}" Text="{Binding Converter={StaticResource rc}, ConverterParameter=Strings.SmsToSOS}"></TextBlock>
+
+                            <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center" Margin="{StaticResource padding_container_start}">
+                                <CheckBox x:Name="chSmsToSOS" Content="{Binding Converter={StaticResource rc}, ConverterParameter=Strings.SmsToSOSStatusText}" IsChecked="False" />
+                            </StackPanel>
+
+                            <ram:FlatButton Grid.Column="1" Style="{StaticResource flat_button_send}" VerticalAlignment="Center" HorizontalAlignment="Right"
+                                            Tag="SetSosSms" Content="{Binding Converter={StaticResource rc}, ConverterParameter=Strings.SendCommand}"
+                                            Margin="{StaticResource padding_widget_ver}" Click="SendCommand_Click" />
+                        </Grid>
+                    </Border>
+
+                    <!--Remove Alarm-->
+                    <Border Style="{StaticResource item}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Style="{StaticResource item_header}" Text="{Binding Converter={StaticResource rc}, ConverterParameter=Strings.RemoveAlarm}"></TextBlock>
+
+                            <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center" Margin="{StaticResource padding_container_start}">
+                                <CheckBox x:Name="chRemoveAlarm" Content="{Binding Converter={StaticResource rc}, ConverterParameter=Strings.RemoveAlarmStatusText}" IsChecked="False" />
+                            </StackPanel>
+
+                            <ram:FlatButton Grid.Column="1" Style="{StaticResource flat_button_send}" VerticalAlignment="Center" HorizontalAlignment="Right"
+                                            Tag="SetRemoveAlarm" Content="{Binding Converter={StaticResource rc}, ConverterParameter=Strings.SendCommand}"
+                                            Margin="{StaticResource padding_widget_ver}" Click="SendCommand_Click" />
+                        </Grid>
+                    </Border>
+
+                    <!--Remove Alarm Sms-->
+                    <Border Style="{StaticResource item}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Style="{StaticResource item_header}" Text="{Binding Converter={StaticResource rc}, ConverterParameter=Strings.RemoveAlarmSms}"></TextBlock>
+
+                            <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center" Margin="{StaticResource padding_container_start}">
+                                <CheckBox x:Name="chRemoveAlarmSms" Content="{Binding Converter={StaticResource rc}, ConverterParameter=Strings.RemoveAlarmSmsStatusText}" IsChecked="False" />
+                            </StackPanel>
+
+                            <ram:FlatButton Grid.Column="1" Style="{StaticResource flat_button_send}" VerticalAlignment="Center" HorizontalAlignment="Right"
+                                            Tag="SetRemoveAlarmSms" Content="{Binding Converter={StaticResource rc}, ConverterParameter=Strings.SendCommand}"
+                                            Margin="{StaticResource padding_widget_ver}" Click="SendCommand_Click" />
+                        </Grid>
+                    </Border>
+
+                    <!--FactoryReset-->
+                    <Border Style="{StaticResource item}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Style="{StaticResource item_header}" Text="{Binding Converter={StaticResource rc}, ConverterParameter=Strings.FactoryReset}"></TextBlock>
+
+                            <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center" Margin="{StaticResource padding_container_start}">
+                                <CheckBox x:Name="chFactoryReset" Foreground="{StaticResource color_required_field}"
+                                          Content="{Binding Converter={StaticResource rc}, ConverterParameter=Strings.FactoryResetWarning}" IsChecked="False" />
+                            </StackPanel>
+
+                            <ram:FlatButton Grid.Column="1" Style="{StaticResource flat_button_send}" VerticalAlignment="Center" HorizontalAlignment="Right"
+                                            Tag="FactoryReset" Content="{Binding Converter={StaticResource rc}, ConverterParameter=Strings.SendCommand}"
+                                            Margin="{StaticResource padding_widget_ver}" Click="SendCommand_Click" 
+                                            IsEnabled="{Binding ElementName=chFactoryReset, Path=IsChecked}" />
+                        </Grid>
+                    </Border>
+                    
+                </StackPanel>
+            </ScrollViewer>
+        </Grid>
+    </toolkit:BusyIndicator>
+    
+</UserControl>

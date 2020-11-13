@@ -1,0 +1,79 @@
+﻿<Window x:Class="TrackingDesktop.Views.Windows.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:TrackingDesktop.Views.Windows"
+        xmlns:ram="clr-namespace:RamancoCC;assembly=RamancoCC"
+        xmlns:loccnv="clr-namespace:TrackingDesktop.Code.Converters"
+        xmlns:vm="clr-namespace:TrackingDesktop.Code.ViewModels"
+        Style="{StaticResource main_window}" 
+        Title="{Binding Converter={StaticResource rc}, ConverterParameter=Strings.AppName}">
+    <Window.DataContext>
+        <vm:MainWindowVM />
+    </Window.DataContext>
+    <Window.Resources>
+        <loccnv:SelectedMenuItemStyleConverter x:Key="selectedMenuItemStyleConverter" />
+    </Window.Resources>
+
+    <Grid Style="{StaticResource main_content}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="auto" />
+        </Grid.RowDefinitions>
+
+        <!--Header-->
+        <Border></Border>
+
+        <!--Middle-->
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="240" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <!--Menu-->
+            <Border Style="{StaticResource menu}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <Image Style="{StaticResource header_logo}" />
+
+                    <ScrollViewer Grid.Row="1">
+                        <StackPanel Orientation="Vertical">
+                            <ram:FlatButton Style="{Binding Content, Converter={StaticResource selectedMenuItemStyleConverter}, ConverterParameter=customers}"
+                                        Content="{Binding Converter={StaticResource rc}, ConverterParameter=Strings.Customers}"
+                                        Click="MenuItem_Click" Tag="Customers"/>
+                            <ram:FlatButton Style="{Binding Content, Converter={StaticResource selectedMenuItemStyleConverter}, ConverterParameter=terminals}"
+                                        Content="{Binding Converter={StaticResource rc}, ConverterParameter=Strings.Terminals}"
+                                        Click="MenuItem_Click" Tag="Terminals"/>
+                            <ram:FlatButton Style="{Binding Content, Converter={StaticResource selectedMenuItemStyleConverter}, ConverterParameter=configterminal}"
+                                        Content="{Binding Converter={StaticResource rc}, ConverterParameter=Strings.ConfigTerminal}"
+                                        Click="MenuItem_Click" Tag="ConfigTerminal"/>
+                            <ram:FlatButton Style="{Binding Content, Converter={StaticResource selectedMenuItemStyleConverter}, ConverterParameter=testterminal}"
+                                        Content="{Binding Converter={StaticResource rc}, ConverterParameter=Strings.TestTerminal}"
+                                        Click="MenuItem_Click" Tag="TestTerminal"/>
+                        </StackPanel>
+                    </ScrollViewer>
+                </Grid>
+            </Border>
+            <GridSplitter Style="{StaticResource menu_splitter}"></GridSplitter>
+
+            <!--Content-->
+            <Border Grid.Column="1" Style="{StaticResource content}">
+                <ContentControl Content="{Binding Content}"></ContentControl>
+            </Border>
+        </Grid>
+
+        <!--Footer-->
+        <Border Style="{StaticResource footer}" Grid.Row="2">
+            <TextBlock Style="{StaticResource footer_text}" Text="{Binding Converter={StaticResource rc}, ConverterParameter=Strings.Footer}"></TextBlock>
+        </Border>
+
+    </Grid>
+
+</Window>

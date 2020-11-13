@@ -1,0 +1,117 @@
+﻿<UserControl x:Class="TrackingDesktop.Views.UserControls.TestTerminal"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:TrackingDesktop.Views.UserControls"
+             xmlns:toolkit="http://schemas.xceed.com/wpf/xaml/toolkit"
+             xmlns:ram="clr-namespace:RamancoCC;assembly=RamancoCC"
+             xmlns:vm="clr-namespace:TrackingDesktop.Code.ViewModels"
+             Loaded="UserControl_Loaded">
+    <UserControl.DataContext>
+        <vm:TestTerminalVM />
+    </UserControl.DataContext>
+
+    <toolkit:BusyIndicator x:Name="progress" BusyContent="{Binding Converter={StaticResource rc}, ConverterParameter=Strings.PleaseWait}">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="auto" />
+            </Grid.RowDefinitions>
+
+            <!--Page Header-->
+            <StackPanel Orientation="Vertical">
+                <Label Style="{StaticResource page_header}" Content="{Binding Converter={StaticResource rc}, ConverterParameter=Strings.TestTerminal}" />
+                <GroupBox Margin="{StaticResource padding_container_top}" Header="{Binding Converter={StaticResource rc}, ConverterParameter=Strings.ConnectToTerminal}">
+                    <StackPanel Orientation="Horizontal">
+                        <Label Content="{Binding Converter={StaticResource rc}, ConverterParameter=Strings.Manufacturer}"></Label>
+                        <ComboBox x:Name="cmbManufacturer" Width="130" SelectedValuePath="Key" DisplayMemberPath="Value" />
+                        <Label Content="{Binding Converter={StaticResource rc}, ConverterParameter=Strings.ID}" 
+                               Margin="{StaticResource padding_container_start}"></Label>
+                        <TextBox x:Name="tbDeviceID" Width="130"></TextBox>
+                        <ram:FlatButton x:Name="btnConnect" Style="{StaticResource flat_button_connect}" Margin="{StaticResource padding_container_start}"
+                                        Content="{Binding Converter={StaticResource rc}, ConverterParameter=Strings.Connect}"
+                                        Click="btnConnect_Click"/>
+                    </StackPanel>
+                </GroupBox>
+            </StackPanel>
+
+            <!--Content-->
+            <GroupBox Grid.Row="1" IsEnabled="{Binding Connected}" Margin="{StaticResource padding_container_top}"
+                      Header="{Binding Converter={StaticResource rc}, ConverterParameter=Strings.SendCommandToTerminal}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="auto" />
+                    </Grid.RowDefinitions>
+                    
+                    <!--Command Selection-->
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                        <Label Content="{Binding Converter={StaticResource rc}, ConverterParameter=Strings.Command}" />
+                        <ComboBox Width="300" x:Name="cmbCommand" SelectedValuePath="Tag">
+                            <ComboBoxItem Tag="MakeCallCommand" Content="{Binding Converter={StaticResource rc}, ConverterParameter=Strings.MakeCallCommand}" />
+                            <ComboBoxItem Tag="PowerOffCommand" Content="{Binding Converter={StaticResource rc}, ConverterParameter=Strings.PowerOffCommand}" />
+                            <ComboBoxItem Tag="RestartCommand" Content="{Binding Converter={StaticResource rc}, ConverterParameter=Strings.RestartCommand}" />
+                            <ComboBoxItem Tag="GetVersionCommand" Content="{Binding Converter={StaticResource rc}, ConverterParameter=Strings.GetVersionCommand}" />
+                            <ComboBoxItem Tag="SendFlowersCommand" Content="{Binding Converter={StaticResource rc}, ConverterParameter=Strings.SendFlowersCommand}" />
+                            <ComboBoxItem Tag="SendMessageCommand" Content="{Binding Converter={StaticResource rc}, ConverterParameter=Strings.SendMessageCommand}" />
+                            <ComboBoxItem Tag="SendVoiceCommand" Content="{Binding Converter={StaticResource rc}, ConverterParameter=Strings.SendVoiceCommand}" />
+                        </ComboBox>
+                    </StackPanel>
+
+                    <!--Commands Parameters-->
+                    <Border BorderThickness="0 1" BorderBrush="{StaticResource color_neutral_light}" Grid.Row="1"
+                            Margin="{StaticResource padding_container_ver}" Padding="{StaticResource padding_container_ver}">
+
+                        <Grid>
+                            <!--MakeCallCommand Parameters-->
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Center"
+                                    Visibility="{Binding ElementName=cmbCommand, Path=SelectedValue, Converter={StaticResource visibilityConverter}, ConverterParameter=MakeCallCommand}">
+                                <Label Content="{Binding Converter={StaticResource rc}, ConverterParameter=Strings.PhoneNumber}" VerticalAlignment="Center"/>
+                                <TextBox x:Name="tbMakeCallPhoneNumber" Width="200" VerticalAlignment="Center" />
+                            </StackPanel>
+
+                            <!--GetVersionCommand Result View-->
+                            <Label x:Name="lblVersion" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontWeight="Bold" FontSize="{StaticResource font_xxlarge}"
+                                   Visibility="{Binding ElementName=cmbCommand, Path=SelectedValue, Converter={StaticResource visibilityConverter}, ConverterParameter=GetVersionCommand}"/>
+
+                            <!--SendFlowersCommand Parameters-->
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Center"
+                                    Visibility="{Binding ElementName=cmbCommand, Path=SelectedValue, Converter={StaticResource visibilityConverter}, ConverterParameter=SendFlowersCommand}">
+                                <Label Content="{Binding Converter={StaticResource rc}, ConverterParameter=Strings.Count}" VerticalAlignment="Center"/>
+                                <TextBox x:Name="tbFlowersCount" Width="80" VerticalAlignment="Center" />
+                            </StackPanel>
+
+                            <!--SendMessageCommand Parameters-->
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Center"
+                                    Visibility="{Binding ElementName=cmbCommand, Path=SelectedValue, Converter={StaticResource visibilityConverter}, ConverterParameter=SendMessageCommand}">
+                                <Label Content="{Binding Converter={StaticResource rc}, ConverterParameter=Strings.MessageText}" VerticalAlignment="Center"/>
+                                <TextBox x:Name="tbMessageText" Width="350" TextWrapping="Wrap" Height="60" AcceptsReturn="True" VerticalAlignment="Center" />
+                            </StackPanel>
+
+                            <!--SendVoiceCommand Parameters-->
+                            <StackPanel VerticalAlignment="Center"
+                                    Visibility="{Binding ElementName=cmbCommand, Path=SelectedValue, Converter={StaticResource visibilityConverter}, ConverterParameter=SendVoiceCommand}">
+                                <ram:FlatButton Content="{Binding Converter={StaticResource rc}, ConverterParameter=Strings.SelectWavFile}" 
+                                                HorizontalAlignment="Center" Style="{StaticResource flat_button_search}" Click="SelectWavFileButton_Click" />
+                                <TextBlock x:Name="txtSelectedVoiceFileName" HorizontalAlignment="Center" Margin="{StaticResource padding_container_top}"/>
+                            </StackPanel>
+                        </Grid>
+
+                    </Border>
+                    
+                    
+                    <!--ActionButton-->
+                    <ram:FlatButton Style="{StaticResource flat_button_send}" Grid.Row="2" Click="CommandButton_Click"
+                                    Content="{Binding Converter={StaticResource rc}, ConverterParameter=Strings.SendCommand}"
+                                    IsEnabled="{Binding ElementName=cmbCommand, Path=SelectedItem, Converter={StaticResource notNullConverter}}"/>
+
+                </Grid>
+            </GroupBox>
+
+        </Grid>
+    </toolkit:BusyIndicator>
+
+</UserControl>

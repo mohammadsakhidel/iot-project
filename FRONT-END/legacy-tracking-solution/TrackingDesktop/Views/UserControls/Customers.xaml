@@ -1,0 +1,111 @@
+﻿<UserControl x:Class="TrackingDesktop.Views.UserControls.Customers"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:TrackingDesktop.Views.UserControls"
+             xmlns:toolkit="http://schemas.xceed.com/wpf/xaml/toolkit"
+             xmlns:ram="clr-namespace:RamancoCC;assembly=RamancoCC"
+             Loaded="UserControl_Loaded">
+
+    <toolkit:BusyIndicator x:Name="progress" BusyContent="{Binding Converter={StaticResource rc}, ConverterParameter=Strings.PleaseWait}">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="auto" />
+            </Grid.RowDefinitions>
+
+            <!--Page Header-->
+            <Label Style="{StaticResource page_header}"
+               Content="{Binding Converter={StaticResource rc}, ConverterParameter=Strings.Customers}" />
+
+            <!--Data Grid-->
+            <DataGrid x:Name="datagrid" Grid.Row="1" Margin="{StaticResource padding_container_ver}">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Binding="{Binding ID}">
+                        <DataGridTextColumn.Header>
+                            <TextBlock Text="{Binding Converter={StaticResource rc}, ConverterParameter=Strings.ID}" />
+                        </DataGridTextColumn.Header>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn>
+                        <DataGridTextColumn.Header>
+                            <TextBlock Text="{Binding Converter={StaticResource rc}, ConverterParameter=Strings.FullName}" />
+                        </DataGridTextColumn.Header>
+                        <DataGridTextColumn.Binding>
+                            <MultiBinding Converter="{StaticResource connectorConverter}">
+                                <Binding Path="AspNetUser.FirstName" />
+                                <Binding Path="AspNetUser.Surname" />
+                            </MultiBinding>
+                        </DataGridTextColumn.Binding>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Binding="{Binding UserName}">
+                        <DataGridTextColumn.Header>
+                            <TextBlock Text="{Binding Converter={StaticResource rc}, ConverterParameter=Strings.UserName}" />
+                        </DataGridTextColumn.Header>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Binding="{Binding AspNetUser.AccountExpirationDate, Converter={StaticResource shortDateConverter}}">
+                        <DataGridTextColumn.Header>
+                            <TextBlock Text="{Binding Converter={StaticResource rc}, ConverterParameter=Strings.AccountExpirationDate}" />
+                        </DataGridTextColumn.Header>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Binding="{Binding AspNetUser.IsActive, Converter={StaticResource boolConverter}}">
+                        <DataGridTextColumn.Header>
+                            <TextBlock Text="{Binding Converter={StaticResource rc}, ConverterParameter=Strings.ActiveAccount}" />
+                        </DataGridTextColumn.Header>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Binding="{Binding AspNetUser.Gender, Converter={StaticResource genderConverter}}">
+                        <DataGridTextColumn.Header>
+                            <TextBlock Text="{Binding Converter={StaticResource rc}, ConverterParameter=Strings.Gender}" />
+                        </DataGridTextColumn.Header>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Binding="{Binding AspNetUser.PhoneNumber}">
+                        <DataGridTextColumn.Header>
+                            <TextBlock Text="{Binding Converter={StaticResource rc}, ConverterParameter=Strings.PhoneNumber}" />
+                        </DataGridTextColumn.Header>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Binding="{Binding AspNetUser.Email}">
+                        <DataGridTextColumn.Header>
+                            <TextBlock Text="{Binding Converter={StaticResource rc}, ConverterParameter=Strings.Email}" />
+                        </DataGridTextColumn.Header>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Binding="{Binding Marketer}">
+                        <DataGridTextColumn.Header>
+                            <TextBlock Text="{Binding Converter={StaticResource rc}, ConverterParameter=Strings.Marketer}" />
+                        </DataGridTextColumn.Header>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Binding="{Binding Address}">
+                        <DataGridTextColumn.Header>
+                            <TextBlock Text="{Binding Converter={StaticResource rc}, ConverterParameter=Strings.Address}" />
+                        </DataGridTextColumn.Header>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Binding="{Binding SaveTimeUtc, Converter={StaticResource shortDateTimeConverter}}">
+                        <DataGridTextColumn.Header>
+                            <TextBlock Text="{Binding Converter={StaticResource rc}, ConverterParameter=Strings.SaveTime}" />
+                        </DataGridTextColumn.Header>
+                    </DataGridTextColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+
+            <!--Action Bar-->
+            <StackPanel Grid.Row="2" Orientation="Horizontal">
+                <ram:FlatButton x:Name="btnCreate" Style="{StaticResource flat_button_add}" Click="btnCreate_Click"
+                                Content="{Binding Converter={StaticResource rc}, ConverterParameter=Strings.New}" />
+
+                <ram:FlatButton x:Name="btnEdit" Style="{StaticResource flat_button_edit}" Margin="{StaticResource padding_container_start}"
+                                Content="{Binding Converter={StaticResource rc}, ConverterParameter=Strings.Edit}" Click="btnEdit_Click"
+                                IsEnabled="{Binding ElementName=datagrid, Path=SelectedItem, Converter={StaticResource notNullConverter}}" />
+
+                <ram:FlatButton x:Name="btnDelete" Style="{StaticResource flat_button_delete}" Margin="{StaticResource padding_container_start}"
+                                Content="{Binding Converter={StaticResource rc}, ConverterParameter=Strings.Delete}" Click="btnDelete_Click"
+                                IsEnabled="{Binding ElementName=datagrid, Path=SelectedItem, Converter={StaticResource notNullConverter}}" />
+
+                <ram:FlatButton x:Name="btnCreateTerminal" Style="{StaticResource flat_button_add}" Click="btnCreateTerminal_Click"
+                                Content="{Binding Converter={StaticResource rc}, ConverterParameter=Strings.NewTerminal}" Margin="{StaticResource padding_container_start}"
+                                IsEnabled="{Binding ElementName=datagrid, Path=SelectedItem, Converter={StaticResource notNullConverter}}" />
+            </StackPanel>
+
+        </Grid>
+    </toolkit:BusyIndicator>
+
+</UserControl>
