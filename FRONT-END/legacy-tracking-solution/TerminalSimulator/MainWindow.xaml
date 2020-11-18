@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:TerminalSimulator"
         xmlns:vm="clr-namespace:TerminalSimulator.Code.ViewModels"
         xmlns:cnv="clr-namespace:TerminalSimulator.Code.Converters"
-        FontFamily="Samim" WindowStartupLocation="CenterScreen"
+        FontFamily="Samim" WindowStartupLocation="CenterScreen" WindowState="Maximized"
         FontSize="11" mc:Ignorable="d" Title="Terminal Simulator" 
         Height="650" Width="900" Loaded="Window_Loaded">
     
@@ -18,7 +18,7 @@
         <cnv:ReverseBooleanConverter x:Key="reverseBooleanConverter" />
     </Window.Resources>
 
-    <Grid FlowDirection="RightToLeft" Margin="16">
+    <Grid Margin="16">
         <Grid.RowDefinitions>
             <RowDefinition Height="auto" />
             <RowDefinition Height="*" />
@@ -28,32 +28,32 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
-        <GroupBox Header="ارتباط با سرور" Padding="16" Grid.ColumnSpan="2"
+        <GroupBox Header="Connecting to the server" Padding="16" Grid.ColumnSpan="2"
                   IsEnabled="{Binding IsConnected, Converter={StaticResource reverseBooleanConverter}}">
             <StackPanel Orientation="Horizontal">
-                <Label>سرور:</Label>
+                <Label>Server:</Label>
                 <TextBox x:Name="tbServer" Width="130"></TextBox>
-                <Label Margin="16 0 0 0">پورت:</Label>
+                <Label Margin="16 0 0 0">Port:</Label>
                 <TextBox x:Name="tbPort" Width="50"></TextBox>
-                <Label Margin="16 0 0 0">تولیدکننده:</Label>
+                <Label Margin="16 0 0 0">Manufacturer:</Label>
                 <ComboBox x:Name="cmbManufacturer" Width="120" SelectedValuePath="Key" DisplayMemberPath="Value"></ComboBox>
-                <Label Margin="16 0 0 0">شناسه دستگاه:</Label>
+                <Label Margin="16 0 0 0">Device ID:</Label>
                 <TextBox x:Name="tbDeviceID" Width="100"></TextBox>
-                <Button x:Name="btnConnect" Margin="16 0 0 0" Padding="16 0" Click="btnConnect_Click">ارتباط</Button>
-                <Button x:Name="btntest" Click="btntest_Click" Margin="8 0 0 0">test</Button>
+                <Button x:Name="btnConnect" Margin="16 0 0 0" Padding="16 0" Click="btnConnect_Click">Connect</Button>
+                <Button x:Name="btntest" Click="btntest_Click" Margin="8 0 0 0">TEST</Button>
             </StackPanel>
         </GroupBox>
 
         <GroupBox Width="200" Grid.Row="1" Margin="0 16 16 0" Header="ارسال فرمان" Padding="16"
                   IsEnabled="{Binding IsConnected}">
             <StackPanel>
-                <Label>نوع فرمان:</Label>
+                <Label>Command Type:</Label>
                 <ComboBox x:Name="cmbCommandType" Margin="0 4 0 0" SelectedValuePath="Key" DisplayMemberPath="Value"></ComboBox>
 
-                <Label Margin="0 8 0 0">داده های فرمان:</Label>
+                <Label Margin="0 8 0 0">Command Data:</Label>
                 <TextBox x:Name="tbCommandData" TextWrapping="Wrap" Height="200" Margin="0 4 0 0"></TextBox>
 
-                <Button x:Name="btnSendCommand" Margin="0 8 0 0" Click="btnSendCommand_Click">ارسال</Button>
+                <Button x:Name="btnSendCommand" Margin="0 8 0 0" Click="btnSendCommand_Click">Send</Button>
             </StackPanel>
         </GroupBox>
 

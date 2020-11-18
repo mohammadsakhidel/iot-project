@@ -48,16 +48,16 @@ namespace TerminalSimulator
                 var rgxDeviceID = new Regex(@"^\d+$");
 
                 if (!IsValidIP(tbServer.Text))
-                    throw new Exception("‌آی پی سرور صحیح نیست.");
+                    throw new Exception("Invalid IP address.");
 
                 if (!rgxPort.IsMatch(tbPort.Text))
-                    throw new Exception("‌شماره پورت وارد شده معتبر نیست.");
+                    throw new Exception("Invalid port number");
 
                 if (!rgxDeviceID.IsMatch(tbDeviceID.Text))
-                    throw new Exception("‌شناسه دستگاه وارد شده معتبر نیست.");
+                    throw new Exception("‌Invalid device ID");
 
                 if (cmbManufacturer.SelectedItem == null)
-                    throw new Exception("لطفاً سازنده دستگاه را مشخص نمایید.");
+                    throw new Exception("Select a manufacturer");
                 #endregion
 
                 #region connect:
@@ -80,7 +80,7 @@ namespace TerminalSimulator
                 vm.IsConnected = true;
                 #endregion
 
-                AddToLog("ارتباط با سرور برقرار شد.");
+                AddToLog("The connection to the server established.");
             }
             catch (Exception ex)
             {
@@ -93,7 +93,7 @@ namespace TerminalSimulator
             {
                 #region Validation:
                 if (cmbCommandType.SelectedItem == null)
-                    throw new Exception("لطفاً نوع فرمان را مشخص کنید.");
+                    throw new Exception("Specify command type");
                 #endregion
 
                 #region send command:
@@ -136,10 +136,10 @@ namespace TerminalSimulator
 
                 #region commands:
                 var commands = new Dictionary<string, string>();
-                commands.Add(typeof(TerminalLinkCommand).ToString(), "درخواست برقراری ارتباط");
-                commands.Add(typeof(TerminalPositionCommand).ToString(), "اعلام موقعیت مکانی");
-                commands.Add(typeof(TerminalBlindSpotCommand).ToString(), "اعلام موقعیت نقطه کور");
-                commands.Add(typeof(TerminalAlarmPositionCommand).ToString(), "اعلام خطر");
+                commands.Add(typeof(TerminalLinkCommand).ToString(), "Terminal Link Command");
+                commands.Add(typeof(TerminalPositionCommand).ToString(), "Terminal Location Command");
+                commands.Add(typeof(TerminalBlindSpotCommand).ToString(), "Blind Spot Command");
+                commands.Add(typeof(TerminalAlarmPositionCommand).ToString(), "Terminal Alarm Command");
 
                 cmbCommandType.ItemsSource = commands;
                 #endregion
