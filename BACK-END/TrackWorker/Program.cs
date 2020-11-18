@@ -6,15 +6,21 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.EventLog;
+using TrackWorker.Extensions;
 
 namespace TrackWorker {
     public class Program {
+
+        public static IHost Host { get; private set; }
+
         public static void Main(string[] args) {
-            CreateHostBuilder(args).Build().Run();
+            Host = CreateHostBuilder(args).Build();
+            Host.Run();
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
+            Microsoft.Extensions.Hosting.Host
+                .CreateDefaultBuilder(args)
                 .ConfigureLogging(logging => {
                     logging.ClearProviders();
                     logging.AddConsole();
@@ -25,6 +31,8 @@ namespace TrackWorker {
                 .UseWindowsService()
                 .ConfigureServices((hostContext, services) => {
                     services.AddHostedService<Worker>();
+                    services.ConfigureSettings(hostContext.Configuration);
+                    services.AddMessageListener();
                 });
     }
 }

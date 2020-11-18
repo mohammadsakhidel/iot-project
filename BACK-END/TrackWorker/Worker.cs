@@ -3,47 +3,61 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using TrackWorker.Listeners;
 
 namespace TrackWorker {
     public class Worker : BackgroundService {
 
         private readonly ILogger<Worker> _logger;
-        private readonly IConfiguration _configuration;
+        private readonly IListener _messageListener;
 
-        public Worker(ILogger<Worker> logger, IConfiguration configuration) {
+        public Worker(ILogger<Worker> logger,
+            IMessageListener messageListener) {
+
             _logger = logger;
-            _configuration = configuration;
+            _messageListener = messageListener;
+
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken) {
 
-            var portNumber = _configuration.GetValue<int>("Socket:PortNumber");
-            var backlogSize = _configuration.GetValue<int>("Socket:ConnectionBacklogSize");
-            var ipAddress = IPAddress.Parse("127.0.0.1");
-            
-            var ipe = new IPEndPoint(ipAddress, portNumber);
+            try {
 
-            // Start Listening the Port:
-            using var listener = new Socket(ipe.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
-            listener.Bind(ipe);
-            listener.Listen(backlogSize);
+                var messageListenerTask = _messageListener.StartListeningAsync(stoppingToken);
+                _messageListener.OnClientConnected += (sender, args) => {
+                    try {
+                        _logger.LogInformation("Client Connected.");
+                    } catch (Exception ex) {
+                        _logger.LogError(ex.Message);
+                    }
+                };
+                _messageListener.OnDataReceived += (sender, args) => {
+                    try {
+                        _logger.LogInformation("Data Received: " + Encoding.ASCII.GetString(Convert.FromBase64String(args.Base64Data)));
+                    } catch (Exception ex) {
+                        _logger.LogError(ex.Message);
+                    }
+                };
+                _messageListener.OnClientDisconnected += (sender, args) => {
+                    try {
+                        _logger.LogInformation("Client Disconnected.");
+                    } catch (Exception ex) {
+                        _logger.LogError(ex.Message);
+                    }
+                };
 
-            while (!stoppingToken.IsCancellationRequested) {
-                try {
+                await Task.WhenAll(messageListenerTask);
 
-                    var socket = listener.Accept();
-                    _logger.LogInformation("Connection accepted...");
-
-                    await Task.Delay(10000);
-                } catch (Exception ex) {
-                    _logger.LogError(ex.Message);
-                }
+            } catch (Exception ex) {
+                _logger.LogError(ex.Message);
             }
+
         }
     }
 }
