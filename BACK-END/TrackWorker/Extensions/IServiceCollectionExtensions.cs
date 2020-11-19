@@ -12,7 +12,8 @@ namespace TrackWorker.Extensions {
             services.Configure<AppSettings>(configuration.GetSection(AppSettings.SECTION_NAME));
         }
         public static void AddMessageListener(this IServiceCollection services) {
-            services.AddSingleton<IMessageListener, MessageListener>();
+            services.AddSingleton<IIncomingMessageListener, IncomingMessageListener>();
+            services.AddSingleton<IOutgoingMessageListener, OutgoingMessageListener>();
         }
     }
 }

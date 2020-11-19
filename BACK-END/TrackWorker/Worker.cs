@@ -9,19 +9,23 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using TrackWorker.Listeners;
+using TrackWorker.Models;
 
 namespace TrackWorker {
     public class Worker : BackgroundService {
 
         private readonly ILogger<Worker> _logger;
-        private readonly IListener _messageListener;
+        private readonly IIncomingMessageListener _inMessageListener;
+        private readonly IOutgoingMessageListener _outMessageListener;
 
-        public Worker(ILogger<Worker> logger,
-            IMessageListener messageListener) {
+        public Worker(ILogger<Worker> logger, IOptions<AppSettings> appSettings,
+            IIncomingMessageListener inMessageListener, IOutgoingMessageListener outMessageListener) {
 
             _logger = logger;
-            _messageListener = messageListener;
+            _inMessageListener = inMessageListener;
+            _outMessageListener = outMessageListener;
 
         }
 
@@ -29,22 +33,22 @@ namespace TrackWorker {
 
             try {
 
-                var messageListenerTask = _messageListener.StartListeningAsync(stoppingToken);
-                _messageListener.OnClientConnected += (sender, args) => {
+                var messageListenerTask = _inMessageListener.StartListeningAsync(stoppingToken);
+                _inMessageListener.OnClientConnected += (sender, args) => {
                     try {
                         _logger.LogInformation("Client Connected.");
                     } catch (Exception ex) {
                         _logger.LogError(ex.Message);
                     }
                 };
-                _messageListener.OnDataReceived += (sender, args) => {
+                _inMessageListener.OnDataReceived += (sender, args) => {
                     try {
                         _logger.LogInformation("Data Received: " + Encoding.ASCII.GetString(Convert.FromBase64String(args.Base64Data)));
                     } catch (Exception ex) {
                         _logger.LogError(ex.Message);
                     }
                 };
-                _messageListener.OnClientDisconnected += (sender, args) => {
+                _inMessageListener.OnClientDisconnected += (sender, args) => {
                     try {
                         _logger.LogInformation("Client Disconnected.");
                     } catch (Exception ex) {

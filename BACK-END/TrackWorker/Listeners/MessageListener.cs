@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
@@ -12,18 +13,11 @@ using TrackWorker.Extensions;
 using TrackWorker.Models;
 
 namespace TrackWorker.Listeners {
-    public class MessageListener : IMessageListener {
+    public abstract class MessageListener : IMessageListener {
 
         // Fields & Constructors:
         private readonly object _lockForOnDataReceived = new object();
         private readonly object _lockForOnClientDisconnected = new object();
-        private readonly AppSettings _appSettings;
-        private readonly byte[] _buffer;
-
-        public MessageListener(IOptions<AppSettings> appSettings) {
-            _appSettings = appSettings.Value;
-            _buffer = new byte[_appSettings.SocketOptions.BufferSize];
-        }
 
         // Events:
         public event EventHandler<ClientConnectedEventArgs> OnClientConnected;
@@ -33,8 +27,8 @@ namespace TrackWorker.Listeners {
         // Methods:
         public async Task StartListeningAsync(CancellationToken stoppingToken) {
             var self = this;
-            var portNumber = _appSettings.SocketOptions.Messages.PortNumber;
-            var backlogSize = _appSettings.SocketOptions.Messages.BacklogSize;
+            var portNumber = GetPortNumber();
+            var backlogSize = GetBacklogSize();
             var ipAddress = IPAddress.Parse("127.0.0.1");
             var ipe = new IPEndPoint(ipAddress, portNumber);
 
@@ -55,13 +49,14 @@ namespace TrackWorker.Listeners {
 
                     // Create A Task for each incomming connection:
                     Task.Run(() => {
+                        var buffer = new byte[GetBufferSize()];
                         while (!stoppingToken.IsCancellationRequested) {
                             // Wait for data to receive or connection to disconnect:
                             bool connected = true;
                             int bytesRead = 0;
                             while (bytesRead == 0 && connected) {
                                 if (socket.Available > 0) {
-                                    bytesRead = socket.Receive(_buffer);
+                                    bytesRead = socket.Receive(buffer);
                                 } else if (!socket.IsConnected()) {
                                     // Invoke OnClietnDisconnected event and exit the task:
                                     lock (_lockForOnClientDisconnected) {
@@ -82,7 +77,7 @@ namespace TrackWorker.Listeners {
                                 lock (_lockForOnDataReceived) {
                                     self.OnDataReceived?.Invoke(self, new DataReceivedEventArgs {
                                         ClientSocket = socket,
-                                        Base64Data = Convert.ToBase64String(_buffer, 0, bytesRead)
+                                        Base64Data = Convert.ToBase64String(buffer, 0, bytesRead)
                                     });
                                 }
                             }
@@ -92,5 +87,10 @@ namespace TrackWorker.Listeners {
 
             });
         }
+
+        // Abstract Members:
+        public abstract int GetBufferSize();
+        public abstract int GetPortNumber();
+        public abstract int GetBacklogSize();
     }
 }

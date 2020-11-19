@@ -10,8 +10,8 @@ namespace TrackWorker.Models {
 
     public class SocketOptions {
         public int BufferSize { get; set; }
-        public ListenerOptions Messages { get; set; }
-        public ListenerOptions Commands { get; set; }
+        public ListenerOptions IncomingListener { get; set; }
+        public ListenerOptions OutgoingListener { get; set; }
     }
 
     public class ListenerOptions {
