@@ -9,6 +9,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TrackAPITests", "TrackAPITe
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TrackWorker", "TrackWorker\TrackWorker.csproj", "{F23715BF-3588-41F0-BB6D-FAAF4F531ADC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrackLib", "TrackLib\TrackLib.csproj", "{D5F00EF6-239D-43B4-B814-208148671810}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{F23715BF-3588-41F0-BB6D-FAAF4F531ADC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F23715BF-3588-41F0-BB6D-FAAF4F531ADC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F23715BF-3588-41F0-BB6D-FAAF4F531ADC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D5F00EF6-239D-43B4-B814-208148671810}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D5F00EF6-239D-43B4-B814-208148671810}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D5F00EF6-239D-43B4-B814-208148671810}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D5F00EF6-239D-43B4-B814-208148671810}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

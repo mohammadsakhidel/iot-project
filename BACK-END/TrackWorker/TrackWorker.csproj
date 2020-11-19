@@ -12,6 +12,9 @@
 
   <ItemGroup>
     <Folder Include="Constants\" />
-    <Folder Include="Tools\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\TrackLib\TrackLib.csproj" />
   </ItemGroup>
 </Project>
