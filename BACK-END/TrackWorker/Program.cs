@@ -30,9 +30,16 @@ namespace TrackWorker {
                 })
                 .UseWindowsService()
                 .ConfigureServices((hostContext, services) => {
+
                     services.AddHostedService<Worker>();
                     services.ConfigureSettings(hostContext.Configuration);
                     services.AddMessageListener();
+                    // This order between pipelines and line managers must remain.
+                    services.AddMiddlewares();
+                    services.AddPipelines();
+                    services.AddLineManagers();
+                    // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                    
                 });
     }
 }

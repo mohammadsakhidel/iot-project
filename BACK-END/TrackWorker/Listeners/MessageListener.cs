@@ -1,10 +1,12 @@
 ﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
+using System.Runtime.ExceptionServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -49,38 +51,43 @@ namespace TrackWorker.Listeners {
 
                     // Create A Task for each incomming connection:
                     Task.Run(() => {
-                        var buffer = new byte[GetBufferSize()];
-                        while (!stoppingToken.IsCancellationRequested) {
-                            // Wait for data to receive or connection to disconnect:
-                            bool connected = true;
-                            int bytesRead = 0;
-                            while (bytesRead == 0 && connected) {
-                                if (socket.Available > 0) {
-                                    bytesRead = socket.Receive(buffer);
-                                } else if (!socket.IsConnected()) {
-                                    // Invoke OnClietnDisconnected event and exit the task:
-                                    lock (_lockForOnClientDisconnected) {
-                                        self.OnClientDisconnected?.Invoke(self, new ClientDisconnectedEventArgs {
-                                            ClientSocket = socket
+                        try {
+                            var buffer = new byte[GetBufferSize()];
+                            while (!stoppingToken.IsCancellationRequested) {
+                                // Wait for data to receive or connection to disconnect:
+                                bool connected = true;
+                                int bytesRead = 0;
+                                while (bytesRead == 0 && connected) {
+                                    if (socket.Available > 0) {
+                                        bytesRead = socket.Receive(buffer);
+                                    } else if (!socket.IsConnected()) {
+                                        // Invoke OnClietnDisconnected event and exit the task:
+                                        lock (_lockForOnClientDisconnected) {
+                                            self.OnClientDisconnected?.Invoke(self, new ClientDisconnectedEventArgs {
+                                                ClientSocket = socket
+                                            });
+                                        }
+                                        connected = false;
+                                    }
+                                }
+
+                                // End the task if socket not connected anymore
+                                if (!connected)
+                                    break;
+
+                                // Invoke OnDataReceived event:
+                                if (bytesRead > 0) {
+                                    lock (_lockForOnDataReceived) {
+                                        self.OnDataReceived?.Invoke(self, new DataReceivedEventArgs {
+                                            ClientSocket = socket,
+                                            Base64Data = Convert.ToBase64String(buffer, 0, bytesRead)
                                         });
                                     }
-                                    connected = false;
                                 }
                             }
-
-                            // End the task if socket not connected anymore
-                            if (!connected)
-                                break;
-
-                            // Invoke OnDataReceived event:
-                            if (bytesRead > 0) {
-                                lock (_lockForOnDataReceived) {
-                                    self.OnDataReceived?.Invoke(self, new DataReceivedEventArgs {
-                                        ClientSocket = socket,
-                                        Base64Data = Convert.ToBase64String(buffer, 0, bytesRead)
-                                    });
-                                }
-                            }
+                        } catch (Exception ex) {
+                            var _logger = (ILogger<Worker>)Program.Host.Services.GetService(typeof(ILogger<Worker>));
+                            _logger.LogError(ex.LogMessage(nameof(StartListeningAsync)));
                         }
                     });
                 }
