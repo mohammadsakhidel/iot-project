@@ -6,9 +6,9 @@
         xmlns:local="clr-namespace:TerminalSimulator"
         xmlns:vm="clr-namespace:TerminalSimulator.Code.ViewModels"
         xmlns:cnv="clr-namespace:TerminalSimulator.Code.Converters"
-        FontFamily="Samim" WindowStartupLocation="CenterScreen" WindowState="Maximized"
+        FontFamily="Samim" WindowStartupLocation="CenterScreen"
         FontSize="11" mc:Ignorable="d" Title="Terminal Simulator" 
-        Height="650" Width="900" Loaded="Window_Loaded">
+        Height="600" Width="900" Loaded="Window_Loaded">
     
     <Window.DataContext>
         <vm:MainWindowVM />
@@ -32,13 +32,13 @@
                   IsEnabled="{Binding IsConnected, Converter={StaticResource reverseBooleanConverter}}">
             <StackPanel Orientation="Horizontal">
                 <Label>Server:</Label>
-                <TextBox x:Name="tbServer" Width="130"></TextBox>
+                <TextBox x:Name="tbServer" Width="130" Text="127.0.0.1"></TextBox>
                 <Label Margin="16 0 0 0">Port:</Label>
-                <TextBox x:Name="tbPort" Width="50"></TextBox>
+                <TextBox x:Name="tbPort" Width="50" Text="8123"></TextBox>
                 <Label Margin="16 0 0 0">Manufacturer:</Label>
-                <ComboBox x:Name="cmbManufacturer" Width="120" SelectedValuePath="Key" DisplayMemberPath="Value"></ComboBox>
+                <ComboBox x:Name="cmbManufacturer" Width="120" SelectedValuePath="Key" DisplayMemberPath="Value" SelectedIndex="0"></ComboBox>
                 <Label Margin="16 0 0 0">Device ID:</Label>
-                <TextBox x:Name="tbDeviceID" Width="100"></TextBox>
+                <TextBox x:Name="tbDeviceID" Width="100" Text="123456"></TextBox>
                 <Button x:Name="btnConnect" Margin="16 0 0 0" Padding="16 0" Click="btnConnect_Click">Connect</Button>
                 <Button x:Name="btntest" Click="btntest_Click" Margin="8 0 0 0">TEST</Button>
             </StackPanel>
