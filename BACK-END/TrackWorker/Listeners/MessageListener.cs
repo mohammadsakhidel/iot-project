@@ -31,8 +31,7 @@ namespace TrackWorker.Listeners {
             var self = this;
             var portNumber = GetPortNumber();
             var backlogSize = GetBacklogSize();
-            var ipAddress = IPAddress.Parse("127.0.0.1");
-            var ipe = new IPEndPoint(ipAddress, portNumber);
+            var ipe = new IPEndPoint(IPAddress.Any, portNumber);
 
             // Start Listening the Port:
             using var listener = new Socket(ipe.AddressFamily, SocketType.Stream, ProtocolType.Tcp);

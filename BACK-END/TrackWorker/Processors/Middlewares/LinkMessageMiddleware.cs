@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Text.RegularExpressions;
+using TrackDataAccess.Repositories;
 using TrackLib.Constants;
 using TrackLib.Utils;
 using TrackWorker.Models;
@@ -9,6 +10,12 @@ using TrackWorker.Utils;
 
 namespace TrackWorker.Processors.Middlewares {
     public class LinkMessageMiddleware : Middleware, ILinkMessageMiddleware {
+
+        private readonly ITerminalRepository _terminalRepository;
+        public LinkMessageMiddleware(ITerminalRepository terminalRepository) {
+            _terminalRepository = terminalRepository;
+        }
+
         protected override void OperateOnMessage(PipelineContext context) {
 
             var text = Encoding.ASCII.GetString(Convert.FromBase64String(context.Message.Base64Text)).Trim();
@@ -16,7 +23,20 @@ namespace TrackWorker.Processors.Middlewares {
             var uniqueId = TerminalConnectionUtil.CreateUniqueId(parts[0], parts[1]);
 
             // Check database for validity:
-            var isValidTerminal = true;
+            var isValidTerminal = false;
+            var terminal = _terminalRepository.Get(uniqueId);
+            if (terminal != null) {
+                isValidTerminal = true;
+
+                // Update terminal last connection fields:
+                var publicIP = SocketUtil.FindPublicIPAddressAsync().Result;
+                terminal.LastConnection = DateTime.UtcNow;
+                terminal.LastConnectedServer = publicIP;
+                
+                _terminalRepository.SaveAsync().Wait();
+            }
+            
+            // Return if terminal doesn't exist in database:
             if (!isValidTerminal)
                 return;
 
@@ -32,8 +52,7 @@ namespace TrackWorker.Processors.Middlewares {
 
         protected override bool ValidateMessage(Message message) {
             var text = Encoding.ASCII.GetString(Convert.FromBase64String(message.Base64Text)).Trim();
-            var reg = new Regex(Patterns.MESSAGE_LINK);
-            return reg.IsMatch(text);
+            return (new Regex(Patterns.MESSAGE_LINK)).IsMatch(text);
         }
     }
 }

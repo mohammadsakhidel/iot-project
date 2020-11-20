@@ -7,7 +7,10 @@ using TrackDataAccess.Models;
 
 namespace TrackDataAccess.Database {
     public class TrackDbContext : DbContext {
-        
+
+        public TrackDbContext(DbContextOptions<TrackDbContext> options) : base(options) {
+        }
+
         public DbSet<Terminal> Terminals { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder) {
@@ -25,6 +28,5 @@ namespace TrackDataAccess.Database {
             }
             #endregion
         }
-
     }
 }
