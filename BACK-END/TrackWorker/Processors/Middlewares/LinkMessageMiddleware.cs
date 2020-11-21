@@ -37,7 +37,9 @@ namespace TrackWorker.Processors.Middlewares {
 
             #region PROCESS MESSAGE:
             // Update terminal last connection fields:
-            var publicIP = SocketUtil.FindPublicIPAddressAsync().Result;
+            var publicIP = !string.IsNullOrEmpty(GlobalState.PublicIPAddress) 
+                ? GlobalState.PublicIPAddress
+                : SocketUtil.FindPublicIPAddressAsync().Result;
             terminal.LastConnection = DateTime.UtcNow;
             terminal.LastConnectedServer = publicIP;
             _terminalRepository.SaveAsync().Wait();
@@ -46,7 +48,7 @@ namespace TrackWorker.Processors.Middlewares {
             TerminalConnectionUtil.Add(uniqueId, baseMessage.Socket.GetRealSocket());
 
             // Respond to terminal:
-            var response = $"[{message.Manufacturer}*{message.TerminalId}*{MessageAbbreviations.LINK_3G.Length:X}*{MessageAbbreviations.LINK_3G}]";
+            var response = $"[{message.Manufacturer}*{message.TerminalId}*{MessageAbbreviations.LINK_3G.Length:X4}*{MessageAbbreviations.LINK_3G}]";
             var responseBytes = Encoding.ASCII.GetBytes(response);
             baseMessage.Socket.Send(responseBytes);
             #endregion

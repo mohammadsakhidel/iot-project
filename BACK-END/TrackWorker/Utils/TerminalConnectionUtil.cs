@@ -10,13 +10,15 @@ namespace TrackWorker.Utils {
         private static Dictionary<string, Socket> _terminals = new Dictionary<string, Socket>();
 
         public static string CreateUniqueId(string manufacturer, string terminalId) {
-            return $"{manufacturer}-{terminalId}";
+            return $"{manufacturer}-{terminalId}".ToLower();
         }
 
         public static void Add(string uniqueId, Socket socket) {
             lock (_lock) {
                 if (!_terminals.ContainsKey(uniqueId))
                     _terminals.Add(uniqueId, socket);
+                else
+                    _terminals[uniqueId] = socket;
             }
         }
     }

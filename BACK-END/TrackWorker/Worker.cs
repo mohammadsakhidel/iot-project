@@ -10,10 +10,12 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using TrackLib.Utils;
 using TrackWorker.Extensions;
 using TrackWorker.Listeners;
 using TrackWorker.Models;
 using TrackWorker.Processors.LineManagers;
+using TrackWorker.Utils;
 
 namespace TrackWorker {
     public class Worker : BackgroundService {
@@ -40,6 +42,15 @@ namespace TrackWorker {
 
             try {
 
+                #region Set Global State Values:
+                var globalStateTask = Task.Run(() => {
+                    var ip = SocketUtil.FindPublicIPAddressAsync(5).Result;
+                    if (!string.IsNullOrEmpty(ip))
+                        GlobalState.PublicIPAddress = ip;
+                });
+                #endregion
+
+                #region Start Listeners:
                 // Listener for messages from terminals:
                 var inTask = _inMessageListener.StartListeningAsync(stoppingToken);
                 _inMessageListener.OnDataReceived += _inMessageListener_OnDataReceivedAsync;
@@ -48,15 +59,17 @@ namespace TrackWorker {
                 // Listener for command messager to be sent to the device:
                 var outTask = _outMessageListener.StartListeningAsync(stoppingToken);
                 _outMessageListener.OnDataReceived += _outMessageListener_OnDataReceivedAsync;
+                #endregion
 
+                #region Start Line Processors:
                 // Line manager for messages from terminals (IN):
                 var inLineTask = _inLineManager.StartWachingAsync(stoppingToken);
 
                 // Line manager for command messages to be sent to terminals:
                 var outLineTask = _outLineManager.StartWachingAsync(stoppingToken);
+                #endregion
 
-                
-                await Task.WhenAll(inTask, outTask, inLineTask, outLineTask);
+                await Task.WhenAll(inTask, outTask, inLineTask, outLineTask, globalStateTask);
 
             } catch (Exception ex) {
                 _logger.LogError(ex.LogMessage(nameof(ExecuteAsync)));
