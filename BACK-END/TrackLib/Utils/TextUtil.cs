@@ -4,11 +4,12 @@ using System.Text;
 
 namespace TrackLib.Utils {
     public static class TextUtil {
-        public static string[] Split3GElecMessage(string text) {
-            return text.Substring(
-                    text.IndexOf('[') + 1,
-                    text.LastIndexOf(']') - text.IndexOf('[') - 1
-                ).Split('*');
+        public static bool IsBase64String(string base64) {
+            if (string.IsNullOrEmpty(base64))
+                return false;
+
+            Span<byte> buffer = new Span<byte>(new byte[base64.Length]);
+            return Convert.TryFromBase64String(base64, buffer, out _);
         }
     }
 }

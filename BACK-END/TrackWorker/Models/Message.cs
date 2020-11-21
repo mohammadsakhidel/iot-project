@@ -5,7 +5,7 @@ using System.Text;
 
 namespace TrackWorker.Models {
     public class Message {
-        public Socket Socket { get; set; }
+        public ISocket Socket { get; set; }
         public string Base64Text { get; set; }
         public DateTime TimeOfCreate { get; set; }
     }

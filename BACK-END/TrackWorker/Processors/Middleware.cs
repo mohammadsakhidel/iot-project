@@ -14,14 +14,14 @@ namespace TrackWorker.Processors {
                 if (context.OnlyValidate)
                     return;
 
-                OperateOnMessage(context);
-                context.MessageProcessed = true;
+                if (OperateOnMessage(context.Message))
+                    context.MessageProcessed = true;
 
             } else {
                 Next?.Invoke(context);
             }
         }
         protected abstract bool ValidateMessage(Message message);
-        protected abstract void OperateOnMessage(PipelineContext context);
+        protected abstract bool OperateOnMessage(Message message);
     }
 }

@@ -70,7 +70,7 @@ namespace TrackWorker {
             try {
 
                 var message = new Message {
-                    Socket = e.ClientSocket,
+                    Socket = new SocketWrapper(e.ClientSocket),
                     Base64Text = e.Base64Data,
                     TimeOfCreate = DateTime.UtcNow
                 };
@@ -85,7 +85,7 @@ namespace TrackWorker {
             try {
 
                 var message = new Message {
-                    Socket = e.ClientSocket,
+                    Socket = new SocketWrapper(e.ClientSocket),
                     Base64Text = e.Base64Data,
                     TimeOfCreate = DateTime.UtcNow
                 };

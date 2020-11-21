@@ -16,43 +16,53 @@ namespace TrackWorker.Processors.Middlewares {
             _terminalRepository = terminalRepository;
         }
 
-        protected override void OperateOnMessage(PipelineContext context) {
+        protected override bool OperateOnMessage(Message baseMessage) {
 
-            var text = Encoding.ASCII.GetString(Convert.FromBase64String(context.Message.Base64Text)).Trim();
-            var parts = TextUtil.Split3GElecMessage(text);
-            var uniqueId = TerminalConnectionUtil.CreateUniqueId(parts[0], parts[1]);
+            #region VALIDATION:
+            // Validate Message:
+            if (baseMessage == null || string.IsNullOrEmpty(baseMessage.Base64Text) || baseMessage.Socket == null)
+                return false;
 
-            // Check database for validity:
-            var isValidTerminal = false;
+            // Parse Message:
+            var message = ThreeGElecMessage.Parse(baseMessage.Base64Text);
+            if (message == null)
+                return false;
+
+            // Check database for terminal existence:
+            var uniqueId = TerminalConnectionUtil.CreateUniqueId(message.Manufacturer.ToLower(), message.TerminalId);
             var terminal = _terminalRepository.Get(uniqueId);
-            if (terminal != null) {
-                isValidTerminal = true;
+            if (terminal == null)
+                return false;
+            #endregion
 
-                // Update terminal last connection fields:
-                var publicIP = SocketUtil.FindPublicIPAddressAsync().Result;
-                terminal.LastConnection = DateTime.UtcNow;
-                terminal.LastConnectedServer = publicIP;
-                
-                _terminalRepository.SaveAsync().Wait();
-            }
-            
-            // Return if terminal doesn't exist in database:
-            if (!isValidTerminal)
-                return;
+            #region PROCESS MESSAGE:
+            // Update terminal last connection fields:
+            var publicIP = SocketUtil.FindPublicIPAddressAsync().Result;
+            terminal.LastConnection = DateTime.UtcNow;
+            terminal.LastConnectedServer = publicIP;
+            _terminalRepository.SaveAsync().Wait();
 
             // Add terminal to connected terminals list:
-            TerminalConnectionUtil.Add(uniqueId, context.Message.Socket);
+            TerminalConnectionUtil.Add(uniqueId, baseMessage.Socket.GetRealSocket());
 
             // Respond to terminal:
-            var response = $"[{parts[0]}*{parts[1]}*{parts[2]}*{parts[3]}]";
+            var response = $"[{message.Manufacturer}*{message.TerminalId}*{MessageAbbreviations.LINK_3G.Length:X}*{MessageAbbreviations.LINK_3G}]";
             var responseBytes = Encoding.ASCII.GetBytes(response);
-            context.Message.Socket.Send(responseBytes);
+            baseMessage.Socket.Send(responseBytes);
+            #endregion
 
+            return true;
         }
 
         protected override bool ValidateMessage(Message message) {
-            var text = Encoding.ASCII.GetString(Convert.FromBase64String(message.Base64Text)).Trim();
+
+            if (message == null || string.IsNullOrEmpty(message.Base64Text) 
+                || !TextUtil.IsBase64String(message.Base64Text))
+                return false;
+
+            var text = Encoding.ASCII.GetString(Convert.FromBase64String(message.Base64Text));
             return (new Regex(Patterns.MESSAGE_LINK)).IsMatch(text);
+
         }
     }
 }
