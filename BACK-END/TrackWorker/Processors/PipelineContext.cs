@@ -7,7 +7,9 @@ namespace TrackWorker.Processors {
     public class PipelineContext {
         public Message Message { get; set; }
         public bool OnlyValidate { get; set; }
+
         public bool MessageValid { get; set; }
         public bool MessageProcessed { get; set; }
+        public string Response { get; set; }
     }
 }

@@ -21,5 +21,9 @@ namespace TrackWorker.Utils {
                     _terminals[uniqueId] = socket;
             }
         }
+
+        public static bool Exists(string uniqueId) {
+            return _terminals.ContainsKey(uniqueId);
+        }
     }
 }

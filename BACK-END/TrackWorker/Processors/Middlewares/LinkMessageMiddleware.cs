@@ -16,9 +16,10 @@ namespace TrackWorker.Processors.Middlewares {
             _terminalRepository = terminalRepository;
         }
 
-        protected override bool OperateOnMessage(Message baseMessage) {
+        public override bool OperateOnMessage(PipelineContext context) {
 
             #region VALIDATION:
+            var baseMessage = context.Message;
             // Validate Message:
             if (baseMessage == null || string.IsNullOrEmpty(baseMessage.Base64Text) || baseMessage.Socket == null)
                 return false;
@@ -47,16 +48,17 @@ namespace TrackWorker.Processors.Middlewares {
             // Add terminal to connected terminals list:
             TerminalConnectionUtil.Add(uniqueId, baseMessage.Socket.GetRealSocket());
 
-            // Respond to terminal:
+            // Respond to terminal & save to context:
             var response = $"[{message.Manufacturer}*{message.TerminalId}*{MessageAbbreviations.LINK_3G.Length:X4}*{MessageAbbreviations.LINK_3G}]";
             var responseBytes = Encoding.ASCII.GetBytes(response);
             baseMessage.Socket.Send(responseBytes);
+            context.Response = response;
             #endregion
 
             return true;
         }
 
-        protected override bool ValidateMessage(Message message) {
+        public override bool ValidateMessage(Message message) {
 
             if (message == null || string.IsNullOrEmpty(message.Base64Text) 
                 || !TextUtil.IsBase64String(message.Base64Text))

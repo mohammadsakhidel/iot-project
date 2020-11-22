@@ -4,9 +4,11 @@ using System.Collections.Generic;
 using System.Text;
 using TrackDataAccess.Models;
 using TrackDataAccess.Repositories;
+using TrackLib.Constants;
 using TrackWorker.Models;
 using TrackWorker.Processors;
 using TrackWorker.Processors.Middlewares;
+using TrackWorker.Utils;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -19,129 +21,98 @@ namespace TrackWorker.Tests.Middlewares {
         }
 
         [Theory]
-        [MemberData(nameof(InvokeTestData))]
-        public void InvokeTest(PipelineContext context, ExpectedResult expected) {
+        [MemberData(nameof(ValidateMessageData))]
+        public void ValidateMessageTest(Message message, bool expected) {
+            // Arrange:
+            var middleware = new LinkMessageMiddleware(null);
+
+            // Act:
+            var validated = middleware.ValidateMessage(message);
+
+            // Assert:
+            Assert.Equal(expected, validated);
+        }
+
+        [Theory]
+        [MemberData(nameof(OperateOnMessageData))]
+        public void OperateOnMessageTest(PipelineContext context, bool expected) {
 
             // Arrang:
-            var mockRepo = new Moq.Mock<ITerminalRepository>();
             var mockTerminal = new Terminal { Id = "8800000015" };
+            var mockRepo = new Moq.Mock<ITerminalRepository>();
             mockRepo.Setup(repo => repo.Get(It.IsAny<string>())).Returns(() => mockTerminal);
             mockRepo.Setup(repo => repo.SaveAsync()).Callback(() => {
                 _output.WriteLine("Mock SaveAsync called.");
             });
+            var middleware = new LinkMessageMiddleware(mockRepo.Object);
 
             // Act:
-            var middleware = new LinkMessageMiddleware(mockRepo.Object);
-            middleware.Invoke(context);
+            var result = middleware.OperateOnMessage(context);
 
             // Assert:
-            Assert.Equal(expected.MessageValid, context.MessageValid);
-            Assert.Equal(expected.MessageProcessed, context.MessageProcessed);
-            if (expected.MessageProcessed)
-                Assert.True(mockTerminal.LastConnection > DateTime.UtcNow.Subtract(TimeSpan.FromSeconds(10)));
+            Assert.Equal(expected, result);
+            if (expected) {
+                var threeGElecMsg = ThreeGElecMessage.Parse(context.Message.Base64Text);
+                Assert.NotNull(threeGElecMsg);
+                Assert.NotEmpty(mockTerminal.LastConnectedServer);
+                Assert.Matches(Patterns.IP_V4, mockTerminal.LastConnectedServer);
+                Assert.True(mockTerminal.LastConnection.HasValue);
+                Assert.True(mockTerminal.LastConnection.Value > DateTime.UtcNow.Subtract(TimeSpan.FromSeconds(10)));
+                Assert.Matches(Patterns.MESSAGE_LINK, context.Response);
+                Assert.True(TerminalConnectionUtil.Exists(TerminalConnectionUtil.CreateUniqueId(threeGElecMsg.Manufacturer, threeGElecMsg.TerminalId)));
+            }
 
         }
 
-        public static IEnumerable<object[]> InvokeTestData() {
+        #region DATA MEMBERS:
+        public static IEnumerable<object[]> ValidateMessageData() {
 
-            // Only validate a context with an empty message:
+            // Empty Message Text
             yield return new object[] {
-                new PipelineContext {
-                    OnlyValidate = true,
-                    Message = new Models.Message { Base64Text = "" }
-                },
-                new ExpectedResult { MessageValid = false, MessageProcessed = false }
+                new Message { Base64Text = "" }, false
             };
 
-            // Only validate a context with a NULL message:
+            // NULL Message Text
             yield return new object[] {
-                new PipelineContext {
-                    OnlyValidate = true,
-                    Message = new Models.Message { Base64Text = null }
-                },
-                new ExpectedResult { MessageValid = false, MessageProcessed = false }
+                new Message { Base64Text = null }, false
             };
 
-            // Only validate a context with an invalid format message:
+            // Invalid base64 text:
             yield return new object[] {
-                new PipelineContext {
-                    OnlyValidate = true,
-                    Message = new Models.Message { Base64Text = "invalid format message" }
-                },
-                new ExpectedResult { MessageValid = false, MessageProcessed = false }
+                new Message { Base64Text = "this is not Base64" }, false
             };
 
-            // Only validate a context with an irrelevant message:
+            // Base64 but invalid message:
             yield return new object[] {
-                new PipelineContext {
-                    OnlyValidate = true,
-                    Message = new Models.Message { Base64Text = "W1NHKjg4MDAwMDAwMTUqMDAwMipVS10=" }
-                },
-                new ExpectedResult { MessageValid = false, MessageProcessed = false }
+                new Message { Base64Text = "SGVsbG8gSG93IEFyZSBZb3U/" }, false
             };
 
-            // Only validate a context with a valid message:
+            // Base64 valid but irrelevant middleware message:
             yield return new object[] {
-                new PipelineContext {
-                    OnlyValidate = true,
-                    Message = new Models.Message { Base64Text = "W1NHKjg4MDAwMDAwMTUqMDAwMipMS10=" }
-                },
-                new ExpectedResult { MessageValid = true, MessageProcessed = false }
+                new Message { Base64Text = "W1NHKjg4MDAwMDAwMTUqMDAwMipVS10=" }, false
             };
 
-            // An empty message:
+            // Valid Message
             yield return new object[] {
-                new PipelineContext {
-                    OnlyValidate = false,
-                    Message = new Models.Message { Base64Text = "" }
-                },
-                new ExpectedResult { MessageValid = false, MessageProcessed = false }
+                new Message { Base64Text = "W1NHKjg4MDAwMDAwMTUqMDAwMipMS10=" }, true
             };
 
-            // A NULL message:
+        }
+        public static IEnumerable<object[]> OperateOnMessageData() {
+            // Invalid Terminal ID:
             yield return new object[] {
-                new PipelineContext {
-                    OnlyValidate = false,
-                    Message = new Models.Message { Base64Text = null }
-                },
-                new ExpectedResult { MessageValid = false, MessageProcessed = false }
+                new PipelineContext { Message = new Message { Base64Text = "W1NHKjg4MDAwMDAwKjAwMDIqTEtd" } },
+                false
             };
-
-            // Invalid format message:
-            yield return new object[] {
-                new PipelineContext {
-                    OnlyValidate = false,
-                    Message = new Models.Message { Base64Text = "invalid format message" }
-                },
-                new ExpectedResult { MessageValid = false, MessageProcessed = false }
-            };
-
-            // Irrelevant message:
-            yield return new object[] {
-                new PipelineContext {
-                    OnlyValidate = false,
-                    Message = new Models.Message { Base64Text = "W1NHKjg4MDAwMDAwMTUqMDAwMipVS10=" }
-                },
-                new ExpectedResult { MessageValid = false, MessageProcessed = false }
-            };
-
-            // Valid message:
+            // Valid Terminal ID:
             var mockSocket = new Mock<ISocket>();
-            mockSocket.Setup(socket => socket.Send(It.IsAny<byte[]>())).Returns(1);
+            mockSocket.Setup(socket => socket.Send(It.IsAny<byte[]>())).Returns(0);
             mockSocket.Setup(socket => socket.GetRealSocket()).Returns(() => null);
             yield return new object[] {
-                new PipelineContext {
-                    OnlyValidate = false,
-                    Message = new Models.Message { Socket = mockSocket.Object, Base64Text = "W1NHKjg4MDAwMDAwMTUqMDAwMipMS10=" }
-                },
-                new ExpectedResult { MessageValid = true, MessageProcessed = true }
+                new PipelineContext { Message = new Message { Base64Text = "W1NHKjg4MDAwMDAwMTUqMDAwMipMS10=", Socket = mockSocket.Object } },
+                true
             };
-
         }
-    }
-
-    public struct ExpectedResult {
-        public bool MessageValid { get; set; }
-        public bool MessageProcessed { get; set; }
+        #endregion
     }
 }
