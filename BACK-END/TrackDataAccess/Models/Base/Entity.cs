@@ -1,22 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace TrackDataAccess.Models.Base {
     public class Entity {
-
-        [Required]
-        [Column("add_time")]
-        public DateTime AddTime { get; set; }
-
-        [Required]
-        [Column("is_deleted")]
-        public bool IsDeleted { get; set; }
-
-        [Column("delete_time")]
-        public DateTime DeleteTime { get; set; }
-
     }
 }

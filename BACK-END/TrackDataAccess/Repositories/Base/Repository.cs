@@ -31,6 +31,10 @@ namespace TrackDataAccess.Repositories.Base {
         }
 
         public void Remove(TEntity entity) {
+            Context.Remove<TEntity>(entity);
+        }
+
+        public void Remove(SoftEntity entity) {
             entity.IsDeleted = true;
         }
 

@@ -6,8 +6,8 @@ using TrackDataAccess.Models;
 using TrackDataAccess.Repositories.Base;
 
 namespace TrackDataAccess.Repositories {
-    public class TerminalRepository : Repository<Terminal>, ITerminalRepository {
-        public TerminalRepository(DbContext context) : base(context) {
+    public class TrackerRepository : Repository<Tracker>, ITrackerRepository {
+        public TrackerRepository(DbContext context) : base(context) {
         }
     }
 }

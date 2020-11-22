@@ -13,11 +13,11 @@ namespace TrackWorker.Models {
         }
 
         public string Manufacturer { get; set; }
-        public string TerminalId { get; set; }
+        public string TrackerId { get; set; }
         public string ContentLengthHex { get; set; }
         public string Content { get; set; }
         public List<string> ContentItems { get; set; }
-        public string UniqueID => $"{Manufacturer}-{TerminalId}";
+        public string UniqueID => $"{Manufacturer}-{TrackerId}";
 
         // Static Methods:
         public static bool TryParse(string base64Message, out ThreeGElecMessage parsedMessage) {
@@ -41,7 +41,7 @@ namespace TrackWorker.Models {
 
             parsedMessage = new ThreeGElecMessage() { 
                 Manufacturer = parts[0],
-                TerminalId = parts[1],
+                TrackerId = parts[1],
                 ContentLengthHex = parts[2],
                 Content = parts[3],
                 ContentItems = contentSeperator.Split(parts[3]).ToList()

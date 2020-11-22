@@ -19,7 +19,7 @@ namespace TrackWorker.Tests.Models {
             Assert.Equal(expected.parseResult, result);
             if (expected.parseResult) {
                 Assert.Equal(expected.manu, message.Manufacturer);
-                Assert.Equal(expected.tId, message.TerminalId);
+                Assert.Equal(expected.tId, message.TrackerId);
                 Assert.Equal(expected.cLen, message.ContentLengthHex);
                 Assert.Equal(expected.content, message.Content);
                 Assert.Equal(expected.cItems.Length, message.ContentItems.Count);

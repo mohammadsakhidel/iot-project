@@ -11,6 +11,7 @@ namespace TrackWorker.Processors {
             if (isMessageValid) {
 
                 context.MessageValid = true;
+                context.AssociatedMiddleware = this;
                 if (context.OnlyValidate)
                     return;
 

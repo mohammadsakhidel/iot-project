@@ -11,7 +11,8 @@ namespace TrackDataAccess.Database {
         public TrackDbContext(DbContextOptions<TrackDbContext> options) : base(options) {
         }
 
-        public DbSet<Terminal> Terminals { get; set; }
+        public DbSet<Tracker> Trackers { get; set; }
+        public DbSet<LocationReport> LocationReports { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder) {
             #region Soft Delete Query Filter:

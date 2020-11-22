@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Worker">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
     <UserSecretsId>dotnet-TrackWorker-DA01212C-D05C-43B0-9754-88B5371A15DD</UserSecretsId>
   </PropertyGroup>
 

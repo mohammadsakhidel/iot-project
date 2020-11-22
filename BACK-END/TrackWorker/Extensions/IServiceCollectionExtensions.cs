@@ -31,6 +31,7 @@ namespace TrackWorker.Extensions {
                 var pipeline = new InPipeline();
 
                 // Middlewares:
+                pipeline.UseMiddleware<ILocationMessageMiddleware>();
                 pipeline.UseMiddleware<ILinkMessageMiddleware>();
 
                 return pipeline;
@@ -47,9 +48,16 @@ namespace TrackWorker.Extensions {
             services.AddSingleton<IOutLineManager, OutLineManager>();
         }
         public static void AddRepositories(this IServiceCollection services) {
-            services.AddTransient<ITerminalRepository, TerminalRepository>();
+            services.AddTransient<ITrackerRepository, TrackerRepository>();
+            services.AddTransient<ILocationReportRepository, LocationReportRepository>();
         }
         public static void AddDbContext(this IServiceCollection services, IConfiguration configuration) {
+            // For dotnet ef tool:
+            services.AddDbContext<TrackDbContext>(options => {
+                options.UseMySQL(configuration.GetValue<string>("Database:ConnectionStrings:TrackDB"));
+            });
+            //^^^^^^^^^^^^^^^^^^^^
+
             services.AddTransient<DbContext, TrackDbContext>(sp => {
                 var options = new DbContextOptionsBuilder<TrackDbContext>()
                     .UseMySQL(configuration.GetValue<string>("Database:ConnectionStrings:TrackDB"))

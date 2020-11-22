@@ -5,6 +5,6 @@ using TrackDataAccess.Models;
 using TrackDataAccess.Repositories.Base;
 
 namespace TrackDataAccess.Repositories {
-    public interface ITerminalRepository : IRepository<Terminal> {
+    public interface ITrackerRepository : IRepository<Tracker> {
     }
 }

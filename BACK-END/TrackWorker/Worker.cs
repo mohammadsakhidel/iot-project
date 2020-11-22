@@ -51,7 +51,7 @@ namespace TrackWorker {
                 #endregion
 
                 #region Start Listeners:
-                // Listener for messages from terminals:
+                // Listener for messages from trackers:
                 var inTask = _inMessageListener.StartListeningAsync(stoppingToken);
                 _inMessageListener.OnDataReceived += _inMessageListener_OnDataReceivedAsync;
                 _inMessageListener.OnClientDisconnected += _inMessageListener_OnClientDisconnected;
@@ -62,10 +62,10 @@ namespace TrackWorker {
                 #endregion
 
                 #region Start Line Processors:
-                // Line manager for messages from terminals (IN):
+                // Line manager for messages from trackers (IN):
                 var inLineTask = _inLineManager.StartWachingAsync(stoppingToken);
 
-                // Line manager for command messages to be sent to terminals:
+                // Line manager for command messages to be sent to trackers:
                 var outLineTask = _outLineManager.StartWachingAsync(stoppingToken);
                 #endregion
 

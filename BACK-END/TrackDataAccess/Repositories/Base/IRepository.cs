@@ -13,6 +13,7 @@ namespace TrackDataAccess.Repositories.Base {
         IEnumerable<TEntity> Filter(Expression<Func<TEntity, bool>> expression);
         void Add(TEntity entity);
         void Remove(TEntity entity);
+        void Remove(SoftEntity entity);
         Task SaveAsync();
 
     }

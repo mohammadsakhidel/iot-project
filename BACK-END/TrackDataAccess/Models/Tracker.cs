@@ -6,9 +6,15 @@ using System.Text;
 using TrackDataAccess.Models.Base;
 
 namespace TrackDataAccess.Models {
-    [Table("terminals")]
-    public class Terminal : IDEntity {
-        
+    [Table("trackers")]
+    public class Tracker : SoftEntity {
+
+        [Key]
+        [Required]
+        [MaxLength(16)]
+        [Column("id")]
+        public string Id { get; set; }
+
         [Required]
         [MaxLength(32)]
         [Column("device_type")]

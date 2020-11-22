@@ -38,9 +38,9 @@ namespace TrackWorker.Tests.Middlewares {
         public void OperateOnMessageTest(PipelineContext context, bool expected) {
 
             // Arrang:
-            var mockTerminal = new Terminal { Id = "8800000015" };
-            var mockRepo = new Moq.Mock<ITerminalRepository>();
-            mockRepo.Setup(repo => repo.Get(It.IsAny<string>())).Returns(() => mockTerminal);
+            var mockTracker = new Tracker { Id = "8800000015" };
+            var mockRepo = new Moq.Mock<ITrackerRepository>();
+            mockRepo.Setup(repo => repo.Get(It.IsAny<string>())).Returns(() => mockTracker);
             mockRepo.Setup(repo => repo.SaveAsync()).Callback(() => {
                 _output.WriteLine("Mock SaveAsync called.");
             });
@@ -55,12 +55,12 @@ namespace TrackWorker.Tests.Middlewares {
                 var messageParsed = ThreeGElecMessage.TryParse(context.Message.Base64Text, out var threeGElecMsg);
                 Assert.True(messageParsed);
                 Assert.NotNull(threeGElecMsg);
-                Assert.NotEmpty(mockTerminal.LastConnectedServer);
-                Assert.Matches(Patterns.IP_V4, mockTerminal.LastConnectedServer);
-                Assert.True(mockTerminal.LastConnection.HasValue);
-                Assert.True(mockTerminal.LastConnection.Value > DateTime.UtcNow.Subtract(TimeSpan.FromSeconds(10)));
+                Assert.NotEmpty(mockTracker.LastConnectedServer);
+                Assert.Matches(Patterns.IP_V4, mockTracker.LastConnectedServer);
+                Assert.True(mockTracker.LastConnection.HasValue);
+                Assert.True(mockTracker.LastConnection.Value > DateTime.UtcNow.Subtract(TimeSpan.FromSeconds(10)));
                 Assert.Matches(Patterns.MESSAGE_LINK, context.Response);
-                Assert.True(TerminalConnectionUtil.Exists(threeGElecMsg.UniqueID));
+                Assert.True(TrackerConnectionUtil.Exists(threeGElecMsg.UniqueID));
             }
 
         }
@@ -100,12 +100,12 @@ namespace TrackWorker.Tests.Middlewares {
 
         }
         public static IEnumerable<object[]> OperateOnMessageData() {
-            // Invalid Terminal ID:
+            // Invalid Tracker ID:
             yield return new object[] {
                 new PipelineContext { Message = new Message { Base64Text = "W1NHKjg4MDAwMDAwKjAwMDIqTEtd" } },
                 false
             };
-            // Valid Terminal ID:
+            // Valid Tracker ID:
             var mockSocket = new Mock<ISocket>();
             mockSocket.Setup(socket => socket.Send(It.IsAny<byte[]>())).Returns(0);
             mockSocket.Setup(socket => socket.GetRealSocket()).Returns(() => null);

@@ -11,9 +11,9 @@ using TrackWorker.Utils;
 namespace TrackWorker.Processors.Middlewares {
     public class LinkMessageMiddleware : Middleware, ILinkMessageMiddleware {
 
-        private readonly ITerminalRepository _terminalRepository;
-        public LinkMessageMiddleware(ITerminalRepository terminalRepository) {
-            _terminalRepository = terminalRepository;
+        private readonly ITrackerRepository _trackerRepository;
+        public LinkMessageMiddleware(ITrackerRepository trackerRepository) {
+            _trackerRepository = trackerRepository;
         }
 
         public override bool OperateOnMessage(PipelineContext context) {
@@ -25,31 +25,30 @@ namespace TrackWorker.Processors.Middlewares {
                 return false;
 
             // Parse Message:
-            var message = ThreeGElecMessage.Parse(baseMessage.Base64Text);
-            if (message == null)
+            var messageParsed = ThreeGElecMessage.TryParse(baseMessage.Base64Text, out var message);
+            if (!messageParsed)
                 return false;
 
-            // Check database for terminal existence:
-            var uniqueId = TerminalConnectionUtil.CreateUniqueId(message.Manufacturer.ToLower(), message.TerminalId);
-            var terminal = _terminalRepository.Get(uniqueId);
-            if (terminal == null)
+            // Check database for tracker existence:
+            var tracker = _trackerRepository.Get(message.UniqueID);
+            if (tracker == null)
                 return false;
             #endregion
 
             #region PROCESS MESSAGE:
-            // Update terminal last connection fields:
+            // Update tracker last connection fields:
             var publicIP = !string.IsNullOrEmpty(GlobalState.PublicIPAddress) 
                 ? GlobalState.PublicIPAddress
                 : SocketUtil.FindPublicIPAddressAsync().Result;
-            terminal.LastConnection = DateTime.UtcNow;
-            terminal.LastConnectedServer = publicIP;
-            _terminalRepository.SaveAsync().Wait();
+            tracker.LastConnection = DateTime.UtcNow;
+            tracker.LastConnectedServer = publicIP;
+            _trackerRepository.SaveAsync().Wait();
 
-            // Add terminal to connected terminals list:
-            TerminalConnectionUtil.Add(uniqueId, baseMessage.Socket.GetRealSocket());
+            // Add tracker to connected trackers list:
+            TrackerConnectionUtil.Add(message.UniqueID, baseMessage.Socket.GetRealSocket());
 
-            // Respond to terminal & save to context:
-            var response = $"[{message.Manufacturer}*{message.TerminalId}*{MessageAbbreviations.LINK_3G.Length:X4}*{MessageAbbreviations.LINK_3G}]";
+            // Respond to tracker & save to context:
+            var response = $"[{message.Manufacturer}*{message.TrackerId}*{MessageAbbreviations.LINK_3G.Length:X4}*{MessageAbbreviations.LINK_3G}]";
             var responseBytes = Encoding.ASCII.GetBytes(response);
             baseMessage.Socket.Send(responseBytes);
             context.Response = response;
