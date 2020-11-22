@@ -52,14 +52,15 @@ namespace TrackWorker.Tests.Middlewares {
             // Assert:
             Assert.Equal(expected, result);
             if (expected) {
-                var threeGElecMsg = ThreeGElecMessage.Parse(context.Message.Base64Text);
+                var messageParsed = ThreeGElecMessage.TryParse(context.Message.Base64Text, out var threeGElecMsg);
+                Assert.True(messageParsed);
                 Assert.NotNull(threeGElecMsg);
                 Assert.NotEmpty(mockTerminal.LastConnectedServer);
                 Assert.Matches(Patterns.IP_V4, mockTerminal.LastConnectedServer);
                 Assert.True(mockTerminal.LastConnection.HasValue);
                 Assert.True(mockTerminal.LastConnection.Value > DateTime.UtcNow.Subtract(TimeSpan.FromSeconds(10)));
                 Assert.Matches(Patterns.MESSAGE_LINK, context.Response);
-                Assert.True(TerminalConnectionUtil.Exists(TerminalConnectionUtil.CreateUniqueId(threeGElecMsg.Manufacturer, threeGElecMsg.TerminalId)));
+                Assert.True(TerminalConnectionUtil.Exists(threeGElecMsg.UniqueID));
             }
 
         }
