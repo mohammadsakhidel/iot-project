@@ -4,8 +4,8 @@ using System.Text;
 using TrackLib.Utils;
 
 namespace TrackWorker.Models {
-    public class ThreeGElecLocMessage {
-        private ThreeGElecLocMessage() {
+    public class ThreeGElecLocMessageData {
+        private ThreeGElecLocMessageData() {
 
         }
 
@@ -62,8 +62,8 @@ namespace TrackWorker.Models {
             }
         }
 
-        public static ThreeGElecLocMessage FromArray(string[] array) {
-            var message = new ThreeGElecLocMessage();
+        public static ThreeGElecLocMessageData FromArray(string[] array) {
+            var message = new ThreeGElecLocMessageData();
 
             #region TimeOfCapture:
             var baseYear = 2000;
