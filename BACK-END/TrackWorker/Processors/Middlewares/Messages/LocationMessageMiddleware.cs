@@ -62,7 +62,7 @@ namespace TrackWorker.Processors.Middlewares.Messages {
             #endregion
         }
 
-        public override bool ValidateMessage(Message message) {
+        public override bool IsMatch(Message message) {
             if (message == null || string.IsNullOrEmpty(message.Base64Text)
                 || !TextUtil.IsBase64String(message.Base64Text))
                 return false;

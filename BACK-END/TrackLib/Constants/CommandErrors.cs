@@ -9,5 +9,6 @@ namespace TrackLib.Constants {
         public const string INVALID_REQUEST = "invalid_request";
         public const string TRACKER_OFFLINE = "tracker_offline";
         public const string SERVER_ERROR = "server_error";
+        public const string INVALID_FORMAT = "invalid_format";
     }
 }

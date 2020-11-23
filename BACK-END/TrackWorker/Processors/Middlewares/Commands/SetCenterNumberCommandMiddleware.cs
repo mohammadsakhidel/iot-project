@@ -7,17 +7,15 @@ using System.Threading.Tasks;
 using TrackDataAccess.Repositories;
 using TrackLib.Constants;
 using TrackLib.DataContracts;
-using TrackLib.Utils;
-using TrackWorker.Extensions;
 using TrackWorker.Models;
 using TrackWorker.Processors.Pipelines;
 using TrackWorker.Utils;
 
 namespace TrackWorker.Processors.Middlewares.Commands {
-    public class SetIntervalCommandMiddleware : Middleware, ISetIntervalCommandMiddleware {
+    public class SetCenterNumberCommandMiddleware : Middleware, ISetCenterNumberCommandMiddleware {
 
         private readonly ITrackerRepository _trackerRepository;
-        public SetIntervalCommandMiddleware(ITrackerRepository trackerRepository) {
+        public SetCenterNumberCommandMiddleware(ITrackerRepository trackerRepository) {
             _trackerRepository = trackerRepository;
         }
 
@@ -30,9 +28,10 @@ namespace TrackWorker.Processors.Middlewares.Commands {
                 var request = CommandRequest.Deserialize(Convert.FromBase64String(context.Message.Base64Text));
 
                 // Validate Arguments:
-                if (!int.TryParse(request.Payload, out int parameter)) {
+                var centerNumber = request.Payload;
+                if (!Regex.IsMatch(centerNumber, Patterns.TRACKER_PHONE_NUMBER)) {
                     isValid = false;
-                    validationError = CommandErrors.INVALID_REQUEST;
+                    validationError = CommandErrors.INVALID_FORMAT;
                 }
 
                 // Return error response if not valid:
@@ -42,14 +41,14 @@ namespace TrackWorker.Processors.Middlewares.Commands {
                     return false;
                 }
                 #endregion
-                
+
                 #region PROCESS:
                 var tracker = _trackerRepository.Get(request.TrackerID);
                 TrackerConnectionUtil.TryGet(request.TrackerID, out var trackerSocket);
 
                 // Send command to the tracher:
                 var commandText = ThreeGElecMessage.CreateString(tracker.Manufacturer,
-                    tracker.RawID, CommandTypes.UPLOAD, parameter);
+                    tracker.RawID, CommandTypes.CENTER, centerNumber);
                 var commandBytes = Encoding.ASCII.GetBytes(commandText);
                 int sentBytes = trackerSocket.Send(commandBytes);
                 if (sentBytes > 0) {
@@ -57,12 +56,14 @@ namespace TrackWorker.Processors.Middlewares.Commands {
                     context.Message.Socket.Send(response.Serialize());
                 }
                 #endregion
-                
+
                 return true;
 
             } catch (Exception ex) {
                 var errorResponse = new CommandResponse {
-                    Done = false, Error = CommandErrors.SERVER_ERROR, Payload = ex.Message 
+                    Done = false,
+                    Error = CommandErrors.SERVER_ERROR,
+                    Payload = ex.Message
                 };
                 context.Message.Socket.Send(errorResponse.Serialize());
                 return false;
@@ -70,7 +71,7 @@ namespace TrackWorker.Processors.Middlewares.Commands {
         }
 
         public override bool IsMatch(Message message) {
-            return CommandMiddlewareHelper.IsMatch(message, CommandTypes.UPLOAD);
+            return CommandMiddlewareHelper.IsMatch(message, CommandTypes.CENTER);
         }
     }
 }

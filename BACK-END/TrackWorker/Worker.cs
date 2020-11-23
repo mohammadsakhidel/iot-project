@@ -90,6 +90,7 @@ namespace TrackWorker {
                     TimeOfCreate = DateTime.UtcNow
                 };
                 await _messageQueue.AddAsync(message);
+                _logger.LogInformation($"MESSAGE RECEIVED -> {Encoding.ASCII.GetString(Convert.FromBase64String(e.Base64Data))}");
 
             } catch (Exception ex) {
                 _logger.LogError(ex.LogMessage(nameof(MessageListener_OnDataReceivedAsync)));

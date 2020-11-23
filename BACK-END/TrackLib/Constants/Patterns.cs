@@ -13,5 +13,6 @@ namespace TrackLib.Constants {
 
         public const string IP_V4 = @"^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$";
         public const string HEX_NUMBER = @"^[0-9a-fA-F]+$";
+        public const string TRACKER_PHONE_NUMBER = @"^\+?\d{10,14}$";
     }
 }

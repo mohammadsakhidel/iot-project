@@ -38,7 +38,7 @@ namespace TrackWorker {
                     services.AddMessageListener();
                     services.AddMiddlewares();
                     services.AddPipelines();
-                    services.AddLineManagers();
+                    services.AddQueues();
 
                     services.AddDbContext(hostContext.Configuration);
                     services.AddRepositories();

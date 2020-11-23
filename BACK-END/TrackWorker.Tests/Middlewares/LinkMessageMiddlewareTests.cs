@@ -28,7 +28,7 @@ namespace TrackWorker.Tests.Middlewares {
             var middleware = new LinkMessageMiddleware(null);
 
             // Act:
-            var validated = middleware.ValidateMessage(message);
+            var validated = middleware.IsMatch(message);
 
             // Assert:
             Assert.Equal(expected, validated);

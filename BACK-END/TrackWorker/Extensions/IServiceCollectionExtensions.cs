@@ -29,6 +29,7 @@ namespace TrackWorker.Extensions {
 
             // Commands:
             services.AddTransient<ISetIntervalCommandMiddleware, SetIntervalCommandMiddleware>();
+            services.AddTransient<ISetCenterNumberCommandMiddleware, SetCenterNumberCommandMiddleware>();
 
         }
         public static void AddPipelines(this IServiceCollection services) {
@@ -49,12 +50,13 @@ namespace TrackWorker.Extensions {
 
                 // Middlewares...
                 pipeline.UseMiddleware<ISetIntervalCommandMiddleware>();
+                pipeline.UseMiddleware<ISetCenterNumberCommandMiddleware>();
 
                 return pipeline;
             });
 
         }
-        public static void AddLineManagers(this IServiceCollection services) {
+        public static void AddQueues(this IServiceCollection services) {
             services.AddSingleton<IMessageQueue, MessageQueue>();
             services.AddSingleton<ICommandQueue, CommandQueue>();
         }
