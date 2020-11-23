@@ -32,28 +32,35 @@
                   IsEnabled="{Binding IsConnected, Converter={StaticResource reverseBooleanConverter}}">
             <StackPanel Orientation="Horizontal">
                 <Label>Server:</Label>
-                <TextBox x:Name="tbServer" Width="130" Text="127.0.0.1"></TextBox>
-                <Label Margin="16 0 0 0">Port:</Label>
-                <TextBox x:Name="tbPort" Width="50" Text="8124"></TextBox>
-                <Label Margin="16 0 0 0">Manufacturer:</Label>
-                <ComboBox x:Name="cmbManufacturer" Width="120" SelectedValuePath="Key" DisplayMemberPath="Value" SelectedIndex="0"></ComboBox>
-                <Label Margin="16 0 0 0">Device ID:</Label>
-                <TextBox x:Name="tbDeviceID" Width="100" Text="123456"></TextBox>
-                <Button x:Name="btnConnect" Margin="16 0 0 0" Padding="16 0" Click="btnConnect_Click">Connect</Button>
-                <Button x:Name="btntest" Click="btntest_Click" Margin="8 0 0 0">TEST</Button>
+                <TextBox x:Name="tbServer" Width="130" Text="127.0.0.1" VerticalAlignment="Center"></TextBox>
+                <Label Margin="16 0 0 0" VerticalAlignment="Center">Port:</Label>
+                <TextBox x:Name="tbPort" Width="50" Text="8123" VerticalAlignment="Center"></TextBox>
+                <Label Margin="16 0 0 0" VerticalAlignment="Center">Manufacturer:</Label>
+                <ComboBox x:Name="cmbManufacturer" Width="120" SelectedValuePath="Key" VerticalAlignment="Center" DisplayMemberPath="Value" SelectedIndex="0"></ComboBox>
+                <Label Margin="16 0 0 0" VerticalAlignment="Center">Device ID:</Label>
+                <TextBox x:Name="tbDeviceID" Width="100" Text="123456" VerticalAlignment="Center"></TextBox>
+                <Button x:Name="btnConnect" Margin="16 0 0 0" Padding="16 0" Click="btnConnect_Click" VerticalAlignment="Center">Connect</Button>
+                <Button x:Name="btntest" Click="btntest_Click" Margin="8 0 0 0" Visibility="Collapsed">TEST</Button>
             </StackPanel>
         </GroupBox>
 
         <GroupBox Width="200" Grid.Row="1" Margin="0 16 16 0" Header="ارسال فرمان" Padding="16"
                   IsEnabled="{Binding IsConnected}">
             <StackPanel>
-                <Label>Command Type:</Label>
-                <ComboBox x:Name="cmbCommandType" Margin="0 4 0 0" SelectedValuePath="Key" DisplayMemberPath="Value"></ComboBox>
+                <Label FontWeight="Bold">SEND MESSAGE:</Label>
+                <ComboBox x:Name="cmbCommandType" SelectedValuePath="Key" DisplayMemberPath="Value"></ComboBox>
+                <Label Margin="0 5 0 0">Message Data:</Label>
+                <TextBox x:Name="tbCommandData" TextWrapping="Wrap" Height="70"></TextBox>
+                <Button x:Name="btnSendMessage" Margin="0 5 0 0" Click="btnSendMessage_Click">Send Message</Button>
 
-                <Label Margin="0 8 0 0">Command Data:</Label>
-                <TextBox x:Name="tbCommandData" TextWrapping="Wrap" Height="200" Margin="0 4 0 0"></TextBox>
-
-                <Button x:Name="btnSendCommand" Margin="0 8 0 0" Click="btnSendCommand_Click">Send</Button>
+                <Label Margin="0 15 0 0" FontWeight="Bold">SEND COMMAND:</Label>
+                <Label Margin="0 5 0 0">Server:</Label>
+                <TextBox x:Name="tbCommandServer" Text="127.0.0.1"></TextBox>
+                <Label Margin="0 5 0 0">Port Number:</Label>
+                <TextBox x:Name="tbCommandPortNumber" Text="8124"></TextBox>
+                <Label Margin="0 5 0 0">Command JSON:</Label>
+                <TextBox x:Name="tbCommandPayload" TextWrapping="Wrap" AcceptsReturn="True" Height="70"></TextBox>
+                <Button x:Name="btnSendCommand" Margin="0 5 0 0" Click="btnSendCommand_Click">Send Command</Button>
             </StackPanel>
         </GroupBox>
 

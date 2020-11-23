@@ -87,7 +87,7 @@ namespace TerminalSimulator
                 MessageBox.Show(ex.Message, "", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
-        private void btnSendCommand_Click(object sender, RoutedEventArgs e)
+        private void btnSendMessage_Click(object sender, RoutedEventArgs e)
         {
             try
             {
@@ -138,15 +138,16 @@ namespace TerminalSimulator
         {
             try
             {
+                tbCommandPayload.Text = @"{""Type"":""UPLOAD"", ""TrackerID"":""3G - 123456"", ""Payload"":""100""}";
                 cmbManufacturer.ItemsSource = Collections.Manufacturers;
 
                 #region commands:
                 var commands = new Dictionary<string, string>();
-                commands.Add(typeof(TerminalLinkCommand).ToString(), "Terminal Link Command");
-                commands.Add(typeof(TerminalPositionCommand).ToString(), "Terminal Location Command");
-                commands.Add(typeof(TerminalBlindSpotCommand).ToString(), "Blind Spot Command");
-                commands.Add(typeof(TerminalAlarmPositionCommand).ToString(), "Terminal Alarm Command");
-                commands.Add("Custom", "Custom Command");
+                commands.Add(typeof(TerminalLinkCommand).ToString(), "Terminal Link Message");
+                commands.Add(typeof(TerminalPositionCommand).ToString(), "Terminal Location Message");
+                commands.Add(typeof(TerminalBlindSpotCommand).ToString(), "Blind Spot Message");
+                commands.Add(typeof(TerminalAlarmPositionCommand).ToString(), "Terminal Alarm Message");
+                commands.Add("Custom", "Custom Message");
 
                 cmbCommandType.ItemsSource = commands;
                 #endregion
@@ -196,6 +197,36 @@ namespace TerminalSimulator
                 {
                     MessageBox.Show(ex.Message, "", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
+            }
+        }
+        private async void btnSendCommand_Click(object sender, RoutedEventArgs e) {
+            try {
+
+                var server = tbCommandServer.Text;
+                var port = Convert.ToInt32(tbCommandPortNumber.Text);
+                var json = tbCommandPayload.Text;
+
+                await Task.Run(() => {
+                    using (var socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp)) {
+                        var bytes = Encoding.ASCII.GetBytes(json);
+                        socket.Connect(server, port);
+                        socket.Send(bytes);
+                        Dispatcher.Invoke(() => {
+                            AddToLog($"Command Sent To {tbCommandServer.Text}:{tbCommandPortNumber.Text}");
+                            AddToLog(tbCommandPayload.Text);
+                            AddToLog("Waiting for the response...");
+                        });
+                        var buffer = new byte[1024];
+                        var count = socket.Receive(buffer);
+                        var response = Encoding.ASCII.GetString(buffer, 0, count);
+                        Dispatcher.Invoke(() => {
+                            AddToLog(response);
+                        });
+                    }
+                });
+
+            } catch (Exception ex) {
+                MessageBox.Show(ex.Message, "", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
         #endregion
