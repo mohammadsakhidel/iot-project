@@ -18,6 +18,15 @@ namespace TrackWorker.Utils {
             }
         }
 
+        public static bool TryGet(string uniqueId, out Socket socket) {
+            if (!Exists(uniqueId)) {
+                socket = null;
+                return false;
+            }
+            socket = _trackers[uniqueId];
+            return true;
+        }
+
         public static bool Exists(string uniqueId) {
             return _trackers.ContainsKey(uniqueId);
         }

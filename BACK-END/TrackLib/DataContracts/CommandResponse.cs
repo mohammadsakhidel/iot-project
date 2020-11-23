@@ -15,6 +15,10 @@ namespace TrackLib.DataContracts {
         /// If succedded = false the payload will contain error info.
         /// </summary>
         public string Payload { get; set; }
+        /// <summary>
+        /// Holds error code
+        /// </summary>
+        public string Error { get; set; }
 
         public byte[] Serialize() {
             var json = JsonSerializer.Serialize(this);

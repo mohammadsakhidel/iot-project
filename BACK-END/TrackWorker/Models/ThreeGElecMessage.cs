@@ -39,7 +39,7 @@ namespace TrackWorker.Models {
 
             var contentSeperator = new Regex(@"\s*,\s*");
 
-            parsedMessage = new ThreeGElecMessage() { 
+            parsedMessage = new ThreeGElecMessage() {
                 Manufacturer = parts[0],
                 TrackerId = parts[1],
                 ContentLengthHex = parts[2],
@@ -47,6 +47,15 @@ namespace TrackWorker.Models {
                 ContentItems = contentSeperator.Split(parts[3]).ToList()
             };
             return true;
+        }
+        public static string CreateString(string manufacturer, string trackerId, string command, params object[] args) {
+
+            string data = args.Aggregate((a, b) => $"{a},{b}").ToString();
+            string content = command + (string.IsNullOrEmpty(data) ? "" : $",{data}");
+            int dataLength = content.Length;
+
+            return string.Format("[{0}*{1}*{2}*{3}]",
+                    manufacturer, trackerId, dataLength.ToString("X").PadLeft(4, '0'), content);
         }
     }
 }
