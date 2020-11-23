@@ -9,7 +9,7 @@ using TrackWorker.Models;
 using TrackWorker.Processors.Pipelines;
 using TrackWorker.Utils;
 
-namespace TrackWorker.Processors.Middlewares {
+namespace TrackWorker.Processors.Middlewares.Messages {
     public class LinkMessageMiddleware : Middleware, ILinkMessageMiddleware {
 
         private readonly ITrackerRepository _trackerRepository;

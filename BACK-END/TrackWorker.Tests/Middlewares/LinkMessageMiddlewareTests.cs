@@ -7,6 +7,7 @@ using TrackDataAccess.Repositories;
 using TrackLib.Constants;
 using TrackWorker.Models;
 using TrackWorker.Processors.Middlewares;
+using TrackWorker.Processors.Middlewares.Messages;
 using TrackWorker.Processors.Pipelines;
 using TrackWorker.Utils;
 using Xunit;

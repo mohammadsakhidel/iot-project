@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TrackWorker.Processors.Middlewares {
+namespace TrackWorker.Processors.Middlewares.Messages {
     public interface IAlarmMessageMiddleware : IMiddleware {
     }
 }

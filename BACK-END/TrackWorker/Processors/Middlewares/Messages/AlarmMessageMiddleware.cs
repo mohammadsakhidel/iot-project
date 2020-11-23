@@ -11,7 +11,7 @@ using TrackLib.Utils;
 using TrackWorker.Models;
 using TrackWorker.Processors.Pipelines;
 
-namespace TrackWorker.Processors.Middlewares {
+namespace TrackWorker.Processors.Middlewares.Messages {
     public class AlarmMessageMiddleware : Middleware, IAlarmMessageMiddleware {
 
         private readonly ITrackerRepository _trackerRepository;

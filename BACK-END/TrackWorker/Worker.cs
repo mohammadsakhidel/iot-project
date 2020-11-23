@@ -23,19 +23,19 @@ namespace TrackWorker {
     public class Worker : BackgroundService {
 
         private readonly ILogger<Worker> _logger;
-        private readonly IMessageListener _inMessageListener;
-        private readonly ICommandListener _outMessageListener;
-        private readonly IMessageQueue _inLineManager;
-        private readonly ICommandQueue _outLineManager;
+        private readonly IMessageListener _messageListener;
+        private readonly ICommandListener _commandListener;
+        private readonly IMessageQueue _messageQueue;
+        private readonly ICommandQueue _commandQueue;
         public Worker(ILogger<Worker> logger, IOptions<AppSettings> appSettings,
-            IMessageListener inMessageListener, ICommandListener outMessageListener,
-            IMessageQueue inLineManager, ICommandQueue outLineManager) {
+            IMessageListener messageListener, ICommandListener commandListener,
+            IMessageQueue messageQueue, ICommandQueue commandQueue) {
 
             _logger = logger;
-            _inMessageListener = inMessageListener;
-            _outMessageListener = outMessageListener;
-            _inLineManager = inLineManager;
-            _outLineManager = outLineManager;
+            _messageListener = messageListener;
+            _commandListener = commandListener;
+            _messageQueue = messageQueue;
+            _commandQueue = commandQueue;
 
         }
 
@@ -53,24 +53,25 @@ namespace TrackWorker {
 
                 #region Start Listeners:
                 // Listener for messages from trackers:
-                var inTask = _inMessageListener.StartListeningAsync(stoppingToken);
-                _inMessageListener.OnDataReceived += _inMessageListener_OnDataReceivedAsync;
-                _inMessageListener.OnClientDisconnected += _inMessageListener_OnClientDisconnected;
+                var messageListenerTask = _messageListener.StartListeningAsync(stoppingToken);
+                _messageListener.OnDataReceived += MessageListener_OnDataReceivedAsync;
+                _messageListener.OnClientDisconnected += MessageListener_OnClientDisconnected;
 
                 // Listener for command messager to be sent to the device:
-                var outTask = _outMessageListener.StartListeningAsync(stoppingToken);
-                _outMessageListener.OnDataReceived += _outMessageListener_OnDataReceivedAsync;
+                var commandListenerTask = _commandListener.StartListeningAsync(stoppingToken);
+                _commandListener.OnDataReceived += CommandListener_OnDataReceivedAsync;
                 #endregion
 
-                #region Start Line Processors:
+                #region Start Queue Listeners:
                 // Line manager for messages from trackers (IN):
-                var inLineTask = _inLineManager.StartWachingAsync(stoppingToken);
+                var messageQueueListenerTask = _messageQueue.StartWachingAsync(stoppingToken);
 
                 // Line manager for command messages to be sent to trackers:
-                var outLineTask = _outLineManager.StartWachingAsync(stoppingToken);
+                var commandQueueListenerTask = _commandQueue.StartWachingAsync(stoppingToken);
                 #endregion
 
-                await Task.WhenAll(inTask, outTask, inLineTask, outLineTask, globalStateTask);
+                await Task.WhenAll(messageListenerTask, commandListenerTask, 
+                    messageQueueListenerTask, commandQueueListenerTask, globalStateTask);
 
             } catch (Exception ex) {
                 _logger.LogError(ex.LogMessage(nameof(ExecuteAsync)));
@@ -80,7 +81,7 @@ namespace TrackWorker {
         #endregion
 
         #region Event Handlers:
-        private async void _inMessageListener_OnDataReceivedAsync(object sender, Events.DataReceivedEventArgs e) {
+        private async void MessageListener_OnDataReceivedAsync(object sender, Events.DataReceivedEventArgs e) {
             try {
 
                 var message = new Message {
@@ -88,14 +89,14 @@ namespace TrackWorker {
                     Base64Text = e.Base64Data,
                     TimeOfCreate = DateTime.UtcNow
                 };
-                await _inLineManager.AddAsync(message);
+                await _messageQueue.AddAsync(message);
 
             } catch (Exception ex) {
-                _logger.LogError(ex.LogMessage(nameof(_inMessageListener_OnDataReceivedAsync)));
+                _logger.LogError(ex.LogMessage(nameof(MessageListener_OnDataReceivedAsync)));
             }
         }
 
-        private async void _outMessageListener_OnDataReceivedAsync(object sender, Events.DataReceivedEventArgs e) {
+        private async void CommandListener_OnDataReceivedAsync(object sender, Events.DataReceivedEventArgs e) {
             try {
 
                 var message = new Message {
@@ -103,14 +104,14 @@ namespace TrackWorker {
                     Base64Text = e.Base64Data,
                     TimeOfCreate = DateTime.UtcNow
                 };
-                await _outLineManager.AddAsync(message);
+                await _commandQueue.AddAsync(message);
 
             } catch (Exception ex) {
-                _logger.LogError(ex.LogMessage(nameof(_outMessageListener_OnDataReceivedAsync)));
+                _logger.LogError(ex.LogMessage(nameof(CommandListener_OnDataReceivedAsync)));
             }
         }
 
-        private void _inMessageListener_OnClientDisconnected(object sender, Events.ClientDisconnectedEventArgs e) {
+        private void MessageListener_OnClientDisconnected(object sender, Events.ClientDisconnectedEventArgs e) {
             //throw new NotImplementedException();
         }
         #endregion

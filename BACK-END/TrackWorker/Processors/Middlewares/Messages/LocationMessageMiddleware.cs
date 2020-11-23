@@ -10,7 +10,7 @@ using TrackWorker.Models;
 using TrackWorker.Processors.Pipelines;
 using TrackWorker.Utils;
 
-namespace TrackWorker.Processors.Middlewares {
+namespace TrackWorker.Processors.Middlewares.Messages {
     public class LocationMessageMiddleware : Middleware, ILocationMessageMiddleware {
 
         private readonly ITrackerRepository _trackerRepository;

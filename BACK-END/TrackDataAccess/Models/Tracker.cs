@@ -16,6 +16,16 @@ namespace TrackDataAccess.Models {
         public string Id { get; set; }
 
         [Required]
+        [MaxLength(16)]
+        [Column("raw_id")]
+        public string RawID { get; set; }
+
+        [Required]
+        [MaxLength(8)]
+        [Column("manufacturer")]
+        public string Manufacturer { get; set; }
+
+        [Required]
         [MaxLength(32)]
         [Column("device_type")]
         public string DeviceType { get; set; }

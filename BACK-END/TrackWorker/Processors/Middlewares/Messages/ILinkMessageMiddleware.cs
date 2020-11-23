@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace TrackWorker.Processors.Middlewares {
+namespace TrackWorker.Processors.Middlewares.Messages {
     public interface ILinkMessageMiddleware : IMiddleware {
     }
 }

@@ -8,6 +8,8 @@ using TrackWorker.Models;
 using TrackWorker.Processors.Queues;
 using TrackWorker.Processors.Middlewares;
 using TrackWorker.Processors.Pipelines;
+using TrackWorker.Processors.Middlewares.Messages;
+using TrackWorker.Processors.Middlewares.Commands;
 
 namespace TrackWorker.Extensions {
     public static class IServiceCollectionExtensions {
@@ -19,11 +21,18 @@ namespace TrackWorker.Extensions {
             services.AddSingleton<ICommandListener, CommandListener>();
         }
         public static void AddMiddlewares(this IServiceCollection services) {
+
+            // Messages:
             services.AddTransient<ILinkMessageMiddleware, LinkMessageMiddleware>();
             services.AddTransient<ILocationMessageMiddleware, LocationMessageMiddleware>();
             services.AddTransient<IAlarmMessageMiddleware, AlarmMessageMiddleware>();
+
+            // Commands:
+            services.AddTransient<ISetIntervalCommandMiddleware, SetIntervalCommandMiddleware>();
+
         }
         public static void AddPipelines(this IServiceCollection services) {
+
             services.AddSingleton<IMessagePipeline>(sp => {
                 var pipeline = new MessagePipeline();
 
@@ -37,9 +46,13 @@ namespace TrackWorker.Extensions {
 
             services.AddSingleton<ICommandPipeline>(s => {
                 var pipeline = new CommandPipeline();
+
                 // Middlewares...
+                pipeline.UseMiddleware<ISetIntervalCommandMiddleware>();
+
                 return pipeline;
             });
+
         }
         public static void AddLineManagers(this IServiceCollection services) {
             services.AddSingleton<IMessageQueue, MessageQueue>();
