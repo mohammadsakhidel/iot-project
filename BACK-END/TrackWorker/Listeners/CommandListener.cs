@@ -5,15 +5,15 @@ using System.Text;
 using TrackWorker.Models;
 
 namespace TrackWorker.Listeners {
-    public class OutgoingMessageListener : MessageListener, IOutgoingMessageListener {
+    public class CommandListener : Listener, ICommandListener {
 
         private readonly AppSettings _appSettings;
-        public OutgoingMessageListener(IOptions<AppSettings> appSettings) {
+        public CommandListener(IOptions<AppSettings> appSettings) {
             _appSettings = appSettings.Value;
         }
 
         public override int GetBacklogSize() {
-            return _appSettings.SocketOptions.OutgoingListener.BacklogSize;
+            return _appSettings.SocketOptions.CommandListener.BacklogSize;
         }
 
         public override int GetBufferSize() {
@@ -21,7 +21,7 @@ namespace TrackWorker.Listeners {
         }
 
         public override int GetPortNumber() {
-            return _appSettings.SocketOptions.OutgoingListener.PortNumber;
+            return _appSettings.SocketOptions.CommandListener.PortNumber;
         }
     }
 }

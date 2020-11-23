@@ -6,8 +6,9 @@ using System.Text;
 using System.Threading.Tasks;
 using TrackWorker.Extensions;
 using TrackWorker.Models;
+using TrackWorker.Processors.Middlewares;
 
-namespace TrackWorker.Processors {
+namespace TrackWorker.Processors.Pipelines {
     public class Pipeline : IPipeline {
         private PipelineContext _context;
         private List<Middleware> _middlewares = new List<Middleware>();

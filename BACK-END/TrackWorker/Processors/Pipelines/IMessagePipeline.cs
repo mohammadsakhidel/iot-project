@@ -3,6 +3,6 @@ using System.Collections.Generic;
 using System.Text;
 
 namespace TrackWorker.Processors.Pipelines {
-    public interface IInPipeline : IPipeline {
+    public interface IMessagePipeline : IPipeline {
     }
 }

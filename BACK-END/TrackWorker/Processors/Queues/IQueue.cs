@@ -5,8 +5,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using TrackWorker.Models;
 
-namespace TrackWorker.Processors {
-    public interface ILineManager {
+namespace TrackWorker.Processors.Queues {
+    public interface IQueue {
         Task AddAsync(Message message);
         Task StartWachingAsync(CancellationToken stoppingToken);
     }

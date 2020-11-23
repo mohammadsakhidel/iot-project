@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 
 namespace TrackWorker.Processors.Pipelines {
-    public class InPipeline : Pipeline, IInPipeline {
+    public class MessagePipeline : Pipeline, IMessagePipeline {
 
         // Middleware arr added via ServiceColleciton.
 

@@ -6,6 +6,7 @@ using TrackDataAccess.Repositories;
 using TrackLib.Constants;
 using TrackLib.Utils;
 using TrackWorker.Models;
+using TrackWorker.Processors.Pipelines;
 using TrackWorker.Utils;
 
 namespace TrackWorker.Processors.Middlewares {
@@ -37,11 +38,14 @@ namespace TrackWorker.Processors.Middlewares {
 
             #region PROCESS MESSAGE:
             // Update tracker last connection fields:
-            var publicIP = !string.IsNullOrEmpty(GlobalState.PublicIPAddress) 
-                ? GlobalState.PublicIPAddress
-                : SocketUtil.FindPublicIPAddressAsync().Result;
+            string publicIP = GlobalState.PublicIPAddress;
+            if (string.IsNullOrEmpty(publicIP)) {
+                publicIP = SocketUtil.FindPublicIPAddressAsync().Result;
+                GlobalState.SetPublicIPAddress(publicIP);
+            }
+            if (!string.IsNullOrEmpty(publicIP))
+                tracker.LastConnectedServer = publicIP;
             tracker.LastConnection = DateTime.UtcNow;
-            tracker.LastConnectedServer = publicIP;
             _trackerRepository.SaveAsync().Wait();
 
             // Add tracker to connected trackers list:
@@ -59,7 +63,7 @@ namespace TrackWorker.Processors.Middlewares {
 
         public override bool ValidateMessage(Message message) {
 
-            if (message == null || string.IsNullOrEmpty(message.Base64Text) 
+            if (message == null || string.IsNullOrEmpty(message.Base64Text)
                 || !TextUtil.IsBase64String(message.Base64Text))
                 return false;
 

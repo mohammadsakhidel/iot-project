@@ -4,30 +4,32 @@ using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using TrackLib.Constants;
 using TrackLib.Utils;
 using TrackWorker.Extensions;
 using TrackWorker.Listeners;
 using TrackWorker.Models;
-using TrackWorker.Processors.LineManagers;
+using TrackWorker.Processors.Queues;
 using TrackWorker.Utils;
 
 namespace TrackWorker {
     public class Worker : BackgroundService {
 
         private readonly ILogger<Worker> _logger;
-        private readonly IIncomingMessageListener _inMessageListener;
-        private readonly IOutgoingMessageListener _outMessageListener;
-        private readonly IInLineManager _inLineManager;
-        private readonly IOutLineManager _outLineManager;
+        private readonly IMessageListener _inMessageListener;
+        private readonly ICommandListener _outMessageListener;
+        private readonly IMessageQueue _inLineManager;
+        private readonly ICommandQueue _outLineManager;
         public Worker(ILogger<Worker> logger, IOptions<AppSettings> appSettings,
-            IIncomingMessageListener inMessageListener, IOutgoingMessageListener outMessageListener,
-            IInLineManager inLineManager, IOutLineManager outLineManager) {
+            IMessageListener inMessageListener, ICommandListener outMessageListener,
+            IMessageQueue inLineManager, ICommandQueue outLineManager) {
 
             _logger = logger;
             _inMessageListener = inMessageListener;
@@ -45,8 +47,7 @@ namespace TrackWorker {
                 #region Set Global State Values:
                 var globalStateTask = Task.Run(() => {
                     var ip = SocketUtil.FindPublicIPAddressAsync(5).Result;
-                    if (!string.IsNullOrEmpty(ip))
-                        GlobalState.PublicIPAddress = ip;
+                    GlobalState.SetPublicIPAddress(ip);
                 });
                 #endregion
 

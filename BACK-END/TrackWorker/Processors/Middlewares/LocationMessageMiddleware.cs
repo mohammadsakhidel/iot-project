@@ -7,6 +7,7 @@ using TrackDataAccess.Repositories;
 using TrackLib.Constants;
 using TrackLib.Utils;
 using TrackWorker.Models;
+using TrackWorker.Processors.Pipelines;
 using TrackWorker.Utils;
 
 namespace TrackWorker.Processors.Middlewares {

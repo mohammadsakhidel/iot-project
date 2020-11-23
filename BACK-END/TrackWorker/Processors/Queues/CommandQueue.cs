@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Text;
 using TrackWorker.Processors.Pipelines;
 
-namespace TrackWorker.Processors.LineManagers {
-    public class OutLineManager : LineManager, IOutLineManager {
+namespace TrackWorker.Processors.Queues {
+    public class CommandQueue : Queue, ICommandQueue {
 
         private readonly IPipeline _pipeline;
-        public OutLineManager(IOutPipeline pipeline) {
+        public CommandQueue(ICommandPipeline pipeline) {
             _pipeline = pipeline;
         }
 

@@ -5,9 +5,10 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using TrackWorker.Models;
+using TrackWorker.Processors.Pipelines;
 
-namespace TrackWorker.Processors {
-    public abstract class LineManager : ILineManager {
+namespace TrackWorker.Processors.Queues {
+    public abstract class Queue : IQueue {
         private readonly BlockingCollection<Message> _queue = new BlockingCollection<Message>();
 
         public async Task AddAsync(Message message) {

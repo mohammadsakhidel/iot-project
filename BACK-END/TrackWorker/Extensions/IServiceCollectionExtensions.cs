@@ -1,15 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using TrackDataAccess.Database;
 using TrackDataAccess.Repositories;
 using TrackWorker.Listeners;
 using TrackWorker.Models;
-using TrackWorker.Processors;
-using TrackWorker.Processors.LineManagers;
+using TrackWorker.Processors.Queues;
 using TrackWorker.Processors.Middlewares;
 using TrackWorker.Processors.Pipelines;
 
@@ -19,8 +15,8 @@ namespace TrackWorker.Extensions {
             services.Configure<AppSettings>(configuration.GetSection(AppSettings.SECTION_NAME));
         }
         public static void AddMessageListener(this IServiceCollection services) {
-            services.AddSingleton<IIncomingMessageListener, IncomingMessageListener>();
-            services.AddSingleton<IOutgoingMessageListener, OutgoingMessageListener>();
+            services.AddSingleton<IMessageListener, MessageListener>();
+            services.AddSingleton<ICommandListener, CommandListener>();
         }
         public static void AddMiddlewares(this IServiceCollection services) {
             services.AddTransient<ILinkMessageMiddleware, LinkMessageMiddleware>();
@@ -28,8 +24,8 @@ namespace TrackWorker.Extensions {
             services.AddTransient<IAlarmMessageMiddleware, AlarmMessageMiddleware>();
         }
         public static void AddPipelines(this IServiceCollection services) {
-            services.AddSingleton<IInPipeline>(sp => {
-                var pipeline = new InPipeline();
+            services.AddSingleton<IMessagePipeline>(sp => {
+                var pipeline = new MessagePipeline();
 
                 // Middlewares:
                 pipeline.UseMiddleware<ILocationMessageMiddleware>();
@@ -39,15 +35,15 @@ namespace TrackWorker.Extensions {
                 return pipeline;
             });
 
-            services.AddSingleton<IOutPipeline>(s => {
-                var pipeline = new OutPipeline();
+            services.AddSingleton<ICommandPipeline>(s => {
+                var pipeline = new CommandPipeline();
                 // Middlewares...
                 return pipeline;
             });
         }
         public static void AddLineManagers(this IServiceCollection services) {
-            services.AddSingleton<IInLineManager, InLineManager>();
-            services.AddSingleton<IOutLineManager, OutLineManager>();
+            services.AddSingleton<IMessageQueue, MessageQueue>();
+            services.AddSingleton<ICommandQueue, CommandQueue>();
         }
         public static void AddRepositories(this IServiceCollection services) {
             services.AddTransient<ITrackerRepository, TrackerRepository>();

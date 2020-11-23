@@ -3,6 +3,6 @@ using System.Collections.Generic;
 using System.Text;
 
 namespace TrackWorker.Listeners {
-    public interface IIncomingMessageListener : IMessageListener {
+    public interface ICommandListener : IListener {
     }
 }

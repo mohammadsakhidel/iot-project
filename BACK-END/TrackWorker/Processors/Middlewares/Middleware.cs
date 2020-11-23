@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 using TrackWorker.Models;
+using TrackWorker.Processors.Pipelines;
 
-namespace TrackWorker.Processors {
+namespace TrackWorker.Processors.Middlewares {
     public abstract class Middleware : IMiddleware {
         public IMiddleware Next { get; set; }
         public void Invoke(PipelineContext context) {
