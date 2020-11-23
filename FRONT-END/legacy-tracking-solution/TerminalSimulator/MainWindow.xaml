@@ -34,7 +34,7 @@
                 <Label>Server:</Label>
                 <TextBox x:Name="tbServer" Width="130" Text="127.0.0.1"></TextBox>
                 <Label Margin="16 0 0 0">Port:</Label>
-                <TextBox x:Name="tbPort" Width="50" Text="8123"></TextBox>
+                <TextBox x:Name="tbPort" Width="50" Text="8124"></TextBox>
                 <Label Margin="16 0 0 0">Manufacturer:</Label>
                 <ComboBox x:Name="cmbManufacturer" Width="120" SelectedValuePath="Key" DisplayMemberPath="Value" SelectedIndex="0"></ComboBox>
                 <Label Margin="16 0 0 0">Device ID:</Label>

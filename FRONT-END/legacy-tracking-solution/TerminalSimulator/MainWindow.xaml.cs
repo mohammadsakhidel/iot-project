@@ -99,20 +99,26 @@ namespace TerminalSimulator
                 #region send command:
                 if (_client != null && _client.Connected)
                 {
-                    // create command:
-                    var data = tbCommandData.Text.Replace(" ", "");
-                    var commandType = typeof(Command).Assembly.GetType(cmbCommandType.SelectedValue.ToString());
-                    var commandId = (
-                        commandType.Equals(typeof(TerminalLinkCommand)) ? CommandTypes.LK :
-                        commandType.Equals(typeof(TerminalPositionCommand)) ? CommandTypes.UD :
-                        commandType.Equals(typeof(TerminalBlindSpotCommand)) ? CommandTypes.UD2 :
-                        commandType.Equals(typeof(TerminalAlarmPositionCommand)) ? CommandTypes.AL :
-                        "");
-                    var dataLength = (string.IsNullOrEmpty(data) ? commandId.Length : data.Length + commandId.Length + 1);
-                    var command = string.Format("[{0}*{1}*{2}*{3}]",
-                                            _manufacturerId.ToUpper(), _deviceId,
-                                            dataLength.ToString("x").ToUpper().PadLeft(4, '0'),
-                                            commandId.ToUpper() + (string.IsNullOrEmpty(data) ? "" : $",{data}"));
+                    string command = "";
+                    if (cmbCommandType.SelectedIndex < 4) {
+                        // create command:
+                        var data = tbCommandData.Text.Replace(" ", "");
+                        var commandType = typeof(Command).Assembly.GetType(cmbCommandType.SelectedValue.ToString());
+                        var commandId = (
+                            commandType.Equals(typeof(TerminalLinkCommand)) ? CommandTypes.LK :
+                            commandType.Equals(typeof(TerminalPositionCommand)) ? CommandTypes.UD :
+                            commandType.Equals(typeof(TerminalBlindSpotCommand)) ? CommandTypes.UD2 :
+                            commandType.Equals(typeof(TerminalAlarmPositionCommand)) ? CommandTypes.AL :
+                            commandType.Equals(typeof(PlatformUploadIntervalSetCommand)) ? CommandTypes.UPLOAD :
+                            "");
+                        var dataLength = (string.IsNullOrEmpty(data) ? commandId.Length : data.Length + commandId.Length + 1);
+                        command = string.Format("[{0}*{1}*{2}*{3}]",
+                                                _manufacturerId.ToUpper(), _deviceId,
+                                                dataLength.ToString("x").ToUpper().PadLeft(4, '0'),
+                                                commandId.ToUpper() + (string.IsNullOrEmpty(data) ? "" : $",{data}"));
+                    } else {
+                        command = tbCommandData.Text;
+                    }
                     // send to server:
                     var bytes = Encoding.ASCII.GetBytes(command);
                     _client.Client.Send(bytes);
@@ -140,6 +146,7 @@ namespace TerminalSimulator
                 commands.Add(typeof(TerminalPositionCommand).ToString(), "Terminal Location Command");
                 commands.Add(typeof(TerminalBlindSpotCommand).ToString(), "Blind Spot Command");
                 commands.Add(typeof(TerminalAlarmPositionCommand).ToString(), "Terminal Alarm Command");
+                commands.Add("Custom", "Custom Command");
 
                 cmbCommandType.ItemsSource = commands;
                 #endregion
@@ -164,18 +171,19 @@ namespace TerminalSimulator
 
                         #region response:
                         var srvCmd = Command.Parse(srvMessage);
-                        var cmdTypeName = srvCmd.GetType().Name;
-                        bool responseNeeded = !cmdTypeName.StartsWith("Terminal");
-                        if (responseNeeded)
-                        {
-                            srvCmd.CommandData = "";
+                        if (srvCmd != null) {
+                            var cmdTypeName = srvCmd.GetType().Name;
+                            bool responseNeeded = !cmdTypeName.StartsWith("Terminal");
+                            if (responseNeeded) {
+                                srvCmd.CommandData = "";
 
-                            if (srvCmd is PlatformGetTerminalVersionCommand)
-                                srvCmd.CommandData = "v1.0";
+                                if (srvCmd is PlatformGetTerminalVersionCommand)
+                                    srvCmd.CommandData = "v1.0";
 
-                            srvCmd.ContentLength = srvCmd.CommandID.Length + srvCmd.CommandData.Length + (string.IsNullOrEmpty(srvCmd.CommandData) ? 0 : 1);
-                            var res = srvCmd.ToString();
-                            _client.Client.Send(Encoding.ASCII.GetBytes(res));
+                                srvCmd.ContentLength = srvCmd.CommandID.Length + srvCmd.CommandData.Length + (string.IsNullOrEmpty(srvCmd.CommandData) ? 0 : 1);
+                                var res = srvCmd.ToString();
+                                _client.Client.Send(Encoding.ASCII.GetBytes(res));
+                            }
                         }
                         #endregion
 
