@@ -11,11 +11,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TrackLib", "TrackLib\TrackL
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TrackDataAccess", "TrackDataAccess\TrackDataAccess.csproj", "{40317C26-98CD-462F-8A1E-EABBCF453F5F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrackWorker.Tests", "TrackWorker.Tests\TrackWorker.Tests.csproj", "{C60EF316-5A0C-4ADD-8837-9B7FF9283847}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TrackWorker.Tests", "TrackWorker.Tests\TrackWorker.Tests.csproj", "{C60EF316-5A0C-4ADD-8837-9B7FF9283847}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrackLib.Tests", "TrackLib.Tests\TrackLib.Tests.csproj", "{F620E1CA-FFDE-44CC-A175-B9AAF12BEA8B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TrackLib.Tests", "TrackLib.Tests\TrackLib.Tests.csproj", "{F620E1CA-FFDE-44CC-A175-B9AAF12BEA8B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrackAPI.Tests", "TrackAPI.Tests\TrackAPI.Tests.csproj", "{505623FF-2E54-4B6B-B8EF-92D430734E47}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TrackAPI.Tests", "TrackAPI.Tests\TrackAPI.Tests.csproj", "{505623FF-2E54-4B6B-B8EF-92D430734E47}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using TrackLib.Utils;
 
 namespace TrackWorker.Models {
     public class ThreeGElecLocMessage {
@@ -57,12 +58,7 @@ namespace TrackWorker.Models {
         public string TrackerStateBinary {
             get {
                 int bits = 32;
-                if (!string.IsNullOrEmpty(TrackerStateHex)) {
-                    var intValue = int.Parse(TrackerStateHex, System.Globalization.NumberStyles.HexNumber);
-                    var binaryString = Convert.ToString(intValue, 2).PadLeft(bits, '0');
-                    return binaryString;
-                }
-                return "".PadLeft(bits, '0');
+                return TextUtil.HexToBinaryString(TrackerStateHex).PadLeft(bits, '0');
             }
         }
 

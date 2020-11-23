@@ -8,8 +8,8 @@ using System.Threading.Tasks;
 using TrackDataAccess.Models.Base;
 
 namespace TrackDataAccess.Models {
-    [Table("location_reports")]
-    public class LocationReport : TrackerReportData {
+    [Table("alarm_reports")]
+    public class AlarmReport : TrackerReportData {
 
         [Column("id")]
         public int Id { get; set; }

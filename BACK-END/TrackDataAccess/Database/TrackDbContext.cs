@@ -13,6 +13,7 @@ namespace TrackDataAccess.Database {
 
         public DbSet<Tracker> Trackers { get; set; }
         public DbSet<LocationReport> LocationReports { get; set; }
+        public DbSet<AlarmReport> AlarmReports { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder) {
             #region Soft Delete Query Filter:
