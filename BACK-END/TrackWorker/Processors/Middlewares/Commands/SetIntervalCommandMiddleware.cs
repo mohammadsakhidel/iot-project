@@ -42,7 +42,7 @@ namespace TrackWorker.Processors.Middlewares.Commands {
                     return false;
                 }
                 #endregion
-
+                
                 #region PROCESS:
                 var tracker = _trackerRepository.Get(request.TrackerID);
                 TrackerConnectionUtil.TryGet(request.TrackerID, out var trackerSocket);
@@ -57,14 +57,14 @@ namespace TrackWorker.Processors.Middlewares.Commands {
                     context.Message.Socket.Send(response.Serialize());
                 }
                 #endregion
-
+                
                 return true;
 
             } catch (Exception ex) {
                 var errorResponse = new CommandResponse {
                     Done = false,
                     Error = CommandErrors.SERVER_ERROR,
-                    Payload = ex.LogMessage(this.GetType().Name)
+                    Payload = ex.Message
                 };
                 context.Message.Socket.Send(errorResponse.Serialize());
                 return false;

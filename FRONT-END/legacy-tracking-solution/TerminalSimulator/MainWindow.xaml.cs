@@ -138,7 +138,7 @@ namespace TerminalSimulator
         {
             try
             {
-                tbCommandPayload.Text = @"{""Type"":""UPLOAD"", ""TrackerID"":""3G - 123456"", ""Payload"":""100""}";
+                tbCommandPayload.Text = @"{""Type"":""UPLOAD"", ""TrackerID"":""3G-123456"", ""Payload"":""100""}";
                 cmbManufacturer.ItemsSource = Collections.Manufacturers;
 
                 #region commands:
