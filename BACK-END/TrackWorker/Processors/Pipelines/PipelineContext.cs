@@ -11,8 +11,5 @@ namespace TrackWorker.Processors.Pipelines {
 
         public bool MessageValid { get; set; }
         public bool MessageProcessed { get; set; }
-
-        public IMiddleware AssociatedMiddleware { get; set; }
-        public string Response { get; set; }
     }
 }

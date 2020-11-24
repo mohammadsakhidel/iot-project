@@ -39,7 +39,7 @@ namespace TrackWorker.Tests.Middlewares {
         public void OperateOnMessageTest(PipelineContext context, bool expected) {
 
             // Arrang:
-            var mockTracker = new Tracker { Id = "8800000015" };
+            var mockTracker = new Tracker { Id = "SG-8800000015" };
             var mockRepo = new Moq.Mock<ITrackerRepository>();
             mockRepo.Setup(repo => repo.Get(It.IsAny<string>())).Returns(() => mockTracker);
             mockRepo.Setup(repo => repo.SaveAsync()).Callback(() => {
@@ -59,9 +59,8 @@ namespace TrackWorker.Tests.Middlewares {
                 Assert.NotEmpty(mockTracker.LastConnectedServer);
                 Assert.Matches(Patterns.IP_V4, mockTracker.LastConnectedServer);
                 Assert.True(mockTracker.LastConnection.HasValue);
-                Assert.True(mockTracker.LastConnection.Value > DateTime.UtcNow.Subtract(TimeSpan.FromSeconds(10)));
-                Assert.Matches(Patterns.MESSAGE_LINK, context.Response);
-                Assert.True(TrackerConnections.IsTrackerOnline(threeGElecMsg.UniqueID));
+                Assert.True(mockTracker.LastConnection.Value > DateTime.UtcNow.Subtract(TimeSpan.FromSeconds(20)));
+                Assert.True(TrackerConnections.Exists(threeGElecMsg.UniqueID));
             }
 
         }
@@ -107,7 +106,7 @@ namespace TrackWorker.Tests.Middlewares {
                 false
             };
             // Valid Tracker ID:
-            var mockSocket = new Mock<ISocket>();
+            var mockSocket = new Mock<ISocketWrapper>();
             mockSocket.Setup(socket => socket.Send(It.IsAny<byte[]>())).Returns(0);
             mockSocket.Setup(socket => socket.GetRealSocket()).Returns(() => null);
             yield return new object[] {

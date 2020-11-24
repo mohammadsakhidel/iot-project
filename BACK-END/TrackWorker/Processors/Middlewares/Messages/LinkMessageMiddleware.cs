@@ -20,23 +20,15 @@ namespace TrackWorker.Processors.Middlewares.Messages {
         public override bool OperateOnMessage(PipelineContext context) {
 
             #region VALIDATION:
-            var baseMessage = context.Message;
-            // Validate Message:
-            if (baseMessage == null || string.IsNullOrEmpty(baseMessage.Base64Text) || baseMessage.Socket == null)
-                return false;
-
-            // Parse Message:
-            var messageParsed = ThreeGElecMessage.TryParse(baseMessage.Base64Text, out var message);
-            if (!messageParsed)
-                return false;
-
-            // Check database for tracker existence:
-            var tracker = _trackerRepository.Get(message.UniqueID);
-            if (tracker == null)
+            var isValid = MessageHelper.Validate(context, _trackerRepository);
+            if (!isValid)
                 return false;
             #endregion
 
-            #region PROCESS MESSAGE:
+            #region PROCESSING:
+            _ = ThreeGElecMessage.TryParse(context.Message.Base64Text, out var message);
+            var tracker = _trackerRepository.Get(message.UniqueID);
+
             // Update tracker last connection fields:
             string publicIP = GlobalState.PublicIPAddress;
             if (string.IsNullOrEmpty(publicIP)) {
@@ -50,14 +42,13 @@ namespace TrackWorker.Processors.Middlewares.Messages {
 
             // Add tracker to connected trackers list:
             TrackerConnections.Add(message.UniqueID, new TrackerConnection { 
-                Socket = baseMessage.Socket.GetRealSocket()
+                Socket = context.Message.Socket.GetRealSocket()
             });
 
             // Respond to tracker & save to context:
-            var response = $"[{message.Manufacturer}*{message.TrackerId}*{MessageAbbreviations.LINK_3G.Length:X4}*{MessageAbbreviations.LINK_3G}]";
+            var response = ThreeGElecMessage.GetCommandText(message.Manufacturer, message.TrackerId, message.MessageType.Length.ToString("X4"), message.MessageType);
             var responseBytes = Encoding.ASCII.GetBytes(response);
-            baseMessage.Socket.Send(responseBytes);
-            context.Response = response;
+            context.Message.Socket.Send(responseBytes);
             #endregion
 
             return true;

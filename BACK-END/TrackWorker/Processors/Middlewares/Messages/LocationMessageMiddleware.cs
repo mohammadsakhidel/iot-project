@@ -23,23 +23,16 @@ namespace TrackWorker.Processors.Middlewares.Messages {
 
         public override bool OperateOnMessage(PipelineContext context) {
             #region VALIDATION:
-            // Null Inputs check:
-            if (context == null || context.Message == null)
-                return false;
-
-            // Parse Message:
-            var messageParsed = ThreeGElecMessage.TryParse(context.Message.Base64Text, out var message);
-            if (!messageParsed)
-                return false;
-
-            // Check database for tracker existence:
-            var tracker = _trackerRepository.Get(message.UniqueID);
-            if (tracker == null)
+            var isValid = MessageHelper.Validate(context, _trackerRepository);
+            if (!isValid)
                 return false;
             #endregion
 
             #region PROCESSING:
+            _ = ThreeGElecMessage.TryParse(context.Message.Base64Text, out var message);
+            var tracker = _trackerRepository.Get(message.UniqueID);
             var loc = ThreeGElecLocMessageData.FromArray(message.ContentItems.ToArray());
+
             if (loc.IsValid) {
                 var locReport = new LocationReport {
                     TrackerId = tracker.Id,
@@ -58,8 +51,9 @@ namespace TrackWorker.Processors.Middlewares.Messages {
                 _locationRepository.Add(locReport);
                 _locationRepository.SaveAsync().Wait();
             }
-            return true;
             #endregion
+
+            return true;
         }
 
         public override bool IsMatch(Message message) {

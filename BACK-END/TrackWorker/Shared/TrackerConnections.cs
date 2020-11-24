@@ -38,5 +38,9 @@ namespace TrackWorker.Shared {
 
             return _trackers[uniqueId].Socket.IsConnected();
         }
+
+        public static bool Exists(string uniqueId) {
+            return _trackers.ContainsKey(uniqueId);
+        }
     }
 }
