@@ -212,9 +212,7 @@ namespace TerminalSimulator
                         socket.Connect(server, port);
                         socket.Send(bytes);
                         Dispatcher.Invoke(() => {
-                            AddToLog($"Command Sent To {tbCommandServer.Text}:{tbCommandPortNumber.Text}");
-                            AddToLog(tbCommandPayload.Text);
-                            AddToLog("Waiting for the response...");
+                            AddToLog($"Command Sent To {tbCommandServer.Text}:{tbCommandPortNumber.Text}, Waiting for the reponse...");
                         });
                         var buffer = new byte[1024];
                         var count = socket.Receive(buffer);
@@ -235,6 +233,7 @@ namespace TerminalSimulator
         private void AddToLog(string message)
         {
             txtLog.Text += $"{message}{Environment.NewLine}";
+            txtLogScroll.ScrollToVerticalOffset(int.MaxValue);
         }
         private bool IsValidIP(string ip)
         {

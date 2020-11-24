@@ -48,9 +48,9 @@ namespace TrackWorker.Models {
             };
             return true;
         }
-        public static string CreateString(string manufacturer, string trackerId, string command, params object[] args) {
+        public static string GetCommandText(string manufacturer, string trackerId, string command, params object[] args) {
 
-            string data = args.Aggregate((a, b) => $"{a},{b}").ToString();
+            string data = args != null && args.Any() ? args.Aggregate((a, b) => $"{a},{b}").ToString() : "";
             string content = command + (string.IsNullOrEmpty(data) ? "" : $",{data}");
             int dataLength = content.Length;
 

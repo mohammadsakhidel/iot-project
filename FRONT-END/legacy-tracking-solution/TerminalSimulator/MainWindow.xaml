@@ -64,8 +64,9 @@
             </StackPanel>
         </GroupBox>
 
-        <TextBlock x:Name="txtLog" Grid.Row="1" Grid.Column="1" Background="Black" Margin="0 16 0 0" 
-                   Foreground="White" Padding="16" />
+        <ScrollViewer x:Name="txtLogScroll" Grid.Row="1" Grid.Column="1" Background="Black" Margin="0 16 0 0" VerticalScrollBarVisibility="Visible">
+            <TextBlock x:Name="txtLog"  Background="Black" Foreground="White" Padding="16" />
+        </ScrollViewer>
 
     </Grid>
     
