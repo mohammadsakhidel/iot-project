@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Net.Sockets;
 using System.Text;
+using TrackWorker.Extensions;
 using TrackWorker.Models;
 
 namespace TrackWorker.Shared {
@@ -22,7 +23,7 @@ namespace TrackWorker.Shared {
         }
 
         public static bool TryGet(string uniqueId, out TrackerConnection connection) {
-            if (!Exists(uniqueId)) {
+            if (!IsTrackerOnline(uniqueId)) {
                 connection = null;
                 return false;
             }
@@ -30,8 +31,12 @@ namespace TrackWorker.Shared {
             return true;
         }
 
-        public static bool Exists(string uniqueId) {
-            return _trackers.ContainsKey(uniqueId);
+        public static bool IsTrackerOnline(string uniqueId) {
+            var exists = _trackers.ContainsKey(uniqueId);
+            if (!exists)
+                return false;
+
+            return _trackers[uniqueId].Socket.IsConnected();
         }
     }
 }

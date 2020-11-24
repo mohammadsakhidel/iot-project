@@ -179,7 +179,7 @@ namespace TerminalSimulator
                                 srvCmd.CommandData = "";
 
                                 if (srvCmd is PlatformGetTerminalVersionCommand)
-                                    srvCmd.CommandData = "v1.0";
+                                    srvCmd.CommandData = "G29_BASE_V1.00_2014.04.23_17.46.49";
 
                                 srvCmd.ContentLength = srvCmd.CommandID.Length + srvCmd.CommandData.Length + (string.IsNullOrEmpty(srvCmd.CommandData) ? 0 : 1);
                                 var res = srvCmd.ToString();

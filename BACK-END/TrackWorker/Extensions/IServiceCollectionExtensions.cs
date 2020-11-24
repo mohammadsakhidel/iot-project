@@ -30,6 +30,7 @@ namespace TrackWorker.Extensions {
 
             // Commands:
             services.AddTransient<ISendValueCommandMiddleware, SetValueCommandMiddleware>();
+            services.AddTransient<IQueryCommandMiddleware, QueryCommandMiddleware>();
 
         }
         public static void AddPipelines(this IServiceCollection services) {
@@ -51,6 +52,7 @@ namespace TrackWorker.Extensions {
 
                 // Middlewares...
                 pipeline.UseMiddleware<ISendValueCommandMiddleware>();
+                pipeline.UseMiddleware<IQueryCommandMiddleware>();
 
                 return pipeline;
             });

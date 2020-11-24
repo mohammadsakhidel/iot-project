@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using TrackDataAccess.Repositories;
 using TrackLib.Constants;
@@ -14,13 +13,26 @@ using TrackWorker.Processors.Pipelines;
 using TrackWorker.Shared;
 
 namespace TrackWorker.Processors.Middlewares.Commands {
-    public class SetValueCommandMiddleware : Middleware, ISendValueCommandMiddleware {
+    public class QueryCommandMiddleware : Middleware, IQueryCommandMiddleware {
 
         private readonly ITrackerRepository _trackerRepository;
         private readonly AppSettings _appSettings;
-        public SetValueCommandMiddleware(ITrackerRepository trackerRepository, IOptions<AppSettings> appSettings) {
+        public QueryCommandMiddleware(ITrackerRepository trackerRepository, IOptions<AppSettings> appSettings) {
             _trackerRepository = trackerRepository;
             _appSettings = appSettings.Value;
+        }
+
+        public override bool IsMatch(Message message) {
+            if (message == null || string.IsNullOrEmpty(message.Base64Text)
+                || !TextUtil.IsBase64String(message.Base64Text))
+                return false;
+
+            var bytes = Convert.FromBase64String(message.Base64Text);
+            var request = CommandRequest.Deserialize(bytes);
+            if (request == null)
+                return false;
+
+            return CommandTypes.AllQueryCommands().Contains(request.Type);
         }
 
         public override bool OperateOnMessage(PipelineContext context) {
@@ -46,7 +58,7 @@ namespace TrackWorker.Processors.Middlewares.Commands {
 
                 // Send command to the tracker:
                 var commandText = ThreeGElecMessage.GetCommandText(tracker.Manufacturer,
-                    tracker.RawID, request.Type, request.Payload);
+                    tracker.RawID, request.Type, string.Empty);
                 var commandBytes = Encoding.ASCII.GetBytes(commandText);
                 int sentBytes = trackerConnection.Socket.Send(commandBytes);
                 if (sentBytes <= 0)
@@ -65,7 +77,7 @@ namespace TrackWorker.Processors.Middlewares.Commands {
                     };
                     context.Message.Socket.Send(errorResponse.Serialize());
                 } else {
-                    var response = new CommandResponse { Done = true };
+                    var response = new CommandResponse { Done = true, Payload = replyMessage.MessagePayload };
                     context.Message.Socket.Send(response.Serialize());
                 }
                 #endregion
@@ -82,19 +94,5 @@ namespace TrackWorker.Processors.Middlewares.Commands {
                 return false;
             }
         }
-
-        public override bool IsMatch(Message message) {
-            if (message == null || string.IsNullOrEmpty(message.Base64Text)
-                || !TextUtil.IsBase64String(message.Base64Text))
-                return false;
-
-            var bytes = Convert.FromBase64String(message.Base64Text);
-            var request = CommandRequest.Deserialize(bytes);
-            if (request == null)
-                return false;
-
-            return CommandTypes.AllSendValueCommands().Contains(request.Type);
-        }
-
     }
 }

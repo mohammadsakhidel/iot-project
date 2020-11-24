@@ -23,7 +23,7 @@ namespace TrackWorker.Processors.Middlewares.Messages {
             if (string.IsNullOrEmpty(messageType))
                 return false;
 
-            return CommandTypes.AllSendValueCommands().Contains(messageType);
+            return CommandTypes.All().Contains(messageType);
         }
 
         public override bool OperateOnMessage(PipelineContext context) {

@@ -18,6 +18,15 @@ namespace TrackWorker.Models {
         public string Content { get; set; }
         public List<string> ContentItems { get; set; }
         public string UniqueID => $"{Manufacturer}-{TrackerId}";
+        public string MessageType => ContentItems.FirstOrDefault();
+        public string MessagePayload {
+            get {
+                if (ContentItems.Count <= 1)
+                    return "";
+
+                return Content[(Content.IndexOf(',') + 1)..Content.Length];
+            }
+        }
 
         // Static Methods:
         public static bool TryParse(string base64Message, out ThreeGElecMessage parsedMessage) {
