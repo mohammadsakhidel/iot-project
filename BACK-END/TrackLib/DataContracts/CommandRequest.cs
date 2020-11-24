@@ -18,8 +18,12 @@ namespace TrackLib.DataContracts {
         }
 
         public static CommandRequest Deserialize(byte[] bytes) {
-            var json = Encoding.ASCII.GetString(bytes);
-            return JsonSerializer.Deserialize<CommandRequest>(json);
+            try {
+                var json = Encoding.ASCII.GetString(bytes);
+                return JsonSerializer.Deserialize<CommandRequest>(json);
+            } catch {
+                return null;
+            }
         }
     }
 

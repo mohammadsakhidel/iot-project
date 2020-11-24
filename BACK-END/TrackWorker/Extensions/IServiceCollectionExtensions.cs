@@ -28,8 +28,7 @@ namespace TrackWorker.Extensions {
             services.AddTransient<IAlarmMessageMiddleware, AlarmMessageMiddleware>();
 
             // Commands:
-            services.AddTransient<ISetIntervalCommandMiddleware, SetIntervalCommandMiddleware>();
-            services.AddTransient<ISetCenterNumberCommandMiddleware, SetCenterNumberCommandMiddleware>();
+            services.AddTransient<ISetValueCommandMiddleware, SetValueCommandMiddleware>();
 
         }
         public static void AddPipelines(this IServiceCollection services) {
@@ -49,8 +48,7 @@ namespace TrackWorker.Extensions {
                 var pipeline = new CommandPipeline();
 
                 // Middlewares...
-                pipeline.UseMiddleware<ISetIntervalCommandMiddleware>();
-                pipeline.UseMiddleware<ISetCenterNumberCommandMiddleware>();
+                pipeline.UseMiddleware<ISetValueCommandMiddleware>();
 
                 return pipeline;
             });

@@ -13,17 +13,17 @@ using TrackWorker.Utils;
 
 namespace TrackWorker.Processors.Middlewares.Commands {
     public static class CommandMiddlewareHelper {
-        public static bool IsMatch(Message message, string commandType) {
+        public static bool IsMatch(Message message, params string[] validCommandTypes) {
             if (message == null || string.IsNullOrEmpty(message.Base64Text)
                 || !TextUtil.IsBase64String(message.Base64Text))
                 return false;
 
             var bytes = Convert.FromBase64String(message.Base64Text);
             var commandRequest = CommandRequest.Deserialize(bytes);
-            return commandRequest.Type == commandType;
+            return validCommandTypes.Contains(commandRequest.Type);
         }
 
-        public static (bool, string) DoBasicValidation(PipelineContext context, ITrackerRepository trackerRepository) {
+        public static (bool, string) DoBasicValidation(PipelineContext context, ITrackerRepository trackerRepository, bool payloadRequired = true) {
 
             var isValid = true;
             var validationError = CommandErrors.INVALID_REQUEST;
@@ -37,6 +37,11 @@ namespace TrackWorker.Processors.Middlewares.Commands {
             // Deserialize Command:
             var bytes = Convert.FromBase64String(context.Message.Base64Text);
             var commandRequest = CommandRequest.Deserialize(bytes);
+            if (commandRequest == null || string.IsNullOrEmpty(commandRequest.TrackerID) || 
+                string.IsNullOrEmpty(commandRequest.Type) || (payloadRequired && string.IsNullOrEmpty(commandRequest.Payload))) {
+                isValid = false;
+                validationError = CommandErrors.INVALID_REQUEST;
+            }
 
             // Is Tracker Online:
             var isTrackerOnline = TrackerConnectionUtil.Exists(commandRequest.TrackerID);

@@ -12,6 +12,7 @@ namespace TrackLib.Constants {
         public const string AL = "AL";
         public const string UPLOAD = "UPLOAD";
         public const string CENTER = "CENTER";
+        public const string SLAVE = "SLAVE";
         public const string PW = "PW";
         public const string CALL = "CALL";
         public const string MONITOR = "MONITOR";
