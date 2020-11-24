@@ -26,6 +26,7 @@ namespace TrackWorker.Extensions {
             services.AddTransient<ILinkMessageMiddleware, LinkMessageMiddleware>();
             services.AddTransient<ILocationMessageMiddleware, LocationMessageMiddleware>();
             services.AddTransient<IAlarmMessageMiddleware, AlarmMessageMiddleware>();
+            services.AddTransient<IResponseMessageMiddleware, ResponseMessageMiddleware>();
 
             // Commands:
             services.AddTransient<ISendValueCommandMiddleware, SetValueCommandMiddleware>();
@@ -38,8 +39,9 @@ namespace TrackWorker.Extensions {
 
                 // Middlewares:
                 pipeline.UseMiddleware<ILocationMessageMiddleware>();
-                pipeline.UseMiddleware<ILinkMessageMiddleware>();
                 pipeline.UseMiddleware<IAlarmMessageMiddleware>();
+                pipeline.UseMiddleware<ILinkMessageMiddleware>();
+                pipeline.UseMiddleware<IResponseMessageMiddleware>();
 
                 return pipeline;
             });

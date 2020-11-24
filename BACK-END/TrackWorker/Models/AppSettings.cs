@@ -12,6 +12,7 @@ namespace TrackWorker.Models {
         public int BufferSize { get; set; }
         public ListenerOptions MessageListener { get; set; }
         public ListenerOptions CommandListener { get; set; }
+        public int CommandReplyTimeoutMillis { get; set; }
     }
 
     public class ListenerOptions {

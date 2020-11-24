@@ -17,7 +17,7 @@ using TrackWorker.Extensions;
 using TrackWorker.Listeners;
 using TrackWorker.Models;
 using TrackWorker.Processors.Queues;
-using TrackWorker.Utils;
+using TrackWorker.Shared;
 
 namespace TrackWorker {
     public class Worker : BackgroundService {

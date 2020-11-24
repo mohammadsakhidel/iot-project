@@ -4,7 +4,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using TrackLib.Constants;
 
-namespace TrackWorker.Utils {
+namespace TrackWorker.Shared {
     public static class GlobalState {
         private static readonly object _lock = new object();
         public static string PublicIPAddress { get; private set; }

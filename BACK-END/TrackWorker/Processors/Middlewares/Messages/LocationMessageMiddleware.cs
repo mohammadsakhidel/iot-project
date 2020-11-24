@@ -8,7 +8,7 @@ using TrackLib.Constants;
 using TrackLib.Utils;
 using TrackWorker.Models;
 using TrackWorker.Processors.Pipelines;
-using TrackWorker.Utils;
+using TrackWorker.Shared;
 
 namespace TrackWorker.Processors.Middlewares.Messages {
     public class LocationMessageMiddleware : Middleware, ILocationMessageMiddleware {

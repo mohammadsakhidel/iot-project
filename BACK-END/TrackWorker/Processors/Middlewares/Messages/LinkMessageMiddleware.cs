@@ -7,7 +7,7 @@ using TrackLib.Constants;
 using TrackLib.Utils;
 using TrackWorker.Models;
 using TrackWorker.Processors.Pipelines;
-using TrackWorker.Utils;
+using TrackWorker.Shared;
 
 namespace TrackWorker.Processors.Middlewares.Messages {
     public class LinkMessageMiddleware : Middleware, ILinkMessageMiddleware {
@@ -49,7 +49,9 @@ namespace TrackWorker.Processors.Middlewares.Messages {
             _trackerRepository.SaveAsync().Wait();
 
             // Add tracker to connected trackers list:
-            TrackerConnectionUtil.Add(message.UniqueID, baseMessage.Socket.GetRealSocket());
+            TrackerConnections.Add(message.UniqueID, new TrackerConnection { 
+                Socket = baseMessage.Socket.GetRealSocket()
+            });
 
             // Respond to tracker & save to context:
             var response = $"[{message.Manufacturer}*{message.TrackerId}*{MessageAbbreviations.LINK_3G.Length:X4}*{MessageAbbreviations.LINK_3G}]";

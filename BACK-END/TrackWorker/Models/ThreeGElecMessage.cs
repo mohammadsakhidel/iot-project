@@ -28,8 +28,7 @@ namespace TrackWorker.Models {
             var bytes = Convert.FromBase64String(base64Message);
             var message = Encoding.ASCII.GetString(bytes).ToUpper();
 
-            var regex = new Regex(Patterns.MESSAGE_3GELEC);
-            if (!regex.IsMatch(message))
+            if (!Regex.IsMatch(message, Patterns.MESSAGE_3GELEC))
                 return false;
 
             var parts = message.Substring(

@@ -9,7 +9,7 @@ using TrackWorker.Models;
 using TrackWorker.Processors.Middlewares;
 using TrackWorker.Processors.Middlewares.Messages;
 using TrackWorker.Processors.Pipelines;
-using TrackWorker.Utils;
+using TrackWorker.Shared;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -61,7 +61,7 @@ namespace TrackWorker.Tests.Middlewares {
                 Assert.True(mockTracker.LastConnection.HasValue);
                 Assert.True(mockTracker.LastConnection.Value > DateTime.UtcNow.Subtract(TimeSpan.FromSeconds(10)));
                 Assert.Matches(Patterns.MESSAGE_LINK, context.Response);
-                Assert.True(TrackerConnectionUtil.Exists(threeGElecMsg.UniqueID));
+                Assert.True(TrackerConnections.Exists(threeGElecMsg.UniqueID));
             }
 
         }

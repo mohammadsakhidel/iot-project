@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Extensions.Options;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,14 +11,16 @@ using TrackLib.DataContracts;
 using TrackLib.Utils;
 using TrackWorker.Models;
 using TrackWorker.Processors.Pipelines;
-using TrackWorker.Utils;
+using TrackWorker.Shared;
 
 namespace TrackWorker.Processors.Middlewares.Commands {
     public class SetValueCommandMiddleware : Middleware, ISendValueCommandMiddleware {
 
         private readonly ITrackerRepository _trackerRepository;
-        public SetValueCommandMiddleware(ITrackerRepository trackerRepository) {
+        private readonly AppSettings _appSettings;
+        public SetValueCommandMiddleware(ITrackerRepository trackerRepository, IOptions<AppSettings> appSettings) {
             _trackerRepository = trackerRepository;
+            _appSettings = appSettings.Value;
         }
 
         public override bool OperateOnMessage(PipelineContext context) {
@@ -39,18 +42,31 @@ namespace TrackWorker.Processors.Middlewares.Commands {
 
                 #region PROCESS:
                 var tracker = _trackerRepository.Get(request.TrackerID);
-                TrackerConnectionUtil.TryGet(request.TrackerID, out var trackerSocket);
+                TrackerConnections.TryGet(request.TrackerID, out var trackerConnection);
 
-                // Send command to the tracher:
+                // Send command to the tracker:
                 var commandText = ThreeGElecMessage.GetCommandText(tracker.Manufacturer,
                     tracker.RawID, request.Type, request.Payload);
                 var commandBytes = Encoding.ASCII.GetBytes(commandText);
-                int sentBytes = trackerSocket.Send(commandBytes);
-                if (sentBytes > 0) {
+                int sentBytes = trackerConnection.Socket.Send(commandBytes);
+                if (sentBytes <= 0)
+                    throw new Exception("Something wrong happened sending command to the tracker.");
+
+                // Wait for the tracker response:
+                var trackerReplied = trackerConnection.ResponseQueue.TryTake(out var trackerReplyBase64,
+                        _appSettings.SocketOptions.CommandReplyTimeoutMillis);
+                var validReply = ThreeGElecMessage.TryParse(trackerReplyBase64, out var replyMessage)
+                    && replyMessage.ContentItems[0] == request.Type;
+
+                if (!trackerReplied || !validReply) {
+                    var errorResponse = new CommandResponse {
+                        Done = false,
+                        Error = CommandErrors.TRACKER_NO_REPLY
+                    };
+                    context.Message.Socket.Send(errorResponse.Serialize());
+                } else {
                     var response = new CommandResponse { Done = true };
                     context.Message.Socket.Send(response.Serialize());
-                } else {
-                    throw new Exception("Something wrong happened sending command to the tracker.");
                 }
                 #endregion
 
@@ -102,7 +118,7 @@ namespace TrackWorker.Processors.Middlewares.Commands {
             }
 
             // Is Tracker Online:
-            var isTrackerOnline = TrackerConnectionUtil.Exists(request.TrackerID);
+            var isTrackerOnline = TrackerConnections.Exists(request.TrackerID);
             if (!isTrackerOnline) {
                 isValid = false;
                 validationError = CommandErrors.TRACKER_OFFLINE;
