@@ -1,9 +1,7 @@
 using System;
 
-namespace TrackAPI
-{
-    public class WeatherForecast
-    {
+namespace TrackAPI {
+    public class WeatherForecast {
         public DateTime Date { get; set; }
 
         public int TemperatureC { get; set; }
