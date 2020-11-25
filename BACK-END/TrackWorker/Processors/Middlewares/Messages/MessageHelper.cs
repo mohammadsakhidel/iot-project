@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TrackDataAccess.Repositories;
-using TrackWorker.Models;
+using TrackWorker.Helpers;
 using TrackWorker.Processors.Pipelines;
 
 namespace TrackWorker.Processors.Middlewares.Messages {

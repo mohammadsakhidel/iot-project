@@ -4,7 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using TrackDataAccess.Database;
 using TrackDataAccess.Repositories;
 using TrackWorker.Listeners;
-using TrackWorker.Models;
+using TrackWorker.Helpers;
 using TrackWorker.Processors.Queues;
 using TrackWorker.Processors.Middlewares;
 using TrackWorker.Processors.Pipelines;

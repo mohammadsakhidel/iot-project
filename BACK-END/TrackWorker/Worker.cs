@@ -15,7 +15,7 @@ using TrackLib.Constants;
 using TrackLib.Utils;
 using TrackWorker.Extensions;
 using TrackWorker.Listeners;
-using TrackWorker.Models;
+using TrackWorker.Helpers;
 using TrackWorker.Processors.Queues;
 using TrackWorker.Shared;
 

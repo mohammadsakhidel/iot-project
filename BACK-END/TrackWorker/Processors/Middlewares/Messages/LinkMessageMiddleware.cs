@@ -5,7 +5,7 @@ using System.Text.RegularExpressions;
 using TrackDataAccess.Repositories;
 using TrackLib.Constants;
 using TrackLib.Utils;
-using TrackWorker.Models;
+using TrackWorker.Helpers;
 using TrackWorker.Processors.Pipelines;
 using TrackWorker.Shared;
 

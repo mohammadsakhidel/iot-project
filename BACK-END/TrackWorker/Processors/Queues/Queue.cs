@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using TrackWorker.Models;
+using TrackWorker.Helpers;
 using TrackWorker.Processors.Pipelines;
 
 namespace TrackWorker.Processors.Queues {

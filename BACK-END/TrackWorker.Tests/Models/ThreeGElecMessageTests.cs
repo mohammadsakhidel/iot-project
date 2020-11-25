@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using TrackWorker.Models;
+using TrackWorker.Helpers;
 using Xunit;
 
 namespace TrackWorker.Tests.Models {

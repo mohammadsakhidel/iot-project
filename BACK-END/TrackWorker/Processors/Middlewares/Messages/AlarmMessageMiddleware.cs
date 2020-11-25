@@ -8,7 +8,7 @@ using TrackDataAccess.Models;
 using TrackDataAccess.Repositories;
 using TrackLib.Constants;
 using TrackLib.Utils;
-using TrackWorker.Models;
+using TrackWorker.Helpers;
 using TrackWorker.Processors.Pipelines;
 
 namespace TrackWorker.Processors.Middlewares.Messages {

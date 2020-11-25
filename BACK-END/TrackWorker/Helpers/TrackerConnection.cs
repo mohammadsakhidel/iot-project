@@ -6,7 +6,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TrackWorker.Models {
+namespace TrackWorker.Helpers {
     public class TrackerConnection {
         public Socket Socket { get; set; }
         /// <summary>

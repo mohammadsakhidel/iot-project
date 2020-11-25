@@ -5,7 +5,7 @@ using System.Text;
 using TrackDataAccess.Models;
 using TrackDataAccess.Repositories;
 using TrackLib.Constants;
-using TrackWorker.Models;
+using TrackWorker.Helpers;
 using TrackWorker.Processors.Middlewares;
 using TrackWorker.Processors.Middlewares.Messages;
 using TrackWorker.Processors.Pipelines;

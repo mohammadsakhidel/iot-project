@@ -17,10 +17,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Constants\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\TrackDataAccess\TrackDataAccess.csproj" />
     <ProjectReference Include="..\TrackLib\TrackLib.csproj" />
   </ItemGroup>

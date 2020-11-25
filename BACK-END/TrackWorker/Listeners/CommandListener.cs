@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using TrackWorker.Models;
+using TrackWorker.Helpers;
 
 namespace TrackWorker.Listeners {
     public class CommandListener : Listener, ICommandListener {

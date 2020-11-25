@@ -9,7 +9,7 @@ using TrackDataAccess.Repositories;
 using TrackLib.Constants;
 using TrackLib.DataContracts;
 using TrackLib.Utils;
-using TrackWorker.Models;
+using TrackWorker.Helpers;
 using TrackWorker.Processors.Pipelines;
 using TrackWorker.Shared;
 

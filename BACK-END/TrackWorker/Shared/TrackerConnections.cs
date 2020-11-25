@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Net.Sockets;
 using System.Text;
 using TrackWorker.Extensions;
-using TrackWorker.Models;
+using TrackWorker.Helpers;
 
 namespace TrackWorker.Shared {
     public static class TrackerConnections {

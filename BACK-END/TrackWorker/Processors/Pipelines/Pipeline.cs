@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TrackWorker.Extensions;
-using TrackWorker.Models;
+using TrackWorker.Helpers;
 using TrackWorker.Processors.Middlewares;
 
 namespace TrackWorker.Processors.Pipelines {

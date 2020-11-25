@@ -6,7 +6,7 @@ using System.Text.RegularExpressions;
 using TrackLib.Constants;
 using TrackLib.Utils;
 
-namespace TrackWorker.Models {
+namespace TrackWorker.Helpers {
     public class ThreeGElecMessage {
         private ThreeGElecMessage() {
 

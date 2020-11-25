@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using TrackLib.Utils;
 
-namespace TrackWorker.Models {
+namespace TrackWorker.Helpers {
     public class ThreeGElecLocMessageData {
         private ThreeGElecLocMessageData() {
 

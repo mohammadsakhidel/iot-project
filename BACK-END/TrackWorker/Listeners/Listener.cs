@@ -12,7 +12,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using TrackWorker.Events;
 using TrackWorker.Extensions;
-using TrackWorker.Models;
+using TrackWorker.Helpers;
 
 namespace TrackWorker.Listeners {
     public abstract class Listener : IListener {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Net.Sockets;
 using System.Text;
 
-namespace TrackWorker.Models {
+namespace TrackWorker.Helpers {
     public class SocketWrapper : ISocketWrapper {
         private readonly Socket _socket;
         public SocketWrapper(Socket socket) {

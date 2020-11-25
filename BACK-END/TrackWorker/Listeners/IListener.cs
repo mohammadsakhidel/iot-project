@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using TrackWorker.Events;
-using TrackWorker.Models;
+using TrackWorker.Helpers;
 
 namespace TrackWorker.Listeners {
     public interface IListener {

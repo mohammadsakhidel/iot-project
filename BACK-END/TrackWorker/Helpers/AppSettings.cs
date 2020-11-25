@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace TrackWorker.Models {
+namespace TrackWorker.Helpers {
     public class AppSettings {
         public const string SECTION_NAME = "AppSettings";
         public SocketOptions SocketOptions { get; set; }

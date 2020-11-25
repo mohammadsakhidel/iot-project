@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using TrackWorker.Models;
+using TrackWorker.Helpers;
 using TrackWorker.Processors.Middlewares;
 
 namespace TrackWorker.Processors.Pipelines {
