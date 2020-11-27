@@ -24,28 +24,27 @@ namespace TrackAPI.Controllers {
         [Authorize(Policies.CanCreateUser)]
         public async Task<IActionResult> Post(UserModel model) {
             try {
-                var u = HttpContext.User.Claims.ToList();
-                var userId = await _userService.CreateAsync(model);
+                
+                var (succeeded, message) = await _userService.CreateAsync(model);
+                if (!succeeded)
+                    throw new ApplicationException(message);
 
                 model.Password = null;
-                return Created($"members/{userId}", model);
+                return Created($"members/{message}", model);
 
             } catch (Exception ex) {
                 return ex.GetActionResult();
             }
         }
 
-        [HttpGet]
-        [Route("{id}")]
-        [Authorize(Policies.CanReadUser)]
-        public async Task<IActionResult> Get(string id) {
+        [HttpPut]
+        [Authorize(Policies.CanUpdateUser)]
+        public async Task<IActionResult> Put(UserModel model) {
             try {
 
-                var user = await _userService.GetAsync(id);
-                if (user == null)
-                    return NotFound();
+                (var succeeded, var error) = await _userService.UpdateAsync(model);
 
-                return Ok(user);
+                return Ok();
 
             } catch (Exception ex) {
                 return ex.GetActionResult();
@@ -66,8 +65,23 @@ namespace TrackAPI.Controllers {
             }
         }
 
-        [HttpDelete]
-        [Route("{id}")]
+        [HttpGet("{id}")]
+        [Authorize(Policies.CanReadUser)]
+        public async Task<IActionResult> Get(string id) {
+            try {
+
+                var user = await _userService.GetAsync(id);
+                if (user == null)
+                    return NotFound();
+
+                return Ok(user);
+
+            } catch (Exception ex) {
+                return ex.GetActionResult();
+            }
+        }
+
+        [HttpDelete("{id}")]
         [Authorize(Policies.CanDeleteUser)]
         public async Task<IActionResult> Delete(string id) {
             try {

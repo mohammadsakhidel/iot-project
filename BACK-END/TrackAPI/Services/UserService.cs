@@ -19,16 +19,21 @@ namespace TrackAPI.Services {
             _userManager = userManager;
         }
 
-        public async Task<string> CreateAsync(UserModel model) {
+        public async Task<(bool, string)> CreateAsync(UserModel model) {
 
-            using (var transaction = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled)) {
-                var user = new AppUser {
-                    UserName = model.Email,
-                    Email = model.Email,
-                    PhoneNumber = model.PhoneNumber
-                };
+            // Check if password is empty or not cause the RequiredAttribute 
+            // is removed to use single model for both creating and updating
+            if (string.IsNullOrEmpty(model.Password))
+                return (false, "Password is empty.");
 
-                var claims = new List<Claim> {
+            using var transaction = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
+            var user = new AppUser {
+                UserName = model.Email,
+                Email = model.Email,
+                PhoneNumber = model.PhoneNumber
+            };
+
+            var claims = new List<Claim> {
                     new Claim(ClaimNames.GIVEN_NAME, model.GivenName),
                     new Claim(ClaimNames.SURNAME, model.Surname),
                     new Claim(ClaimNames.EMAIL, model.Email),
@@ -38,12 +43,16 @@ namespace TrackAPI.Services {
                     new Claim(ClaimNames.GROUP, UserGroups.USERS)
                 };
 
-                await _userManager.CreateAsync(user, model.Password);
-                await _userManager.AddClaimsAsync(user, claims);
-                transaction.Complete();
+            var result = await _userManager.CreateAsync(user, model.Password);
+            if (!result.Succeeded)
+                return (false, result.Errors.FirstOrDefault()?.Description);
 
-                return user.Id;
-            }
+            result = await _userManager.AddClaimsAsync(user, claims);
+            if (!result.Succeeded)
+                return (false, result.Errors.FirstOrDefault()?.Description);
+
+            transaction.Complete();
+            return (true, user.Id);
 
         }
 
@@ -84,6 +93,47 @@ namespace TrackAPI.Services {
                 return (false, result.Errors.FirstOrDefault()?.Description);
 
             return (true, string.Empty);
+        }
+
+        public async Task<(bool, string)> UpdateAsync(UserModel model) {
+
+            using var transaction = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
+            var user = await _userManager.FindByIdAsync(model.Id);
+            if (user == null)
+                return (false, "User not found");
+
+            user.Email = model.Email;
+            user.UserName = model.Email;
+            user.PhoneNumber = model.PhoneNumber;
+
+            // Update Claims and Password:
+            await Task.Run(() => {
+                var claims = _userManager.GetClaimsAsync(user).Result;
+                _userManager.ReplaceClaimAsync(user, claims.Single(c => c.Type == ClaimNames.GIVEN_NAME),
+                    new Claim(ClaimNames.GIVEN_NAME, model.GivenName)).Wait();
+                _userManager.ReplaceClaimAsync(user, claims.Single(c => c.Type == ClaimNames.SURNAME),
+                    new Claim(ClaimNames.SURNAME, model.Surname)).Wait();
+                _userManager.ReplaceClaimAsync(user, claims.Single(c => c.Type == ClaimNames.STATE),
+                    new Claim(ClaimNames.STATE, model.State)).Wait();
+                _userManager.ReplaceClaimAsync(user, claims.Single(c => c.Type == ClaimNames.CITY),
+                    new Claim(ClaimNames.CITY, model.City)).Wait();
+                _userManager.ReplaceClaimAsync(user, claims.Single(c => c.Type == ClaimNames.ADDRESS),
+                    new Claim(ClaimNames.ADDRESS, model.Address)).Wait();
+
+                // Change Password:
+                if (!string.IsNullOrEmpty(model.Password)) {
+                    _userManager.RemovePasswordAsync(user).Wait();
+                    _userManager.AddPasswordAsync(user, model.Password).Wait();
+                }
+            });
+
+            var result = await _userManager.UpdateAsync(user);
+            if (!result.Succeeded)
+                return (false, result.Errors.FirstOrDefault()?.Description);
+
+            transaction.Complete();
+            return (true, string.Empty);
+
         }
 
         #region Private Methods:

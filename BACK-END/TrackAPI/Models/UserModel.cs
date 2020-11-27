@@ -9,6 +9,8 @@ using TrackLib.Constants;
 namespace TrackAPI.Models {
     public class UserModel {
 
+        public string Id { get; set; }
+
         [Required]
         [RegularExpression(Patterns.NAME)]
         public string GivenName { get; set; }
@@ -32,7 +34,6 @@ namespace TrackAPI.Models {
         [RegularExpression(Patterns.EMAIL)]
         public string Email { get; set; }
 
-        [Required]
         [RegularExpression(Patterns.PASSWORD)]
         public string Password { get; set; }
 
