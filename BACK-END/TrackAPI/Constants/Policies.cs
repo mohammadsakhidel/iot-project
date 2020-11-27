@@ -5,6 +5,11 @@ using System.Threading.Tasks;
 
 namespace TrackAPI.Constants {
     public class Policies {
-        public const string CanCreateTracker = "cancreatetracker";
+        #region User Policies:
+        public const string CanCreateUser = "CanCreateUser";
+        public const string CanReadUser = "CanReadUser";
+        public const string CanDeleteUser = "CanDeleteUser";
+        public const string CanUpdateUser = "CanUpdateUser";
+        #endregion
     }
 }

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace TrackAPI.Helpers {
     public class MappingProfile : Profile {
         public MappingProfile() {
-            //CreateMap<UserDTO, User>().ReverseMap();
+            
         }
     }
 }

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 
 namespace TrackAPI.Constants {
-    public class Claims {
-        public const string IsAdmin = "idm";
+    public class Values {
+        public const string API_BASE = "v1";
     }
 }

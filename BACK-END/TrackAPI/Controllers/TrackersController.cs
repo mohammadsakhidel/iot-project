@@ -14,7 +14,6 @@ namespace TrackAPI.Controllers {
     public class TrackersController : ControllerBase {
         
         [HttpPost]
-        [Authorize(Policies.CanCreateTracker)]
         public IActionResult Post() {
             return Ok();
         }
