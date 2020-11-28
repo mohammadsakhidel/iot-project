@@ -17,5 +17,7 @@ namespace TrackAPI.Models {
         public string UserId { get; set; }
         public int? ProductId { get; set; }
         public string CreationTime { get; set; }
+        public DateTime? LastConnection { get; set; }
+        public string LastConnectedServer { get; set; }
     }
 }

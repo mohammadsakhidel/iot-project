@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 namespace TrackAPI.Helpers {
     public class AppSettings {
         public JWTSettings JWT { get; set; }
+        public WorkerSettings Worker { get; set; }
     }
 
     public class JWTSettings {
@@ -13,5 +14,13 @@ namespace TrackAPI.Helpers {
         public string Audience { get; set; }
         public string SecretKey { get; set; }
         public int SessionTimeout { get; set; }
+    }
+
+    public class WorkerSettings {
+        public bool UseTrackerLastConnection { get; set; }
+        public string DefaultServer { get; set; }
+        public int PortNumber { get; set; }
+        public int BufferSize { get; set; }
+        public int ResponseTimeoutMillis { get; set; }
     }
 }

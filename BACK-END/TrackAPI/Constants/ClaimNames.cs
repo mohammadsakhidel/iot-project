@@ -8,6 +8,7 @@ namespace TrackAPI.Constants {
 
         // JWT Specific:
         public const string ISADMIN = "isadm";
+        public const string USER_ID = "usrid";
 
         // Database Specific:
         public const string GROUP = "group";

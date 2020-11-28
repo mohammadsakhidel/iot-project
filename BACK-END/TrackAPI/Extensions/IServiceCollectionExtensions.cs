@@ -15,6 +15,7 @@ using TrackAPI.Constants;
 using TrackAPI.Helpers;
 using TrackAPI.Middlewares;
 using TrackAPI.Services;
+using TrackAPI.Sockets;
 using TrackDataAccess.Database;
 using TrackDataAccess.Models.Identity;
 using TrackDataAccess.Repositories;
@@ -81,6 +82,10 @@ namespace TrackAPI.Extensions {
 
         public static void AddRepositories(this IServiceCollection services) {
             services.AddScoped<ITrackerRepository, TrackerRepository>();
+        }
+
+        public static void AddHelpers(this IServiceCollection services) {
+            services.AddScoped<ICommandExecutor, CommandExecutor>();
         }
 
     }

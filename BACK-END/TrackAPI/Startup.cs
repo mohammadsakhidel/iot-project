@@ -32,6 +32,7 @@ namespace TrackAPI {
             services.AddAspNetIdentity();
             services.AddAPIServices();
             services.AddRepositories();
+            services.AddHelpers();
 
             services.Configure<AppSettings>(Configuration);
             services.AddControllers().AddJsonOptions(options => {
