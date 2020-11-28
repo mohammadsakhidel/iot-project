@@ -31,9 +31,12 @@ namespace TrackAPI {
             services.AddTrackDbContext(Configuration);
             services.AddAspNetIdentity();
             services.AddAPIServices();
+            services.AddRepositories();
 
             services.Configure<AppSettings>(Configuration);
-            services.AddControllers();
+            services.AddControllers().AddJsonOptions(options => {
+                options.JsonSerializerOptions.IgnoreNullValues = true;
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

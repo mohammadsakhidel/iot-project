@@ -8,7 +8,11 @@ using System.Threading.Tasks;
 namespace TrackAPI.Extensions {
     public static class ExceptionExtensions {
         public static IActionResult GetActionResult(this Exception exception) {
-            return new ObjectResult(exception.Message) {
+            var message = exception.Message;
+            if (exception.InnerException != null)
+                message += $"\n{exception.InnerException.Message}";
+
+            return new ObjectResult(message) {
                 StatusCode = StatusCodes.Status500InternalServerError
             };
         }

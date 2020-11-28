@@ -36,7 +36,7 @@ namespace TrackWorker.Processors.Middlewares.Messages {
             if (loc.IsValid) {
                 var locReport = new LocationReport {
                     TrackerId = tracker.Id,
-                    ReportTime = loc.ReportTime,
+                    CreationTime = loc.ReportTime,
                     Latitude = loc.Latitude,
                     LatitudeMark = loc.LatitudeMark.ToString(),
                     Longitude = loc.Longitude,

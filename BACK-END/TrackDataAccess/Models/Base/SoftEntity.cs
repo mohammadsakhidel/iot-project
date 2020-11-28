@@ -12,7 +12,7 @@ namespace TrackDataAccess.Models.Base {
         public bool IsDeleted { get; set; }
 
         [Column("delete_time")]
-        public DateTime DeleteTime { get; set; }
+        public DateTime? DeleteTime { get; set; }
 
     }
 }

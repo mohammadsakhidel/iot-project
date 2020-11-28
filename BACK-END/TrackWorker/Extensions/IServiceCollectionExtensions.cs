@@ -74,7 +74,7 @@ namespace TrackWorker.Extensions {
             });
             //^^^^^^^^^^^^^^^^^^^^
 
-            services.AddTransient<DbContext, TrackDbContext>(sp => {
+            services.AddTransient<TrackDbContext>(sp => {
                 var options = new DbContextOptionsBuilder<TrackDbContext>()
                     .UseMySQL(configuration.GetValue<string>("Database:ConnectionStrings:TrackDB"))
                     .Options;

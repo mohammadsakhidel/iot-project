@@ -11,5 +11,12 @@ namespace TrackAPI.Constants {
         public const string CanDeleteUser = "CanDeleteUser";
         public const string CanUpdateUser = "CanUpdateUser";
         #endregion
+
+        #region Tracker Policies:
+        public const string CanCreateTracker = "CanCreateTracker";
+        public const string CanReadTracker = "CanReadTracker";
+        public const string CanDeleteTracker = "CanDeleteTracker";
+        public const string CanUpdateTracker = "CanUpdateTracker";
+        #endregion
     }
 }

@@ -9,8 +9,8 @@ using TrackDataAccess.Database;
 namespace TrackDataAccess.Migrations
 {
     [DbContext(typeof(TrackDbContext))]
-    [Migration("20201128103336_CreationTimeAddedToUser")]
-    partial class CreationTimeAddedToUser
+    [Migration("20201128143458_InitAgain")]
+    partial class InitAgain
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -167,6 +167,10 @@ namespace TrackDataAccess.Migrations
                         .HasColumnName("battery")
                         .HasColumnType("double");
 
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnName("creation_time")
+                        .HasColumnType("datetime");
+
                     b.Property<double>("Direction")
                         .HasColumnName("direction")
                         .HasColumnType("double");
@@ -190,10 +194,6 @@ namespace TrackDataAccess.Migrations
                         .HasColumnName("longitude_mark")
                         .HasColumnType("varchar(1)")
                         .HasMaxLength(1);
-
-                    b.Property<DateTime>("ReportTime")
-                        .HasColumnName("report_time")
-                        .HasColumnType("datetime");
 
                     b.Property<double?>("SignalStrength")
                         .HasColumnName("signal_strength")
@@ -235,6 +235,7 @@ namespace TrackDataAccess.Migrations
                         .HasColumnType("text");
 
                     b.Property<DateTime>("CreationTime")
+                        .HasColumnName("creation_time")
                         .HasColumnType("datetime");
 
                     b.Property<string>("Email")
@@ -304,6 +305,10 @@ namespace TrackDataAccess.Migrations
                         .HasColumnName("battery")
                         .HasColumnType("double");
 
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnName("creation_time")
+                        .HasColumnType("datetime");
+
                     b.Property<double>("Direction")
                         .HasColumnName("direction")
                         .HasColumnType("double");
@@ -327,10 +332,6 @@ namespace TrackDataAccess.Migrations
                         .HasColumnName("longitude_mark")
                         .HasColumnType("varchar(1)")
                         .HasMaxLength(1);
-
-                    b.Property<DateTime>("ReportTime")
-                        .HasColumnName("report_time")
-                        .HasColumnType("datetime");
 
                     b.Property<double?>("SignalStrength")
                         .HasColumnName("signal_strength")
@@ -365,19 +366,13 @@ namespace TrackDataAccess.Migrations
                         .HasColumnType("varchar(16)")
                         .HasMaxLength(16);
 
-                    b.Property<int?>("AssociatedProductId")
-                        .HasColumnName("associated_product_id")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("DeleteTime")
-                        .HasColumnName("delete_time")
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnName("creation_time")
                         .HasColumnType("datetime");
 
-                    b.Property<string>("DeviceType")
-                        .IsRequired()
-                        .HasColumnName("device_type")
-                        .HasColumnType("varchar(32)")
-                        .HasMaxLength(32);
+                    b.Property<DateTime?>("DeleteTime")
+                        .HasColumnName("delete_time")
+                        .HasColumnType("datetime");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnName("is_deleted")
@@ -398,11 +393,19 @@ namespace TrackDataAccess.Migrations
                         .HasColumnType("varchar(8)")
                         .HasMaxLength(8);
 
+                    b.Property<int?>("ProductId")
+                        .HasColumnName("product_id")
+                        .HasColumnType("int");
+
                     b.Property<string>("RawID")
                         .IsRequired()
                         .HasColumnName("raw_id")
                         .HasColumnType("varchar(16)")
                         .HasMaxLength(16);
+
+                    b.Property<int?>("UserId")
+                        .HasColumnName("user_id")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 

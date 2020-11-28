@@ -30,12 +30,24 @@ namespace TrackDataAccess.Repositories.Base {
             return Context.Find<TEntity>(id);
         }
 
-        public void Remove(TEntity entity) {
-            Context.Remove<TEntity>(entity);
+        public async Task<TEntity> GetAsync(params object[] id) {
+            return await Context.FindAsync<TEntity>(id);
         }
 
-        public void Remove(SoftEntity entity) {
-            entity.IsDeleted = true;
+        public async Task<IEnumerable<TEntity>> TakeAsync<TOrderbyProp>(int skip, int take, Func<TEntity, TOrderbyProp> orderbyPropSelector, bool desc = false) {
+            return await Task.Run(() => {
+                return (desc ? Context.Set<TEntity>().OrderByDescending(orderbyPropSelector).Skip(skip).Take(take).ToList()
+                    : Context.Set<TEntity>().OrderBy(orderbyPropSelector).Skip(skip).Take(take).ToList());
+            });
+        }
+
+        public void Remove(TEntity entity) {
+            if (entity is SoftEntity soft) {
+                soft.IsDeleted = true;
+                soft.DeleteTime = DateTime.UtcNow;
+            } else {
+                Context.Remove<TEntity>(entity);
+            }
         }
 
         public async Task SaveAsync() {

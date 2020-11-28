@@ -67,7 +67,7 @@ namespace TrackAPI.Services {
             var appUser = await _userManager.FindByNameAsync(userName);
             if (appUser != null) {
                 var claims = await _userManager.GetClaimsAsync(appUser);
-                return mapAppUserToUserModel(appUser, claims);
+                return mapEntityToModel(appUser, claims);
             } else {
                 return null;
             }
@@ -77,7 +77,7 @@ namespace TrackAPI.Services {
             var appUser = await _userManager.FindByIdAsync(id);
             if (appUser != null) {
                 var claims = await _userManager.GetClaimsAsync(appUser);
-                return mapAppUserToUserModel(appUser, claims);
+                return mapEntityToModel(appUser, claims);
             } else {
                 return null;
             }
@@ -92,7 +92,7 @@ namespace TrackAPI.Services {
                 var list = new List<UserModel>();
                 foreach (var user in appUsers) {
                     var claims = _userManager.GetClaimsAsync(user).Result;
-                    list.Add(mapAppUserToUserModel(user, claims));
+                    list.Add(mapEntityToModel(user, claims));
                 }
                 return list;
             });
@@ -171,7 +171,7 @@ namespace TrackAPI.Services {
         }
 
         #region Private Methods:
-        private UserModel mapAppUserToUserModel(AppUser appUser, IEnumerable<Claim> claims) {
+        private static UserModel mapEntityToModel(AppUser appUser, IEnumerable<Claim> claims) {
             return new UserModel {
                 Id = appUser.Id,
                 GivenName = claims.SingleOrDefault(c => c.Type == ClaimNames.GIVEN_NAME)?.Value,

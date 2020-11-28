@@ -25,13 +25,12 @@ namespace TrackDataAccess.Models {
         [Column("manufacturer")]
         public string Manufacturer { get; set; }
 
-        [Required]
-        [MaxLength(32)]
-        [Column("device_type")]
-        public string DeviceType { get; set; }
+        [Column("product_id")]
+        public int? ProductId { get; set; }
 
-        [Column("associated_product_id")]
-        public int? AssociatedProductId { get; set; }
+        [MaxLength(64)]
+        [Column("user_id")]
+        public string UserId { get; set; }
 
         [Column("last_connection")]
         public DateTime? LastConnection { get; set; }

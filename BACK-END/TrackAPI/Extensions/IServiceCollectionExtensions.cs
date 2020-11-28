@@ -17,6 +17,7 @@ using TrackAPI.Middlewares;
 using TrackAPI.Services;
 using TrackDataAccess.Database;
 using TrackDataAccess.Models.Identity;
+using TrackDataAccess.Repositories;
 
 namespace TrackAPI.Extensions {
     public static class IServiceCollectionExtensions {
@@ -29,10 +30,18 @@ namespace TrackAPI.Extensions {
 
         public static void AddAuthorizationPolicies(this IServiceCollection services) {
             services.AddAuthorization(options => {
+                // Users:
                 options.AddPolicy(Policies.CanCreateUser, p => p.RequireClaim(ClaimNames.ISADMIN));
                 options.AddPolicy(Policies.CanReadUser, p => p.RequireClaim(ClaimNames.ISADMIN));
                 options.AddPolicy(Policies.CanDeleteUser, p => p.RequireClaim(ClaimNames.ISADMIN));
                 options.AddPolicy(Policies.CanUpdateUser, p => p.RequireClaim(ClaimNames.ISADMIN));
+
+                // Trackers:
+                // Users:
+                options.AddPolicy(Policies.CanCreateTracker, p => p.RequireClaim(ClaimNames.ISADMIN));
+                options.AddPolicy(Policies.CanReadTracker, p => p.RequireClaim(ClaimNames.ISADMIN));
+                options.AddPolicy(Policies.CanDeleteTracker, p => p.RequireClaim(ClaimNames.ISADMIN));
+                options.AddPolicy(Policies.CanUpdateTracker, p => p.RequireClaim(ClaimNames.ISADMIN));
             });
         }
 
@@ -67,6 +76,11 @@ namespace TrackAPI.Extensions {
 
         public static void AddAPIServices(this IServiceCollection services) {
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<ITrackerService, TrackerService>();
+        }
+
+        public static void AddRepositories(this IServiceCollection services) {
+            services.AddScoped<ITrackerRepository, TrackerRepository>();
         }
 
     }

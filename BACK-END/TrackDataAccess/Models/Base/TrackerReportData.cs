@@ -8,9 +8,6 @@ using System.Threading.Tasks;
 
 namespace TrackDataAccess.Models.Base {
     public abstract class TrackerReportData : Entity {
-        [Required]
-        [Column("report_time")]
-        public DateTime ReportTime { get; set; }
 
         [Required]
         [Column("latitude")]

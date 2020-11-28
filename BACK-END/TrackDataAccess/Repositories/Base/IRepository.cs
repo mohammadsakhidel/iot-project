@@ -10,10 +10,11 @@ namespace TrackDataAccess.Repositories.Base {
         where TEntity : Entity {
 
         TEntity Get(params object[] id);
+        Task<TEntity> GetAsync(params object[] id);
         IEnumerable<TEntity> Filter(Expression<Func<TEntity, bool>> expression);
+        Task<IEnumerable<TEntity>> TakeAsync<TOrderbyProp>(int skip, int take, Func<TEntity, TOrderbyProp> orderbyPropSelector, bool desc);
         void Add(TEntity entity);
         void Remove(TEntity entity);
-        void Remove(SoftEntity entity);
         Task SaveAsync();
 
     }

@@ -4,7 +4,7 @@ using MySql.Data.EntityFrameworkCore.Metadata;
 
 namespace TrackDataAccess.Migrations
 {
-    public partial class InitAfterIdentity : Migration
+    public partial class InitAgain : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -40,7 +40,8 @@ namespace TrackDataAccess.Migrations
                     TwoFactorEnabled = table.Column<bool>(nullable: false),
                     LockoutEnd = table.Column<DateTimeOffset>(nullable: true),
                     LockoutEnabled = table.Column<bool>(nullable: false),
-                    AccessFailedCount = table.Column<int>(nullable: false)
+                    AccessFailedCount = table.Column<int>(nullable: false),
+                    creation_time = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -52,12 +53,13 @@ namespace TrackDataAccess.Migrations
                 columns: table => new
                 {
                     id = table.Column<string>(maxLength: 16, nullable: false),
+                    creation_time = table.Column<DateTime>(nullable: false),
                     is_deleted = table.Column<bool>(nullable: false),
-                    delete_time = table.Column<DateTime>(nullable: false),
+                    delete_time = table.Column<DateTime>(nullable: true),
                     raw_id = table.Column<string>(maxLength: 16, nullable: false),
                     manufacturer = table.Column<string>(maxLength: 8, nullable: false),
-                    device_type = table.Column<string>(maxLength: 32, nullable: false),
-                    associated_product_id = table.Column<int>(nullable: true),
+                    product_id = table.Column<int>(nullable: true),
+                    user_id = table.Column<int>(nullable: true),
                     last_connection = table.Column<DateTime>(nullable: true),
                     last_connected_server = table.Column<string>(maxLength: 32, nullable: true)
                 },
@@ -178,7 +180,7 @@ namespace TrackDataAccess.Migrations
                 {
                     id = table.Column<int>(nullable: false)
                         .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
-                    report_time = table.Column<DateTime>(nullable: false),
+                    creation_time = table.Column<DateTime>(nullable: false),
                     latitude = table.Column<double>(nullable: false),
                     latitude_mark = table.Column<string>(maxLength: 1, nullable: false),
                     longitude = table.Column<double>(nullable: false),
@@ -208,7 +210,7 @@ namespace TrackDataAccess.Migrations
                 {
                     id = table.Column<int>(nullable: false)
                         .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
-                    report_time = table.Column<DateTime>(nullable: false),
+                    creation_time = table.Column<DateTime>(nullable: false),
                     latitude = table.Column<double>(nullable: false),
                     latitude_mark = table.Column<string>(maxLength: 1, nullable: false),
                     longitude = table.Column<double>(nullable: false),

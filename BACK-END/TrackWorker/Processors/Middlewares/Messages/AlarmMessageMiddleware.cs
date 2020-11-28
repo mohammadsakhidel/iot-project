@@ -36,7 +36,7 @@ namespace TrackWorker.Processors.Middlewares.Messages {
             var data = ThreeGElecLocMessageData.FromArray(message.ContentItems.ToArray());
             var alarmReport = new AlarmReport {
                 TrackerId = tracker.Id,
-                ReportTime = data.ReportTime,
+                CreationTime = data.ReportTime,
                 Latitude = data.Latitude,
                 LatitudeMark = data.LatitudeMark.ToString(),
                 Longitude = data.Longitude,
