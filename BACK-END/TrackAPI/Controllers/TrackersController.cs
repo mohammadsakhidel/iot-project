@@ -26,10 +26,10 @@ namespace TrackAPI.Controllers {
         public async Task<IActionResult> PostAsync(TrackerModel model) {
             try {
 
-                await _trackerService.CreateAsync(model);
+                (var done, var trackerId) = await _trackerService.CreateAsync(model);
 
-                var createdModel = await _trackerService.GetAsync(model.Id);
-                return Created($"trackers/{model.Id}", createdModel);
+                var createdModel = await _trackerService.GetAsync(trackerId);
+                return Created($"trackers/{trackerId}", createdModel);
 
             } catch (Exception ex) {
                 return ex.GetActionResult();

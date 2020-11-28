@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AutoMapper;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -11,22 +12,22 @@ namespace TrackAPI.Services {
     public class TrackerService : ITrackerService {
 
         private readonly ITrackerRepository _trackerRepository;
-        public TrackerService(ITrackerRepository trackerRepository) {
+        private readonly IMapper _mapper;
+        public TrackerService(ITrackerRepository trackerRepository, IMapper mapper) {
             _trackerRepository = trackerRepository;
+            _mapper = mapper;
         }
 
-        public async Task CreateAsync(TrackerModel model) {
-            var tracker = new Tracker {
-                Id = $"{model.Manufacturer}-{model.RawID}".ToUpper(),
-                CreationTime = DateTime.UtcNow,
-                RawID = model.RawID,
-                Manufacturer = model.Manufacturer,
-                CommandSet = model.CommandSet,
-                ProductId = model.ProductId,
-                UserId = model.UserId
-            };
+        public async Task<(bool, string)> CreateAsync(TrackerModel model) {
+            
+            var tracker = _mapper.Map<Tracker>(model);
+            tracker.Id = $"{model.Manufacturer}-{model.RawID}".ToUpper();
+            tracker.CreationTime = DateTime.UtcNow;
+
             _trackerRepository.Add(tracker);
             await _trackerRepository.SaveAsync();
+
+            return (true, tracker.Id);
         }
 
         public async Task<TrackerModel> GetAsync(string id) {
@@ -34,13 +35,13 @@ namespace TrackAPI.Services {
             if (tracker == null)
                 return null;
 
-            return mapEntityToModel(tracker);
+            return _mapper.Map<TrackerModel>(tracker);
         }
 
         public async Task<List<TrackerModel>> TakeAsync(int skip, int take) {
 
             var trackers = await _trackerRepository.TakeAsync(skip, take, t => t.CreationTime, true);
-            var models = trackers.Select(t => mapEntityToModel(t));
+            var models = trackers.Select(t => _mapper.Map<TrackerModel>(t));
             return models.ToList();
 
         }
@@ -71,20 +72,6 @@ namespace TrackAPI.Services {
             await _trackerRepository.SaveAsync();
             return (true, string.Empty);
         }
-
-        #region Private Methods:
-        private static TrackerModel mapEntityToModel(Tracker model) {
-            return new TrackerModel {
-                Id = model.Id,
-                RawID = model.RawID,
-                Manufacturer = model.Manufacturer,
-                CommandSet = model.CommandSet,
-                ProductId = model.ProductId,
-                UserId = model.UserId,
-                CreationTime = model.CreationTime.ToString(Values.DATETIME_FORMAT)
-            };
-        }
-        #endregion
 
     }
 }
