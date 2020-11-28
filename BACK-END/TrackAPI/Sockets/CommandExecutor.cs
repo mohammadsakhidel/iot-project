@@ -5,7 +5,7 @@ using System.Linq;
 using System.Net.Sockets;
 using System.Threading.Tasks;
 using TrackAPI.Helpers;
-using TrackLib.DataContracts;
+using TrackLib.Commands;
 
 namespace TrackAPI.Sockets {
     public class CommandExecutor : ICommandExecutor {

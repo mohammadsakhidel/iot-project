@@ -32,6 +32,11 @@ namespace TrackDataAccess.Models {
         [Column("user_id")]
         public string UserId { get; set; }
 
+        [Required]
+        [MaxLength(16)]
+        [Column("command_set")]
+        public string CommandSet { get; set; }
+
         [Column("last_connection")]
         public DateTime? LastConnection { get; set; }
 

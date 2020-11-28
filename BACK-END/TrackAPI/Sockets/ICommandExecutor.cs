@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using TrackLib.DataContracts;
+using TrackLib.Commands;
 
 namespace TrackAPI.Sockets {
     public interface ICommandExecutor {

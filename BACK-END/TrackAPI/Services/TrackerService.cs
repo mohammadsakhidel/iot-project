@@ -17,10 +17,11 @@ namespace TrackAPI.Services {
 
         public async Task CreateAsync(TrackerModel model) {
             var tracker = new Tracker {
-                Id = $"{model.Manufacturer}-{model.RawId}".ToUpper(),
+                Id = $"{model.Manufacturer}-{model.RawID}".ToUpper(),
                 CreationTime = DateTime.UtcNow,
-                RawID = model.RawId,
+                RawID = model.RawID,
                 Manufacturer = model.Manufacturer,
+                CommandSet = model.CommandSet,
                 ProductId = model.ProductId,
                 UserId = model.UserId
             };
@@ -50,8 +51,9 @@ namespace TrackAPI.Services {
             if (tracker == null)
                 return (false, "Tracker not found.");
 
-            tracker.RawID = model.RawId;
+            tracker.RawID = model.RawID;
             tracker.Manufacturer = model.Manufacturer;
+            tracker.CommandSet = model.CommandSet;
             tracker.ProductId = model.ProductId;
             tracker.UserId = model.UserId;
 
@@ -74,8 +76,9 @@ namespace TrackAPI.Services {
         private static TrackerModel mapEntityToModel(Tracker model) {
             return new TrackerModel {
                 Id = model.Id,
-                RawId = model.RawID,
+                RawID = model.RawID,
                 Manufacturer = model.Manufacturer,
+                CommandSet = model.CommandSet,
                 ProductId = model.ProductId,
                 UserId = model.UserId,
                 CreationTime = model.CreationTime.ToString(Values.DATETIME_FORMAT)

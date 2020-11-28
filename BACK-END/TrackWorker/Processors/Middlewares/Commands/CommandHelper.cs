@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TrackDataAccess.Repositories;
 using TrackLib.Constants;
-using TrackLib.DataContracts;
+using TrackLib.Commands;
 using TrackWorker.Processors.Pipelines;
 using TrackWorker.Shared;
 

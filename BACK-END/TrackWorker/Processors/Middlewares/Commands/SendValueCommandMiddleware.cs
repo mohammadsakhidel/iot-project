@@ -7,7 +7,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using TrackDataAccess.Repositories;
 using TrackLib.Constants;
-using TrackLib.DataContracts;
+using TrackLib.Commands;
 using TrackLib.Utils;
 using TrackWorker.Helpers;
 using TrackWorker.Processors.Pipelines;

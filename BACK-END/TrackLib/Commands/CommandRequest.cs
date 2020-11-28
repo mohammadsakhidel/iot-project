@@ -5,7 +5,7 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace TrackLib.DataContracts {
+namespace TrackLib.Commands {
 
     public class CommandRequest {
         public string Type { get; set; }

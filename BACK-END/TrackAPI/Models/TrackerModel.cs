@@ -9,10 +9,13 @@ namespace TrackAPI.Models {
         public string Id { get; set; }
 
         [Required]
-        public string RawId { get; set; }
+        public string RawID { get; set; }
 
         [Required]
         public string Manufacturer { get; set; }
+
+        [Required]
+        public string CommandSet { get; set; }
 
         public string UserId { get; set; }
         public int? ProductId { get; set; }
