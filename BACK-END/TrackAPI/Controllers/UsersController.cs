@@ -12,7 +12,7 @@ using TrackAPI.Services;
 
 namespace TrackAPI.Controllers {
 
-    [Route("api/[controller]")]
+    [Route("v1/[controller]")]
     [ApiController]
     public class UsersController : ControllerBase {
         private readonly IUserService _userService;
@@ -25,12 +25,12 @@ namespace TrackAPI.Controllers {
         public async Task<IActionResult> Post(UserModel model) {
             try {
                 
-                var (succeeded, message) = await _userService.CreateAsync(model);
+                var (succeeded, messageOrCreatedUserId) = await _userService.CreateAsync(model);
                 if (!succeeded)
-                    throw new ApplicationException(message);
+                    throw new ApplicationException(messageOrCreatedUserId);
 
-                model.Password = null;
-                return Created($"members/{message}", model);
+                var createdUser = await _userService.GetAsync(messageOrCreatedUserId);
+                return Created($"users/{createdUser.Id}", createdUser);
 
             } catch (Exception ex) {
                 return ex.GetActionResult();
@@ -53,7 +53,7 @@ namespace TrackAPI.Controllers {
 
         [HttpGet]
         [Authorize(Policies.CanReadUser)]
-        public async Task<IActionResult> Get(int skip, int take) {
+        public async Task<IActionResult> Get(int skip = 0, int take = Values.PAGESIZE) {
             try {
 
                 var users = await _userService.GetAsync(skip, take);

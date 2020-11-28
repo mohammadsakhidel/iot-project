@@ -10,6 +10,8 @@ namespace TrackAPI.Services {
         Task<(bool succeeded, string error)> UpdateAsync(UserModel model);
         Task<UserModel> GetAsync(string id);
         Task<List<UserModel>> GetAsync(int skip, int take);
+        Task<UserModel> FindByUsernameAsync(string userName);
         Task<(bool succeeded, string error)> RemoveAsync(string id);
+        Task<(bool isValid, string token)> ValidateUserAsync(string userName, string password);
     }
 }

@@ -37,5 +37,7 @@ namespace TrackAPI.Models {
         [RegularExpression(Patterns.PASSWORD)]
         public string Password { get; set; }
 
+        public string CreationTime { get; set; }
+
     }
 }

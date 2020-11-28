@@ -9,7 +9,7 @@ using TrackAPI.Constants;
 
 namespace TrackAPI.Controllers {
 
-    [Route("api/[controller]")]
+    [Route("v1/[controller]")]
     [ApiController]
     public class TrackersController : ControllerBase {
         

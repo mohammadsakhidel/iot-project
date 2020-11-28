@@ -11,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using TrackAPI.Extensions;
+using TrackAPI.Helpers;
 
 namespace TrackAPI {
     public class Startup {
@@ -31,6 +32,7 @@ namespace TrackAPI {
             services.AddAspNetIdentity();
             services.AddAPIServices();
 
+            services.Configure<AppSettings>(Configuration);
             services.AddControllers();
         }
 

@@ -7,5 +7,6 @@ using System.Threading.Tasks;
 
 namespace TrackDataAccess.Models.Identity {
     public class AppUser : IdentityUser {
+        public DateTime CreationTime { get; set; }
     }
 }
