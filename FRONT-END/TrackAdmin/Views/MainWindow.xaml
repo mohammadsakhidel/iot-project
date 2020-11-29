@@ -1,0 +1,16 @@
+﻿<Window x:Class="TrackAdmin.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:TrackAdmin.Views"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Grid>
+        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+            <Button Command="{Binding TestCommand}">Click Here</Button>
+            <TextBlock Text="{Binding TestMessage}"></TextBlock>
+            <Button Command="{Binding TestCommand2}">Change Message</Button>
+        </StackPanel>
+    </Grid>
+</Window>
