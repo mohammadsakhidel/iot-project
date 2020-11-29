@@ -4,13 +4,40 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TrackAdmin.Views"
+        xmlns:res="clr-namespace:TrackAdmin.Resources"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
-        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
-            <Button Command="{Binding TestCommand}">Click Here</Button>
-            <TextBlock Text="{Binding TestMessage}"></TextBlock>
-            <Button Command="{Binding TestCommand2}">Change Message</Button>
-        </StackPanel>
-    </Grid>
+        Title="MainWindow" Style="{StaticResource mainWindow}">
+    <Border>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="auto" />
+            </Grid.RowDefinitions>
+
+            <!--Header-->
+            <Border Style="{StaticResource header}">
+                <TextBlock Style="{StaticResource headerText}" Text="{x:Static res:Strings.AppName}"></TextBlock>
+            </Border>
+            
+            <!--Content-->
+            <Border Grid.Row="1" Background="DarkCyan">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <Border Width="200" Background="Red"></Border>
+                    
+                </Grid>
+            </Border>
+            
+            <!--Footer-->
+            <Border Grid.Row="2" Background="Yellow">
+                <TextBlock>footer...</TextBlock>
+            </Border>
+
+        </Grid>
+    </Border>
 </Window>

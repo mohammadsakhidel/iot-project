@@ -1,0 +1,9 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+
+    <Thickness x:Key="padDouble">20</Thickness>
+    <Thickness x:Key="padNormal">10</Thickness>
+    <Thickness x:Key="padSmall">5</Thickness>
+    
+</ResourceDictionary>

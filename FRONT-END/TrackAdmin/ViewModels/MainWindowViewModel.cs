@@ -25,35 +25,5 @@ namespace TrackAdmin.ViewModels {
             }
         }
 
-        #region TestCommand:
-        private ICommand testCommand;
-        public ICommand TestCommand {
-            get {
-                if (testCommand == null)
-                    testCommand = new RelayCommand(() => {
-                        TestMessage = new Random().Next(1000000, 10000000).ToString();
-                        OnPropertyChanged(nameof(TestMessage));
-                    }, () => Convert.ToInt32(TestMessage) < 5000000);
-
-                return testCommand;
-            }
-        }
-
-        private ICommand testCommand2;
-        public ICommand TestCommand2 {
-            get {
-                if (testCommand2 == null)
-                    testCommand2 = new RelayCommand(() => {
-                        TestMessage = 0.ToString();
-                        OnPropertyChanged(nameof(TestMessage));
-                    });
-
-                return testCommand2;
-            }
-        }
-
-        public string TestMessage { get; set; }
-        #endregion
-
     }
 }

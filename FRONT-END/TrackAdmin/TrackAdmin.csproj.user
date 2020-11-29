@@ -7,7 +7,19 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Page Update="Resources\Styles.xaml">
+    <Page Update="Resources\DefaultTheme\_Templates.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Resources\DefaultTheme\_Colors.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Resources\DefaultTheme\_Dimensions.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Resources\DefaultTheme\_Fonts.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Resources\DefaultTheme\Styles.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\MainWindow.xaml">
