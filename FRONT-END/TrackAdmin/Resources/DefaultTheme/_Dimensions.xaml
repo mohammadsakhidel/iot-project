@@ -9,6 +9,13 @@
     <Thickness x:Key="padDoubleBottom">0 0 0 20</Thickness>
     
     <Thickness x:Key="padNormal">10</Thickness>
+    <Thickness x:Key="padNormalTop">0 10 0 0</Thickness>
+    <Thickness x:Key="padNormalStart">10 0 0 0</Thickness>
+    <Thickness x:Key="padNormalEnd">0 0 10 0</Thickness>
+    <Thickness x:Key="padNormalBottom">0 0 0 10</Thickness>
+    <Thickness x:Key="padNormalVertical">0 10</Thickness>
+    <Thickness x:Key="padNormalHorizontal">10 0</Thickness>
+    
     <Thickness x:Key="padSmall">5</Thickness>
 
     <sys:Double x:Key="wSideBarDefaultWith">220</sys:Double>

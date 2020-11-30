@@ -5,10 +5,51 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TrackAdmin.Views"
              xmlns:v="clr-namespace:TrackAdmin.Views"
+             xmlns:r="clr-namespace:TrackAdmin.Resources"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-        <Button Command="{Binding TestCommand}" VerticalAlignment="Center" HorizontalAlignment="Center">Click here to show loading...</Button>
-        <v:Loading Visibility="{Binding IsLoading, Converter={StaticResource cVisibility}}"></v:Loading>
+        
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="auto" />
+            </Grid.RowDefinitions>
+
+            <StackPanel Orientation="Horizontal">
+                <Button Command="{Binding LoadData}">Refresh</Button>
+                <Label Content="{x:Static r:Strings.Users}" Style="{StaticResource pageTitle}"></Label>
+            </StackPanel>
+
+            <DataGrid Grid.Row="1" ItemsSource="{Binding Users}" Style="{StaticResource datagrid}">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="{x:Static r:Strings.ID}" Binding="{Binding Id}" />
+                    <DataGridTextColumn Header="{x:Static r:Strings.GivenName}" Binding="{Binding GivenName}" />
+                    <DataGridTextColumn Header="{x:Static r:Strings.Surname}" Binding="{Binding Surname}" />
+                    <DataGridTextColumn Header="{x:Static r:Strings.Email}" Binding="{Binding Email}" />
+                    <DataGridTextColumn Header="{x:Static r:Strings.PhoneNumber}" Binding="{Binding PhoneNumber}" />
+                    <DataGridTextColumn Header="{x:Static r:Strings.State}" Binding="{Binding State}" />
+                    <DataGridTextColumn Header="{x:Static r:Strings.City}" Binding="{Binding City}" />
+                    <DataGridTextColumn Header="{x:Static r:Strings.Address}" Binding="{Binding Address}" />
+                    <DataGridTextColumn Header="{x:Static r:Strings.CreationTime}" Binding="{Binding CreationTime}" />
+                </DataGrid.Columns>
+            </DataGrid>
+
+            <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="{StaticResource padNormalVertical}">
+                <Button>Add</Button>
+                <Button>Edit</Button>
+                <Button>Remove</Button>
+            </StackPanel>
+
+        </Grid>
+
+        <!--Error Message-->
+        <Border Style="{StaticResource errorBox}" Visibility="{Binding Error, Converter={StaticResource cStringVis}}">
+            <TextBlock Style="{StaticResource errorMessage}" Text="{Binding Error}"></TextBlock>
+        </Border>
+
+        <!--Loading-->
+        <v:Loading Visibility="{Binding IsLoading, Converter={StaticResource cBoolVis}}"></v:Loading>
     </Grid>
 </UserControl>

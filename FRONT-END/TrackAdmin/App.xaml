@@ -6,7 +6,8 @@
         <ResourceDictionary>
             
             <!--Converters:-->
-            <c:VisibilityConverter x:Key="cVisibility" />
+            <c:BoolVisibilityConverter x:Key="cBoolVis" />
+            <c:StringVisibilityConverter x:Key="cStringVis" />
 
             <!--Resource Dictionaries-->
             <ResourceDictionary.MergedDictionaries>

@@ -5,6 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace TrackAdmin.ViewModels {
-    public class TrackerLogsViewModel : BaseViewModel, ITrackerLogsViewModel {
+    public interface ITrackerLogsViewModel : IViewModel {
     }
 }

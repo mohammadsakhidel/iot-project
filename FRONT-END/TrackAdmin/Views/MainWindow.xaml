@@ -48,7 +48,7 @@
                     <RowDefinition Height="auto" />
                 </Grid.RowDefinitions>
 
-                <ContentControl Content="{Binding CurrentPage}"></ContentControl>
+                <ContentControl Content="{Binding CurrentPage}" Margin="{StaticResource padDouble}"></ContentControl>
 
                 <!--Footer-->
                 <Border Grid.Row="1" Style="{StaticResource footer}">

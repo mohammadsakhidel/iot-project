@@ -23,7 +23,9 @@ namespace TrackAdmin
             IServiceCollection services = new ServiceCollection();
             services.AddConfiguration();
             services.AddWindows();
-            
+            services.AddServices();
+            services.AddViewModels();
+
             ServiceProvider = services.BuildServiceProvider();
             #endregion
 
