@@ -7,37 +7,57 @@
         xmlns:res="clr-namespace:TrackAdmin.Resources"
         mc:Ignorable="d"
         Title="MainWindow" Style="{StaticResource mainWindow}">
-    <Border>
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="auto" />
-                <RowDefinition Height="*" />
-                <RowDefinition Height="auto" />
-            </Grid.RowDefinitions>
 
-            <!--Header-->
-            <Border Style="{StaticResource header}">
-                <TextBlock Style="{StaticResource headerText}" Text="{x:Static res:Strings.AppName}"></TextBlock>
-            </Border>
-            
-            <!--Content-->
-            <Border Grid.Row="1" Background="DarkCyan">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="auto" />
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="auto" />
+            <ColumnDefinition Width="2" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
 
-                    <Border Width="200" Background="Red"></Border>
+        <Border Style="{StaticResource sidebar}">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <Image Style="{StaticResource logo}"></Image>
+
+                <StackPanel Grid.Row="1">
                     
-                </Grid>
-            </Border>
-            
-            <!--Footer-->
-            <Border Grid.Row="2" Background="Yellow">
-                <TextBlock>footer...</TextBlock>
-            </Border>
+                    <Label Style="{StaticResource sidebarHeader}" Content="{x:Static res:Strings.BasicInfo}"></Label>
+                    <Button Style="{StaticResource sidebarButton}" Content="{x:Static res:Strings.Users}" Command="{Binding SidebarCommand}" CommandParameter="Users"></Button>
+                    <Button Style="{StaticResource sidebarButton}" Content="{x:Static res:Strings.Trackers}" Command="{Binding SidebarCommand}" CommandParameter="Trackers"></Button>
 
-        </Grid>
-    </Border>
+                    <Label Style="{StaticResource sidebarHeader}" Content="{x:Static res:Strings.Monitoring}" Margin="{StaticResource padDoubleTop}"></Label>
+                    <Button Style="{StaticResource sidebarButton}" Content="{x:Static res:Strings.TestLab}" Command="{Binding SidebarCommand}" CommandParameter="TrackerTesting"></Button>
+                    <Button Style="{StaticResource sidebarButton}" Content="{x:Static res:Strings.TrackerLogs}" Command="{Binding SidebarCommand}" CommandParameter="TrackerLogs"></Button>
+
+                </StackPanel>
+
+            </Grid>
+        </Border>
+
+        <GridSplitter Grid.Column="1" Style="{StaticResource splitter}"></GridSplitter>
+
+        <Border Grid.Column="2" Style="{StaticResource content}">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="auto" />
+                </Grid.RowDefinitions>
+
+                <ContentControl Content="{Binding CurrentPage}"></ContentControl>
+
+                <!--Footer-->
+                <Border Grid.Row="1" Style="{StaticResource footer}">
+                    <TextBlock Style="{StaticResource footerText}" Text="{x:Static res:Strings.Footer}"></TextBlock>
+                </Border>
+
+            </Grid>
+        </Border>
+
+    </Grid>
+
 </Window>

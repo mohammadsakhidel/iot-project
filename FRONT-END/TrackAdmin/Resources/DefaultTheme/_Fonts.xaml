@@ -2,13 +2,13 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:sys="clr-namespace:System;assembly=mscorlib">
     
-    <FontFamily x:Key="fContent">Arial</FontFamily>
-    <FontFamily x:Key="fHeader">Georgia</FontFamily>
+    <FontFamily x:Key="fContent">Calibri</FontFamily>
+    <FontFamily x:Key="fHeader">Arial Rounded MT Bold</FontFamily>
 
     <sys:Double x:Key="fsTinay">8</sys:Double>
-    <sys:Double x:Key="fsSmall">10</sys:Double>
-    <sys:Double x:Key="fsNormal">12</sys:Double>
-    <sys:Double x:Key="fsLarge">15</sys:Double>
+    <sys:Double x:Key="fsSmall">11</sys:Double>
+    <sys:Double x:Key="fsNormal">14</sys:Double>
+    <sys:Double x:Key="fsLarge">16</sys:Double>
     <sys:Double x:Key="fsXLarge">20</sys:Double>
     <sys:Double x:Key="fsHuge">40</sys:Double>
     

@@ -1,8 +1,25 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <PropertyGroup />
+  <PropertyGroup>
+    <ShowAllFiles>false</ShowAllFiles>
+  </PropertyGroup>
   <ItemGroup>
+    <Compile Update="Views\Loading.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Views\MainWindow.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\TrackerLogs.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\Trackers.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\TrackerTesting.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\Users.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
@@ -22,7 +39,22 @@
     <Page Update="Resources\DefaultTheme\Styles.xaml">
       <SubType>Designer</SubType>
     </Page>
+    <Page Update="Views\Loading.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="Views\MainWindow.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\TrackerLogs.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\Trackers.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\TrackerTesting.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\Users.xaml">
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>

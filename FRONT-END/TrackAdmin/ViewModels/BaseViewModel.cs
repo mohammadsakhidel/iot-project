@@ -11,5 +11,19 @@ namespace TrackAdmin.ViewModels {
         protected void OnPropertyChanged(string propName) {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propName));
         }
+
+
+        // test:
+        private string randomId = DateTime.Now.ToString();
+        public string RandomId {
+            get {
+                return randomId;
+            }
+            set {
+                randomId = value;
+                OnPropertyChanged(nameof(RandomId));
+            }
+        }
+
     }
 }
