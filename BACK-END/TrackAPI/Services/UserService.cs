@@ -37,7 +37,7 @@ namespace TrackAPI.Services {
                 UserName = model.Email,
                 Email = model.Email,
                 PhoneNumber = model.PhoneNumber,
-                IsActive = model.IsActive,
+                IsActive = model.IsActive.HasValue && model.IsActive.Value,
                 CreationTime = DateTime.UtcNow
             };
 
@@ -107,6 +107,8 @@ namespace TrackAPI.Services {
                 return (false, "User not found.");
 
             user.IsDeleted = true;
+            user.DeleteTime = DateTime.UtcNow;
+
             var result = await _userManager.UpdateAsync(user);
             if (!result.Succeeded)
                 return (false, result.Errors.FirstOrDefault()?.Description);
@@ -124,6 +126,8 @@ namespace TrackAPI.Services {
             user.Email = model.Email;
             user.UserName = model.Email;
             user.PhoneNumber = model.PhoneNumber;
+            if (model.IsActive.HasValue)
+                user.IsActive = model.IsActive.Value;
 
             // Update Claims and Password:
             await Task.Run(() => {

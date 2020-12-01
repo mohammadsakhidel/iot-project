@@ -110,6 +110,16 @@ namespace TrackAdmin.ViewModels {
                 OnPropertyChanged(nameof(Address));
             }
         }
+
+        private bool isActive;
+
+        public bool IsActive {
+            get { return isActive; }
+            set {
+                isActive = value;
+                OnPropertyChanged(nameof(IsActive));
+            }
+        }
         #endregion
 
         #region -------------------- COMMANDS ---------------------
@@ -159,7 +169,8 @@ namespace TrackAdmin.ViewModels {
                     PhoneNumber = PhoneNumber,
                     State = State,
                     City = City,
-                    Address = Address
+                    Address = Address,
+                    IsActive = IsActive
                 };
                 (var done, var message) = await _userService.CreateAsync(user);
                 if (!done)
@@ -182,7 +193,7 @@ namespace TrackAdmin.ViewModels {
                 (Error, Message, IsLoading) = ("", "", true);
 
                 // Call API:
-                var user = new UserDto { 
+                var user = new UserDto {
                     Id = User.Id,
                     GivenName = GivenName,
                     Surname = Surname,
@@ -191,7 +202,8 @@ namespace TrackAdmin.ViewModels {
                     PhoneNumber = PhoneNumber,
                     State = State,
                     City = City,
-                    Address = Address
+                    Address = Address,
+                    IsActive = IsActive
                 };
                 (var done, var message) = await _userService.UpdateAsync(user);
                 if (!done)
@@ -218,6 +230,7 @@ namespace TrackAdmin.ViewModels {
             State = user?.State;
             City = user?.City;
             Address = user?.Address;
+            IsActive = user != null && user.IsActive;
         }
         #endregion
     }

@@ -25,6 +25,7 @@
             <DataGrid Grid.Row="1" ItemsSource="{Binding Users}" Style="{StaticResource datagrid}"
                       SelectedItem="{Binding SelectedRecord, Mode=OneWayToSource}" Margin="{StaticResource padNormalVertical}">
                 <DataGrid.Columns>
+                    <DataGridCheckBoxColumn Header="{x:Static r:Strings.Active}" Binding="{Binding IsActive}" />
                     <DataGridTextColumn Header="{x:Static r:Strings.ID}" Binding="{Binding Id}" />
                     <DataGridTextColumn Header="{x:Static r:Strings.GivenName}" Binding="{Binding GivenName}" />
                     <DataGridTextColumn Header="{x:Static r:Strings.Surname}" Binding="{Binding Surname}" />
@@ -45,8 +46,8 @@
 
                 <StackPanel Orientation="Horizontal">
                     <Button Command="{Binding GoToUserEditor}" CommandParameter="add">Add</Button>
-                    <Button Command="{Binding GoToUserEditor}" CommandParameter="edit">Edit</Button>
-                    <Button>Remove</Button>
+                    <Button Command="{Binding GoToUserEditor}" CommandParameter="edit" IsEnabled="{Binding SelectedRecord, Converter={StaticResource cIsNotNull}}">Edit</Button>
+                    <Button Command="{Binding DeleteUser}" IsEnabled="{Binding SelectedRecord, Converter={StaticResource cIsNotNull}}">Remove</Button>
                 </StackPanel>
 
                 <!--Error Message-->

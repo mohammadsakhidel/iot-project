@@ -25,6 +25,7 @@ namespace TrackAdmin
             services.AddWindows();
             services.AddServices();
             services.AddViewModels();
+            services.AddHelpers();
 
             ServiceProvider = services.BuildServiceProvider();
             #endregion

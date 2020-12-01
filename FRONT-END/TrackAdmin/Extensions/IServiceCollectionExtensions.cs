@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using TrackAdmin.Services;
@@ -42,5 +43,22 @@ namespace TrackAdmin.Extensions {
             services.AddSingleton<ITrackerLogsViewModel, TrackerLogsViewModel>();
             services.AddSingleton<ITrackerTestingViewModel, TrackerTestingViewModel>();
         }
+
+        public static void AddHelpers(this IServiceCollection services) {
+            
+            // HttpClient:
+            services.AddTransient<HttpClient>(sp => {
+                var config = (IConfiguration)sp.GetService(typeof(IConfiguration));
+                HttpClientHandler handler = new HttpClientHandler {
+                    ServerCertificateCustomValidationCallback =
+                        (sender, cert, chain, sslPolicyErrors) => true
+                };
+                var http = new HttpClient(handler);
+                http.AddAuthHeader(config["API:Token"]);
+                return http;
+            });
+
+        }
+        
     }
 }

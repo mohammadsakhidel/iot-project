@@ -10,5 +10,6 @@ namespace TrackAdmin.Services {
         Task<List<UserDto>> ListAsync(int page = 1);
         Task<(bool done, string message)> CreateAsync(UserDto user);
         Task<(bool done, string message)> UpdateAsync(UserDto user);
+        Task<(bool done, string message)> DeleteAsync(string userId);
     }
 }

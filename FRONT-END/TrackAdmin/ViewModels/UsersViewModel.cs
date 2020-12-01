@@ -12,6 +12,7 @@ using TrackAdmin.Commands;
 using TrackAdmin.Constants;
 using TrackAdmin.DTOs;
 using TrackAdmin.Helpers;
+using TrackAdmin.Resources;
 using TrackAdmin.Services;
 using TrackAdmin.Shared;
 
@@ -45,7 +46,6 @@ namespace TrackAdmin.ViewModels {
         #endregion
 
         #region -------------------- COMMANDS ---------------------
-        // ---------------------- TestCommand:
         private ICommand loadData;
         public ICommand LoadData {
             get {
@@ -58,20 +58,14 @@ namespace TrackAdmin.ViewModels {
             }
         }
 
-        private ICommand goToUserEditor;
 
+        private ICommand goToUserEditor;
         public ICommand GoToUserEditor {
             get {
                 if (goToUserEditor == null) {
                     goToUserEditor = new RelayCommand(action => {
-                        if (action.ToString().ToLower() == "add") {
-                            Mediator.Notify(MediatorTokens.GoToUserEditor, null);
-                        } else if (action.ToString().ToLower() == "edit") {
-                            if (SelectedRecord == null)
-                                _ = ShowError("Please select a user to edit.");
-                            else
-                                Mediator.Notify(MediatorTokens.GoToUserEditor, SelectedRecord);
-                        }
+                        Mediator.Notify(MediatorTokens.GoToUserEditor,
+                            (action.ToString().ToLower() == "add" ? null : SelectedRecord));
                     });
                 }
 
@@ -79,6 +73,22 @@ namespace TrackAdmin.ViewModels {
             }
         }
 
+        private ICommand deleteUser;
+
+        public ICommand DeleteUser {
+            get {
+                if (deleteUser == null) {
+                    deleteUser = new RelayCommand(p => {
+                        var result = MessageBox.Show(Strings.AreYouSure, "???", MessageBoxButton.YesNoCancel, MessageBoxImage.Question);
+                        if (result == MessageBoxResult.Yes) {
+                            _ = DeleteUserAsync(SelectedRecord.Id);
+                        }
+                    });
+                }
+
+                return deleteUser;
+            }
+        }
 
         #endregion
 
@@ -91,6 +101,28 @@ namespace TrackAdmin.ViewModels {
                 Users = await _userService.ListAsync();
 
                 IsLoading = false;
+
+            } catch (Exception ex) {
+                IsLoading = false;
+                _ = ShowError(ex.Message);
+            }
+        }
+        private async Task DeleteUserAsync(string userId) {
+            try {
+
+                // UI show Loading:
+                (Error, Message, IsLoading) = ("", "", true);
+
+                // Call API:
+                (var done, var message) = await _userService.DeleteAsync(userId);
+                if (!done)
+                    throw new ApplicationException(message);
+
+                // UI clear loading:
+                IsLoading = false;
+                _ = ShowMessage(Strings.SuccessfullyDone);
+
+                _ = GetDataAsync();
 
             } catch (Exception ex) {
                 IsLoading = false;

@@ -7,6 +7,7 @@ using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using System.Windows;
 using TrackAdmin.Constants;
 using TrackAdmin.DTOs;
 using TrackAdmin.Extensions;
@@ -23,8 +24,8 @@ namespace TrackAdmin.Services {
         public async Task<List<UserDto>> ListAsync(int page = 1) {
 
             // Http Client Preparation:
-            using var http = new HttpClient();
-            http.AddAuthHeader(_configuration["API:Token"]);
+            var services = ((App)Application.Current).ServiceProvider;
+            using var http = (HttpClient)services.GetService(typeof(HttpClient));
 
             // Send Request:
             var url = ApiUtils.Combine(_configuration["API:Host"], ApiEndpoints.USERS);
@@ -40,8 +41,8 @@ namespace TrackAdmin.Services {
         public async Task<(bool done, string message)> CreateAsync(UserDto user) {
 
             // Http Client Preparation:
-            using var http = new HttpClient();
-            http.AddAuthHeader(_configuration["API:Token"]);
+            var services = ((App)Application.Current).ServiceProvider;
+            using var http = (HttpClient)services.GetService(typeof(HttpClient));
 
             // Sending Request:
             var url = ApiUtils.Combine(_configuration["API:Host"], ApiEndpoints.USERS);
@@ -57,12 +58,29 @@ namespace TrackAdmin.Services {
         public async Task<(bool done, string message)> UpdateAsync(UserDto user) {
 
             // Http Client Preparation:
-            using var http = new HttpClient();
-            http.AddAuthHeader(_configuration["API:Token"]);
+            var services = ((App)Application.Current).ServiceProvider;
+            using var http = (HttpClient)services.GetService(typeof(HttpClient));
 
             // Sending Request:
             var url = ApiUtils.Combine(_configuration["API:Host"], ApiEndpoints.USERS);
             var response = await http.PutAsJsonAsync(url, user);
+            if (!response.IsSuccessStatusCode)
+                return (false, response.Content.ReadAsStringAsync().Result);
+
+            // Result:
+            return (true, string.Empty);
+
+        }
+
+        public async Task<(bool done, string message)> DeleteAsync(string userId) {
+
+            // Http Client Preparation:
+            var services = ((App)Application.Current).ServiceProvider;
+            using var http = (HttpClient)services.GetService(typeof(HttpClient));
+
+            // Sending Request:
+            var url = ApiUtils.Combine(_configuration["API:Host"], ApiEndpoints.USERS);
+            var response = await http.DeleteAsync($"{url}/{userId}");
             if (!response.IsSuccessStatusCode)
                 return (false, response.Content.ReadAsStringAsync().Result);
 
