@@ -3,7 +3,7 @@
                     xmlns:sys="clr-namespace:System;assembly=mscorlib">
     
     <FontFamily x:Key="fContent">Calibri</FontFamily>
-    <FontFamily x:Key="fHeader">Arial Rounded MT Bold</FontFamily>
+    <FontFamily x:Key="fHeader">Segoe UI</FontFamily>
 
     <sys:Double x:Key="fsTinay">8</sys:Double>
     <sys:Double x:Key="fsSmall">11</sys:Double>

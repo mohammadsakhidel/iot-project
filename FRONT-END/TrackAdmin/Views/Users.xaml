@@ -22,8 +22,8 @@
             <StackPanel Orientation="Horizontal">
                 <Label Content="{x:Static r:Strings.Users}" Style="{StaticResource pageTitle}"></Label>
                 <Button Style="{StaticResource linkButton}" Command="{Binding LoadData}"
-                        Margin="{StaticResource padNormalStart}" VerticalAlignment="Center">
-                    Reload
+                        Content="{x:Static r:Strings.Reload}"
+                        Margin="20 8 0 0" VerticalAlignment="Center">
                 </Button>
             </StackPanel>
 
