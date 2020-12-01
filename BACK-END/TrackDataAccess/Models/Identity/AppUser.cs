@@ -12,5 +12,15 @@ namespace TrackDataAccess.Models.Identity {
         [Required]
         [Column("creation_time")]
         public DateTime CreationTime { get; set; }
+
+        [Column("is_active")]
+        public bool IsActive { get; set; } = true;
+
+        [Required]
+        [Column("is_deleted")]
+        public bool IsDeleted { get; set; }
+
+        [Column("delete_time")]
+        public DateTime? DeleteTime { get; set; }
     }
 }

@@ -26,7 +26,7 @@ namespace TrackAPI.Middlewares {
             var authHeaderExists = context.Request.Headers.TryGetValue("Authorization", out var authHeader);
             if (authHeaderExists && Regex.IsMatch(authHeader, Patterns.BEARER_JWT_TOKEN)) {
                 var tokenText = Regex.Split(authHeader, @"\s+")[1];
-                var validToken = tryValidate(tokenText, context, out var principal);
+                var validToken = TryValidate(tokenText, context, out var principal);
                 if (validToken) {
                     context.User = principal;
                 }
@@ -35,7 +35,7 @@ namespace TrackAPI.Middlewares {
             await next.Invoke(context);
         }
 
-        private bool tryValidate(string token, HttpContext context, out ClaimsPrincipal principal) {
+        private bool TryValidate(string token, HttpContext context, out ClaimsPrincipal principal) {
             try {
                 var handler = new JwtSecurityTokenHandler();
                 principal = handler.ValidateToken(token, new TokenValidationParameters {

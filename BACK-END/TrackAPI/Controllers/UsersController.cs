@@ -24,7 +24,7 @@ namespace TrackAPI.Controllers {
         [Authorize(Policies.CanCreateUser)]
         public async Task<IActionResult> Post(UserModel model) {
             try {
-                
+
                 var (succeeded, messageOrCreatedUserId) = await _userService.CreateAsync(model);
                 if (!succeeded)
                     throw new ApplicationException(messageOrCreatedUserId);
@@ -43,6 +43,23 @@ namespace TrackAPI.Controllers {
             try {
 
                 (var succeeded, var error) = await _userService.UpdateAsync(model);
+
+                return Ok();
+
+            } catch (Exception ex) {
+                return ex.GetActionResult();
+            }
+        }
+
+        [HttpPut("status")]
+        [Authorize(Policies.CanUpdateUser)]
+        public async Task<IActionResult> Put(UserStatusModel model) {
+            try {
+
+                (var succeeded, var error) =
+                    (model.IsActive.HasValue && model.IsActive.Value
+                    ? await _userService.ActivateAsync(model.UserId)
+                    : await _userService.DeactivateAsync(model.UserId));
 
                 return Ok();
 
@@ -85,7 +102,7 @@ namespace TrackAPI.Controllers {
         [Authorize(Policies.CanDeleteUser)]
         public async Task<IActionResult> Delete(string id) {
             try {
-                
+
                 var (succeeded, error) = await _userService.RemoveAsync(id);
                 if (!succeeded)
                     throw new ApplicationException(error);

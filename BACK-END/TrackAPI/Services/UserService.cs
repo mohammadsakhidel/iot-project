@@ -37,6 +37,7 @@ namespace TrackAPI.Services {
                 UserName = model.Email,
                 Email = model.Email,
                 PhoneNumber = model.PhoneNumber,
+                IsActive = model.IsActive,
                 CreationTime = DateTime.UtcNow
             };
 
@@ -105,7 +106,8 @@ namespace TrackAPI.Services {
             if (user == null)
                 return (false, "User not found.");
 
-            var result = await _userManager.DeleteAsync(user);
+            user.IsDeleted = true;
+            var result = await _userManager.UpdateAsync(user);
             if (!result.Succeeded)
                 return (false, result.Errors.FirstOrDefault()?.Description);
 
@@ -153,18 +155,48 @@ namespace TrackAPI.Services {
 
         }
 
+        public async Task<(bool, string)> DeactivateAsync(string id) {
+            var user = await _userManager.FindByIdAsync(id);
+            if (user == null)
+                return (false, "User not found.");
+
+            user.IsActive = false;
+            var result = await _userManager.UpdateAsync(user);
+            if (!result.Succeeded)
+                return (false, result.Errors.FirstOrDefault()?.Description);
+
+            return (true, string.Empty);
+        }
+
+        public async Task<(bool, string)> ActivateAsync(string id) {
+            var user = await _userManager.FindByIdAsync(id);
+            if (user == null)
+                return (false, "User not found.");
+
+            user.IsActive = true;
+            var result = await _userManager.UpdateAsync(user);
+            if (!result.Succeeded)
+                return (false, result.Errors.FirstOrDefault()?.Description);
+
+            return (true, string.Empty);
+        }
+
         public async Task<(bool isValid, string token)> ValidateUserAsync(string userName, string password) {
             var appUser = await _userManager.FindByNameAsync(userName);
             if (appUser != null) {
-                var isValid = await _userManager.CheckPasswordAsync(appUser, password);
-                if (isValid) {
 
-                    var token = await generateTokenAsync(appUser);
-                    return (true, token);
+                // Check Passord:
+                var isPassValid = await _userManager.CheckPasswordAsync(appUser, password);
+                if (!isPassValid)
+                    return (false, "Username or password is not valid.");
 
-                } else {
-                    return (false, null);
-                }
+                // Check Being Active:
+                if (!appUser.IsActive)
+                    return (false, "User is not active.");
+
+                var token = await generateTokenAsync(appUser);
+                return (true, token);
+
             } else {
                 return (false, null);
             }
@@ -178,6 +210,7 @@ namespace TrackAPI.Services {
                 Surname = claims.SingleOrDefault(c => c.Type == ClaimNames.SURNAME)?.Value,
                 Email = appUser.Email,
                 PhoneNumber = appUser.PhoneNumber,
+                IsActive = appUser.IsActive,
                 State = claims.SingleOrDefault(c => c.Type == ClaimNames.STATE)?.Value,
                 City = claims.SingleOrDefault(c => c.Type == ClaimNames.CITY)?.Value,
                 Address = claims.SingleOrDefault(c => c.Type == ClaimNames.ADDRESS)?.Value,

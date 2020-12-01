@@ -31,11 +31,12 @@ namespace TrackAPI.Controllers {
         [HttpPost("token")]
         public async Task<IActionResult> TokenAsync(LoginModel model) {
             try {
-                (var isValid, var token) = await _userService.ValidateUserAsync(model.UserName, model.Password);
-                if (!isValid)
-                    return BadRequest("Invalid username or password.");
 
-                return Ok(token);
+                (var isValid, var tokenOrMessage) = await _userService.ValidateUserAsync(model.UserName, model.Password);
+                if (!isValid)
+                    return BadRequest(tokenOrMessage);
+
+                return Ok(tokenOrMessage);
 
             } catch (Exception ex) {
                 return ex.GetActionResult();

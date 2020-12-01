@@ -12,6 +12,8 @@ namespace TrackAPI.Services {
         Task<List<UserModel>> GetAsync(int skip, int take);
         Task<UserModel> FindByUsernameAsync(string userName);
         Task<(bool succeeded, string error)> RemoveAsync(string id);
+        Task<(bool, string)> ActivateAsync(string id);
+        Task<(bool, string)> DeactivateAsync(string id);
         Task<(bool isValid, string token)> ValidateUserAsync(string userName, string password);
     }
 }
