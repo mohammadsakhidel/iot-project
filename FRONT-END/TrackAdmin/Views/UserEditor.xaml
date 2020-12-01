@@ -6,6 +6,8 @@
              xmlns:local="clr-namespace:TrackAdmin.Views"
              xmlns:r="clr-namespace:TrackAdmin.Resources"
              xmlns:v="clr-namespace:TrackAdmin.Views"
+             xmlns:toolkit="http://schemas.xceed.com/wpf/xaml/toolkit"
+             xmlns:fa="http://schemas.fontawesome.io/icons/"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
@@ -99,8 +101,19 @@
                 </Grid.ColumnDefinitions>
 
                 <StackPanel Orientation="Horizontal">
-                    <Button Command="{Binding Save}">Save</Button>
-                    <Button Command="{Binding BackToUsers}" CommandParameter="{Binding OperationDone}">Back To Users</Button>
+                    <toolkit:IconButton Command="{Binding Save}" Style="{StaticResource iconButton}" 
+                                        Margin="{StaticResource padNormalEnd}" Content="{x:Static r:Strings.Save}">
+                        <toolkit:IconButton.Icon>
+                            <fa:ImageAwesome Icon="Save" Style="{StaticResource iconButtonIcon}" />
+                        </toolkit:IconButton.Icon>
+                    </toolkit:IconButton>
+                    <toolkit:IconButton Command="{Binding BackToUsers}" CommandParameter="{Binding OperationDone}" 
+                                        Style="{StaticResource iconButton}" Margin="{StaticResource padNormalEnd}" 
+                                        Content="{x:Static r:Strings.BackToList}">
+                        <toolkit:IconButton.Icon>
+                            <fa:ImageAwesome Icon="ArrowLeft" Style="{StaticResource iconButtonIcon}" />
+                        </toolkit:IconButton.Icon>
+                    </toolkit:IconButton>
                 </StackPanel>
 
                 <!--Error Message-->

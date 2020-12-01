@@ -7,6 +7,9 @@
     <SolidColorBrush x:Key="cTwoL1" Color="#5390b0"></SolidColorBrush>
     
     <SolidColorBrush x:Key="cThree" Color="#F0810F"></SolidColorBrush>
+    <SolidColorBrush x:Key="cThreeD1" Color="#cc6700"></SolidColorBrush>
+    <SolidColorBrush x:Key="cThreeD2" Color="#a35200"></SolidColorBrush>
+    
     <SolidColorBrush x:Key="cFour" Color="#E6DF44"></SolidColorBrush>
     
     <SolidColorBrush x:Key="cNeutral" Color="#fff"></SolidColorBrush>

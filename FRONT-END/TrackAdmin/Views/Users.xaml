@@ -6,6 +6,8 @@
              xmlns:local="clr-namespace:TrackAdmin.Views"
              xmlns:v="clr-namespace:TrackAdmin.Views"
              xmlns:r="clr-namespace:TrackAdmin.Resources"
+             xmlns:toolkit="http://schemas.xceed.com/wpf/xaml/toolkit"
+             xmlns:fa="http://schemas.fontawesome.io/icons/"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
@@ -18,8 +20,11 @@
             </Grid.RowDefinitions>
 
             <StackPanel Orientation="Horizontal">
-                <Button Command="{Binding LoadData}">Refresh</Button>
                 <Label Content="{x:Static r:Strings.Users}" Style="{StaticResource pageTitle}"></Label>
+                <Button Style="{StaticResource linkButton}" Command="{Binding LoadData}"
+                        Margin="{StaticResource padNormalStart}" VerticalAlignment="Center">
+                    Reload
+                </Button>
             </StackPanel>
 
             <DataGrid Grid.Row="1" ItemsSource="{Binding Users}" Style="{StaticResource datagrid}"
@@ -45,9 +50,25 @@
                 </Grid.ColumnDefinitions>
 
                 <StackPanel Orientation="Horizontal">
-                    <Button Command="{Binding GoToUserEditor}" CommandParameter="add">Add</Button>
-                    <Button Command="{Binding GoToUserEditor}" CommandParameter="edit" IsEnabled="{Binding SelectedRecord, Converter={StaticResource cIsNotNull}}">Edit</Button>
-                    <Button Command="{Binding DeleteUser}" IsEnabled="{Binding SelectedRecord, Converter={StaticResource cIsNotNull}}">Remove</Button>
+                    <toolkit:IconButton Command="{Binding GoToUserEditor}" CommandParameter="add" Content="{x:Static r:Strings.Create}"
+                                        Style="{StaticResource iconButton}" Margin="{StaticResource padNormalEnd}">
+                        <toolkit:IconButton.Icon>
+                            <fa:ImageAwesome Icon="Plus" Style="{StaticResource iconButtonIcon}" />
+                        </toolkit:IconButton.Icon>
+                    </toolkit:IconButton>
+                    <toolkit:IconButton Command="{Binding GoToUserEditor}" CommandParameter="edit" Content="{x:Static r:Strings.Edit}"
+                                        Style="{StaticResource iconButton}" Margin="{StaticResource padNormalEnd}"
+                                        IsEnabled="{Binding SelectedRecord, Converter={StaticResource cIsNotNull}}">
+                        <toolkit:IconButton.Icon>
+                            <fa:ImageAwesome Icon="Edit" Style="{StaticResource iconButtonIcon}" />
+                        </toolkit:IconButton.Icon>
+                    </toolkit:IconButton>
+                    <toolkit:IconButton Command="{Binding DeleteUser}" Style="{StaticResource iconButton}" Content="{x:Static r:Strings.Delete}"
+                                        IsEnabled="{Binding SelectedRecord, Converter={StaticResource cIsNotNull}}">
+                        <toolkit:IconButton.Icon>
+                            <fa:ImageAwesome Icon="Remove" Style="{StaticResource iconButtonIcon}" />
+                        </toolkit:IconButton.Icon>
+                    </toolkit:IconButton>
                 </StackPanel>
 
                 <!--Error Message-->
