@@ -18,6 +18,7 @@ namespace TrackAdmin.Extensions {
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.json", false, true);
             var configuration = configBuilder.Build();
+
             services.AddSingleton<IConfiguration>(configuration);
         }
 
@@ -35,6 +36,8 @@ namespace TrackAdmin.Extensions {
 
         public static void AddViewModels(this IServiceCollection services) {
             services.AddSingleton<IUsersViewModel, UsersViewModel>();
+            services.AddSingleton<IUserEditorViewModel, UserEditorViewModel>();
+
             services.AddSingleton<ITrackersViewModel, TrackersViewModel>();
             services.AddSingleton<ITrackerLogsViewModel, TrackerLogsViewModel>();
             services.AddSingleton<ITrackerTestingViewModel, TrackerTestingViewModel>();

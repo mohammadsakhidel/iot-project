@@ -26,4 +26,8 @@
         <v:TrackerTesting></v:TrackerTesting>
     </DataTemplate>
 
+    <DataTemplate DataType="{x:Type vm:UserEditorViewModel}">
+        <v:UserEditor></v:UserEditor>
+    </DataTemplate>
+
 </ResourceDictionary>

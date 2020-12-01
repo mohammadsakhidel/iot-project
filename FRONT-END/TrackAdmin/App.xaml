@@ -8,6 +8,7 @@
             <!--Converters:-->
             <c:BoolVisibilityConverter x:Key="cBoolVis" />
             <c:StringVisibilityConverter x:Key="cStringVis" />
+            <c:ConcatConverter x:Key="cConcat" />
 
             <!--Resource Dictionaries-->
             <ResourceDictionary.MergedDictionaries>

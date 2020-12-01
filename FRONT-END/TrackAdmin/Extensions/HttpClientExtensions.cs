@@ -8,8 +8,8 @@ using System.Threading.Tasks;
 
 namespace TrackAdmin.Extensions {
     public static class HttpClientExtensions {
-        public static void AddTokenHeader(this HttpClient http, IConfiguration config) {
-            http.DefaultRequestHeaders.Add("Authorization", $"Bearer {config["API:Token"]}");
+        public static void AddAuthHeader(this HttpClient http, string token) {
+            http.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
         }
     }
 }

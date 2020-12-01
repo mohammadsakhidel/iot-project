@@ -1,0 +1,114 @@
+﻿<UserControl x:Class="TrackAdmin.Views.UserEditor"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:TrackAdmin.Views"
+             xmlns:r="clr-namespace:TrackAdmin.Resources"
+             xmlns:v="clr-namespace:TrackAdmin.Views"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="auto" />
+            </Grid.RowDefinitions>
+
+            <Label Style="{StaticResource pageTitle}" Content="{x:Static r:Strings.UserInformationForm}"></Label>
+
+            <!--Form-->
+            <Grid Grid.Row="1" VerticalAlignment="Top" Margin="{StaticResource padNormalVertical}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                </Grid.RowDefinitions>
+
+                <!--Given Name-->
+                <Label Content="{x:Static r:Strings.GivenName}" Style="{StaticResource formLabel}" />
+                <TextBox Grid.Column="1" Style="{StaticResource textbox}" 
+                         Text="{Binding GivenName, Mode=TwoWay, ValidatesOnExceptions=True}" 
+                         Margin="{StaticResource padNormalBottom}"/>
+
+                <!--Surname-->
+                <Label Grid.Row="1" Content="{x:Static r:Strings.Surname}" Style="{StaticResource formLabel}" />
+                <TextBox Grid.Row="1" Grid.Column="1" Style="{StaticResource textbox}" 
+                         Text="{Binding Surname, Mode=TwoWay, ValidatesOnExceptions=True}"
+                         Margin="{StaticResource padNormalBottom}"/>
+
+                <!--Email-->
+                <Label Grid.Row="2" Content="{x:Static r:Strings.Email}" Style="{StaticResource formLabel}" />
+                <TextBox Grid.Row="2" Grid.Column="1" Style="{StaticResource textbox}" 
+                         Text="{Binding Email, Mode=TwoWay, ValidatesOnExceptions=True}"
+                         Margin="{StaticResource padNormalBottom}"/>
+
+                <!--Password-->
+                <Label Grid.Row="3" Content="{x:Static r:Strings.Password}" Style="{StaticResource formLabel}" />
+                <TextBox Grid.Row="3" Grid.Column="1" Style="{StaticResource textbox}" 
+                         Text="{Binding Password, Mode=TwoWay, ValidatesOnExceptions=True}" 
+                         Margin="{StaticResource padNormalBottom}"/>
+
+                <!--PhoneNumber-->
+                <Label Grid.Row="4" Content="{x:Static r:Strings.PhoneNumber}" Style="{StaticResource formLabel}" />
+                <TextBox Grid.Row="4" Grid.Column="1" Style="{StaticResource textbox}" 
+                         Text="{Binding PhoneNumber, Mode=TwoWay, ValidatesOnExceptions=True}" 
+                         Margin="{StaticResource padNormalBottom}"/>
+
+                <!--State-->
+                <Label Grid.Row="5" Content="{x:Static r:Strings.State}" Style="{StaticResource formLabel}" />
+                <TextBox Grid.Row="5" Grid.Column="1" Style="{StaticResource textbox}" 
+                         Text="{Binding State, Mode=TwoWay, ValidatesOnExceptions=True}" 
+                         Margin="{StaticResource padNormalBottom}"/>
+
+                <!--City-->
+                <Label Grid.Row="6" Content="{x:Static r:Strings.City}" Style="{StaticResource formLabel}" />
+                <TextBox Grid.Row="6" Grid.Column="1" Style="{StaticResource textbox}" 
+                         Text="{Binding City, Mode=TwoWay, ValidatesOnExceptions=True}"
+                         Margin="{StaticResource padNormalBottom}"/>
+
+                <!--Address-->
+                <Label Grid.Row="7" Content="{x:Static r:Strings.Address}" Style="{StaticResource formLabel}" />
+                <TextBox Grid.Row="7" Grid.Column="1" Style="{StaticResource textbox}" 
+                         Text="{Binding Address, Mode=TwoWay, ValidatesOnExceptions=True}"
+                         Margin="{StaticResource padNormalBottom}" TextWrapping="Wrap" Height="50"/>
+
+            </Grid>
+
+            <Grid Grid.Row="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Orientation="Horizontal">
+                    <Button Command="{Binding Save}">Save</Button>
+                    <Button Command="{Binding BackToUsers}" CommandParameter="{Binding OperationDone}">Back To Users</Button>
+                </StackPanel>
+
+                <!--Error Message-->
+                <TextBlock Grid.Column="1"  Style="{StaticResource errorMessage}" HorizontalAlignment="Right"
+                           Text="{Binding Error}" Visibility="{Binding Error, Converter={StaticResource cStringVis}}"/>
+
+                <!--Success Message-->
+                <TextBlock Grid.Column="1"  Style="{StaticResource successMessage}" HorizontalAlignment="Right"
+                           Text="{Binding Message}" Visibility="{Binding Message, Converter={StaticResource cStringVis}}"/>
+            </Grid>
+
+        </Grid>
+
+        <!--Loading-->
+        <v:Loading Visibility="{Binding IsLoading, Converter={StaticResource cBoolVis}}"></v:Loading>
+    </Grid>
+</UserControl>

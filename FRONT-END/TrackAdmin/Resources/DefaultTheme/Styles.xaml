@@ -94,7 +94,14 @@
 
     <Style x:Key="errorMessage" TargetType="TextBlock">
         <Setter Property="FontWeight" Value="Bold"></Setter>
-        <Setter Property="Foreground" Value="White"></Setter>
+        <Setter Property="FontSize" Value="{StaticResource fsLarge}"></Setter>
+        <Setter Property="Foreground" Value="Red"></Setter>
+    </Style>
+
+    <Style x:Key="successMessage" TargetType="TextBlock">
+        <Setter Property="FontWeight" Value="Bold"></Setter>
+        <Setter Property="FontSize" Value="{StaticResource fsLarge}"></Setter>
+        <Setter Property="Foreground" Value="LightSeaGreen"></Setter>
     </Style>
 
     <Style x:Key="datagrid" TargetType="DataGrid">
@@ -124,6 +131,26 @@
                 </Style>
             </Setter.Value>
         </Setter>
+    </Style>
+
+    <Style x:Key="textbox" TargetType="TextBox">
+        <Setter Property="Validation.ErrorTemplate">
+            <Setter.Value>
+                <ControlTemplate>
+                    <Grid>
+                        <AdornedElementPlaceholder x:Name="adornedElementPlaceholder" />
+                        <TextBlock Text="{Binding ElementName=adornedElementPlaceholder, Path=AdornedElement.(Validation.Errors)[0].ErrorContent}" 
+                                       Foreground="Red" DockPanel.Dock="Right" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="formLabel" TargetType="Label">
+        <Setter Property="Margin" Value="0 0 5 0"></Setter>
+        <Setter Property="Padding" Value="0"></Setter>
+        <Setter Property="HorizontalAlignment" Value="Right"></Setter>
     </Style>
 
 </ResourceDictionary>

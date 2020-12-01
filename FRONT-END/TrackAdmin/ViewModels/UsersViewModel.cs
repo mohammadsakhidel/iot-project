@@ -6,12 +6,14 @@ using System.Net.Http;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 using TrackAdmin.Commands;
 using TrackAdmin.Constants;
 using TrackAdmin.DTOs;
 using TrackAdmin.Helpers;
 using TrackAdmin.Services;
+using TrackAdmin.Shared;
 
 namespace TrackAdmin.ViewModels {
     public class UsersViewModel : BaseViewModel, IUsersViewModel {
@@ -23,26 +25,6 @@ namespace TrackAdmin.ViewModels {
         }
 
         #region ----------------- STATE ------------------
-        private bool isLoading;
-        public bool IsLoading {
-            get {
-                return isLoading;
-            }
-            set {
-                isLoading = value;
-                OnPropertyChanged(nameof(IsLoading));
-            }
-        }
-
-        private string error;
-        public string Error {
-            get { return error; }
-            set {
-                error = value;
-                OnPropertyChanged(nameof(Error));
-            }
-        }
-        // ---------------------- Users:
         private List<UserDto> users;
         public List<UserDto> Users {
             get { return users; }
@@ -51,12 +33,20 @@ namespace TrackAdmin.ViewModels {
                 OnPropertyChanged(nameof(Users));
             }
         }
+
+        private UserDto selectedRecord;
+        public UserDto SelectedRecord {
+            get { return selectedRecord; }
+            set {
+                selectedRecord = value;
+                OnPropertyChanged(nameof(selectedRecord));
+            }
+        }
         #endregion
 
         #region -------------------- COMMANDS ---------------------
         // ---------------------- TestCommand:
         private ICommand loadData;
-
         public ICommand LoadData {
             get {
                 if (loadData == null)
@@ -68,10 +58,32 @@ namespace TrackAdmin.ViewModels {
             }
         }
 
+        private ICommand goToUserEditor;
+
+        public ICommand GoToUserEditor {
+            get {
+                if (goToUserEditor == null) {
+                    goToUserEditor = new RelayCommand(action => {
+                        if (action.ToString().ToLower() == "add") {
+                            Mediator.Notify(MediatorTokens.GoToUserEditor, null);
+                        } else if (action.ToString().ToLower() == "edit") {
+                            if (SelectedRecord == null)
+                                _ = ShowError("Please select a user to edit.");
+                            else
+                                Mediator.Notify(MediatorTokens.GoToUserEditor, SelectedRecord);
+                        }
+                    });
+                }
+
+                return goToUserEditor;
+            }
+        }
+
+
         #endregion
 
         #region Methods:
-        private async Task GetDataAsync() {
+        public async Task GetDataAsync() {
             try {
                 Error = "";
                 IsLoading = true;
@@ -82,7 +94,7 @@ namespace TrackAdmin.ViewModels {
 
             } catch (Exception ex) {
                 IsLoading = false;
-                Error = ex.Message;
+                _ = ShowError(ex.Message);
             }
         }
         #endregion

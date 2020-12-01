@@ -151,6 +151,15 @@ namespace TrackAdmin.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Password.
+        /// </summary>
+        public static string Password {
+            get {
+                return ResourceManager.GetString("Password", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Phone Number.
         /// </summary>
         public static string PhoneNumber {
@@ -165,6 +174,15 @@ namespace TrackAdmin.Resources {
         public static string State {
             get {
                 return ResourceManager.GetString("State", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Operation done successfully..
+        /// </summary>
+        public static string SuccessfullyDone {
+            get {
+                return ResourceManager.GetString("SuccessfullyDone", resourceCulture);
             }
         }
         
@@ -201,6 +219,15 @@ namespace TrackAdmin.Resources {
         public static string Trackers {
             get {
                 return ResourceManager.GetString("Trackers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to User Information Form.
+        /// </summary>
+        public static string UserInformationForm {
+            get {
+                return ResourceManager.GetString("UserInformationForm", resourceCulture);
             }
         }
         

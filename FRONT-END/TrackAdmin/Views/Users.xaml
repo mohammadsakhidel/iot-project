@@ -22,7 +22,8 @@
                 <Label Content="{x:Static r:Strings.Users}" Style="{StaticResource pageTitle}"></Label>
             </StackPanel>
 
-            <DataGrid Grid.Row="1" ItemsSource="{Binding Users}" Style="{StaticResource datagrid}">
+            <DataGrid Grid.Row="1" ItemsSource="{Binding Users}" Style="{StaticResource datagrid}"
+                      SelectedItem="{Binding SelectedRecord, Mode=OneWayToSource}" Margin="{StaticResource padNormalVertical}">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="{x:Static r:Strings.ID}" Binding="{Binding Id}" />
                     <DataGridTextColumn Header="{x:Static r:Strings.GivenName}" Binding="{Binding GivenName}" />
@@ -36,18 +37,24 @@
                 </DataGrid.Columns>
             </DataGrid>
 
-            <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="{StaticResource padNormalVertical}">
-                <Button>Add</Button>
-                <Button>Edit</Button>
-                <Button>Remove</Button>
-            </StackPanel>
+            <Grid Grid.Row="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Orientation="Horizontal">
+                    <Button Command="{Binding GoToUserEditor}" CommandParameter="add">Add</Button>
+                    <Button Command="{Binding GoToUserEditor}" CommandParameter="edit">Edit</Button>
+                    <Button>Remove</Button>
+                </StackPanel>
+
+                <!--Error Message-->
+                <TextBlock Grid.Column="1"  Style="{StaticResource errorMessage}" HorizontalAlignment="Right"
+                           Text="{Binding Error}" Visibility="{Binding Error, Converter={StaticResource cStringVis}}"/>
+            </Grid>
 
         </Grid>
-
-        <!--Error Message-->
-        <Border Style="{StaticResource errorBox}" Visibility="{Binding Error, Converter={StaticResource cStringVis}}">
-            <TextBlock Style="{StaticResource errorMessage}" Text="{Binding Error}"></TextBlock>
-        </Border>
 
         <!--Loading-->
         <v:Loading Visibility="{Binding IsLoading, Converter={StaticResource cBoolVis}}"></v:Loading>

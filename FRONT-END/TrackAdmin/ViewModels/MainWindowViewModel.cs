@@ -7,13 +7,15 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using TrackAdmin.Commands;
+using TrackAdmin.Constants;
+using TrackAdmin.DTOs;
 using TrackAdmin.Shared;
 
 namespace TrackAdmin.ViewModels {
     public class MainWindowViewModel : BaseViewModel {
 
         public MainWindowViewModel() {
-
+            ConfigMediatorSubscriptions();
         }
 
         #region ----------------------- STATE -------------------------
@@ -56,7 +58,7 @@ namespace TrackAdmin.ViewModels {
         #endregion
 
         #region FIELDS:
-        
+
         #endregion
 
         #region PROPERTIES:
@@ -65,10 +67,31 @@ namespace TrackAdmin.ViewModels {
 
         #region METHODS:
         public void ChangeCurrentPage(IViewModel pageVM) {
-            if (CurrentPage != pageVM) {
+            if (CurrentPage != pageVM)
                 CurrentPage = pageVM;
-                OnPropertyChanged(nameof(CurrentPage));
-            }
+        }
+
+        private void ConfigMediatorSubscriptions() {
+            
+            // Go To User Editor:
+            Mediator.Subscribe(MediatorTokens.GoToUserEditor, user => {
+                var services = ((App)Application.Current).ServiceProvider;
+                var userEditorVM = (IUserEditorViewModel)services.GetService(typeof(IUserEditorViewModel));
+                userEditorVM.Init(user as UserDto);
+                ChangeCurrentPage(userEditorVM);
+            });
+
+            // Back To Users Page:
+            Mediator.Subscribe(MediatorTokens.BackToUsers, result => {
+                var services = ((App)Application.Current).ServiceProvider;
+                var done = Convert.ToBoolean(result);
+                var usersVM = (IUsersViewModel)services.GetService(typeof(IUsersViewModel));
+                if (done)
+                    _ = usersVM.GetDataAsync();
+                
+                ChangeCurrentPage(usersVM);
+            });
+
         }
         #endregion
 

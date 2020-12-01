@@ -147,11 +147,17 @@
   <data name="Monitoring" xml:space="preserve">
     <value>Monitoring</value>
   </data>
+  <data name="Password" xml:space="preserve">
+    <value>Password</value>
+  </data>
   <data name="PhoneNumber" xml:space="preserve">
     <value>Phone Number</value>
   </data>
   <data name="State" xml:space="preserve">
     <value>State</value>
+  </data>
+  <data name="SuccessfullyDone" xml:space="preserve">
+    <value>Operation done successfully.</value>
   </data>
   <data name="Surname" xml:space="preserve">
     <value>Surname</value>
@@ -164,6 +170,9 @@
   </data>
   <data name="Trackers" xml:space="preserve">
     <value>Trackers</value>
+  </data>
+  <data name="UserInformationForm" xml:space="preserve">
+    <value>User Information Form</value>
   </data>
   <data name="Users" xml:space="preserve">
     <value>Users</value>
