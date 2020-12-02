@@ -22,5 +22,7 @@ namespace TrackDataAccess.Models.Identity {
 
         [Column("delete_time")]
         public DateTime? DeleteTime { get; set; }
+
+        public List<IdentityUserClaim<string>> Claims { get; set; }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System;
@@ -14,13 +15,17 @@ using TrackAPI.Constants;
 using TrackAPI.Helpers;
 using TrackAPI.Models;
 using TrackDataAccess.Models.Identity;
+using TrackDataAccess.Repositories;
 
 namespace TrackAPI.Services {
     public class UserService : IUserService {
 
-        private UserManager<AppUser> _userManager;
+        private readonly IUserRepository _userRepository;
+        private readonly UserManager<AppUser> _userManager;
         private readonly AppSettings _appSettings;
-        public UserService(UserManager<AppUser> userManager, IOptions<AppSettings> appSettings) {
+        public UserService(UserManager<AppUser> userManager, IOptions<AppSettings> appSettings,
+            IUserRepository userRepository) {
+            _userRepository = userRepository;
             _userManager = userManager;
             _appSettings = appSettings.Value;
         }
@@ -62,6 +67,28 @@ namespace TrackAPI.Services {
             transaction.Complete();
             return (true, user.Id);
 
+        }
+
+        public async Task<List<UserModel>> SearchAsync(UserSearchModel model) {
+            var appUsers = await Task.Run(() => {
+                var users = _userRepository.Search(u =>
+                    (string.IsNullOrEmpty(model.UserId) || u.Id == model.UserId) &&
+                    (string.IsNullOrEmpty(model.Email) || u.Email.Contains(model.Email)) &&
+                    (string.IsNullOrEmpty(model.GivenName) || u.Claims.Single(c => c.ClaimType == ClaimNames.GIVEN_NAME).ClaimValue.ToLower().Contains(model.GivenName.ToLower())) &&
+                    (string.IsNullOrEmpty(model.Surname) || u.Claims.Single(c => c.ClaimType == ClaimNames.SURNAME).ClaimValue.Contains(model.Surname))
+                );
+                return users;
+            });
+
+            var users = await Task.Run(() => {
+                var list = new List<UserModel>();
+                foreach (var user in appUsers) {
+                    list.Add(mapEntityToModel(user, user.Claims.Select(c => new Claim(c.ClaimType, c.ClaimValue)).ToList()));
+                }
+                return list;
+            });
+
+            return users;
         }
 
         public async Task<UserModel> FindByUsernameAsync(string userName) {

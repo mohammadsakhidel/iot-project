@@ -37,6 +37,20 @@ namespace TrackAPI.Controllers {
             }
         }
 
+        [HttpPost("search")]
+        [Authorize(Policies.CanReadUser)]
+        public async Task<IActionResult> Post(UserSearchModel model) {
+            try {
+
+                var users = await _userService.SearchAsync(model);
+
+                return Ok(users);
+
+            } catch (Exception ex) {
+                return ex.GetActionResult();
+            }
+        }
+
         [HttpPut]
         [Authorize(Policies.CanUpdateUser)]
         public async Task<IActionResult> Put(UserModel model) {

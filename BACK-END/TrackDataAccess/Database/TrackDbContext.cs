@@ -20,6 +20,8 @@ namespace TrackDataAccess.Database {
 
         protected override void OnModelCreating(ModelBuilder modelBuilder) {
 
+            base.OnModelCreating(modelBuilder);
+
             #region Soft Delete Query Filter:
             foreach (var entityType in modelBuilder.Model.GetEntityTypes()) {
                 var isDeletedProperty = entityType.FindProperty("IsDeleted");
@@ -43,7 +45,12 @@ namespace TrackDataAccess.Database {
             modelBuilder.Entity<IdentityUserToken<string>>().Property(ul => ul.Name).HasMaxLength(256);
             #endregion
 
-            base.OnModelCreating(modelBuilder);
+            #region Identity Customization:
+            modelBuilder.Entity<AppUser>()
+                .HasMany(u => u.Claims)
+                .WithOne()
+                .HasForeignKey(c => c.UserId);
+            #endregion
 
         }
     }

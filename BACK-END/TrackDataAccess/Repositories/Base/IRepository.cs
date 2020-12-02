@@ -7,7 +7,7 @@ using TrackDataAccess.Models.Base;
 
 namespace TrackDataAccess.Repositories.Base {
     public interface IRepository<TEntity>
-        where TEntity : Entity {
+        where TEntity : class {
 
         TEntity Get(params object[] id);
         Task<TEntity> GetAsync(params object[] id);

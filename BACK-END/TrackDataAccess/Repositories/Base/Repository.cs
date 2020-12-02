@@ -5,11 +5,12 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
+using TrackDataAccess.Database;
 using TrackDataAccess.Models.Base;
 
 namespace TrackDataAccess.Repositories.Base {
     public abstract class Repository<TEntity> : IRepository<TEntity> 
-        where TEntity : Entity {
+        where TEntity : class {
 
         // Constructor:
         protected Repository(DbContext context) {
