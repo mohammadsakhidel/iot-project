@@ -4,9 +4,86 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TrackAdmin.Views"
-             mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             xmlns:v="clr-namespace:TrackAdmin.Views"
+             xmlns:r="clr-namespace:TrackAdmin.Resources"
+             xmlns:toolkit="http://schemas.xceed.com/wpf/xaml/toolkit"
+             xmlns:fa="http://schemas.fontawesome.io/icons/"
+             mc:Ignorable="d">
     <Grid>
-        <Label HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="60" Content="{Binding RandomId}"></Label>
+
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="auto" />
+            </Grid.RowDefinitions>
+
+            <StackPanel Orientation="Horizontal">
+                <Label Content="{x:Static r:Strings.Trackers}" Style="{StaticResource pageTitle}"></Label>
+                <Button Style="{StaticResource linkButton}" Command="{Binding LoadData}"
+                        Content="{x:Static r:Strings.Reload}"
+                        Margin="20 8 0 0" VerticalAlignment="Center">
+                </Button>
+            </StackPanel>
+
+            <DataGrid Grid.Row="1" ItemsSource="{Binding Trackers}" Style="{StaticResource datagrid}"
+                      SelectedItem="{Binding SelectedRecord, Mode=OneWayToSource}" Margin="{StaticResource padNormalVertical}">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="{x:Static r:Strings.ID}" Binding="{Binding Id}" />
+                    <DataGridTextColumn Header="{x:Static r:Strings.UserId}" Binding="{Binding UserId}" />
+                    <DataGridTextColumn Header="{x:Static r:Strings.Manufacturer}" Binding="{Binding Manufacturer}" />
+                    <DataGridTextColumn Header="{x:Static r:Strings.RawID}" Binding="{Binding RawID}" />
+                    <DataGridTextColumn Header="{x:Static r:Strings.CommandSet}" Binding="{Binding CommandSet}" />
+                    <DataGridTextColumn Header="{x:Static r:Strings.CreationTime}" Binding="{Binding CreationTime}" />
+                </DataGrid.Columns>
+            </DataGrid>
+
+            <Grid Grid.Row="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Orientation="Horizontal">
+
+                    <toolkit:IconButton Command="{Binding GoToTrackerEditor}" CommandParameter="add" Content="{x:Static r:Strings.Create}"
+                                        Style="{StaticResource iconButton}" Margin="{StaticResource padNormalEnd}">
+                        <toolkit:IconButton.Icon>
+                            <fa:ImageAwesome Icon="Plus" Style="{StaticResource iconButtonIcon}" />
+                        </toolkit:IconButton.Icon>
+                    </toolkit:IconButton>
+
+                    <toolkit:IconButton Command="{Binding GoToTrackerEditor}" CommandParameter="edit" Content="{x:Static r:Strings.Edit}"
+                                        Style="{StaticResource iconButton}" Margin="{StaticResource padNormalEnd}"
+                                        IsEnabled="{Binding SelectedRecord, Converter={StaticResource cIsNotNull}}">
+                        <toolkit:IconButton.Icon>
+                            <fa:ImageAwesome Icon="Edit" Style="{StaticResource iconButtonIcon}" />
+                        </toolkit:IconButton.Icon>
+                    </toolkit:IconButton>
+
+                    <toolkit:IconButton Command="{Binding DeleteTracker}" Style="{StaticResource iconButton}" Content="{x:Static r:Strings.Delete}"
+                                        Margin="{StaticResource padNormalEnd}" IsEnabled="{Binding SelectedRecord, Converter={StaticResource cIsNotNull}}">
+                        <toolkit:IconButton.Icon>
+                            <fa:ImageAwesome Icon="Remove" Style="{StaticResource iconButtonIcon}" />
+                        </toolkit:IconButton.Icon>
+                    </toolkit:IconButton>
+
+                    <toolkit:IconButton Command="{Binding Search}" Style="{StaticResource iconButton}" Content="{x:Static r:Strings.Search}">
+                        <toolkit:IconButton.Icon>
+                            <fa:ImageAwesome Icon="Search" Style="{StaticResource iconButtonIcon}" />
+                        </toolkit:IconButton.Icon>
+                    </toolkit:IconButton>
+
+                </StackPanel>
+
+                <!--Error Message-->
+                <TextBlock Grid.Column="1"  Style="{StaticResource errorMessage}" HorizontalAlignment="Right"
+                           Text="{Binding Error}" Visibility="{Binding Error, Converter={StaticResource cStringVis}}"/>
+            </Grid>
+
+        </Grid>
+
+        <!--Loading-->
+        <v:Loading Visibility="{Binding IsLoading, Converter={StaticResource cBoolVis}}"></v:Loading>
     </Grid>
 </UserControl>

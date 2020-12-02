@@ -10,7 +10,13 @@
     <Compile Update="Views\MainWindow.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Views\SearchTrackers.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Views\SearchUsers.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\TrackerEditor.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Views\TrackerLogs.xaml.cs">
@@ -51,7 +57,13 @@
     <Page Update="Views\MainWindow.xaml">
       <SubType>Designer</SubType>
     </Page>
+    <Page Update="Views\SearchTrackers.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="Views\SearchUsers.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\TrackerEditor.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\TrackerLogs.xaml">

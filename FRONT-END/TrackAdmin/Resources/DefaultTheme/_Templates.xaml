@@ -10,20 +10,9 @@
         </Border>
     </ControlTemplate>
 
+    <!--USERS-->
     <DataTemplate DataType="{x:Type vm:UsersViewModel}">
         <v:Users></v:Users>
-    </DataTemplate>
-
-    <DataTemplate DataType="{x:Type vm:TrackersViewModel}">
-        <v:Trackers></v:Trackers>
-    </DataTemplate>
-
-    <DataTemplate DataType="{x:Type vm:TrackerLogsViewModel}">
-        <v:TrackerLogs></v:TrackerLogs>
-    </DataTemplate>
-
-    <DataTemplate DataType="{x:Type vm:TrackerTestingViewModel}">
-        <v:TrackerTesting></v:TrackerTesting>
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type vm:UserEditorViewModel}">
@@ -32,6 +21,27 @@
 
     <DataTemplate DataType="{x:Type vm:SearchUsersViewModel}">
         <v:SearchUsers></v:SearchUsers>
+    </DataTemplate>
+
+    <!--TRACKERS-->
+    <DataTemplate DataType="{x:Type vm:TrackersViewModel}">
+        <v:Trackers></v:Trackers>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type vm:TrackerEditorViewModel}">
+        <v:TrackerEditor></v:TrackerEditor>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type vm:SearchTrackersViewModel}">
+        <v:SearchTrackers></v:SearchTrackers>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type vm:TrackerLogsViewModel}">
+        <v:TrackerLogs></v:TrackerLogs>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type vm:TrackerTestingViewModel}">
+        <v:TrackerTesting></v:TrackerTesting>
     </DataTemplate>
 
 </ResourceDictionary>

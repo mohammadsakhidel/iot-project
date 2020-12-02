@@ -41,7 +41,7 @@ namespace TrackAdmin.ViewModels {
             get { return selectedRecord; }
             set {
                 selectedRecord = value;
-                OnPropertyChanged(nameof(selectedRecord));
+                OnPropertyChanged(nameof(SelectedRecord));
             }
         }
         #endregion

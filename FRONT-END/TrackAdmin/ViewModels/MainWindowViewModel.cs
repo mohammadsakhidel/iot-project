@@ -99,6 +99,32 @@ namespace TrackAdmin.ViewModels {
                 ChangeCurrentPage(usersVM);
             });
 
+            // Go To Tracker Editor:
+            Mediator.Subscribe(MediatorTokens.GoToTrackerEditor, tracker => {
+                var services = ((App)Application.Current).ServiceProvider;
+                var trackerEditorVM = (ITrackerEditorViewModel)services.GetService(typeof(ITrackerEditorViewModel));
+                trackerEditorVM.Init(tracker as TrackerDto);
+                ChangeCurrentPage(trackerEditorVM);
+            });
+
+            // Go To Tracker Search:
+            Mediator.Subscribe(MediatorTokens.GoToSearchTracker, _ => {
+                var services = ((App)Application.Current).ServiceProvider;
+                var searchTrackerVM = (ISearchTrackersViewModel)services.GetService(typeof(ISearchTrackersViewModel));
+                ChangeCurrentPage(searchTrackerVM);
+            });
+
+            // Back To Trackers Page:
+            Mediator.Subscribe(MediatorTokens.BackToTrackers, result => {
+                var services = ((App)Application.Current).ServiceProvider;
+                var done = Convert.ToBoolean(result);
+                var trackersVM = (ITrackersViewModel)services.GetService(typeof(ITrackersViewModel));
+                if (done)
+                    _ = trackersVM.GetDataAsync();
+
+                ChangeCurrentPage(trackersVM);
+            });
+
         }
         #endregion
 

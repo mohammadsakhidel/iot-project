@@ -10,5 +10,10 @@ namespace TrackAdmin.Constants {
         public const string BackToUsers = "BackToUsers";
         public const string SearchUsers = "SearchUsers";
         public const string GoToSearchUser = "GoToSearchUser";
+
+        public const string SearchTrackers = "SearchTrackers";
+        public const string GoToTrackerEditor = "GoToTrackerEditor";
+        public const string GoToSearchTracker = "GoToSearchTracker";
+        public const string BackToTrackers = "BackToTrackers";
     }
 }

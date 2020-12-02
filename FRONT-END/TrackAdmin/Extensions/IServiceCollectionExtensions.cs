@@ -33,6 +33,7 @@ namespace TrackAdmin.Extensions {
 
         public static void AddServices(this IServiceCollection services) {
             services.AddSingleton<IUserService, UserService>();
+            services.AddSingleton<ITrackerService, TrackerService>();
         }
 
         public static void AddViewModels(this IServiceCollection services) {
@@ -41,6 +42,8 @@ namespace TrackAdmin.Extensions {
             services.AddSingleton<ISearchUsersViewModel, SearchUsersViewModel>();
 
             services.AddSingleton<ITrackersViewModel, TrackersViewModel>();
+            services.AddSingleton<ITrackerEditorViewModel, TrackerEditorViewModel>();
+
             services.AddSingleton<ITrackerLogsViewModel, TrackerLogsViewModel>();
             services.AddSingleton<ITrackerTestingViewModel, TrackerTestingViewModel>();
         }

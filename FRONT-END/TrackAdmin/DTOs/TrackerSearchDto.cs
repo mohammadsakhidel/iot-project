@@ -4,8 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TrackAdmin.ViewModels {
-    public interface ITrackersViewModel : IViewModel {
-        Task GetDataAsync();
+namespace TrackAdmin.DTOs {
+    public class TrackerSearchDto {
     }
 }

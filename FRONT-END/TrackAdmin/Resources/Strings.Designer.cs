@@ -124,6 +124,15 @@ namespace TrackAdmin.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Command Set.
+        /// </summary>
+        public static string CommandSet {
+            get {
+                return ResourceManager.GetString("CommandSet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Create.
         /// </summary>
         public static string Create {
@@ -196,6 +205,15 @@ namespace TrackAdmin.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Manufacturer.
+        /// </summary>
+        public static string Manufacturer {
+            get {
+                return ResourceManager.GetString("Manufacturer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Monitoring.
         /// </summary>
         public static string Monitoring {
@@ -219,6 +237,15 @@ namespace TrackAdmin.Resources {
         public static string PhoneNumber {
             get {
                 return ResourceManager.GetString("PhoneNumber", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to RawID.
+        /// </summary>
+        public static string RawID {
+            get {
+                return ResourceManager.GetString("RawID", resourceCulture);
             }
         }
         
@@ -309,6 +336,15 @@ namespace TrackAdmin.Resources {
         public static string Trackers {
             get {
                 return ResourceManager.GetString("Trackers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to User ID.
+        /// </summary>
+        public static string UserId {
+            get {
+                return ResourceManager.GetString("UserId", resourceCulture);
             }
         }
         
