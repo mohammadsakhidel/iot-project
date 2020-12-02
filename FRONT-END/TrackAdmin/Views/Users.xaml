@@ -50,12 +50,14 @@
                 </Grid.ColumnDefinitions>
 
                 <StackPanel Orientation="Horizontal">
+                    
                     <toolkit:IconButton Command="{Binding GoToUserEditor}" CommandParameter="add" Content="{x:Static r:Strings.Create}"
                                         Style="{StaticResource iconButton}" Margin="{StaticResource padNormalEnd}">
                         <toolkit:IconButton.Icon>
                             <fa:ImageAwesome Icon="Plus" Style="{StaticResource iconButtonIcon}" />
                         </toolkit:IconButton.Icon>
                     </toolkit:IconButton>
+                    
                     <toolkit:IconButton Command="{Binding GoToUserEditor}" CommandParameter="edit" Content="{x:Static r:Strings.Edit}"
                                         Style="{StaticResource iconButton}" Margin="{StaticResource padNormalEnd}"
                                         IsEnabled="{Binding SelectedRecord, Converter={StaticResource cIsNotNull}}">
@@ -63,12 +65,20 @@
                             <fa:ImageAwesome Icon="Edit" Style="{StaticResource iconButtonIcon}" />
                         </toolkit:IconButton.Icon>
                     </toolkit:IconButton>
+                    
                     <toolkit:IconButton Command="{Binding DeleteUser}" Style="{StaticResource iconButton}" Content="{x:Static r:Strings.Delete}"
-                                        IsEnabled="{Binding SelectedRecord, Converter={StaticResource cIsNotNull}}">
+                                        Margin="{StaticResource padNormalEnd}" IsEnabled="{Binding SelectedRecord, Converter={StaticResource cIsNotNull}}">
                         <toolkit:IconButton.Icon>
                             <fa:ImageAwesome Icon="Remove" Style="{StaticResource iconButtonIcon}" />
                         </toolkit:IconButton.Icon>
                     </toolkit:IconButton>
+                    
+                    <toolkit:IconButton Command="{Binding Search}" Style="{StaticResource iconButton}" Content="{x:Static r:Strings.Search}">
+                        <toolkit:IconButton.Icon>
+                            <fa:ImageAwesome Icon="Search" Style="{StaticResource iconButtonIcon}" />
+                        </toolkit:IconButton.Icon>
+                    </toolkit:IconButton>
+                    
                 </StackPanel>
 
                 <!--Error Message-->

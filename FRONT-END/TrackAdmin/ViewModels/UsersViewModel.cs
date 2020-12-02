@@ -23,6 +23,7 @@ namespace TrackAdmin.ViewModels {
         public UsersViewModel(IUserService userService) {
             _userService = userService;
             _ = GetDataAsync();
+            ConfigMediatorSubscriptions();
         }
 
         #region ----------------- STATE ------------------
@@ -58,7 +59,6 @@ namespace TrackAdmin.ViewModels {
             }
         }
 
-
         private ICommand goToUserEditor;
         public ICommand GoToUserEditor {
             get {
@@ -74,7 +74,6 @@ namespace TrackAdmin.ViewModels {
         }
 
         private ICommand deleteUser;
-
         public ICommand DeleteUser {
             get {
                 if (deleteUser == null) {
@@ -90,6 +89,16 @@ namespace TrackAdmin.ViewModels {
             }
         }
 
+        private ICommand search;
+        public ICommand Search {
+            get {
+                if (search == null) {
+                    search = new RelayCommand(_ => Mediator.Notify(MediatorTokens.GoToSearchUser));
+                }
+
+                return search;
+            }
+        }
         #endregion
 
         #region Methods:
@@ -99,6 +108,20 @@ namespace TrackAdmin.ViewModels {
                 IsLoading = true;
 
                 Users = await _userService.ListAsync();
+
+                IsLoading = false;
+
+            } catch (Exception ex) {
+                IsLoading = false;
+                _ = ShowError(ex.Message);
+            }
+        }
+        public async Task SearchAsync(UserSearchDto dto) {
+            try {
+                Error = "";
+                IsLoading = true;
+
+                Users = await _userService.SearchAsync(dto);
 
                 IsLoading = false;
 
@@ -128,6 +151,14 @@ namespace TrackAdmin.ViewModels {
                 IsLoading = false;
                 _ = ShowError(ex.Message);
             }
+        }
+        private void ConfigMediatorSubscriptions() {
+
+            // Search users subscription:
+            Mediator.Subscribe(MediatorTokens.SearchUsers, data => {
+                _ = SearchAsync(data as UserSearchDto);
+            });
+
         }
         #endregion
 

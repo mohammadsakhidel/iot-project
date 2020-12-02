@@ -30,4 +30,8 @@
         <v:UserEditor></v:UserEditor>
     </DataTemplate>
 
+    <DataTemplate DataType="{x:Type vm:SearchUsersViewModel}">
+        <v:SearchUsers></v:SearchUsers>
+    </DataTemplate>
+
 </ResourceDictionary>

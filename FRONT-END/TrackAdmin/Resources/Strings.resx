@@ -177,6 +177,12 @@
   <data name="Save" xml:space="preserve">
     <value>Save</value>
   </data>
+  <data name="Search" xml:space="preserve">
+    <value>Search</value>
+  </data>
+  <data name="SearchUsers" xml:space="preserve">
+    <value>Search Users</value>
+  </data>
   <data name="State" xml:space="preserve">
     <value>State</value>
   </data>

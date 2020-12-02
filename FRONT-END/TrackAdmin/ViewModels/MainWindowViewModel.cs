@@ -81,6 +81,13 @@ namespace TrackAdmin.ViewModels {
                 ChangeCurrentPage(userEditorVM);
             });
 
+            // Go To User Search:
+            Mediator.Subscribe(MediatorTokens.GoToSearchUser, _ => {
+                var services = ((App)Application.Current).ServiceProvider;
+                var searchUserVM = (ISearchUsersViewModel)services.GetService(typeof(ISearchUsersViewModel));
+                ChangeCurrentPage(searchUserVM);
+            });
+
             // Back To Users Page:
             Mediator.Subscribe(MediatorTokens.BackToUsers, result => {
                 var services = ((App)Application.Current).ServiceProvider;

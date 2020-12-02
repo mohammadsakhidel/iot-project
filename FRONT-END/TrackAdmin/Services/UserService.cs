@@ -38,6 +38,21 @@ namespace TrackAdmin.Services {
 
         }
 
+        public async Task<List<UserDto>> SearchAsync(UserSearchDto dto) {
+            // Http Client Preparation:
+            var services = ((App)Application.Current).ServiceProvider;
+            using var http = (HttpClient)services.GetService(typeof(HttpClient));
+
+            // Send Request:
+            var url = ApiUtils.Combine(_configuration["API:Host"], ApiEndpoints.USERS_SEARCH);
+            var response = await http.PostAsJsonAsync(url, dto);
+            response.EnsureSuccessStatusCode();
+
+            // Deserialization:
+            var users = await response.Content.ReadAsAsync<List<UserDto>>();
+            return users;
+        }
+
         public async Task<(bool done, string message)> CreateAsync(UserDto user) {
 
             // Http Client Preparation:

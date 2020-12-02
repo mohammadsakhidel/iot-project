@@ -8,5 +8,6 @@ using System.Threading.Tasks;
 namespace TrackAdmin.Constants {
     public class ApiEndpoints {
         public const string USERS = "users";
+        public const string USERS_SEARCH = "users/search";
     }
 }
