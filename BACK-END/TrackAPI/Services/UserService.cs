@@ -42,14 +42,14 @@ namespace TrackAPI.Services {
             };
 
             var claims = new List<Claim> {
-                    new Claim(ClaimNames.GIVEN_NAME, model.GivenName),
-                    new Claim(ClaimNames.SURNAME, model.Surname),
-                    new Claim(ClaimNames.EMAIL, model.Email),
-                    new Claim(ClaimNames.STATE, model.State),
-                    new Claim(ClaimNames.CITY, model.City),
-                    new Claim(ClaimNames.ADDRESS, model.Address),
-                    new Claim(ClaimNames.GROUP, UserGroups.USERS)
-                };
+                new Claim(ClaimNames.GIVEN_NAME, model.GivenName),
+                new Claim(ClaimNames.SURNAME, model.Surname),
+                new Claim(ClaimNames.EMAIL, model.Email),
+                new Claim(ClaimNames.STATE, model.State ?? ""),
+                new Claim(ClaimNames.CITY, model.City ?? ""),
+                new Claim(ClaimNames.ADDRESS, model.Address ?? ""),
+                new Claim(ClaimNames.GROUP, UserGroups.USERS)
+            };
 
             var result = await _userManager.CreateAsync(user, model.Password);
             if (!result.Succeeded)
@@ -137,11 +137,11 @@ namespace TrackAPI.Services {
                 _userManager.ReplaceClaimAsync(user, claims.Single(c => c.Type == ClaimNames.SURNAME),
                     new Claim(ClaimNames.SURNAME, model.Surname)).Wait();
                 _userManager.ReplaceClaimAsync(user, claims.Single(c => c.Type == ClaimNames.STATE),
-                    new Claim(ClaimNames.STATE, model.State)).Wait();
+                    new Claim(ClaimNames.STATE, model.State ?? "")).Wait();
                 _userManager.ReplaceClaimAsync(user, claims.Single(c => c.Type == ClaimNames.CITY),
-                    new Claim(ClaimNames.CITY, model.City)).Wait();
+                    new Claim(ClaimNames.CITY, model.City ?? "")).Wait();
                 _userManager.ReplaceClaimAsync(user, claims.Single(c => c.Type == ClaimNames.ADDRESS),
-                    new Claim(ClaimNames.ADDRESS, model.Address)).Wait();
+                    new Claim(ClaimNames.ADDRESS, model.Address ?? "")).Wait();
 
                 // Change Password:
                 if (!string.IsNullOrEmpty(model.Password)) {

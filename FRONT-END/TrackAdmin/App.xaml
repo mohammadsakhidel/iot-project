@@ -10,6 +10,7 @@
             <c:StringVisibilityConverter x:Key="cStringVis" />
             <c:ConcatConverter x:Key="cConcat" />
             <c:IsNotNullConverter x:Key="cIsNotNull" />
+            <c:BoolOppositeConverter x:Key="cBoolOpposite" />
 
             <!--Resource Dictionaries-->
             <ResourceDictionary.MergedDictionaries>

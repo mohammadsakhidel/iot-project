@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using TrackAdmin.Commands;
@@ -44,6 +46,9 @@ namespace TrackAdmin.ViewModels {
             get { return givenName; }
             set {
                 givenName = value;
+                RemoveValidationErrors(nameof(GivenName));
+                ValidateRequiredProp(nameof(GivenName), value);
+                ValidatePropWithRegex(nameof(GivenName), value, Patterns.NAME);
                 OnPropertyChanged(nameof(GivenName));
             }
         }
@@ -53,6 +58,9 @@ namespace TrackAdmin.ViewModels {
             get { return surname; }
             set {
                 surname = value;
+                RemoveValidationErrors(nameof(Surname));
+                ValidateRequiredProp(nameof(Surname), value);
+                ValidatePropWithRegex(nameof(Surname), value, Patterns.NAME);
                 OnPropertyChanged(nameof(Surname));
             }
         }
@@ -62,6 +70,9 @@ namespace TrackAdmin.ViewModels {
             get { return email; }
             set {
                 email = value;
+                RemoveValidationErrors(nameof(Email));
+                ValidateRequiredProp(nameof(Email), value);
+                ValidatePropWithRegex(nameof(Email), value, Patterns.EMAIL);
                 OnPropertyChanged(nameof(Email));
             }
         }
@@ -71,6 +82,8 @@ namespace TrackAdmin.ViewModels {
             get { return password; }
             set {
                 password = value;
+                RemoveValidationErrors(nameof(Password));
+                ValidatePropWithRegex(nameof(Password), value, Patterns.PASSWORD);
                 OnPropertyChanged(nameof(Password));
             }
         }
@@ -80,6 +93,8 @@ namespace TrackAdmin.ViewModels {
             get { return phoneNumber; }
             set {
                 phoneNumber = value;
+                RemoveValidationErrors(nameof(PhoneNumber));
+                ValidatePropWithRegex(nameof(PhoneNumber), value, Patterns.PHONE);
                 OnPropertyChanged(nameof(PhoneNumber));
             }
         }
@@ -89,6 +104,8 @@ namespace TrackAdmin.ViewModels {
             get { return state; }
             set {
                 state = value;
+                RemoveValidationErrors(nameof(State));
+                ValidatePropWithRegex(nameof(State), value, Patterns.NAME);
                 OnPropertyChanged(nameof(State));
             }
         }
@@ -98,6 +115,8 @@ namespace TrackAdmin.ViewModels {
             get { return city; }
             set {
                 city = value;
+                RemoveValidationErrors(nameof(City));
+                ValidatePropWithRegex(nameof(City), value, Patterns.NAME);
                 OnPropertyChanged(nameof(City));
             }
         }
@@ -107,12 +126,13 @@ namespace TrackAdmin.ViewModels {
             get { return address; }
             set {
                 address = value;
+                RemoveValidationErrors(nameof(Address));
+                ValidatePropWithRegex(nameof(Address), value, Patterns.NAME);
                 OnPropertyChanged(nameof(Address));
             }
         }
 
         private bool isActive;
-
         public bool IsActive {
             get { return isActive; }
             set {
@@ -231,6 +251,16 @@ namespace TrackAdmin.ViewModels {
             City = user?.City;
             Address = user?.Address;
             IsActive = user != null && user.IsActive;
+        }
+
+        private void ValidateRequiredProp(string propName, string propVal) {
+            if (string.IsNullOrEmpty(propVal))
+                AddValidationError(propName, $"{propName} is required.");
+        }
+
+        private void ValidatePropWithRegex(string propName, string propValue, string pattern) {
+            if (!string.IsNullOrEmpty(propValue) && !Regex.IsMatch(propValue, pattern))
+                AddValidationError(propName, $"{propName} is invalid.");
         }
         #endregion
     }

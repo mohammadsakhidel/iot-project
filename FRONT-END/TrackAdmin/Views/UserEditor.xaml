@@ -42,49 +42,49 @@
                 <!--Given Name-->
                 <Label Content="{x:Static r:Strings.GivenName}" Style="{StaticResource formLabel}" />
                 <TextBox Grid.Column="1" Style="{StaticResource textbox}" 
-                         Text="{Binding GivenName, Mode=TwoWay, ValidatesOnExceptions=True}" 
+                         Text="{Binding GivenName, Mode=TwoWay, ValidatesOnNotifyDataErrors=True}" 
                          Margin="{StaticResource padNormalBottom}"/>
 
                 <!--Surname-->
                 <Label Grid.Row="1" Content="{x:Static r:Strings.Surname}" Style="{StaticResource formLabel}" />
                 <TextBox Grid.Row="1" Grid.Column="1" Style="{StaticResource textbox}" 
-                         Text="{Binding Surname, Mode=TwoWay, ValidatesOnExceptions=True}"
+                         Text="{Binding Surname, Mode=TwoWay, ValidatesOnNotifyDataErrors=True}"
                          Margin="{StaticResource padNormalBottom}"/>
 
                 <!--Email-->
                 <Label Grid.Row="2" Content="{x:Static r:Strings.Email}" Style="{StaticResource formLabel}" />
                 <TextBox Grid.Row="2" Grid.Column="1" Style="{StaticResource textbox}" 
-                         Text="{Binding Email, Mode=TwoWay, ValidatesOnExceptions=True}"
+                         Text="{Binding Email, Mode=TwoWay, ValidatesOnNotifyDataErrors=True}"
                          Margin="{StaticResource padNormalBottom}"/>
 
                 <!--Password-->
                 <Label Grid.Row="3" Content="{x:Static r:Strings.Password}" Style="{StaticResource formLabel}" />
                 <TextBox Grid.Row="3" Grid.Column="1" Style="{StaticResource textbox}" 
-                         Text="{Binding Password, Mode=TwoWay, ValidatesOnExceptions=True}" 
+                         Text="{Binding Password, Mode=TwoWay, ValidatesOnNotifyDataErrors=True}" 
                          Margin="{StaticResource padNormalBottom}"/>
 
                 <!--PhoneNumber-->
                 <Label Grid.Row="4" Content="{x:Static r:Strings.PhoneNumber}" Style="{StaticResource formLabel}" />
                 <TextBox Grid.Row="4" Grid.Column="1" Style="{StaticResource textbox}" 
-                         Text="{Binding PhoneNumber, Mode=TwoWay, ValidatesOnExceptions=True}" 
+                         Text="{Binding PhoneNumber, Mode=TwoWay, ValidatesOnNotifyDataErrors=True}" 
                          Margin="{StaticResource padNormalBottom}"/>
 
                 <!--State-->
                 <Label Grid.Row="5" Content="{x:Static r:Strings.State}" Style="{StaticResource formLabel}" />
                 <TextBox Grid.Row="5" Grid.Column="1" Style="{StaticResource textbox}" 
-                         Text="{Binding State, Mode=TwoWay, ValidatesOnExceptions=True}" 
+                         Text="{Binding State, Mode=TwoWay, ValidatesOnNotifyDataErrors=True}" 
                          Margin="{StaticResource padNormalBottom}"/>
 
                 <!--City-->
                 <Label Grid.Row="6" Content="{x:Static r:Strings.City}" Style="{StaticResource formLabel}" />
                 <TextBox Grid.Row="6" Grid.Column="1" Style="{StaticResource textbox}" 
-                         Text="{Binding City, Mode=TwoWay, ValidatesOnExceptions=True}"
+                         Text="{Binding City, Mode=TwoWay, ValidatesOnNotifyDataErrors=True}"
                          Margin="{StaticResource padNormalBottom}"/>
 
                 <!--Address-->
                 <Label Grid.Row="7" Content="{x:Static r:Strings.Address}" Style="{StaticResource formLabel}" />
                 <TextBox Grid.Row="7" Grid.Column="1" Style="{StaticResource textbox}" 
-                         Text="{Binding Address, Mode=TwoWay, ValidatesOnExceptions=True}"
+                         Text="{Binding Address, Mode=TwoWay, ValidatesOnNotifyDataErrors=True}"
                          Margin="{StaticResource padNormalBottom}" TextWrapping="Wrap" Height="50"/>
 
                 <!--IsActive-->
@@ -102,11 +102,13 @@
 
                 <StackPanel Orientation="Horizontal">
                     <toolkit:IconButton Command="{Binding Save}" Style="{StaticResource iconButton}" 
+                                        IsEnabled="{Binding HasErrors, Converter={StaticResource cBoolOpposite}}"
                                         Margin="{StaticResource padNormalEnd}" Content="{x:Static r:Strings.Save}">
                         <toolkit:IconButton.Icon>
                             <fa:ImageAwesome Icon="Save" Style="{StaticResource iconButtonIcon}" />
                         </toolkit:IconButton.Icon>
                     </toolkit:IconButton>
+                    
                     <toolkit:IconButton Command="{Binding BackToUsers}" CommandParameter="{Binding OperationDone}" 
                                         Style="{StaticResource iconButton}" Margin="{StaticResource padNormalEnd}" 
                                         Content="{x:Static r:Strings.BackToList}">
