@@ -204,6 +204,9 @@
   <data name="TestLab" xml:space="preserve">
     <value>Testing Lab</value>
   </data>
+  <data name="TrackerInfo" xml:space="preserve">
+    <value>Tracker Information</value>
+  </data>
   <data name="TrackerLogs" xml:space="preserve">
     <value>Tracker Logs</value>
   </data>

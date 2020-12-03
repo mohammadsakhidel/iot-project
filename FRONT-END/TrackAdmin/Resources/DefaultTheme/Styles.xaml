@@ -164,6 +164,10 @@
         </Style.Triggers>
     </Style>
 
+    <Style x:Key="combobox" TargetType="ComboBox">
+        
+    </Style>
+
     <Style x:Key="formLabel" TargetType="Label">
         <Setter Property="Margin" Value="0 5 5 0"></Setter>
         <Setter Property="Padding" Value="0"></Setter>

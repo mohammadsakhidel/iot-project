@@ -322,6 +322,15 @@ namespace TrackAdmin.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Tracker Information.
+        /// </summary>
+        public static string TrackerInfo {
+            get {
+                return ResourceManager.GetString("TrackerInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Tracker Logs.
         /// </summary>
         public static string TrackerLogs {

@@ -27,5 +27,9 @@ namespace TrackAdmin.DTOs {
         public bool IsActive { get; set; }
 
         public string CreationTime { get; set; }
+
+
+        // Computed Prop:
+        public string Desc => $"{Id}: {GivenName} {Surname}";
     }
 }

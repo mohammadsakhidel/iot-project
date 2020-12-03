@@ -11,6 +11,7 @@ namespace TrackAPI.Services {
         Task<(bool succeeded, string error)> UpdateAsync(UserModel model);
         Task<UserModel> GetAsync(string id);
         Task<List<UserModel>> GetAsync(int skip, int take);
+        Task<List<UserModel>> QueryAsync(string query);
         Task<UserModel> FindByUsernameAsync(string userName);
         Task<(bool succeeded, string error)> RemoveAsync(string id);
         Task<(bool, string)> ActivateAsync(string id);

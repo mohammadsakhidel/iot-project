@@ -16,5 +16,6 @@ namespace TrackAdmin.Constants {
         /// Australian phone number format
         /// </summary>
         public const string PHONE = @"^((\+61\s?)?(\((0|02|03|04|07|08)\))?)?\s?\d{1,4}\s?\d{1,4}\s?\d{0,4}$";
+        public const string USER_DESC = @"^[^\n\s]+:\s.+\s.+$";
     }
 }

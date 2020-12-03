@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,20 +7,31 @@ using System.Threading.Tasks;
 using TrackAPI.Constants;
 using TrackAPI.Models;
 using TrackDataAccess.Models;
+using TrackDataAccess.Models.Identity;
 using TrackDataAccess.Repositories;
 
 namespace TrackAPI.Services {
     public class TrackerService : ITrackerService {
 
+        private readonly UserManager<AppUser> _userManager;
         private readonly ITrackerRepository _trackerRepository;
         private readonly IMapper _mapper;
-        public TrackerService(ITrackerRepository trackerRepository, IMapper mapper) {
+        public TrackerService(ITrackerRepository trackerRepository, IMapper mapper,
+            UserManager<AppUser> userManager) {
             _trackerRepository = trackerRepository;
             _mapper = mapper;
+            _userManager = userManager;
         }
 
         public async Task<(bool, string)> CreateAsync(TrackerModel model) {
             
+            // Validate UserId:
+            if (!string.IsNullOrEmpty(model.UserId)) {
+                var user = await _userManager.FindByIdAsync(model.UserId);
+                if (user == null)
+                    return (false, "Invalid UserId.");
+            }
+
             var tracker = _mapper.Map<Tracker>(model);
             tracker.Id = $"{model.Manufacturer}-{model.RawID}".ToUpper();
             tracker.CreationTime = DateTime.UtcNow;
@@ -51,6 +63,13 @@ namespace TrackAPI.Services {
             var tracker = await _trackerRepository.GetAsync(model.Id);
             if (tracker == null)
                 return (false, "Tracker not found.");
+
+            // Validate UserId:
+            if (!string.IsNullOrEmpty(model.UserId)) {
+                var user = await _userManager.FindByIdAsync(model.UserId);
+                if (user == null)
+                    return (false, "Invalid UserId.");
+            }
 
             tracker.RawID = model.RawID;
             tracker.Manufacturer = model.Manufacturer;

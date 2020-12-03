@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using TrackAPI.Constants;
 using TrackAPI.Extensions;
@@ -84,10 +85,17 @@ namespace TrackAPI.Controllers {
 
         [HttpGet]
         [Authorize(Policies.CanReadUser)]
-        public async Task<IActionResult> Get(int skip = 0, int take = Values.PAGESIZE) {
+        public async Task<IActionResult> Get(int? skip, int? take, string query) {
             try {
 
-                var users = await _userService.GetAsync(skip, take);
+                List<UserModel> users = new();
+
+                if (!string.IsNullOrEmpty(query)) {
+                    query = WebUtility.UrlDecode(query);
+                    users = await _userService.QueryAsync(query);
+                } else {
+                    users = await _userService.GetAsync(skip ?? 0, take ?? Values.PAGESIZE);
+                }
 
                 return Ok(users);
 

@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Text;
@@ -102,6 +103,22 @@ namespace TrackAdmin.Services {
             // Result:
             return (true, string.Empty);
 
+        }
+
+        public async Task<List<UserDto>> QueryAsync(string query) {
+            // Http Client Preparation:
+            var services = ((App)Application.Current).ServiceProvider;
+            using var http = (HttpClient)services.GetService(typeof(HttpClient));
+
+            // Send Request:
+            var url = ApiUtils.Combine(_configuration["API:Host"], ApiEndpoints.USERS);
+            var endpoint = $"{url}?query={WebUtility.UrlEncode(query)}";
+            var response = await http.GetAsync(endpoint);
+            response.EnsureSuccessStatusCode();
+
+            // Deserialization:
+            var users = await response.Content.ReadAsAsync<List<UserDto>>();
+            return users;
         }
     }
 }

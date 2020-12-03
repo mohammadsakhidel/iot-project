@@ -128,6 +128,28 @@ namespace TrackAPI.Services {
             return users;
         }
 
+        public async Task<List<UserModel>> QueryAsync(string query) {
+            var appUsers = await Task.Run(() => {
+                var users = _userRepository.Search(u =>
+                    u.Id == query ||
+                    u.Email.ToLower().Contains(query.ToLower()) ||
+                    ($"{u.Claims.First(c => c.ClaimType == ClaimNames.GIVEN_NAME).ClaimValue} {u.Claims.First(c => c.ClaimType == ClaimNames.SURNAME).ClaimValue}")
+                        .ToLower().Contains(query.ToLower())
+                );
+                return users;
+            });
+
+            var users = await Task.Run(() => {
+                var list = new List<UserModel>();
+                foreach (var user in appUsers) {
+                    list.Add(mapEntityToModel(user, user.Claims.Select(c => new Claim(c.ClaimType, c.ClaimValue)).ToList()));
+                }
+                return list;
+            });
+
+            return users;
+        }
+
         public async Task<(bool, string)> RemoveAsync(string id) {
             var user = await _userManager.FindByIdAsync(id);
             if (user == null)
