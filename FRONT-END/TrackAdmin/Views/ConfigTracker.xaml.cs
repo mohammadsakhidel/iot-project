@@ -17,9 +17,13 @@ namespace TrackAdmin.Views {
     /// <summary>
     /// Interaction logic for TrackerTesting.xaml
     /// </summary>
-    public partial class TrackerTesting : UserControl {
-        public TrackerTesting() {
+    public partial class ConfigTracker : UserControl {
+        public ConfigTracker() {
             InitializeComponent();
+        }
+
+        private void UserControl_Loaded(object sender, RoutedEventArgs e) {
+            tbTrackerId.Focus();
         }
     }
 }

@@ -7,6 +7,7 @@
     <Thickness x:Key="padDoubleStart">20 0 0 0</Thickness>
     <Thickness x:Key="padDoubleEnd">0 0 20 0</Thickness>
     <Thickness x:Key="padDoubleBottom">0 0 0 20</Thickness>
+    <Thickness x:Key="padDoubleVertical">0 20</Thickness>
     
     <Thickness x:Key="padNormal">10</Thickness>
     <Thickness x:Key="padNormalTop">0 10 0 0</Thickness>

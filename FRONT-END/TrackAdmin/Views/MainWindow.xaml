@@ -31,7 +31,7 @@
                     <Button Style="{StaticResource sidebarButton}" Content="{x:Static res:Strings.Trackers}" Command="{Binding SidebarCommand}" CommandParameter="Trackers"></Button>
 
                     <Label Style="{StaticResource sidebarHeader}" Content="{x:Static res:Strings.Monitoring}" Margin="{StaticResource padDoubleTop}"></Label>
-                    <Button Style="{StaticResource sidebarButton}" Content="{x:Static res:Strings.TestLab}" Command="{Binding SidebarCommand}" CommandParameter="TrackerTesting"></Button>
+                    <Button Style="{StaticResource sidebarButton}" Content="{x:Static res:Strings.ConfigTracker}" Command="{Binding SidebarCommand}" CommandParameter="ConfigTracker"></Button>
                     <Button Style="{StaticResource sidebarButton}" Content="{x:Static res:Strings.TrackerLogs}" Command="{Binding SidebarCommand}" CommandParameter="TrackerLogs"></Button>
 
                 </StackPanel>

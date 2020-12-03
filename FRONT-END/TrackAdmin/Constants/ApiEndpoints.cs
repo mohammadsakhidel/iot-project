@@ -12,5 +12,9 @@ namespace TrackAdmin.Constants {
 
         public const string TRACKERS = "trackers";
         public const string TRACKERS_SEARCH = "trackers/search";
+
+        public const string COMMANDS = "commands";
+        public const string COMMANDS_CONNECT = "commands/connect";
+        public const string COMMANDS_SETS = "commands/sets";
     }
 }

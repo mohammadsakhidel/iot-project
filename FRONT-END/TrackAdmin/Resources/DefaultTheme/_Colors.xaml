@@ -7,6 +7,8 @@
     <SolidColorBrush x:Key="cTwoL1" Color="#5390b0"></SolidColorBrush>
     
     <SolidColorBrush x:Key="cThree" Color="#F0810F"></SolidColorBrush>
+    <SolidColorBrush x:Key="cThreeL3" Color="#ffe1c2"></SolidColorBrush>
+    <SolidColorBrush x:Key="cThreeL2" Color="#ffc385"></SolidColorBrush>
     <SolidColorBrush x:Key="cThreeD1" Color="#cc6700"></SolidColorBrush>
     <SolidColorBrush x:Key="cThreeD2" Color="#a35200"></SolidColorBrush>
     
@@ -14,5 +16,11 @@
     
     <SolidColorBrush x:Key="cNeutral" Color="#fff"></SolidColorBrush>
     <SolidColorBrush x:Key="cNeutralD1" Color="#e3e3e3"></SolidColorBrush>
-    
+    <SolidColorBrush x:Key="cNeutralD2" Color="#cccccc"></SolidColorBrush>
+    <SolidColorBrush x:Key="cNeutralDarkest" Color="#383838"></SolidColorBrush>
+
+    <SolidColorBrush x:Key="cSuccess" Color="#47cc8c"></SolidColorBrush>
+    <SolidColorBrush x:Key="cSuccessL3" Color="#c7ffe4"></SolidColorBrush>
+    <SolidColorBrush x:Key="cSuccessD2" Color="#1c754a"></SolidColorBrush>
+
 </ResourceDictionary>

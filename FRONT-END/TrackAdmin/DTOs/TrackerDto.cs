@@ -12,6 +12,11 @@ namespace TrackAdmin.DTOs {
         public string RawID { get; set; }
         public string CommandSet { get; set; }
         public string CreationTime { get; set; }
+        public string LastConnection { get; set; }
+        public string LastConnectedServer { get; set; }
 
+        // Computed Props:
+        public string Desc => $"Tracker ID: {Id}\tCommand Set: {CommandSet}\t" +
+            $"Last Connection: {LastConnection} to the server: {LastConnectedServer}";
     }
 }

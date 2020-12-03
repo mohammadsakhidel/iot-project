@@ -138,8 +138,20 @@
   <data name="City" xml:space="preserve">
     <value>City</value>
   </data>
+  <data name="CommandPayload" xml:space="preserve">
+    <value>Command Payload</value>
+  </data>
   <data name="CommandSet" xml:space="preserve">
     <value>Command Set</value>
+  </data>
+  <data name="CommandType" xml:space="preserve">
+    <value>Command Type</value>
+  </data>
+  <data name="ConfigTracker" xml:space="preserve">
+    <value>Tracker Config</value>
+  </data>
+  <data name="Connect" xml:space="preserve">
+    <value>Connect</value>
   </data>
   <data name="Create" xml:space="preserve">
     <value>Create</value>
@@ -150,11 +162,20 @@
   <data name="Delete" xml:space="preserve">
     <value>Delete</value>
   </data>
+  <data name="Disconnect" xml:space="preserve">
+    <value>Disconnect</value>
+  </data>
   <data name="Edit" xml:space="preserve">
     <value>Edit</value>
   </data>
   <data name="Email" xml:space="preserve">
     <value>Email</value>
+  </data>
+  <data name="Execute" xml:space="preserve">
+    <value>Execute</value>
+  </data>
+  <data name="ExecutionResultEmpty" xml:space="preserve">
+    <value>{Empty Resul}</value>
   </data>
   <data name="Footer" xml:space="preserve">
     <value>@2021 All rights reserved for zorrotracker.com</value>
@@ -195,6 +216,9 @@
   <data name="SearchUsers" xml:space="preserve">
     <value>Search Users</value>
   </data>
+  <data name="SendingCommands" xml:space="preserve">
+    <value>Sending Commands</value>
+  </data>
   <data name="State" xml:space="preserve">
     <value>State</value>
   </data>
@@ -206,6 +230,9 @@
   </data>
   <data name="TestLab" xml:space="preserve">
     <value>Testing Lab</value>
+  </data>
+  <data name="TrackerId" xml:space="preserve">
+    <value>Tracker ID</value>
   </data>
   <data name="TrackerInfo" xml:space="preserve">
     <value>Tracker Information</value>

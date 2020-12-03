@@ -124,11 +124,47 @@ namespace TrackAdmin.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Command Payload.
+        /// </summary>
+        public static string CommandPayload {
+            get {
+                return ResourceManager.GetString("CommandPayload", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Command Set.
         /// </summary>
         public static string CommandSet {
             get {
                 return ResourceManager.GetString("CommandSet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Command Type.
+        /// </summary>
+        public static string CommandType {
+            get {
+                return ResourceManager.GetString("CommandType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tracker Config.
+        /// </summary>
+        public static string ConfigTracker {
+            get {
+                return ResourceManager.GetString("ConfigTracker", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Connect.
+        /// </summary>
+        public static string Connect {
+            get {
+                return ResourceManager.GetString("Connect", resourceCulture);
             }
         }
         
@@ -160,6 +196,15 @@ namespace TrackAdmin.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Disconnect.
+        /// </summary>
+        public static string Disconnect {
+            get {
+                return ResourceManager.GetString("Disconnect", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Edit.
         /// </summary>
         public static string Edit {
@@ -174,6 +219,24 @@ namespace TrackAdmin.Resources {
         public static string Email {
             get {
                 return ResourceManager.GetString("Email", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Execute.
+        /// </summary>
+        public static string Execute {
+            get {
+                return ResourceManager.GetString("Execute", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {Empty Resul}.
+        /// </summary>
+        public static string ExecutionResultEmpty {
+            get {
+                return ResourceManager.GetString("ExecutionResultEmpty", resourceCulture);
             }
         }
         
@@ -295,6 +358,15 @@ namespace TrackAdmin.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Sending Commands.
+        /// </summary>
+        public static string SendingCommands {
+            get {
+                return ResourceManager.GetString("SendingCommands", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to State.
         /// </summary>
         public static string State {
@@ -327,6 +399,15 @@ namespace TrackAdmin.Resources {
         public static string TestLab {
             get {
                 return ResourceManager.GetString("TestLab", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tracker ID.
+        /// </summary>
+        public static string TrackerId {
+            get {
+                return ResourceManager.GetString("TrackerId", resourceCulture);
             }
         }
         

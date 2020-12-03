@@ -7,6 +7,7 @@
             
             <!--Converters:-->
             <c:BoolVisibilityConverter x:Key="cBoolVis" />
+            <c:BoolVisibilityOppositeConverter x:Key="cBoolVisOpposite" />
             <c:StringVisibilityConverter x:Key="cStringVis" />
             <c:ConcatConverter x:Key="cConcat" />
             <c:IsNotNullConverter x:Key="cIsNotNull" />
