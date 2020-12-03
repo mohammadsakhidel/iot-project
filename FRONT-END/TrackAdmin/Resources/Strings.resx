@@ -189,6 +189,9 @@
   <data name="Search" xml:space="preserve">
     <value>Search</value>
   </data>
+  <data name="SearchTrackers" xml:space="preserve">
+    <value>Search Trackers</value>
+  </data>
   <data name="SearchUsers" xml:space="preserve">
     <value>Search Users</value>
   </data>
@@ -212,6 +215,9 @@
   </data>
   <data name="Trackers" xml:space="preserve">
     <value>Trackers</value>
+  </data>
+  <data name="User" xml:space="preserve">
+    <value>User</value>
   </data>
   <data name="UserId" xml:space="preserve">
     <value>User ID</value>

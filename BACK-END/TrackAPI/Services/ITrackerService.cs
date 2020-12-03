@@ -9,6 +9,7 @@ namespace TrackAPI.Services {
         Task<(bool, string)> CreateAsync(TrackerModel model);
         Task<TrackerModel> GetAsync(string id);
         Task<List<TrackerModel>> TakeAsync(int skip, int take);
+        Task<List<TrackerModel>> SearchAsync(TrackerSearchModel model);
         Task<(bool, string)> UpdateAsync(TrackerModel model);
         Task<(bool, string)> RemoveAsync(string id);
     }

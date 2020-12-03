@@ -277,6 +277,15 @@ namespace TrackAdmin.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Search Trackers.
+        /// </summary>
+        public static string SearchTrackers {
+            get {
+                return ResourceManager.GetString("SearchTrackers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Search Users.
         /// </summary>
         public static string SearchUsers {
@@ -345,6 +354,15 @@ namespace TrackAdmin.Resources {
         public static string Trackers {
             get {
                 return ResourceManager.GetString("Trackers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to User.
+        /// </summary>
+        public static string User {
+            get {
+                return ResourceManager.GetString("User", resourceCulture);
             }
         }
         

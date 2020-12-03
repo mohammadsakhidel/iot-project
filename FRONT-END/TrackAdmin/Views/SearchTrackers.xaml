@@ -4,9 +4,73 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TrackAdmin.Views"
-             mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             xmlns:r="clr-namespace:TrackAdmin.Resources"
+             xmlns:v="clr-namespace:TrackAdmin.Views"
+             xmlns:toolkit="http://schemas.xceed.com/wpf/xaml/toolkit"
+             xmlns:fa="http://schemas.fontawesome.io/icons/"
+             xmlns:cn="clr-namespace:TrackAdmin.Constants"
+             mc:Ignorable="d">
     <Grid>
-            
+
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="auto" />
+            </Grid.RowDefinitions>
+
+            <Label Style="{StaticResource pageTitle}" Content="{x:Static r:Strings.SearchTrackers}"></Label>
+
+            <!--Form-->
+            <Grid Grid.Row="1" VerticalAlignment="Top" Margin="{StaticResource padNormalVertical}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                    
+                </Grid.RowDefinitions>
+
+                <!--Manufacturer-->
+                <Label Grid.Row="0" Content="{x:Static r:Strings.Manufacturer}" Style="{StaticResource formLabel}" />
+                <TextBox Grid.Row="0" Grid.Column="1" Style="{StaticResource textbox}" 
+                         Text="{Binding Manufacturer, Mode=TwoWay}" Margin="{StaticResource padNormalBottom}"/>
+
+                <!--RawID-->
+                <Label Grid.Row="1" Content="{x:Static r:Strings.RawID}" Style="{StaticResource formLabel}" />
+                <TextBox Grid.Row="1" Grid.Column="1" Style="{StaticResource textbox}" 
+                         Text="{Binding RawID, Mode=TwoWay}" Margin="{StaticResource padNormalBottom}"/>
+
+                <!--UserId-->
+                <Label Grid.Row="2" Content="{x:Static r:Strings.User}" Style="{StaticResource formLabel}" />
+                <ComboBox Grid.Row="2" Grid.Column="1" Style="{StaticResource combobox}" 
+                          SelectedValue="{Binding UserId, Mode=TwoWay, ValidatesOnNotifyDataErrors=True}"
+                          Margin="{StaticResource padNormalBottom}" IsEditable="True" Text="{Binding UserIdInput}" 
+                          ItemsSource="{Binding Users}" SelectedValuePath="Id" DisplayMemberPath="Desc"
+                          IsDropDownOpen="{Binding UserIdInput, Converter={StaticResource cIsNotEmptyOrPattern}, ConverterParameter={x:Static cn:Patterns.USER_DESC}, Mode=OneWay}" />
+
+            </Grid>
+
+            <StackPanel Orientation="Horizontal" Grid.Row="2">
+                <toolkit:IconButton Command="{Binding Search}" Style="{StaticResource iconButton}"
+                                        Margin="{StaticResource padNormalEnd}" Content="{x:Static r:Strings.Search}">
+                    <toolkit:IconButton.Icon>
+                        <fa:ImageAwesome Icon="Search" Style="{StaticResource iconButtonIcon}" />
+                    </toolkit:IconButton.Icon>
+                </toolkit:IconButton>
+
+                <toolkit:IconButton Command="{Binding BackToUsers}" CommandParameter="{Binding OperationDone}" 
+                                        Style="{StaticResource iconButton}" Margin="{StaticResource padNormalEnd}" 
+                                        Content="{x:Static r:Strings.BackToList}">
+                    <toolkit:IconButton.Icon>
+                        <fa:ImageAwesome Icon="ArrowLeft" Style="{StaticResource iconButtonIcon}" />
+                    </toolkit:IconButton.Icon>
+                </toolkit:IconButton>
+            </StackPanel>
+
+        </Grid>
     </Grid>
 </UserControl>

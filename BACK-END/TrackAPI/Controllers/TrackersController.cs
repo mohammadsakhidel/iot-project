@@ -36,6 +36,20 @@ namespace TrackAPI.Controllers {
             }
         }
 
+        [HttpPost("search")]
+        [Authorize(Policies.CanReadTracker)]
+        public async Task<IActionResult> Post(TrackerSearchModel model) {
+            try {
+
+                var users = await _trackerService.SearchAsync(model);
+
+                return Ok(users);
+
+            } catch (Exception ex) {
+                return ex.GetActionResult();
+            }
+        }
+
         [HttpGet]
         [Authorize(Policies.CanReadTracker)]
         public async Task<IActionResult> GetAsync(int skip = 0, int take = Values.PAGESIZE) {

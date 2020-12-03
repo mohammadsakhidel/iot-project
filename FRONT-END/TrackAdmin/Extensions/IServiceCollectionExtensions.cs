@@ -43,6 +43,7 @@ namespace TrackAdmin.Extensions {
 
             services.AddSingleton<ITrackersViewModel, TrackersViewModel>();
             services.AddSingleton<ITrackerEditorViewModel, TrackerEditorViewModel>();
+            services.AddSingleton<ISearchTrackersViewModel, SearchTrackersViewModel>();
 
             services.AddSingleton<ITrackerLogsViewModel, TrackerLogsViewModel>();
             services.AddSingleton<ITrackerTestingViewModel, TrackerTestingViewModel>();

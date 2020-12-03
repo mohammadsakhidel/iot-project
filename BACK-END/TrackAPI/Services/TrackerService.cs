@@ -24,7 +24,7 @@ namespace TrackAPI.Services {
         }
 
         public async Task<(bool, string)> CreateAsync(TrackerModel model) {
-            
+
             // Validate UserId:
             if (!string.IsNullOrEmpty(model.UserId)) {
                 var user = await _userManager.FindByIdAsync(model.UserId);
@@ -92,5 +92,29 @@ namespace TrackAPI.Services {
             return (true, string.Empty);
         }
 
+        public async Task<List<TrackerModel>> SearchAsync(TrackerSearchModel model) {
+            var trackers = await Task.Run(() => {
+
+                // Return Empty list if all parameters are empty:
+                if (string.IsNullOrEmpty(model.UserId) &&
+                    string.IsNullOrEmpty(model.RawID) &&
+                    string.IsNullOrEmpty(model.Manufacturer)) {
+                    
+                    return new List<Tracker> { };
+
+                }
+                        
+                return _trackerRepository.Filter(t =>
+                            (string.IsNullOrEmpty(model.UserId) || t.UserId == model.UserId) &&
+                            (string.IsNullOrEmpty(model.RawID) || t.RawID == model.RawID) &&
+                            (string.IsNullOrEmpty(model.Manufacturer) || t.Manufacturer.ToLower() == model.Manufacturer.ToLower())
+                        ).OrderByDescending(t => t.CreationTime)
+                        .Take(50)
+                        .ToList();
+            });
+
+            var models = trackers.Select(t => _mapper.Map<TrackerModel>(t));
+            return models.ToList();
+        }
     }
 }
