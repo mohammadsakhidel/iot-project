@@ -111,7 +111,7 @@ namespace TrackAPI.Services {
                             (string.IsNullOrEmpty(model.RawID) || t.RawID == model.RawID) &&
                             (string.IsNullOrEmpty(model.Manufacturer) || t.Manufacturer.ToLower() == model.Manufacturer.ToLower())
                         ).OrderByDescending(t => t.CreationTime)
-                        .Take(50)
+                        .Take(Values.PAGESIZE)
                         .ToList();
             });
 

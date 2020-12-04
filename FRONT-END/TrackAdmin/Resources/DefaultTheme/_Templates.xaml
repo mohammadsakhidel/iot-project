@@ -44,4 +44,8 @@
         <v:ConfigTracker></v:ConfigTracker>
     </DataTemplate>
 
+    <DataTemplate DataType="{x:Type vm:HomePageViewModel}">
+        <v:HomePage></v:HomePage>
+    </DataTemplate>
+
 </ResourceDictionary>

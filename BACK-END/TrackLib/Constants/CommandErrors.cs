@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace TrackLib.Constants {
     public class CommandErrors {
-        public const string INVALID_REQUEST = "invalid_request";
-        public const string TRACKER_OFFLINE = "tracker_offline";
-        public const string SERVER_ERROR = "server_error";
-        public const string INVALID_FORMAT = "invalid_format";
-        public const string TRACKER_NO_REPLY = "tracker_no_reply";
+        public const string INVALID_REQUEST = "INVALID_REQUEST";
+        public const string TRACKER_OFFLINE = "TRACKER_OFFLINE";
+        public const string SERVER_ERROR = "SERVER_ERROR";
+        public const string INVALID_FORMAT = "INVALID_FORMAT";
+        public const string TRACKER_NO_REPLY = "NO_REPLY_FROM_TRACKER";
     }
 }

@@ -14,8 +14,9 @@ using TrackAdmin.Shared;
 namespace TrackAdmin.ViewModels {
     public class MainWindowViewModel : BaseViewModel {
 
-        public MainWindowViewModel() {
+        public MainWindowViewModel(IHomePageViewModel homepageViewModel) {
             ConfigMediatorSubscriptions();
+            _currentPage = homepageViewModel;
         }
 
         #region ----------------------- STATE -------------------------
@@ -31,9 +32,6 @@ namespace TrackAdmin.ViewModels {
                 OnPropertyChanged(nameof(CurrentPage));
             }
         }
-
-
-
         #endregion
 
         #region ---------------------- COMMANDS -----------------------

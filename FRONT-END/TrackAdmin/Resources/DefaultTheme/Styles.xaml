@@ -45,6 +45,14 @@
         <Setter Property="HorizontalAlignment" Value="Center"></Setter>
     </Style>
 
+    <Style x:Key="logoHome" TargetType="Image">
+        <Setter Property="Width" Value="300"></Setter>
+        <Setter Property="Height" Value="90"></Setter>
+        <Setter Property="Source" Value="Images/logo.png"></Setter>
+        <Setter Property="VerticalAlignment" Value="Center"></Setter>
+        <Setter Property="HorizontalAlignment" Value="Center"></Setter>
+    </Style>
+
     <Style x:Key="sidebarHeader" TargetType="Label">
         <Setter Property="FontFamily" Value="{StaticResource fHeader}"></Setter>
         <Setter Property="FontSize" Value="{StaticResource fsLarge}"></Setter>

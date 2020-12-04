@@ -25,9 +25,12 @@ namespace TrackAdmin.Extensions {
 
         public static void AddWindows(this IServiceCollection services) {
             services.AddSingleton<MainWindow>(sp => {
+
+                var homepage = (IHomePageViewModel)sp.GetService(typeof(IHomePageViewModel));
                 return new MainWindow {
-                    DataContext = new MainWindowViewModel()
+                    DataContext = new MainWindowViewModel(homepage)
                 };
+
             });
         }
 
@@ -48,6 +51,7 @@ namespace TrackAdmin.Extensions {
 
             services.AddSingleton<ITrackerLogsViewModel, TrackerLogsViewModel>();
             services.AddSingleton<IConfigTrackerViewModel, ConfigTrackerViewModel>();
+            services.AddSingleton<IHomePageViewModel, HomePageViewModel>();
         }
 
         public static void AddHelpers(this IServiceCollection services) {
