@@ -21,5 +21,9 @@ namespace TrackAdmin.Views {
         public TrackerLogs() {
             InitializeComponent();
         }
+
+        private void UserControl_Loaded(object sender, RoutedEventArgs e) {
+            tbTrackerId.Focus();
+        }
     }
 }

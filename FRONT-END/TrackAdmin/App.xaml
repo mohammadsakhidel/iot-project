@@ -13,6 +13,7 @@
             <c:IsNotNullConverter x:Key="cIsNotNull" />
             <c:IsNotEmptyOrPatternConverter x:Key="cIsNotEmptyOrPattern" />
             <c:BoolOppositeConverter x:Key="cBoolOpposite" />
+            <c:DateConverter x:Key="cDate" />
 
             <!--Resource Dictionaries-->
             <ResourceDictionary.MergedDictionaries>

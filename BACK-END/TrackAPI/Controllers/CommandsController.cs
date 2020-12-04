@@ -95,8 +95,8 @@ namespace TrackAPI.Controllers {
 
                 return Ok(new ApiResult {
                     Done = response.Done,
-                    Data = response.Payload,
-                    Error = response.Error
+                    Data = response.Payload ?? string.Empty,
+                    Error = response.Error ?? string.Empty
                 });
             } catch (Exception ex) {
                 return ex.GetActionResult();

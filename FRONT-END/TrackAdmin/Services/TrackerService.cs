@@ -101,5 +101,40 @@ namespace TrackAdmin.Services {
 
         }
 
+        public async Task<List<TrackerReportDto>> GetReportsAsync(string trackerId, string date) {
+
+            // Http Client Preparation:
+            var services = ((App)Application.Current).ServiceProvider;
+            using var http = (HttpClient)services.GetService(typeof(HttpClient));
+
+            // Send Request:
+            var endpoint = ApiUtils.Combine(_configuration["API:Host"], ApiEndpoints.TRACKERS);
+            var url = $"{endpoint}/{trackerId}/reports/{date}";
+            var response = await http.GetAsync(url);
+            response.EnsureSuccessStatusCode();
+
+            // Deserialization:
+            var reports = await response.Content.ReadAsAsync<List<TrackerReportDto>>();
+            return reports;
+
+        }
+
+        public async Task<List<CommandLogDto>> GetCommandLogsAsync(string trackerId, string date) {
+
+            // Http Client Preparation:
+            var services = ((App)Application.Current).ServiceProvider;
+            using var http = (HttpClient)services.GetService(typeof(HttpClient));
+
+            // Send Request:
+            var endpoint = ApiUtils.Combine(_configuration["API:Host"], ApiEndpoints.TRACKERS);
+            var url = $"{endpoint}/{trackerId}/commandlogs/{date}";
+            var response = await http.GetAsync(url);
+            response.EnsureSuccessStatusCode();
+
+            // Deserialization:
+            var logs = await response.Content.ReadAsAsync<List<CommandLogDto>>();
+            return logs;
+
+        }
     }
 }

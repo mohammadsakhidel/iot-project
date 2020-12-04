@@ -22,33 +22,39 @@
             <Label Content="{x:Static r:Strings.ConfigTracker}" Style="{StaticResource pageTitle}"></Label>
             
             <!--Connect to the Tracker-->
-            <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" Margin="{StaticResource padDoubleTop}">
-                <Label Style="{StaticResource formLabel}" Content="{x:Static r:Strings.TrackerId}" />
-                <TextBox Text="{Binding TrackerId, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource textbox}" 
-                         Width="120" VerticalAlignment="Center" Name="tbTrackerId"
+            <Border Grid.Row="1" BorderBrush="{StaticResource cNeutralD1}" 
+                    BorderThickness="0 1" Margin="{StaticResource padNormalTop}" 
+                    Padding="{StaticResource padDouble}">
+
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                    <Label Style="{StaticResource formLabel}" Content="{x:Static r:Strings.TrackerId}" />
+                    <TextBox Text="{Binding TrackerId, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource textbox}" 
+                         Width="120" VerticalAlignment="Center" Name="tbTrackerId" TextAlignment="Center"
                          IsEnabled="{Binding IsConnected, Converter={StaticResource cBoolOpposite}}"/>
-                <!--Connect-->
-                <t:IconButton Style="{StaticResource iconButton}" Content="{x:Static r:Strings.Connect}"
-                              Margin="{StaticResource padNormalStart}" Command="{Binding Connect}"
+                    <!--Connect-->
+                    <t:IconButton Style="{StaticResource iconButton}" Content="{x:Static r:Strings.Connect}"
+                              Margin="{StaticResource padDoubleStart}" Command="{Binding Connect}"
                               IsEnabled="{Binding TrackerId, Converter={StaticResource cIsNotNull}}"
                               Visibility="{Binding IsConnected, Converter={StaticResource cBoolVisOpposite}}">
-                    <t:IconButton.Icon>
-                        <fa:ImageAwesome Icon="Link" Style="{StaticResource iconButtonIcon}" />
-                    </t:IconButton.Icon>
-                </t:IconButton>
-                <!--Disconnect-->
-                <t:IconButton Style="{StaticResource iconButton}" Content="{x:Static r:Strings.Disconnect}"
-                              Margin="{StaticResource padNormalStart}" Command="{Binding Disconnect}"
+                        <t:IconButton.Icon>
+                            <fa:ImageAwesome Icon="Link" Style="{StaticResource iconButtonIcon}" />
+                        </t:IconButton.Icon>
+                    </t:IconButton>
+                    <!--Disconnect-->
+                    <t:IconButton Style="{StaticResource iconButton}" Content="{x:Static r:Strings.Disconnect}"
+                              Margin="{StaticResource padDoubleStart}" Command="{Binding Disconnect}"
                               Visibility="{Binding IsConnected, Converter={StaticResource cBoolVis}}">
-                    <t:IconButton.Icon>
-                        <fa:ImageAwesome Icon="Link" Style="{StaticResource iconButtonIcon}" />
-                    </t:IconButton.Icon>
-                </t:IconButton>
-            </StackPanel>
+                        <t:IconButton.Icon>
+                            <fa:ImageAwesome Icon="Link" Style="{StaticResource iconButtonIcon}" />
+                        </t:IconButton.Icon>
+                    </t:IconButton>
+                </StackPanel>
+
+            </Border>
 
             <GroupBox Grid.Row="2" Header="{x:Static r:Strings.SendingCommands}"
                       IsEnabled="{Binding IsConnected}"
-                      Margin="{StaticResource padDoubleVertical}" Style="{StaticResource groupbox}">
+                      Margin="{StaticResource padNormalVertical}" Style="{StaticResource groupbox}">
 
                 <Grid>
                     <Grid.RowDefinitions>

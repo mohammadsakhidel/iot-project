@@ -4,9 +4,84 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TrackAdmin.Views"
-             mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             xmlns:v="clr-namespace:TrackAdmin.Views"
+             xmlns:r="clr-namespace:TrackAdmin.Resources"
+             xmlns:toolkit="http://schemas.xceed.com/wpf/xaml/toolkit"
+             xmlns:fa="http://schemas.fontawesome.io/icons/"
+             xmlns:cn="clr-namespace:TrackAdmin.Constants"
+             mc:Ignorable="d" Loaded="UserControl_Loaded">
     <Grid>
-        <Label HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="60" Content="{Binding RandomId}"></Label>
+
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="auto" />
+            </Grid.RowDefinitions>
+
+            <Label Content="{x:Static r:Strings.TrackerLogs}" Style="{StaticResource pageTitle}"></Label>
+
+            <!--TrackerID & Date-->
+            <Border Grid.Row="1" BorderBrush="{StaticResource cNeutralD1}" 
+                    BorderThickness="0 1" Margin="{StaticResource padNormalTop}" 
+                    Padding="{StaticResource padDouble}">
+
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                    <Label Content="{x:Static r:Strings.TrackerId}" VerticalAlignment="Center" />
+                    <TextBox x:Name="tbTrackerId" Text="{Binding TrackerId, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource textbox}" 
+                             Width="120" TextAlignment="Center" VerticalAlignment="Center" />
+
+                    <Label Content="{x:Static r:Strings.Date}" Margin="{StaticResource padDoubleStart}" VerticalAlignment="Center" />
+                    <toolkit:MaskedTextBox Text="{Binding SelectedDate, Converter={StaticResource cDate}}" 
+                                           Style="{StaticResource textbox}" Width="120" TextAlignment="Center"
+                                           Mask="{x:Static cn:Values.DATE_MASK}" VerticalAlignment="Center" />
+                    <Label FontSize="{StaticResource fsSmall}" Foreground="{StaticResource cNeutralD2}"
+                           Content="{x:Static r:Strings.DateFormat}" VerticalAlignment="Center"/>
+
+                    <!--Load Data Button-->
+                    <toolkit:IconButton Style="{StaticResource iconButton}" Content="{x:Static r:Strings.Load}"
+                              Margin="{StaticResource padDoubleStart}" Command="{Binding LoadData}"
+                              IsEnabled="{Binding TrackerId, Converter={StaticResource cIsNotNull}}">
+                        <toolkit:IconButton.Icon>
+                            <fa:ImageAwesome Icon="Download" Style="{StaticResource iconButtonIcon}" />
+                        </toolkit:IconButton.Icon>
+                    </toolkit:IconButton>
+                </StackPanel>
+
+            </Border>
+
+            <TabControl Grid.Row="2" Margin="{StaticResource padNormalVertical}">
+                <TabItem Header="{x:Static r:Strings.TrackerMessages}">
+                    <DataGrid ItemsSource="{Binding Reports}" Style="{StaticResource datagrid}" 
+                              AutoGenerateColumns="True" Margin="{StaticResource padNormal}" />
+                </TabItem>
+                <TabItem Header="{x:Static r:Strings.CommandLogs}">
+                    <DataGrid ItemsSource="{Binding CommandLogs}" Style="{StaticResource datagrid}" 
+                              AutoGenerateColumns="True" Margin="{StaticResource padNormal}" />
+                </TabItem>
+            </TabControl>
+
+            <Grid Grid.Row="3">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Orientation="Horizontal">
+
+
+
+                </StackPanel>
+
+                <!--Error Message-->
+                <TextBlock Grid.Column="1"  Style="{StaticResource errorMessage}" HorizontalAlignment="Right"
+                           Text="{Binding Error}" Visibility="{Binding Error, Converter={StaticResource cStringVis}}"/>
+            </Grid>
+
+        </Grid>
+
+        <!--Loading-->
+        <v:Loading Visibility="{Binding IsLoading, Converter={StaticResource cBoolVis}}"></v:Loading>
     </Grid>
 </UserControl>

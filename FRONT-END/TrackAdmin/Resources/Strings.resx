@@ -138,6 +138,9 @@
   <data name="City" xml:space="preserve">
     <value>City</value>
   </data>
+  <data name="CommandLogs" xml:space="preserve">
+    <value>Command Logs</value>
+  </data>
   <data name="CommandPayload" xml:space="preserve">
     <value>Command Payload</value>
   </data>
@@ -158,6 +161,12 @@
   </data>
   <data name="CreationTime" xml:space="preserve">
     <value>Creation Time</value>
+  </data>
+  <data name="Date" xml:space="preserve">
+    <value>Date</value>
+  </data>
+  <data name="DateFormat" xml:space="preserve">
+    <value>YEAR-MONTH-DAY</value>
   </data>
   <data name="Delete" xml:space="preserve">
     <value>Delete</value>
@@ -185,6 +194,9 @@
   </data>
   <data name="ID" xml:space="preserve">
     <value>ID</value>
+  </data>
+  <data name="Load" xml:space="preserve">
+    <value>Get Data</value>
   </data>
   <data name="Manufacturer" xml:space="preserve">
     <value>Manufacturer</value>
@@ -239,6 +251,9 @@
   </data>
   <data name="TrackerLogs" xml:space="preserve">
     <value>Tracker Logs</value>
+  </data>
+  <data name="TrackerMessages" xml:space="preserve">
+    <value>Tracker Messages</value>
   </data>
   <data name="Trackers" xml:space="preserve">
     <value>Trackers</value>

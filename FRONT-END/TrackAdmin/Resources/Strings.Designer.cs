@@ -124,6 +124,15 @@ namespace TrackAdmin.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Command Logs.
+        /// </summary>
+        public static string CommandLogs {
+            get {
+                return ResourceManager.GetString("CommandLogs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Command Payload.
         /// </summary>
         public static string CommandPayload {
@@ -183,6 +192,24 @@ namespace TrackAdmin.Resources {
         public static string CreationTime {
             get {
                 return ResourceManager.GetString("CreationTime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Date.
+        /// </summary>
+        public static string Date {
+            get {
+                return ResourceManager.GetString("Date", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to YEAR-MONTH-DAY.
+        /// </summary>
+        public static string DateFormat {
+            get {
+                return ResourceManager.GetString("DateFormat", resourceCulture);
             }
         }
         
@@ -264,6 +291,15 @@ namespace TrackAdmin.Resources {
         public static string ID {
             get {
                 return ResourceManager.GetString("ID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Get Data.
+        /// </summary>
+        public static string Load {
+            get {
+                return ResourceManager.GetString("Load", resourceCulture);
             }
         }
         
@@ -426,6 +462,15 @@ namespace TrackAdmin.Resources {
         public static string TrackerLogs {
             get {
                 return ResourceManager.GetString("TrackerLogs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tracker Messages.
+        /// </summary>
+        public static string TrackerMessages {
+            get {
+                return ResourceManager.GetString("TrackerMessages", resourceCulture);
             }
         }
         
