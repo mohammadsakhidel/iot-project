@@ -4,11 +4,12 @@ using System.Text;
 using TrackLib.Utils;
 
 namespace TrackWorker.Helpers {
-    public class ThreeGElecLocMessageData {
-        private ThreeGElecLocMessageData() {
+    public class ThreeGElecReportData {
+        private ThreeGElecReportData() {
 
         }
 
+        public string ReportType { get; set; }
         public DateTime ReportTime { get; set; }
         public bool IsValid { get; set; }
         public double Latitude { get; set; }
@@ -62,8 +63,10 @@ namespace TrackWorker.Helpers {
             }
         }
 
-        public static ThreeGElecLocMessageData FromArray(string[] array) {
-            var message = new ThreeGElecLocMessageData();
+        public static ThreeGElecReportData FromArray(string[] array) {
+            var message = new ThreeGElecReportData();
+
+            message.ReportType = array[0];
 
             #region TimeOfCapture:
             var baseYear = 2000;

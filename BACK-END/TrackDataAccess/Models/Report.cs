@@ -5,9 +5,25 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TrackDataAccess.Models.Base;
 
-namespace TrackDataAccess.Models.Base {
-    public abstract class TrackerReportData : Entity {
+namespace TrackDataAccess.Models {
+    [Table("reports")]
+    public class Report : Entity {
+
+        [Column("id")]
+        public int Id { get; set; }
+
+        [Required]
+        [MaxLength(16)]
+        [Column("report_type")]
+        public string ReportType { get; set; }
+
+        [Required]
+        [MaxLength(16)]
+        [ForeignKey("Tracker")]
+        [Column("tracker_id")]
+        public string TrackerId { get; set; }
 
         [Required]
         [Column("latitude")]
@@ -26,6 +42,9 @@ namespace TrackDataAccess.Models.Base {
         [MaxLength(1)]
         [Column("longitude_mark")]
         public string LongitudeMark { get; set; }
+
+        [Column("is_valid")]
+        public bool IsValid { get; set; }
 
         [Required]
         [Column("speed")]
@@ -47,5 +66,10 @@ namespace TrackDataAccess.Models.Base {
         [MaxLength(64)]
         [Column("tracker_state")]
         public string TrackerState { get; set; }
+
+        #region Navigation Properties:
+        public Tracker Tracker { get; set; }
+        #endregion
+
     }
 }

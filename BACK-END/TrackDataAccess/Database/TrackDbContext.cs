@@ -15,8 +15,7 @@ namespace TrackDataAccess.Database {
         }
 
         public DbSet<Tracker> Trackers { get; set; }
-        public DbSet<LocationReport> LocationReports { get; set; }
-        public DbSet<AlarmReport> AlarmReports { get; set; }
+        public DbSet<Report> Reports { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder) {
 

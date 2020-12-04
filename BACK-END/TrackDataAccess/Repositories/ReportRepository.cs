@@ -9,8 +9,8 @@ using TrackDataAccess.Models;
 using TrackDataAccess.Repositories.Base;
 
 namespace TrackDataAccess.Repositories {
-    public class AlarmReportRepository : Repository<AlarmReport>, IAlarmReportRepository {
-        public AlarmReportRepository(TrackDbContext context) : base(context) {
+    public class ReportRepository : Repository<Report>, IReportRepository {
+        public ReportRepository(TrackDbContext context) : base(context) {
         }
     }
 }

@@ -7,6 +7,6 @@ using TrackDataAccess.Models;
 using TrackDataAccess.Repositories.Base;
 
 namespace TrackDataAccess.Repositories {
-    public interface ILocationReportRepository : IRepository<LocationReport> {
+    public interface IReportRepository : IRepository<Report> {
     }
 }

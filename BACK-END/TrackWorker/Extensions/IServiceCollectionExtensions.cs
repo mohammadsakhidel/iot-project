@@ -24,8 +24,7 @@ namespace TrackWorker.Extensions {
 
             // Messages:
             services.AddTransient<ILinkMessageMiddleware, LinkMessageMiddleware>();
-            services.AddTransient<ILocationMessageMiddleware, LocationMessageMiddleware>();
-            services.AddTransient<IAlarmMessageMiddleware, AlarmMessageMiddleware>();
+            services.AddTransient<IReportMessageMiddleware, ReportMessageMiddleware>();
             services.AddTransient<IResponseMessageMiddleware, ResponseMessageMiddleware>();
 
             // Commands:
@@ -39,8 +38,7 @@ namespace TrackWorker.Extensions {
                 var pipeline = new MessagePipeline();
 
                 // Middlewares:
-                pipeline.UseMiddleware<ILocationMessageMiddleware>();
-                pipeline.UseMiddleware<IAlarmMessageMiddleware>();
+                pipeline.UseMiddleware<IReportMessageMiddleware>();
                 pipeline.UseMiddleware<ILinkMessageMiddleware>();
                 pipeline.UseMiddleware<IResponseMessageMiddleware>();
 
@@ -64,8 +62,7 @@ namespace TrackWorker.Extensions {
         }
         public static void AddRepositories(this IServiceCollection services) {
             services.AddTransient<ITrackerRepository, TrackerRepository>();
-            services.AddTransient<ILocationReportRepository, LocationReportRepository>();
-            services.AddTransient<IAlarmReportRepository, AlarmReportRepository>();
+            services.AddTransient<IReportRepository, ReportRepository>();
         }
         public static void AddDbContext(this IServiceCollection services, IConfiguration configuration) {
             // For dotnet ef tool:

@@ -6,8 +6,7 @@ namespace TrackLib.Constants {
     public class Patterns {
         public const string MESSAGE_3GELEC = @"^\[[a-zA-Z0-9]{2}\*[a-zA-Z0-9]+\*[a-fA-F0-9]{4}\*[a-zA-Z0-9]+(,.+)?]$";
         public const string MESSAGE_LINK = @"^\[[a-zA-Z0-9]{2}\*[a-zA-Z0-9]+\*[a-fA-F0-9]{4}\*LK[^*]*\]$";
-        public const string MESSAGE_LOCATION = @"^\[[a-zA-Z0-9]{2}\*[a-zA-Z0-9]+\*[a-fA-F0-9]{4}\*UD(,[^*]+)+\]$";
-        public const string MESSAGE_ALARM = @"^\[[a-zA-Z0-9]{2}\*[a-zA-Z0-9]+\*[a-fA-F0-9]{4}\*AL(,[^*]+)+\]$";
+        public const string MESSAGE_REPORT = @"^\[[a-zA-Z0-9]{2}\*[a-zA-Z0-9]+\*[a-fA-F0-9]{4}\*(UD|AL)(,[^*]+)+\]$";
 
         public const string COMMAND_PAYLOAD = @"^([^,]+)(,[^,]+)*$";
 
