@@ -78,12 +78,14 @@ namespace TrackAPI.Extensions {
         public static void AddAPIServices(this IServiceCollection services) {
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<ITrackerService, TrackerService>();
+            services.AddScoped<ICommandService, CommandService>();
         }
 
         public static void AddRepositories(this IServiceCollection services) {
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<ITrackerRepository, TrackerRepository>();
             services.AddScoped<IReportRepository, ReportRepository>();
+            services.AddScoped<ICommandLogRepository, CommandLogRepository>();
         }
 
         public static void AddHelpers(this IServiceCollection services) {

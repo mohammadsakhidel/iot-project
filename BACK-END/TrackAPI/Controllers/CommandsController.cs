@@ -23,13 +23,15 @@ namespace TrackAPI.Controllers {
     public class CommandsController : ControllerBase {
 
         private readonly ITrackerService _trackerService;
+        private readonly ICommandService _commandService;
         private readonly ICommandExecutor _commandExecutor;
         private readonly IMapper _mapper;
         private readonly AppSettings _appSettings;
         public CommandsController(ITrackerService trackerService, ICommandExecutor commandExecutor,
-            IMapper mapper, IOptions<AppSettings> options) {
+            ICommandService commandService, IMapper mapper, IOptions<AppSettings> options) {
 
             _trackerService = trackerService;
+            _commandService = commandService;
             _commandExecutor = commandExecutor;
             _mapper = mapper;
             _appSettings = options.Value;
@@ -72,8 +74,21 @@ namespace TrackAPI.Controllers {
                     ? tracker.LastConnectedServer : _appSettings.Worker.DefaultServer;
                 #endregion
 
-                #region Execute Command:
+                #region Execute & Log Command:
+                // Send command:
                 var response = await _commandExecutor.SendAsync(command, host);
+
+                // Add Log:
+                var log = new CommandLogModel {
+                    TrackerId = tracker.Id,
+                    Type = command.Type,
+                    Payload = command.Payload,
+                    UserId = userId, 
+                    Response = response != null ? JsonSerializer.Serialize(response) : "",
+                    CreationTime = DateTime.UtcNow.ToString(Values.DATETIME_FORMAT)
+                };
+                await _commandService.AddLogAsync(log);
+
                 if (response == null)
                     throw new ApplicationException("Command execution failed.");
                 #endregion

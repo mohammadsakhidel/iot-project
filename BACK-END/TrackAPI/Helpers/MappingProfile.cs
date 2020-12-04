@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿
+using AutoMapper;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,6 +21,12 @@ namespace TrackAPI.Helpers {
             // Report <--> TrackerReportModel
             CreateMap<TrackerReportModel, Report>();
             CreateMap<Report, TrackerReportModel>()
+                .ForMember(dest => dest.CreationTime, opt =>
+                    opt.MapFrom(src => src.CreationTime.ToString(Values.DATETIME_FORMAT)));
+
+            // CommandLog <--> CommandLogModel
+            CreateMap<CommandLogModel, CommandLog>();
+            CreateMap<CommandLog, CommandLogModel>()
                 .ForMember(dest => dest.CreationTime, opt =>
                     opt.MapFrom(src => src.CreationTime.ToString(Values.DATETIME_FORMAT)));
         }

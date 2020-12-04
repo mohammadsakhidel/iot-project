@@ -18,8 +18,10 @@ namespace TrackAPI.Controllers {
 
         #region -------------- CONSTRUCTION ---------------
         private readonly ITrackerService _trackerService;
-        public TrackersController(ITrackerService trackerService) {
+        private readonly ICommandService _commandService;
+        public TrackersController(ITrackerService trackerService, ICommandService commandService) {
             _trackerService = trackerService;
+            _commandService = commandService;
         }
         #endregion
 
@@ -63,6 +65,24 @@ namespace TrackAPI.Controllers {
 
                 var hasDate = DateTime.TryParse(date, out var reportDate);
                 var reports = await _trackerService.GetReportsAsync(trackerId, hasDate ? reportDate : null);
+
+                return Ok(reports);
+
+            } catch (Exception ex) {
+                return ex.GetActionResult();
+            }
+        }
+
+        [HttpGet("{trackerId}/commandlogs/{date?}")]
+        public async Task<IActionResult> Logs(string trackerId, string date) {
+            try {
+
+                var tracker = await _trackerService.GetAsync(trackerId);
+                if (tracker == null)
+                    return NotFound();
+
+                var hasDate = DateTime.TryParse(date, out var logsDate);
+                var reports = await _commandService.GetLogsAsync(trackerId, hasDate ? logsDate : null);
 
                 return Ok(reports);
 
