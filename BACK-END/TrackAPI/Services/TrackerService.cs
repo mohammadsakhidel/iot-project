@@ -15,10 +15,12 @@ namespace TrackAPI.Services {
 
         private readonly UserManager<AppUser> _userManager;
         private readonly ITrackerRepository _trackerRepository;
+        private readonly IReportRepository _reportRepository;
         private readonly IMapper _mapper;
         public TrackerService(ITrackerRepository trackerRepository, IMapper mapper,
-            UserManager<AppUser> userManager) {
+            IReportRepository reportRepository, UserManager<AppUser> userManager) {
             _trackerRepository = trackerRepository;
+            _reportRepository = reportRepository;
             _mapper = mapper;
             _userManager = userManager;
         }
@@ -115,6 +117,21 @@ namespace TrackAPI.Services {
 
             var models = trackers.Select(t => _mapper.Map<TrackerModel>(t));
             return models.ToList();
+        }
+
+        public async Task<List<TrackerReportModel>> GetReportsAsync(string trackerId, DateTime? date) {
+            
+            var reportDate = date ?? DateTime.UtcNow;
+            var reports = await Task.Run(() => { 
+                return _reportRepository.Filter(r =>
+                            r.TrackerId == trackerId &&
+                            r.CreationTime.Date == reportDate.Date
+                        ).ToList();
+            });
+            
+            var models = reports.Select(r => _mapper.Map<TrackerReportModel>(r)).ToList();
+            return models;
+
         }
     }
 }

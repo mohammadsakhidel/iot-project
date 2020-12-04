@@ -20,6 +20,10 @@ namespace TrackDataAccess.Models {
         public string ReportType { get; set; }
 
         [Required]
+        [Column("report_time")]
+        public DateTime ReportTime { get; set; }
+
+        [Required]
         [MaxLength(16)]
         [ForeignKey("Tracker")]
         [Column("tracker_id")]

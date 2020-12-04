@@ -14,9 +14,14 @@ namespace TrackAPI.Helpers {
             // Tracker <--> TrackerModel
             CreateMap<TrackerModel, Tracker>();
             CreateMap<Tracker, TrackerModel>()
-                .ForMember(model => model.CreationTime, opt =>
+                .ForMember(dest => dest.CreationTime, opt =>
                     opt.MapFrom(src => src.CreationTime.ToString(Values.DATETIME_FORMAT)));
 
+            // Report <--> TrackerReportModel
+            CreateMap<TrackerReportModel, Report>();
+            CreateMap<Report, TrackerReportModel>()
+                .ForMember(dest => dest.CreationTime, opt =>
+                    opt.MapFrom(src => src.CreationTime.ToString(Values.DATETIME_FORMAT)));
         }
     }
 }

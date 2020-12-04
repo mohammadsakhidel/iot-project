@@ -42,7 +42,7 @@ namespace TrackWorker.Processors.Middlewares.Messages {
                     _ => "unknown" 
                 },
                 TrackerId = tracker.Id,
-                CreationTime = report.ReportTime,
+                ReportTime = report.ReportTime,
                 Latitude = report.Latitude,
                 LatitudeMark = report.LatitudeMark.ToString(),
                 Longitude = report.Longitude,
@@ -53,7 +53,8 @@ namespace TrackWorker.Processors.Middlewares.Messages {
                 Altitude = report.Altitude,
                 Battery = report.Power,
                 SignalStrength = report.SignalStrength,
-                TrackerState = report.TrackerStateBinary
+                TrackerState = report.TrackerStateBinary,
+                CreationTime = DateTime.UtcNow
             };
             _reportRepository.Add(locReport);
             _reportRepository.SaveAsync().Wait();

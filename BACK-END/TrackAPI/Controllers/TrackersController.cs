@@ -16,40 +16,14 @@ namespace TrackAPI.Controllers {
     [ApiController]
     public class TrackersController : ControllerBase {
 
+        #region -------------- CONSTRUCTION ---------------
         private readonly ITrackerService _trackerService;
         public TrackersController(ITrackerService trackerService) {
             _trackerService = trackerService;
         }
+        #endregion
 
-        [HttpPost]
-        [Authorize(Policies.CanCreateTracker)]
-        public async Task<IActionResult> PostAsync(TrackerModel model) {
-            try {
-
-                (var done, var trackerId) = await _trackerService.CreateAsync(model);
-
-                var createdModel = await _trackerService.GetAsync(trackerId);
-                return Created($"trackers/{trackerId}", createdModel);
-
-            } catch (Exception ex) {
-                return ex.GetActionResult();
-            }
-        }
-
-        [HttpPost("search")]
-        [Authorize(Policies.CanReadTracker)]
-        public async Task<IActionResult> Post(TrackerSearchModel model) {
-            try {
-
-                var users = await _trackerService.SearchAsync(model);
-
-                return Ok(users);
-
-            } catch (Exception ex) {
-                return ex.GetActionResult();
-            }
-        }
-
+        #region -------------- GET ACTIONS ----------------
         [HttpGet]
         [Authorize(Policies.CanReadTracker)]
         public async Task<IActionResult> GetAsync(int skip = 0, int take = Values.PAGESIZE) {
@@ -79,6 +53,57 @@ namespace TrackAPI.Controllers {
             }
         }
 
+        [HttpGet("{trackerId}/reports/{date?}")]
+        public async Task<IActionResult> Reports(string trackerId, string date) {
+            try {
+
+                var tracker = await _trackerService.GetAsync(trackerId);
+                if (tracker == null)
+                    return NotFound();
+
+                var hasDate = DateTime.TryParse(date, out var reportDate);
+                var reports = await _trackerService.GetReportsAsync(trackerId, hasDate ? reportDate : null);
+
+                return Ok(reports);
+
+            } catch (Exception ex) {
+                return ex.GetActionResult();
+            }
+        }
+        #endregion
+
+        #region -------------- POST ACTIONS ---------------
+        [HttpPost]
+        [Authorize(Policies.CanCreateTracker)]
+        public async Task<IActionResult> PostAsync(TrackerModel model) {
+            try {
+
+                (var done, var trackerId) = await _trackerService.CreateAsync(model);
+
+                var createdModel = await _trackerService.GetAsync(trackerId);
+                return Created($"trackers/{trackerId}", createdModel);
+
+            } catch (Exception ex) {
+                return ex.GetActionResult();
+            }
+        }
+
+        [HttpPost("search")]
+        [Authorize(Policies.CanReadTracker)]
+        public async Task<IActionResult> Search(TrackerSearchModel model) {
+            try {
+
+                var users = await _trackerService.SearchAsync(model);
+
+                return Ok(users);
+
+            } catch (Exception ex) {
+                return ex.GetActionResult();
+            }
+        }
+        #endregion
+
+        #region -------------- PUT ACTIONS ----------------
         [HttpPut]
         [Authorize(Policies.CanUpdateTracker)]
         public async Task<IActionResult> PutAsync(TrackerModel model) {
@@ -94,7 +119,9 @@ namespace TrackAPI.Controllers {
                 return ex.GetActionResult();
             }
         }
+        #endregion
 
+        #region ------------- DELETE ACTIONS --------------
         [HttpDelete("{id}")]
         [Authorize(Policies.CanDeleteTracker)]
         public async Task<IActionResult> Delete(string id) {
@@ -110,6 +137,7 @@ namespace TrackAPI.Controllers {
                 return ex.GetActionResult();
             }
         }
+        #endregion
 
     }
 
