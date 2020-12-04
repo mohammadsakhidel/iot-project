@@ -24,7 +24,8 @@ namespace TrackWorker.Extensions {
 
             // Messages:
             services.AddTransient<ILinkMessageMiddleware, LinkMessageMiddleware>();
-            services.AddTransient<IReportMessageMiddleware, ReportMessageMiddleware>();
+            services.AddTransient<ILocationMessageMiddleware, LocationMessageMiddleware>();
+            services.AddTransient<IAlarmMessageMiddleware, AlarmMessageMiddleware>();
             services.AddTransient<IResponseMessageMiddleware, ResponseMessageMiddleware>();
 
             // Commands:
@@ -38,7 +39,8 @@ namespace TrackWorker.Extensions {
                 var pipeline = new MessagePipeline();
 
                 // Middlewares:
-                pipeline.UseMiddleware<IReportMessageMiddleware>();
+                pipeline.UseMiddleware<ILocationMessageMiddleware>();
+                pipeline.UseMiddleware<IAlarmMessageMiddleware>();
                 pipeline.UseMiddleware<ILinkMessageMiddleware>();
                 pipeline.UseMiddleware<IResponseMessageMiddleware>();
 
@@ -78,6 +80,5 @@ namespace TrackWorker.Extensions {
                 return new TrackDbContext(options);
             });
         }
-
     }
 }

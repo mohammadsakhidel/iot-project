@@ -11,11 +11,13 @@ using TrackWorker.Processors.Pipelines;
 using TrackWorker.Shared;
 
 namespace TrackWorker.Processors.Middlewares.Messages {
-    public class ReportMessageMiddleware : Middleware, IReportMessageMiddleware {
+    public class LocationMessageMiddleware : Middleware, ILocationMessageMiddleware {
+
+        private const string REPORT_TYPE = "location";
 
         private readonly ITrackerRepository _trackerRepository;
         private readonly IReportRepository _reportRepository;
-        public ReportMessageMiddleware(ITrackerRepository trackerRepository,
+        public LocationMessageMiddleware(ITrackerRepository trackerRepository,
             IReportRepository locationRepository) {
 
             _trackerRepository = trackerRepository;
@@ -33,30 +35,26 @@ namespace TrackWorker.Processors.Middlewares.Messages {
             #region PROCESSING:
             _ = ThreeGElecMessage.TryParse(context.Message.Base64Text, out var message);
             var tracker = _trackerRepository.Get(message.UniqueID);
-            var report = ThreeGElecReportData.FromArray(message.ContentItems.ToArray());
+            var reportData = ThreeGElecReportData.FromArray(message.ContentItems.ToArray());
 
-            var locReport = new Report {
-                ReportType = report.ReportType.ToLower() switch {
-                    "ud" => "location",
-                    "al" => "alarm",
-                    _ => "unknown" 
-                },
+            var report = new Report {
+                ReportType = REPORT_TYPE,
                 TrackerId = tracker.Id,
-                ReportTime = report.ReportTime,
-                Latitude = report.Latitude,
-                LatitudeMark = report.LatitudeMark.ToString(),
-                Longitude = report.Longitude,
-                LongitudeMark = report.LongitudeMark.ToString(),
-                IsValid = report.IsValid,
-                Speed = report.Speed,
-                Direction = report.Direction,
-                Altitude = report.Altitude,
-                Battery = report.Power,
-                SignalStrength = report.SignalStrength,
-                TrackerState = report.TrackerStateBinary,
+                ReportTime = reportData.ReportTime,
+                Latitude = reportData.Latitude,
+                LatitudeMark = reportData.LatitudeMark.ToString(),
+                Longitude = reportData.Longitude,
+                LongitudeMark = reportData.LongitudeMark.ToString(),
+                IsValid = reportData.IsValid,
+                Speed = reportData.Speed,
+                Direction = reportData.Direction,
+                Altitude = reportData.Altitude,
+                Battery = reportData.Power,
+                SignalStrength = reportData.SignalStrength,
+                TrackerState = reportData.TrackerStateBinary,
                 CreationTime = DateTime.UtcNow
             };
-            _reportRepository.Add(locReport);
+            _reportRepository.Add(report);
             _reportRepository.SaveAsync().Wait();
             #endregion
 
@@ -69,8 +67,7 @@ namespace TrackWorker.Processors.Middlewares.Messages {
                 return false;
 
             var text = Encoding.ASCII.GetString(Convert.FromBase64String(message.Base64Text));
-            var regex = new Regex(Patterns.MESSAGE_REPORT);
-            return regex.IsMatch(text);
+            return Regex.IsMatch(text, Patterns.MESSAGE_LOCATION);
         }
     }
 }
