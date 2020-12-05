@@ -268,6 +268,15 @@ namespace TrackAdmin.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Statements.
+        /// </summary>
+        public static string Explanation {
+            get {
+                return ResourceManager.GetString("Explanation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to @2021 All rights reserved for zorrotracker.com.
         /// </summary>
         public static string Footer {
@@ -336,6 +345,24 @@ namespace TrackAdmin.Resources {
         public static string PhoneNumber {
             get {
                 return ResourceManager.GetString("PhoneNumber", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Product ID.
+        /// </summary>
+        public static string ProductId {
+            get {
+                return ResourceManager.GetString("ProductId", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Product Model.
+        /// </summary>
+        public static string ProductModel {
+            get {
+                return ResourceManager.GetString("ProductModel", resourceCulture);
             }
         }
         

@@ -29,6 +29,10 @@ namespace TrackDataAccess.Models {
         public int? ProductId { get; set; }
 
         [MaxLength(64)]
+        [Column("product_model")]
+        public string ProductModel { get; set; }
+
+        [MaxLength(64)]
         [Column("user_id")]
         public string UserId { get; set; }
 
@@ -43,6 +47,10 @@ namespace TrackDataAccess.Models {
         [MaxLength(32)]
         [Column("last_connected_server")]
         public string LastConnectedServer { get; set; }
+
+        [MaxLength(512)]
+        [Column("explanation")]
+        public string Explanation { get; set; }
 
     }
 }

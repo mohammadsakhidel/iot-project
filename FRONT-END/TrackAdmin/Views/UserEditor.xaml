@@ -36,6 +36,7 @@
                     <RowDefinition Height="auto" />
                     <RowDefinition Height="auto" />
                     <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
                 </Grid.RowDefinitions>
 
                 <!--Given Name-->
@@ -86,8 +87,15 @@
                          Text="{Binding Address, Mode=TwoWay, ValidatesOnNotifyDataErrors=True}"
                          Margin="{StaticResource padNormalBottom}" TextWrapping="Wrap" Height="50"/>
 
+                <!--Explanation-->
+                <Label Grid.Row="8" Content="{x:Static r:Strings.Explanation}" Style="{StaticResource formLabel}" />
+                <TextBox Grid.Row="8" Grid.Column="1" Style="{StaticResource textbox}" 
+                         Text="{Binding Explanation, Mode=TwoWay, ValidatesOnNotifyDataErrors=True}"
+                         Margin="{StaticResource padNormalBottom}" AcceptsReturn="True" TextWrapping="Wrap"
+                         Height="80" />
+
                 <!--IsActive-->
-                <CheckBox Grid.Row="8" Grid.Column="1" IsChecked="{Binding IsActive, Mode=TwoWay}" 
+                <CheckBox Grid.Row="9" Grid.Column="1" IsChecked="{Binding IsActive, Mode=TwoWay}" 
                           Margin="{StaticResource padNormalBottom}" 
                           Content="{x:Static r:Strings.Active}" />
 

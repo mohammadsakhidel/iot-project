@@ -132,6 +132,15 @@ namespace TrackAdmin.ViewModels {
             }
         }
 
+        private string explanation;
+        public string Explanation {
+            get { return explanation; }
+            set {
+                explanation = value;
+                OnPropertyChanged(nameof(Explanation));
+            }
+        }
+
         private bool isActive;
         public bool IsActive {
             get { return isActive; }
@@ -190,6 +199,7 @@ namespace TrackAdmin.ViewModels {
                     State = State,
                     City = City,
                     Address = Address,
+                    Explanation = Explanation,
                     IsActive = IsActive
                 };
                 (var done, var message) = await _userService.CreateAsync(user);
@@ -223,6 +233,7 @@ namespace TrackAdmin.ViewModels {
                     State = State,
                     City = City,
                     Address = Address,
+                    Explanation = Explanation,
                     IsActive = IsActive
                 };
                 (var done, var message) = await _userService.UpdateAsync(user);
@@ -250,6 +261,7 @@ namespace TrackAdmin.ViewModels {
             State = user?.State;
             City = user?.City;
             Address = user?.Address;
+            Explanation = user?.Explanation;
             IsActive = user != null && user.IsActive;
         }
 
