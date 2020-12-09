@@ -39,6 +39,8 @@ namespace TrackAPI.Models {
 
         public bool? IsActive { get; set; }
 
+        public string Explanation { get; set; }
+
         public string CreationTime { get; set; }
 
     }

@@ -86,6 +86,33 @@ namespace TrackAdmin.ViewModels {
             }
         }
 
+        private int? productId;
+        public int? ProductId {
+            get { return productId; }
+            set {
+                productId = value;
+                OnPropertyChanged(nameof(ProductId));
+            }
+        }
+
+        private string productModel;
+        public string ProductModel {
+            get { return productModel; }
+            set {
+                productModel = value;
+                OnPropertyChanged(nameof(ProductModel));
+            }
+        }
+
+        private string explanation;
+        public string Explanation {
+            get { return explanation; }
+            set {
+                explanation = value;
+                OnPropertyChanged(nameof(Explanation));
+            }
+        }
+
         private List<UserDto> users;
         public List<UserDto> Users {
             get { return users; }
@@ -185,7 +212,10 @@ namespace TrackAdmin.ViewModels {
                     Manufacturer = Manufacturer,
                     RawID = RawID,
                     UserId = UserId,
-                    CommandSet = CommandSet
+                    CommandSet = CommandSet,
+                    ProductId = ProductId,
+                    ProductModel = ProductModel,
+                    Explanation = Explanation
                 };
                 (var done, var message) = await _trackerService.CreateAsync(tracker);
                 if (!done)
@@ -213,7 +243,10 @@ namespace TrackAdmin.ViewModels {
                     Manufacturer = Manufacturer,
                     RawID = RawID,
                     UserId = UserId,
-                    CommandSet = CommandSet
+                    CommandSet = CommandSet,
+                    ProductId = ProductId,
+                    ProductModel = ProductModel,
+                    Explanation = Explanation
                 };
                 (var done, var message) = await _trackerService.UpdateAsync(tracker);
                 if (!done)
@@ -239,16 +272,14 @@ namespace TrackAdmin.ViewModels {
             RawID = tracker?.RawID;
             UserId = tracker?.UserId;
             CommandSet = tracker?.CommandSet;
+            ProductId = tracker?.ProductId;
+            ProductModel = tracker?.ProductModel;
+            Explanation = tracker?.Explanation;
         }
 
         private void ValidateRequiredProp(string propName, string propVal) {
             if (string.IsNullOrEmpty(propVal))
                 AddValidationError(propName, $"{propName} is required.");
-        }
-
-        private void ValidatePropWithRegex(string propName, string propValue, string pattern) {
-            if (!string.IsNullOrEmpty(propValue) && !Regex.IsMatch(propValue, pattern))
-                AddValidationError(propName, $"{propName} is invalid.");
         }
 
         private void UpdateUsersList() {

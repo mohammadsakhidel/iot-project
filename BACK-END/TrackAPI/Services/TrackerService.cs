@@ -77,7 +77,9 @@ namespace TrackAPI.Services {
             tracker.Manufacturer = model.Manufacturer;
             tracker.CommandSet = model.CommandSet;
             tracker.ProductId = model.ProductId;
+            tracker.ProductModel = model.ProductModel;
             tracker.UserId = model.UserId;
+            tracker.Explanation = model.Explanation;
 
             await _trackerRepository.SaveAsync();
 

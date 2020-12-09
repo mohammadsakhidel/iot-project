@@ -24,6 +24,8 @@ namespace TrackAdmin.DTOs {
 
         public string Password { get; set; }
 
+        public string Explanation { get; set; }
+
         public bool IsActive { get; set; }
 
         public string CreationTime { get; set; }

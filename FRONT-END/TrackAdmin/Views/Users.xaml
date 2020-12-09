@@ -40,6 +40,7 @@
                     <DataGridTextColumn Header="{x:Static r:Strings.City}" Binding="{Binding City}" />
                     <DataGridTextColumn Header="{x:Static r:Strings.Address}" Binding="{Binding Address}" />
                     <DataGridTextColumn Header="{x:Static r:Strings.CreationTime}" Binding="{Binding CreationTime}" />
+                    <DataGridTextColumn Header="{x:Static r:Strings.Explanation}" Binding="{Binding Explanation}" />
                 </DataGrid.Columns>
             </DataGrid>
 

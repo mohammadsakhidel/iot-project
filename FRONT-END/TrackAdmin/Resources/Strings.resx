@@ -186,6 +186,9 @@
   <data name="ExecutionResultEmpty" xml:space="preserve">
     <value>{Empty Resul}</value>
   </data>
+  <data name="Explanation" xml:space="preserve">
+    <value>Statements</value>
+  </data>
   <data name="Footer" xml:space="preserve">
     <value>@2021 All rights reserved for zorrotracker.com</value>
   </data>
@@ -209,6 +212,12 @@
   </data>
   <data name="PhoneNumber" xml:space="preserve">
     <value>Phone Number</value>
+  </data>
+  <data name="ProductId" xml:space="preserve">
+    <value>Product ID</value>
+  </data>
+  <data name="ProductModel" xml:space="preserve">
+    <value>Product Model</value>
   </data>
   <data name="RawID" xml:space="preserve">
     <value>RawID</value>

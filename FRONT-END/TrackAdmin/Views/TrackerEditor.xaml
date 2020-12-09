@@ -3,12 +3,10 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:TrackAdmin.Views"
              xmlns:r="clr-namespace:TrackAdmin.Resources"
              xmlns:v="clr-namespace:TrackAdmin.Views"
              xmlns:toolkit="http://schemas.xceed.com/wpf/xaml/toolkit"
              xmlns:fa="http://schemas.fontawesome.io/icons/"
-             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:cn="clr-namespace:TrackAdmin.Constants"
              mc:Ignorable="d">
     <Grid>
@@ -29,6 +27,9 @@
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
                     <RowDefinition Height="auto" />
                     <RowDefinition Height="auto" />
                     <RowDefinition Height="auto" />
@@ -64,6 +65,25 @@
                           SelectedValuePath="Key" DisplayMemberPath="Value" SelectedIndex="0">
                 </ComboBox>
 
+                <!--ProductID-->
+                <Label Grid.Row="4" Content="{x:Static r:Strings.ProductId}" Style="{StaticResource formLabel}" />
+                <TextBox Grid.Row="4" Grid.Column="1" Style="{StaticResource textbox}" 
+                         Text="{Binding ProductId, Mode=TwoWay, ValidatesOnNotifyDataErrors=True}"
+                         Margin="{StaticResource padNormalBottom}"/>
+
+                <!--ProductModel-->
+                <Label Grid.Row="5" Content="{x:Static r:Strings.ProductModel}" Style="{StaticResource formLabel}" />
+                <TextBox Grid.Row="5" Grid.Column="1" Style="{StaticResource textbox}" 
+                         Text="{Binding ProductModel, Mode=TwoWay, ValidatesOnNotifyDataErrors=True}"
+                         Margin="{StaticResource padNormalBottom}"/>
+
+                <!--Explanation-->
+                <Label Grid.Row="6" Content="{x:Static r:Strings.Explanation}" Style="{StaticResource formLabel}" />
+                <TextBox Grid.Row="6" Grid.Column="1" Style="{StaticResource textbox}" 
+                         Text="{Binding Explanation, Mode=TwoWay, ValidatesOnNotifyDataErrors=True}"
+                         Margin="{StaticResource padNormalBottom}" AcceptsReturn="True" TextWrapping="Wrap"
+                         Height="80" />
+                
             </Grid>
 
             <Grid Grid.Row="2">
@@ -80,7 +100,6 @@
                             <fa:ImageAwesome Icon="Save" Style="{StaticResource iconButtonIcon}" />
                         </toolkit:IconButton.Icon>
                     </toolkit:IconButton>
-
                     <toolkit:IconButton Command="{Binding BackToTrackers}" CommandParameter="{Binding OperationDone}" 
                                         Style="{StaticResource iconButton}" Margin="{StaticResource padNormalEnd}" 
                                         Content="{x:Static r:Strings.BackToList}">

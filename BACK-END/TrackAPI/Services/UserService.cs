@@ -43,6 +43,7 @@ namespace TrackAPI.Services {
                 Email = model.Email,
                 PhoneNumber = model.PhoneNumber,
                 IsActive = model.IsActive.HasValue && model.IsActive.Value,
+                Explanation = model.Explanation,
                 CreationTime = DateTime.UtcNow
             };
 
@@ -175,6 +176,7 @@ namespace TrackAPI.Services {
             user.Email = model.Email;
             user.UserName = model.Email;
             user.PhoneNumber = model.PhoneNumber;
+            user.Explanation = model.Explanation;
             if (model.IsActive.HasValue)
                 user.IsActive = model.IsActive.Value;
 
@@ -267,6 +269,7 @@ namespace TrackAPI.Services {
                 State = claims.SingleOrDefault(c => c.Type == ClaimNames.STATE)?.Value,
                 City = claims.SingleOrDefault(c => c.Type == ClaimNames.CITY)?.Value,
                 Address = claims.SingleOrDefault(c => c.Type == ClaimNames.ADDRESS)?.Value,
+                Explanation = appUser.Explanation,
                 CreationTime = appUser.CreationTime.ToString(Values.DATETIME_FORMAT)
             };
         }
