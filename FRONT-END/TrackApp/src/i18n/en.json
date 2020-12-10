@@ -1,4 +1,10 @@
 {
-    "welcome": "Welcome to translation tutorial",
-    "homePage": "Home Page"
+    "AppHeaderTitle": "Aussie",
+    "AppHeaderSubtitle": "Tracker",
+    "Welcome": "Welcome to translation tutorial",
+    "HomeScreen": "Home Page",
+    "Trackers": "Trackers",
+    "Map": "Map",
+    "Notifications": "Notifications",
+    "Messages": "Messages"
 }

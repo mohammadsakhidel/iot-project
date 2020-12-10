@@ -2,12 +2,18 @@ import React, { useContext } from 'react';
 import { Text, View, Button } from 'react-native';
 import { connect } from 'react-redux';
 import { incCounter } from '../../redux/actions';
-import Strings from '../../i18n/strings';
+import { Strings } from '../../i18n/strings';
+import { Icon } from 'native-base';
 
 
 const TrackersScreen = (props) => {
     return (
-        <Text>{Strings.get('welcome')}</Text>
+        <View style={{ padding: 30 }}>
+            <Text>{Strings.Welcome}</Text>
+            <Text style={{fontSize: 14}}>{Strings.Welcome}</Text>
+            <Icon name="apps" />
+
+        </View>
     );
 };
 

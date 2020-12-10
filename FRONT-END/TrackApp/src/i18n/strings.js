@@ -1,12 +1,8 @@
-import * as data from './en.json';
+export const Strings = require('./en.json');
 
-export default class Strings {
-
-    static get(key) {
-        if (key in data)
-            return data[key];
-        else
-            return '';
-    }
-    
+export const getString = (key) => {
+    if (key in Strings)
+        return Strings[key];
+    else
+        return '';
 }
