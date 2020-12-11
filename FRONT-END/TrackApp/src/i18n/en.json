@@ -6,5 +6,10 @@
     "Trackers": "Trackers",
     "Map": "Map",
     "Notifications": "Notifications",
-    "Messages": "Messages"
+    "Messages": "Messages",
+    "LoginPageTitle": "Signing in",
+    "UsernameOrEmail": "Email or Username",
+    "Password": "Password",
+    "Login": "Log in",
+    "ForgetPassword": "Forgot password?"
 }

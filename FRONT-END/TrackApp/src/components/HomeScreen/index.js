@@ -4,11 +4,10 @@ import TrackersScreen from '../TrackersScreen';
 import MapScreen from '../MapScreen';
 import NotificationsScreen from '../NotificationsScreen';
 import MessagesScreen from '../MessagesScreen';
-import { Header, Icon, Left, Body, Right, Title, Button } from 'native-base';
+import { Icon } from 'native-base';
 import { StyleSheet, Text, View } from 'react-native';
 import { Strings } from '../../i18n/strings';
 import * as vars from '../../styles/vars';
-import { StatusBar } from 'expo-status-bar';
 import AppHeader from '../AppHeader';
 
 const Tab = createBottomTabNavigator();
@@ -81,7 +80,6 @@ export default function HomeScreen(props) {
                 }} />
             </Tab.Navigator>
             
-            <StatusBar style="light" backgroundColor={vars.COLOR_SECONDARY} />
         </View>
     );
 
