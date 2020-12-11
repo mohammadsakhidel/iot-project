@@ -2,11 +2,11 @@ import React, { Component } from 'react';
 import * as Font from 'expo-font';
 import { AppLoading } from 'expo';
 import { Ionicons } from '@expo/vector-icons';
-import DrawerLayout from './src/components/DrawerLayout';
+import HomeLoginSwitch from './src/components/HomeLoginSwitch';
 import store from './src/redux/store';
 import { Provider } from 'react-redux';
 import AppContext from './src/contexts/app-context';
-
+import { SafeAreaView } from 'react-native-safe-area-context';
 export default class App extends Component {
 
   constructor(props) {
@@ -14,14 +14,12 @@ export default class App extends Component {
 
     this.state = {
       isReady: false,
-      language: 'en-US',
-      theme: 'default',
-      setLanguage: lang => this.setState({
-        language: lang
-      }),
-      setTheme: theme => this.setState({
-        theme: theme
-      })
+      user: null,
+      setUser: (newUser) => {
+        this.setState({
+          user: newUser
+        });
+      }
     };
   }
 
@@ -45,7 +43,9 @@ export default class App extends Component {
     return (
       <Provider store={store}>
         <AppContext.Provider value={this.state}>
-          <DrawerLayout />
+          <SafeAreaView style={{ flex: 1 }}>
+            <HomeLoginSwitch />
+          </SafeAreaView>
         </AppContext.Provider>
       </Provider>
     );
