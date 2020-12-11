@@ -1,5 +1,3 @@
-export const FS_HEADER_TITLE = 22;
-export const FS_HEADER_SUBTITLE = 20;
 export const FS_XXLARGE = Math.round(2 * FS_NORMAL);
 export const FS_XLARGE = Math.round(1.5 * FS_NORMAL);
 export const FS_LARGE = Math.round(1.3 * FS_NORMAL);
@@ -11,6 +9,9 @@ export const FS_TINY = Math.round(0.65 * FS_NORMAL);
 
 
 export const COLOR_PRIMARY = '#e47911';
+export const COLOR_PRIMARY_L1 = '#f2963d';
+export const COLOR_PRIMARY_L2 = '#ffb670';
+export const COLOR_PRIMARY_L3 = '#ffd7b0';
 
 export const COLOR_SECONDARY = '#232f3e';
 export const COLOR_SECONDARY_D1 = '#111111';
