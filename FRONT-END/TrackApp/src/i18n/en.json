@@ -11,5 +11,8 @@
     "UsernameOrEmail": "Email or Username",
     "Password": "Password",
     "Login": "Log in",
-    "ForgetPassword": "Forgot password?"
+    "ForgetPassword": "Forgot password?",
+    "ErrorMessage": "An error has occurred please try again.",
+    "ErrorEnterUserName": "Enter your username or email please.",
+    "ErrorEnterPassword": "Enter your password please."
 }

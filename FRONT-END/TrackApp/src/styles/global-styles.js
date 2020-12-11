@@ -28,3 +28,7 @@ export const linkButton = {
     textDecorationStyle: 'solid', 
     textDecorationLine: 'underline'
 };
+
+export const error = {
+    color: 'red'
+};

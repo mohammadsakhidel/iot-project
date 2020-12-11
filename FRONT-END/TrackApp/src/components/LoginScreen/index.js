@@ -8,58 +8,107 @@ import { Item, Input, Button, Icon, Text, Spinner } from 'native-base';
 import PageHeader from '../PageHeader';
 import { Strings } from '../../i18n/strings';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
+import PrimaryButton from '../PrimaryButton';
+import FormError from '../FormError';
+import { Component } from 'react';
 
-export default function LoginScreen() {
+export default class LoginScreen extends Component {
 
-    const [isLoading, setIsLoading] = useState(false);
-    const appContext = useContext(AppContext);
+    static contextType = AppContext;
 
-    const onLoginPress = () => {
-        setIsLoading(true);
-        setTimeout(() => {
-            //appContext.setUser({ name: 'mohammada' });
-            setIsLoading(false);
-        }, 2000);
+    constructor(props) {
+        super(props);
+
+        // State:
+        this.state = {
+            isLoading: false,
+            errors: [],
+            userName: '',
+            password: ''
+        };
+
+        // Bindings:
+        this.onLoginPress = this.onLoginPress.bind(this);
+    }
+
+    onLoginPress() {
+
+        // clear isLoading & errors Then call API and the rest:
+        this.setState({ errors: [], isLoading: false }, () => {
+            try {
+
+                // Validate Inputs:
+                const validationErrors = [];
+                if (!this.state.userName)
+                    validationErrors.push(Strings.ErrorEnterUserName);
+                if (!this.state.password)
+                    validationErrors.push(Strings.ErrorEnterPassword);
+                if (validationErrors.length > 0) {
+                    this.setState({ errors: validationErrors });
+                    return;
+                }
+
+                // Call API:
+                this.setState({ isLoading: true });
+                setTimeout(() => {
+                    this.setState({ isLoading: false, errors: ['Not Implemented!'] });
+                }, 2000);
+
+            } catch (e) {
+                this.setState({ errors: [Strings.ErrorMessage] });
+            }
+        });
+
     };
 
-    return (
-        <View style={styles.container}>
-            <AppHeader />
+    render() {
+        return (
+            <View style={styles.container} >
+                <AppHeader />
 
-            <View style={globalStyles.page}>
+                <View style={globalStyles.page}>
 
-                <PageHeader>
-                    {Strings.LoginPageTitle}
-                </PageHeader>
+                    <PageHeader>
+                        {Strings.LoginPageTitle}
+                    </PageHeader>
 
-                <Item>
-                    <Input placeholder={Strings.UsernameOrEmail} />
-                </Item>
-                <Item>
-                    <Input placeholder={Strings.Password}
-                        textContentType="password"
-                        secureTextEntry={true}
-                    />
-                </Item>
+                    <Item>
+                        <Input placeholder={Strings.UsernameOrEmail}
+                            onChangeText={text => this.setState({ userName: text })}
+                            defaultValue={this.state.userName} />
+                    </Item>
+                    <Item>
+                        <Input placeholder={Strings.Password}
+                            textContentType="password"
+                            secureTextEntry={true}
+                            defaultValue={this.state.password}
+                            onChangeText={text => this.setState({ password: text })}
+                        />
+                    </Item>
 
-                <Button iconRight primary block onPress={onLoginPress} disabled={isLoading}
-                    style={[styles.loginButton, globalStyles.primaryButton]}>
-                    <Text>{Strings.Login}</Text>
-                    <Icon name='arrow-forward' />
-                </Button>
+                    <PrimaryButton icon="arrow-forward" iconRight
+                        disabled={this.state.isLoading} isLoading={this.state.isLoading}
+                        style={styles.loginButton} onPress={this.onLoginPress}>
+                        {Strings.Login}
+                    </PrimaryButton>
 
-                <TouchableWithoutFeedback>
-                    <Text style={[globalStyles.linkButton, styles.forgetButton]}>
-                        {Strings.ForgetPassword}
-                    </Text>
-                </TouchableWithoutFeedback>
+                    <TouchableWithoutFeedback>
+                        <Text style={[globalStyles.linkButton, styles.forgetButton]}>
+                            {Strings.ForgetPassword}
+                        </Text>
+                    </TouchableWithoutFeedback>
 
-                {isLoading ? <Spinner color="red" /> : null}
+                    <View style={{ marginTop: vars.PAD_BIT_MORE }}>
+                        {this.state.errors.map(error => (
+                            <FormError key={error} error={error} />
+                        ))}
+                    </View>
+
+                </View>
 
             </View>
-
-        </View>
-    );
+        );
+    }
 }
 
 const styles = StyleSheet.create({
