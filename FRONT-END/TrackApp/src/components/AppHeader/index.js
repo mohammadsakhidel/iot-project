@@ -4,31 +4,46 @@ import * as globalStyles from '../../styles/global-styles';
 import { Header, Icon, Left, Body, Right, Title, Button } from 'native-base';
 import { Text } from 'react-native';
 
-export default function AppHeader({navigation}) {
+export default function AppHeader(props) {
 
-    // Event Handlers:
-    const onPressMenu = () => {
-        navigation.openDrawer();
-    };
+    const {
+        hasLeft,
+        hasRight,
+        onLeftPress,
+        onRightPress,
+        leftIconName,
+        rightIconName,
+        leftIconType,
+        rightIconType
+    } = props;
 
     return (
         <Header style={globalStyles.header}>
-            <Left>
-                <Button transparent onPress={onPressMenu}>
-                    <Icon name="menu" />
-                </Button>
-            </Left>
+            {hasLeft
+                ? (
+                    <Left>
+                        <Button transparent onPress={onLeftPress}>
+                            <Icon name={leftIconName} type={leftIconType} />
+                        </Button>
+                    </Left>
+                )
+                : null}
             <Body>
                 <Title>
                     <Text style={globalStyles.headerTitle}>{Strings.AppHeaderTitle}</Text>
                     <Text style={globalStyles.headerSubtitle}>{Strings.AppHeaderSubtitle}</Text>
                 </Title>
             </Body>
-            <Right>
-                <Button transparent>
-                    <Icon name="ellipsis-v" type="FontAwesome" />
-                </Button>
-            </Right>
+            {hasRight
+                ? (
+                    <Right>
+                        <Button transparent onPress={onRightPress}>
+                            <Icon name={rightIconName} type={rightIconType} />
+                        </Button>
+                    </Right>
+                )
+                : null
+            }
         </Header>
     );
 }

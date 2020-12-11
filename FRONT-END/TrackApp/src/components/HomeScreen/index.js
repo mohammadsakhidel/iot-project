@@ -24,10 +24,20 @@ export default function HomeScreen(props) {
         color: color,
         fontSize: (focused ? 24 : 20)
     });
+    const onHeaderLeftButtonPress = () => {
+        props.navigation.openDrawer();
+    };
 
     return (
         <View style={styles.container}>
-            <AppHeader {...props} />
+            <AppHeader 
+                hasLeft={true} 
+                hasRight={true} 
+                leftIconName="menu" 
+                rightIconName="ellipsis-v" 
+                rightIconType="FontAwesome"
+                onLeftPress={onHeaderLeftButtonPress} />
+
             <Tab.Navigator backBehavior="none" tabBarOptions={{ style: styles.tabBar, activeTintColor: vars.COLOR_PRIMARY, inactiveTintColor: vars.COLOR_SECONDARY_LIGHTEST }}>
                 <Tab.Screen name='Trackers' component={TrackersScreen} options={{
                     tabBarIcon: ({ focused, color }) => (
@@ -70,6 +80,7 @@ export default function HomeScreen(props) {
                     )
                 }} />
             </Tab.Navigator>
+            
             <StatusBar style="light" backgroundColor={vars.COLOR_SECONDARY} />
         </View>
     );
