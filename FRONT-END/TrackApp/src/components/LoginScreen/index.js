@@ -11,7 +11,7 @@ import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import PrimaryButton from '../PrimaryButton';
 import FormError from '../FormError';
 import { Component } from 'react';
-import { login } from '../../api/services/auth-service';
+import AuthService from '../../api/services/auth-service';
 import LoginDTO from '../../api/dtos/login-dto';
 import AppUser from '../../helpers/app-user';
 import * as RouteNames from '../../constants/route-names';
@@ -58,7 +58,7 @@ export default class LoginScreen extends Component {
                 // Call API:
                 this.setState({ isLoading: true });
                 const dto = new LoginDTO(this.state.userName, this.state.password);
-                const result = await login(dto);
+                const result = await AuthService.login(dto);
 
                 // Process Result:
                 if (result.done) {

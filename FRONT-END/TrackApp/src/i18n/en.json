@@ -13,6 +13,7 @@
     "Login": "Log in",
     "ForgetPassword": "Forgot password?",
     "ErrorMessage": "An error has occurred please try again.",
+    "ErrorMessageLoading": "An error occurred while connecting to the server, please try again.",
     "ErrorEnterUserName": "Enter your username or email please.",
     "ErrorEnterPassword": "Enter your password please.",
     "InvalidCredentials": "Username or password is not valid."
