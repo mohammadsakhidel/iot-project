@@ -9,11 +9,9 @@ const Drawer = createDrawerNavigator();
 
 export default function HomeContainer() {
   return (
-    <NavigationContainer>
-      <Drawer.Navigator>
-        <Drawer.Screen name="HomeScreen" component={HomeScreen} options={{ title: Strings.HomeScreen }} />
-      </Drawer.Navigator>
-    </NavigationContainer>
+    <Drawer.Navigator>
+      <Drawer.Screen name="HomeScreen" component={HomeScreen} options={{ title: Strings.HomeScreen }} />
+    </Drawer.Navigator>
   );
 }
 

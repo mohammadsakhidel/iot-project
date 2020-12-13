@@ -4,15 +4,20 @@ import { connect } from 'react-redux';
 import { incCounter } from '../../redux/actions';
 import { Strings } from '../../i18n/strings';
 import { Icon } from 'native-base';
+import AppContext from '../../helpers/app-context';
 
 
 const TrackersScreen = (props) => {
+
+    const appContext = useContext(AppContext);
+
     return (
         <View style={{ padding: 30 }}>
             <Text>{Strings.Welcome}</Text>
-            <Text style={{fontSize: 14}}>{Strings.Welcome}</Text>
-            <Icon name="apps" />
-
+            <Text>{appContext.user.id}</Text>
+            <Text>{appContext.user.givenName}</Text>
+            <Text>{appContext.user.surname}</Text>
+            <Text>{appContext.user.token}</Text>
         </View>
     );
 };

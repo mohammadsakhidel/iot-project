@@ -2,11 +2,12 @@ import React, { Component } from 'react';
 import * as Font from 'expo-font';
 import { AppLoading } from 'expo';
 import { Ionicons } from '@expo/vector-icons';
-import HomeLoginSwitch from './src/components/HomeLoginSwitch';
 import store from './src/redux/store';
 import { Provider } from 'react-redux';
-import AppContext from './src/contexts/app-context';
+import AppContext from './src/helpers/app-context';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import Entry from './src/components/Entry';
+
 export default class App extends Component {
 
   constructor(props) {
@@ -15,10 +16,13 @@ export default class App extends Component {
     this.state = {
       isReady: false,
       user: null,
-      setUser: (newUser) => {
-        this.setState({
-          user: newUser
-        });
+      login: (appUser) => {
+        this.setState({ user: appUser });
+      },
+      logout: () => {
+        if (this.state.user != null) {
+          this.setState({ user: null });
+        }
       }
     };
   }
@@ -44,7 +48,7 @@ export default class App extends Component {
       <Provider store={store}>
         <AppContext.Provider value={this.state}>
           <SafeAreaView style={{ flex: 1 }}>
-            <HomeLoginSwitch />
+            <Entry />
           </SafeAreaView>
         </AppContext.Provider>
       </Provider>

@@ -15,7 +15,6 @@ export const headerSubtitle = {
 };
 
 export const page = {
-    flex: 1,
     padding: vars.PAD_DOUBLE
 };
 
@@ -25,10 +24,11 @@ export const primaryButton = {
 
 export const linkButton = {
     color: vars.COLOR_LINK,
-    textDecorationStyle: 'solid', 
-    textDecorationLine: 'underline'
+    textDecorationStyle: 'solid',
+    textDecorationLine: 'underline',
+    paddingVertical: vars.PAD_HALF
 };
 
 export const error = {
-    color: 'red'
+    color: '#d90036'
 };

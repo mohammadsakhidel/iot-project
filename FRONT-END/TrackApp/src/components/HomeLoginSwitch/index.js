@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import HomeContainer from '../HomeContainer';
 import LoginScreen from '../LoginScreen';
-import AppContext from '../../contexts/app-context';
+import AppContext from '../../helpers/app-context';
 
 export default function HomeLoginSwitch() {
     

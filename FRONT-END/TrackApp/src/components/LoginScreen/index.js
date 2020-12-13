@@ -1,16 +1,21 @@
-import React, { useContext, useState } from 'react';
-import { View, StyleSheet } from 'react-native';
-import AppContext from '../../contexts/app-context';
+import React from 'react';
+import { View, StyleSheet, ScrollView, Keyboard } from 'react-native';
+import AppContext from '../../helpers/app-context';
 import AppHeader from '../AppHeader';
 import * as vars from '../../styles/vars';
 import * as globalStyles from '../../styles/global-styles';
-import { Item, Input, Button, Icon, Text, Spinner } from 'native-base';
+import { Item, Input, Text } from 'native-base';
 import PageHeader from '../PageHeader';
 import { Strings } from '../../i18n/strings';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import PrimaryButton from '../PrimaryButton';
 import FormError from '../FormError';
 import { Component } from 'react';
+import { login } from '../../api/services/auth-service';
+import LoginDTO from '../../api/dtos/login-dto';
+import AppUser from '../../helpers/app-user';
+import * as RouteNames from '../../constants/route-names';
+import { NavigationContext } from '@react-navigation/native';
 
 export default class LoginScreen extends Component {
 
@@ -27,15 +32,17 @@ export default class LoginScreen extends Component {
             password: ''
         };
 
-        // Bindings:
         this.onLoginPress = this.onLoginPress.bind(this);
+        this.onForgotPress = this.onForgotPress.bind(this);
     }
 
     onLoginPress() {
 
-        // clear isLoading & errors Then call API and the rest:
-        this.setState({ errors: [], isLoading: false }, () => {
+        // clear isLoading & errors THEN call API and the rest:
+        this.setState({ errors: [], isLoading: false }, async () => {
             try {
+
+                Keyboard.dismiss();
 
                 // Validate Inputs:
                 const validationErrors = [];
@@ -50,23 +57,38 @@ export default class LoginScreen extends Component {
 
                 // Call API:
                 this.setState({ isLoading: true });
-                setTimeout(() => {
-                    this.setState({ isLoading: false, errors: ['Not Implemented!'] });
-                }, 2000);
+                const dto = new LoginDTO(this.state.userName, this.state.password);
+                const result = await login(dto);
+
+                // Process Result:
+                if (result.done) {
+                    const appUser = AppUser.parseToken(result.data);
+                    this.context.login(appUser);
+                } else {
+                    this.setState({ isLoading: false, errors: [result.data] });
+                }
 
             } catch (e) {
-                this.setState({ errors: [Strings.ErrorMessage] });
+                this.setState({ isLoading: false, errors: [Strings.ErrorMessage] });
             }
         });
 
     };
+
+    onForgotPress(navigation) {
+        try {
+            navigation.navigate(RouteNames.FORGOTTEN_PASSWORD_SCREEN);
+        } catch (e) {
+            this.setState({ errors: [Strings.ErrorMessage, e.message] });
+        }
+    }
 
     render() {
         return (
             <View style={styles.container} >
                 <AppHeader />
 
-                <View style={globalStyles.page}>
+                <ScrollView style={globalStyles.page} keyboardShouldPersistTaps="always">
 
                     <PageHeader>
                         {Strings.LoginPageTitle}
@@ -92,11 +114,17 @@ export default class LoginScreen extends Component {
                         {Strings.Login}
                     </PrimaryButton>
 
-                    <TouchableWithoutFeedback>
-                        <Text style={[globalStyles.linkButton, styles.forgetButton]}>
-                            {Strings.ForgetPassword}
-                        </Text>
-                    </TouchableWithoutFeedback>
+                    <NavigationContext.Consumer>
+                        {navigation => {
+                            return (
+                                <TouchableWithoutFeedback onPress={() => this.onForgotPress(navigation)}>
+                                    <Text style={[globalStyles.linkButton, styles.forgetButton]}>
+                                        {Strings.ForgetPassword}
+                                    </Text>
+                                </TouchableWithoutFeedback>
+                            );
+                        }}
+                    </NavigationContext.Consumer>
 
                     <View style={{ marginTop: vars.PAD_BIT_MORE }}>
                         {this.state.errors.map(error => (
@@ -104,7 +132,7 @@ export default class LoginScreen extends Component {
                         ))}
                     </View>
 
-                </View>
+                </ScrollView>
 
             </View>
         );

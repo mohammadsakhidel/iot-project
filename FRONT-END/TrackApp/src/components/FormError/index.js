@@ -9,8 +9,8 @@ export default function FormError(props) {
 
     return (
         <View style={{ flexDirection: 'row', alignItems: 'center' }} {...rest}>
-            <Icon name="warning" style={{ color: 'red' }} />
-            <Text style={[globalStyles.error, { marginHorizontal: 5 }]}>
+            <Icon name="remove-circle" style={globalStyles.error} />
+            <Text style={[globalStyles.error, { marginHorizontal: 7, fontWeight: 'bold' }]}>
                 {error}
             </Text>
         </View>
