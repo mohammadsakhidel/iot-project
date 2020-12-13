@@ -103,11 +103,11 @@ namespace TrackAPI.Services {
                 if (string.IsNullOrEmpty(model.UserId) &&
                     string.IsNullOrEmpty(model.RawID) &&
                     string.IsNullOrEmpty(model.Manufacturer)) {
-                    
+
                     return new List<Tracker> { };
 
                 }
-                        
+
                 return _trackerRepository.Filter(t =>
                             (string.IsNullOrEmpty(model.UserId) || t.UserId == model.UserId) &&
                             (string.IsNullOrEmpty(model.RawID) || t.RawID == model.RawID) &&
@@ -122,18 +122,25 @@ namespace TrackAPI.Services {
         }
 
         public async Task<List<TrackerReportModel>> GetReportsAsync(string trackerId, DateTime? date) {
-            
+
             var reportDate = date ?? DateTime.UtcNow;
-            var reports = await Task.Run(() => { 
+            var reports = await Task.Run(() => {
                 return _reportRepository.Filter(r =>
                             r.TrackerId == trackerId &&
                             r.CreationTime.Date == reportDate.Date
                         ).ToList();
             });
-            
+
             var models = reports.Select(r => _mapper.Map<TrackerReportModel>(r)).ToList();
             return models;
 
+        }
+
+        public async Task<List<TrackerModel>> GetUserTrackers(string userId) {
+            var trackers = await Task.Run(() => {
+                return _trackerRepository.Filter(t => t.UserId == userId);
+            });
+            return trackers.Select(t => _mapper.Map<Tracker, TrackerModel>(t)).ToList();
         }
     }
 }

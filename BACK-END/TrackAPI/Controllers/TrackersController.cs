@@ -56,6 +56,7 @@ namespace TrackAPI.Controllers {
         }
 
         [HttpGet("{trackerId}/reports/{date?}")]
+        [Authorize(Policies.CanReadTracker)]
         public async Task<IActionResult> Reports(string trackerId, string date) {
             try {
 
@@ -74,6 +75,7 @@ namespace TrackAPI.Controllers {
         }
 
         [HttpGet("{trackerId}/commandlogs/{date?}")]
+        [Authorize(Policies.CanReadTracker)]
         public async Task<IActionResult> Logs(string trackerId, string date) {
             try {
 
@@ -85,6 +87,23 @@ namespace TrackAPI.Controllers {
                 var reports = await _commandService.GetLogsAsync(trackerId, hasDate ? logsDate : null);
 
                 return Ok(reports);
+
+            } catch (Exception ex) {
+                return ex.GetActionResult();
+            }
+        }
+
+        [HttpGet("mine")]
+        [Authorize]
+        public async Task<IActionResult> GetUserTrackers() {
+            try {
+
+                var userId = HttpContext.User.Claims.SingleOrDefault(c => c.Type == ClaimNames.USER_ID)?.Value;
+                if (string.IsNullOrEmpty(userId))
+                    throw new ApplicationException("UserID cannot be null.");
+
+                var trackers = await _trackerService.GetUserTrackers(userId);
+                return Ok(trackers);
 
             } catch (Exception ex) {
                 return ex.GetActionResult();
