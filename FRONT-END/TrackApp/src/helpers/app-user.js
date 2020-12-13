@@ -12,8 +12,6 @@ export default class AppUser {
     static parseToken(jwtToken) {
         const jwtObject = jwtDecode(jwtToken);
 
-        console.log(jwtObject);
-
         appUser = new AppUser();
         appUser.token = jwtToken;
         appUser.id = jwtObject[ClaimNames.CLAIM_USERID];

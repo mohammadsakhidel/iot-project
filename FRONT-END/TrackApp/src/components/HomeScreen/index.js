@@ -90,9 +90,11 @@ const styles = StyleSheet.create({
         flex: 1
     },
     tabBar: {
-        //height: 60,
-        paddingBottom: 5,
-        backgroundColor: vars.COLOR_SECONDARY
+        //height: 55,
+        paddingBottom: 2,
+        backgroundColor: vars.COLOR_SECONDARY,
+        borderTopWidth: 5,
+        borderTopColor: vars.COLOR_SECONDARY_L1
     },
     tabLabel: {
         fontSize: vars.FS_SMALL

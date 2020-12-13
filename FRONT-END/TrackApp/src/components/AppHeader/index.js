@@ -2,7 +2,7 @@ import React from 'react';
 import { Strings } from '../../i18n/strings';
 import * as globalStyles from '../../styles/global-styles';
 import { Header, Icon, Left, Body, Right, Title, Button } from 'native-base';
-import { Text, View } from 'react-native';
+import { Image, Text, View } from 'react-native';
 import * as vars from '../../styles/vars';
 import { StatusBar } from 'expo-status-bar';
 
@@ -32,10 +32,13 @@ export default function AppHeader(props) {
                     )
                     : null}
                 <Body>
-                    <Title>
+                    <View style={{ flext: 1, justifyContent: 'center' }}>
+                        <Image source={require('../../styles/images/header-title.png')} style={{ width: 110 }} resizeMode="contain" />
+                    </View>
+                    {/* <Title>
                         <Text style={globalStyles.headerTitle}>{Strings.AppHeaderTitle}</Text>
                         <Text style={globalStyles.headerSubtitle}>{Strings.AppHeaderSubtitle}</Text>
-                    </Title>
+                    </Title> */}
                 </Body>
                 {hasRight
                     ? (
