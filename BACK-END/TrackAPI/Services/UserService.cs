@@ -16,6 +16,7 @@ using TrackAPI.Helpers;
 using TrackAPI.Models;
 using TrackDataAccess.Models.Identity;
 using TrackDataAccess.Repositories;
+using TrackLib.Utils;
 
 namespace TrackAPI.Services {
     public class UserService : IUserService {
@@ -277,8 +278,10 @@ namespace TrackAPI.Services {
         private async Task<string> generateTokenAsync(AppUser appUser) {
             var secret = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_appSettings.JWT.SecretKey));
             var userClaims = await _userManager.GetClaimsAsync(appUser);
+            var emailHash = TextUtil.CreateMD5(appUser.Email);
             var tokenClaims = new List<Claim> {
                         new Claim(ClaimNames.USER_ID, appUser.Id),
+                        new Claim(ClaimNames.EMAIL_HASH, emailHash),
                         new Claim(ClaimNames.GIVEN_NAME, userClaims.SingleOrDefault(c => c.Type == ClaimNames.GIVEN_NAME)?.Value),
                         new Claim(ClaimNames.SURNAME, userClaims.SingleOrDefault(c => c.Type == ClaimNames.SURNAME)?.Value),
                         new Claim(ClaimNames.ISADMIN, (userClaims.SingleOrDefault(c => c.Type == ClaimNames.GROUP)?.Value == UserGroups.ADMINS).ToString()),
