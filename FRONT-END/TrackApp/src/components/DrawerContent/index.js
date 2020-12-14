@@ -29,7 +29,7 @@ export default function DrawerContent(props) {
                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
 
                     <Image style={styles.profileImage} source={{
-                        uri: `https://www.gravatar.com/avatar/${user.emailHash}?s=200&d=identicon`
+                        uri: `https://www.gravatar.com/avatar/${user.emailHash.toLowerCase()}?s=200&d=identicon`
                     }} />
 
                     <SmallButton
