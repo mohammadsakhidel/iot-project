@@ -29,12 +29,10 @@ export default function HomeScreen(props) {
 
     return (
         <View style={styles.container}>
-            <AppHeader 
-                hasLeft={true} 
-                hasRight={true} 
-                leftIconName="menu" 
-                rightIconName="ellipsis-v" 
-                rightIconType="FontAwesome"
+            <AppHeader
+                hasLeft={true}
+                hasRight={false}
+                leftIconName="menu"
                 onLeftPress={onHeaderLeftButtonPress} />
 
             <Tab.Navigator backBehavior="none" tabBarOptions={{ style: styles.tabBar, activeTintColor: vars.COLOR_PRIMARY, inactiveTintColor: vars.COLOR_SECONDARY_LIGHTEST }}>
@@ -79,7 +77,7 @@ export default function HomeScreen(props) {
                     )
                 }} />
             </Tab.Navigator>
-            
+
         </View>
     );
 

@@ -2,7 +2,7 @@ import React from 'react';
 import { Strings } from '../../i18n/strings';
 import * as globalStyles from '../../styles/global-styles';
 import { Header, Icon, Left, Body, Right, Title, Button } from 'native-base';
-import { Image, Text, View, Platform } from 'react-native';
+import { Image, Text, View, Platform, StyleSheet } from 'react-native';
 import * as vars from '../../styles/vars';
 import { StatusBar } from 'expo-status-bar';
 
@@ -24,29 +24,33 @@ export default function AppHeader(props) {
             <Header style={globalStyles.header}>
                 {hasLeft
                     ? (
-                        <Left>
-                            <Button transparent onPress={onLeftPress}>
-                                <Icon name={leftIconName} type={leftIconType} />
-                            </Button>
-                        </Left>
+                        <Button transparent onPress={onLeftPress}>
+                            <Icon
+                                name={leftIconName}
+                                type={leftIconType}
+                                style={styles.icons}
+                            />
+                        </Button>
                     )
                     : null}
                 <Body>
                     <View style={{ flext: 1, justifyContent: 'center' }}>
-                        <Image source={require('../../styles/images/header-title.png')} style={{ width: 110 }} resizeMode="contain" />
+                        <Image
+                            source={require('../../styles/images/header-title.png')}
+                            style={styles.titleImage}
+                            resizeMode="contain"
+                        />
                     </View>
-                    {/* <Title>
-                        <Text style={globalStyles.headerTitle}>{Strings.AppHeaderTitle}</Text>
-                        <Text style={globalStyles.headerSubtitle}>{Strings.AppHeaderSubtitle}</Text>
-                    </Title> */}
                 </Body>
                 {hasRight
                     ? (
-                        <Right>
-                            <Button transparent onPress={onRightPress}>
-                                <Icon name={rightIconName} type={rightIconType} />
-                            </Button>
-                        </Right>
+                        <Button transparent onPress={onRightPress}>
+                            <Icon
+                                name={rightIconName}
+                                type={rightIconType}
+                                style={styles.icons}
+                            />
+                        </Button>
                     )
                     : null
                 }
@@ -58,3 +62,13 @@ export default function AppHeader(props) {
         </View>
     );
 }
+
+const styles = StyleSheet.create({
+    icons: {
+        color: vars.COLOR_GRAY_LIGHTEST,
+        fontSize: vars.ICO_NORMAL
+    },
+    titleImage: {
+        width: 100
+    }
+});

@@ -1,7 +1,8 @@
 import * as vars from './vars';
 
 export const header = {
-    backgroundColor: vars.COLOR_SECONDARY
+    backgroundColor: vars.COLOR_SECONDARY,
+    alignItems: 'center'
 };
 
 export const headerTitle = {
