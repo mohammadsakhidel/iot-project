@@ -2,7 +2,7 @@ import React from 'react';
 import { Strings } from '../../i18n/strings';
 import * as globalStyles from '../../styles/global-styles';
 import { Header, Icon, Left, Body, Right, Title, Button } from 'native-base';
-import { Image, Text, View } from 'react-native';
+import { Image, Text, View, Platform } from 'react-native';
 import * as vars from '../../styles/vars';
 import { StatusBar } from 'expo-status-bar';
 
@@ -51,7 +51,10 @@ export default function AppHeader(props) {
                     : null
                 }
             </Header>
-            <StatusBar style="light" backgroundColor={vars.COLOR_SECONDARY} />
+            {(Platform.OS == "android"
+                ? (<StatusBar style="light" backgroundColor={vars.COLOR_SECONDARY} />)
+                : null
+            )}
         </View>
     );
 }
