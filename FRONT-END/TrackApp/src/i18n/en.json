@@ -16,5 +16,13 @@
     "ErrorMessageLoading": "An error occurred while connecting to the server, please try again.",
     "ErrorEnterUserName": "Enter your username or email please.",
     "ErrorEnterPassword": "Enter your password please.",
-    "InvalidCredentials": "Username or password is not valid."
+    "InvalidCredentials": "Username or password is not valid.",
+    "EditProfile": "Edit Profile",
+    "Logout": "Sing out",
+    "WebsiteHome": "Website Home",
+    "ContactUs": "Contact Us",
+    "Question": "Question",
+    "LogoutSureMessage": "Are you sure you want to sign out?",
+    "Yes": "Yes",
+    "Cancel": "Cancel"
 }

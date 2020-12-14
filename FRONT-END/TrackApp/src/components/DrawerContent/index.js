@@ -1,21 +1,84 @@
-import React from 'react';
-import { StyleSheet, Text, View, Image } from "react-native";
+import React, { useContext } from 'react';
+import { StyleSheet, Text, View, Image, Alert } from "react-native";
 import * as vars from '../../styles/vars';
-import md5 from 'blueimp-md5';
+import { Strings } from '../../i18n/strings';
+import SmallButton from '../SmallButton';
+import DrawerMenuItem from '../DrawerMenuItem';
+import AppContext from '../../helpers/app-context';
 
 export default function DrawerContent(props) {
 
     const { user } = props;
-    const emailHash = md5('mohammad.sakhidel@gmail.com');
+    const appContext = useContext(AppContext);
+
+    // Funcs:
+    const logout = () => {
+        try {
+
+            appContext.logout();
+
+        } catch (e) { }
+    };
+    // ^^^^^
 
     return (
         <View style={styles.container}>
+
+            {/* Header */}
             <View style={styles.header}>
-                <Image style={styles.profileImage} source={{
-                    uri: `https://www.gravatar.com/avatar/${emailHash}?s=200`
-                }} />
+                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+
+                    <Image style={styles.profileImage} source={{
+                        uri: `https://www.gravatar.com/avatar/${user.emailHash}?s=200&d=identicon`
+                    }} />
+
+                    <SmallButton
+                        iconName="create"
+                        title={Strings.EditProfile}
+                        style={{ marginHorizontal: vars.PAD_NORMAL }}
+                        buttonStyle={styles.editProfileButton} />
+
+                </View>
                 <Text style={styles.userName}>{`${user.givenName} ${user.surname}`}</Text>
             </View>
+
+            {/* Menu */}
+            <View style={{ paddingVertical: vars.PAD_HALF }}>
+                <DrawerMenuItem
+                    iconName="home"
+                    title={Strings.WebsiteHome}
+                    onPress={() => { }}
+                />
+                <DrawerMenuItem
+                    iconName="mail"
+                    title={Strings.ContactUs}
+                    onPress={() => { }}
+                    borderBottom={true}
+                />
+                <DrawerMenuItem
+                    iconName="log-out"
+                    title={Strings.Logout}
+                    onPress={() => {
+                        Alert.alert(
+                            Strings.Question,
+                            Strings.LogoutSureMessage,
+                            [
+                                {
+                                    text: Strings.Yes,
+                                    onPress: () => {
+                                        logout();
+                                    }
+                                },
+                                {
+                                    text: Strings.Cancel,
+                                    onPress: () => { }
+                                }
+                            ]
+                        );
+                    }}
+                />
+            </View>
+
         </View>
     );
 
@@ -42,5 +105,9 @@ const styles = StyleSheet.create({
         borderRadius: 35,
         borderWidth: StyleSheet.hairlineWidth,
         borderColor: vars.COLOR_GRAY_LIGHTEST
+    },
+    editProfileButton: {
+        backgroundColor: vars.COLOR_SECONDARY_L1,
+        borderColor: vars.COLOR_SECONDARY_D1
     }
 });

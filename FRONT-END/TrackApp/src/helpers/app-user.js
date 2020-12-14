@@ -7,6 +7,7 @@ export default class AppUser {
         this.givenName = '';
         this.surname = '';
         this.token = '';
+        this.emailHash = '';
     }
 
     static parseToken(jwtToken) {
@@ -17,6 +18,7 @@ export default class AppUser {
         appUser.id = jwtObject[ClaimNames.CLAIM_USERID];
         appUser.givenName = jwtObject[ClaimNames.CLAIM_GIVEN_NAME];
         appUser.surname = jwtObject[ClaimNames.CLAIM_SURNAME];
+        appUser.emailHash = jwtObject[ClaimNames.CLAIM_EMAIL_HASH];
 
         return appUser;
     }

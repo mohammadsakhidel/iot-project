@@ -7,11 +7,15 @@ export const FS_BIT_SMALLER = Math.round(0.9 * FS_NORMAL);
 export const FS_SMALL = Math.round(0.75 * FS_NORMAL);
 export const FS_TINY = Math.round(0.65 * FS_NORMAL);
 
+export const ICO_NORMAL = 30;
+export const ICO_BIT_SMALLER = Math.round(0.8 * ICO_NORMAL);
+
 
 export const COLOR_PRIMARY = '#e47911';
 export const COLOR_PRIMARY_L1 = '#f2963d';
 export const COLOR_PRIMARY_L2 = '#ffb670';
 export const COLOR_PRIMARY_L3 = '#ffd7b0';
+export const COLOR_PRIMARY_D1 = '#b2601a';
 export const COLOR_SECONDARY = '#242f29';//'#232f3e';
 export const COLOR_SECONDARY_L1 = '#314f3f';
 export const COLOR_SECONDARY_D1 = '#111111';
