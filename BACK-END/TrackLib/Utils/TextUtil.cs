@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -7,6 +8,8 @@ using TrackLib.Constants;
 
 namespace TrackLib.Utils {
     public static class TextUtil {
+        private static Random _random = new Random();
+
         public static bool IsBase64String(string base64) {
             if (string.IsNullOrEmpty(base64))
                 return false;
@@ -46,6 +49,12 @@ namespace TrackLib.Utils {
                 }
                 return sb.ToString();
             }
+        }
+
+        public static string RandomString(int length) {
+            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            return new string(Enumerable.Repeat(chars, length)
+              .Select(s => s[_random.Next(s.Length)]).ToArray());
         }
     }
 }

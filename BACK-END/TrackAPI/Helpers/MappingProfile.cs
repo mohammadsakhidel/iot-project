@@ -29,6 +29,10 @@ namespace TrackAPI.Helpers {
             CreateMap<CommandLog, CommandLogModel>()
                 .ForMember(dest => dest.CreationTime, opt =>
                     opt.MapFrom(src => src.CreationTime.ToString(Values.DATETIME_FORMAT)));
+
+            // Image <--> ImageModel
+            CreateMap<ImageModel, Image>();
+            CreateMap<Image, ImageModel>();
         }
     }
 }
