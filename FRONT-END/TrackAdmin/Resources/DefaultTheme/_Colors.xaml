@@ -1,18 +1,18 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    
-    <SolidColorBrush x:Key="cOne" Color="#011A27"></SolidColorBrush>
-    
-    <SolidColorBrush x:Key="cTwo" Color="#063852"></SolidColorBrush>
-    <SolidColorBrush x:Key="cTwoL1" Color="#5390b0"></SolidColorBrush>
-    
-    <SolidColorBrush x:Key="cThree" Color="#F0810F"></SolidColorBrush>
+
+    <SolidColorBrush x:Key="cOne" Color="#1f3428"></SolidColorBrush>
+
+    <SolidColorBrush x:Key="cTwo" Color="#182d21"></SolidColorBrush>
+    <SolidColorBrush x:Key="cTwoL1" Color="#314f3f"></SolidColorBrush>
+
+    <SolidColorBrush x:Key="cThree" Color="#e47911"></SolidColorBrush>
     <SolidColorBrush x:Key="cThreeL3" Color="#ffe1c2"></SolidColorBrush>
     <SolidColorBrush x:Key="cThreeL2" Color="#ffc385"></SolidColorBrush>
     <SolidColorBrush x:Key="cThreeD1" Color="#cc6700"></SolidColorBrush>
     <SolidColorBrush x:Key="cThreeD2" Color="#a35200"></SolidColorBrush>
-    
-    <SolidColorBrush x:Key="cFour" Color="#E6DF44"></SolidColorBrush>
+
+    <SolidColorBrush x:Key="cFour" Color="#e47911"></SolidColorBrush>
     
     <SolidColorBrush x:Key="cNeutral" Color="#fff"></SolidColorBrush>
     <SolidColorBrush x:Key="cNeutralD1" Color="#e3e3e3"></SolidColorBrush>

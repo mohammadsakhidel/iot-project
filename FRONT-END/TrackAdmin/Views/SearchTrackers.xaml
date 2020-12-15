@@ -31,6 +31,7 @@
                     <RowDefinition Height="auto" />
                     <RowDefinition Height="auto" />
                     <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
                     
                 </Grid.RowDefinitions>
 
@@ -44,9 +45,14 @@
                 <TextBox Grid.Row="1" Grid.Column="1" Style="{StaticResource textbox}" 
                          Text="{Binding RawID, Mode=TwoWay}" Margin="{StaticResource padNormalBottom}"/>
 
+                <!--SerialNumber-->
+                <Label Grid.Row="2" Content="{x:Static r:Strings.SerialNumber}" Style="{StaticResource formLabel}" />
+                <TextBox Grid.Row="2" Grid.Column="1" Style="{StaticResource textbox}" 
+                         Text="{Binding SerialNumber, Mode=TwoWay}" Margin="{StaticResource padNormalBottom}"/>
+                
                 <!--UserId-->
-                <Label Grid.Row="2" Content="{x:Static r:Strings.User}" Style="{StaticResource formLabel}" />
-                <ComboBox Grid.Row="2" Grid.Column="1" Style="{StaticResource combobox}" 
+                <Label Grid.Row="3" Content="{x:Static r:Strings.User}" Style="{StaticResource formLabel}" />
+                <ComboBox Grid.Row="3" Grid.Column="1" Style="{StaticResource combobox}" 
                           SelectedValue="{Binding UserId, Mode=TwoWay, ValidatesOnNotifyDataErrors=True}"
                           Margin="{StaticResource padNormalBottom}" IsEditable="True" Text="{Binding UserIdInput}" 
                           ItemsSource="{Binding Users}" SelectedValuePath="Id" DisplayMemberPath="Desc"

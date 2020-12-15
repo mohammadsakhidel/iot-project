@@ -40,7 +40,7 @@
     <Style x:Key="logo" TargetType="Image">
         <Setter Property="Width" Value="200"></Setter>
         <Setter Property="Height" Value="60"></Setter>
-        <Setter Property="Source" Value="Images/logo.png"></Setter>
+        <Setter Property="Source" Value="Images/logo-light.png"></Setter>
         <Setter Property="Margin" Value="0 25"></Setter>
         <Setter Property="HorizontalAlignment" Value="Center"></Setter>
     </Style>

@@ -79,7 +79,7 @@ namespace TrackAdmin.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to ZorroTracker.
+        ///   Looks up a localized string similar to ozTracker.
         /// </summary>
         public static string AppName {
             get {
@@ -228,6 +228,15 @@ namespace TrackAdmin.Resources {
         public static string Disconnect {
             get {
                 return ResourceManager.GetString("Disconnect", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Display Name.
+        /// </summary>
+        public static string DisplayName {
+            get {
+                return ResourceManager.GetString("DisplayName", resourceCulture);
             }
         }
         
@@ -426,6 +435,15 @@ namespace TrackAdmin.Resources {
         public static string SendingCommands {
             get {
                 return ResourceManager.GetString("SendingCommands", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Serial Number.
+        /// </summary>
+        public static string SerialNumber {
+            get {
+                return ResourceManager.GetString("SerialNumber", resourceCulture);
             }
         }
         

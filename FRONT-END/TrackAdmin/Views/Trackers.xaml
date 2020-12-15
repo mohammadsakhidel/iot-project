@@ -30,9 +30,11 @@
                       SelectedItem="{Binding SelectedRecord, Mode=OneWayToSource}" Margin="{StaticResource padNormalVertical}">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="{x:Static r:Strings.ID}" Binding="{Binding Id}" />
-                    <DataGridTextColumn Header="{x:Static r:Strings.UserId}" Binding="{Binding UserId}" />
+                    <DataGridTextColumn Header="{x:Static r:Strings.DisplayName}" Binding="{Binding DisplayName}" />
                     <DataGridTextColumn Header="{x:Static r:Strings.Manufacturer}" Binding="{Binding Manufacturer}" />
                     <DataGridTextColumn Header="{x:Static r:Strings.RawID}" Binding="{Binding RawID}" />
+                    <DataGridTextColumn Header="{x:Static r:Strings.SerialNumber}" Binding="{Binding SerialNumber}" />
+                    <DataGridTextColumn Header="{x:Static r:Strings.UserId}" Binding="{Binding UserId}" />
                     <DataGridTextColumn Header="{x:Static r:Strings.ProductId}" Binding="{Binding ProductId}" />
                     <DataGridTextColumn Header="{x:Static r:Strings.ProductModel}" Binding="{Binding ProductModel}" />
                     <DataGridTextColumn Header="{x:Static r:Strings.CommandSet}" Binding="{Binding CommandSet}" />

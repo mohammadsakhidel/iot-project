@@ -9,5 +9,6 @@ namespace TrackAdmin.DTOs {
         public string Manufacturer { get; set; }
         public string RawID { get; set; }
         public string UserId { get; set; }
+        public string SerialNumber { get; set; }
     }
 }

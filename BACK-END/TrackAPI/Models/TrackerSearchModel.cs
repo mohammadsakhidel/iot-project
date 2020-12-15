@@ -8,5 +8,6 @@ namespace TrackAPI.Models {
         public string UserId { get; set; }
         public string Manufacturer { get; set; }
         public string RawID { get; set; }
+        public string SerialNumber { get; set; }
     }
 }

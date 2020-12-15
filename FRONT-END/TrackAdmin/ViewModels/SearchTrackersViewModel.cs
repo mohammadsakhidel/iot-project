@@ -49,6 +49,15 @@ namespace TrackAdmin.ViewModels {
             }
         }
 
+        private string serialNumber;
+        public string SerialNumber {
+            get { return serialNumber; }
+            set {
+                serialNumber = value;
+                OnPropertyChanged(nameof(SerialNumber));
+            }
+        }
+
         private List<UserDto> users;
         public List<UserDto> Users {
             get { return users; }
@@ -79,7 +88,8 @@ namespace TrackAdmin.ViewModels {
                         var model = new TrackerSearchDto {
                             UserId = UserId,
                             Manufacturer = Manufacturer,
-                            RawID = RawID
+                            RawID = RawID,
+                            SerialNumber = SerialNumber
                         };
                         Mediator.Notify(MediatorTokens.SearchTrackers, model);
                     });

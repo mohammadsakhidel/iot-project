@@ -52,5 +52,19 @@ namespace TrackDataAccess.Models {
         [Column("explanation")]
         public string Explanation { get; set; }
 
+        [Required]
+        [MaxLength(64)]
+        [Column("display_name")]
+        public string DisplayName { get; set; }
+
+        [MaxLength(64)]
+        [Column("icon_image_id")]
+        public string IconImageId { get; set; }
+
+        [Required]
+        [MaxLength(128)]
+        [Column("serial_number")]
+        public string SerialNumber { get; set; }
+
     }
 }

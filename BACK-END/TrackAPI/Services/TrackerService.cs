@@ -80,6 +80,10 @@ namespace TrackAPI.Services {
             tracker.ProductModel = model.ProductModel;
             tracker.UserId = model.UserId;
             tracker.Explanation = model.Explanation;
+            tracker.DisplayName = model.DisplayName;
+            tracker.SerialNumber = model.SerialNumber;
+            if (!string.IsNullOrEmpty(model.IconImageId))
+                tracker.IconImageId = model.IconImageId;
 
             await _trackerRepository.SaveAsync();
 
@@ -102,6 +106,7 @@ namespace TrackAPI.Services {
                 // Return Empty list if all parameters are empty:
                 if (string.IsNullOrEmpty(model.UserId) &&
                     string.IsNullOrEmpty(model.RawID) &&
+                    string.IsNullOrEmpty(model.SerialNumber) &&
                     string.IsNullOrEmpty(model.Manufacturer)) {
 
                     return new List<Tracker> { };
@@ -111,6 +116,7 @@ namespace TrackAPI.Services {
                 return _trackerRepository.Filter(t =>
                             (string.IsNullOrEmpty(model.UserId) || t.UserId == model.UserId) &&
                             (string.IsNullOrEmpty(model.RawID) || t.RawID == model.RawID) &&
+                            (string.IsNullOrEmpty(model.SerialNumber) || t.SerialNumber.Contains(model.SerialNumber)) &&
                             (string.IsNullOrEmpty(model.Manufacturer) || t.Manufacturer.ToLower() == model.Manufacturer.ToLower())
                         ).OrderByDescending(t => t.CreationTime)
                         .Take(Values.PAGESIZE)

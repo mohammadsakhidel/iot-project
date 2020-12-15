@@ -66,6 +66,28 @@ namespace TrackAdmin.ViewModels {
             }
         }
 
+        private string serialNumber;
+        public string SerialNumber {
+            get { return serialNumber; }
+            set {
+                serialNumber = value;
+                RemoveValidationErrors(nameof(SerialNumber));
+                ValidateRequiredProp(nameof(SerialNumber), value);
+                OnPropertyChanged(nameof(SerialNumber));
+            }
+        }
+
+        private string displayName;
+        public string DisplayName {
+            get { return displayName; }
+            set {
+                displayName = value;
+                RemoveValidationErrors(nameof(DisplayName));
+                ValidateRequiredProp(nameof(DisplayName), value);
+                OnPropertyChanged(nameof(DisplayName));
+            }
+        }
+
         private string userId;
         public string UserId {
             get { return userId; }
@@ -211,6 +233,8 @@ namespace TrackAdmin.ViewModels {
                 var tracker = new TrackerDto {
                     Manufacturer = Manufacturer,
                     RawID = RawID,
+                    SerialNumber = SerialNumber,
+                    DisplayName = DisplayName,
                     UserId = UserId,
                     CommandSet = CommandSet,
                     ProductId = ProductId,
@@ -242,6 +266,8 @@ namespace TrackAdmin.ViewModels {
                     Id = Tracker.Id,
                     Manufacturer = Manufacturer,
                     RawID = RawID,
+                    SerialNumber = SerialNumber,
+                    DisplayName = DisplayName,
                     UserId = UserId,
                     CommandSet = CommandSet,
                     ProductId = ProductId,
@@ -270,6 +296,8 @@ namespace TrackAdmin.ViewModels {
 
             Manufacturer = tracker?.Manufacturer;
             RawID = tracker?.RawID;
+            SerialNumber = tracker?.SerialNumber;
+            DisplayName = tracker?.DisplayName;
             UserId = tracker?.UserId;
             CommandSet = tracker?.CommandSet;
             ProductId = tracker?.ProductId;

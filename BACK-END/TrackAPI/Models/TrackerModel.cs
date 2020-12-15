@@ -19,6 +19,14 @@ namespace TrackAPI.Models {
 
         public string Explanation { get; set; }
 
+        [Required]
+        public string DisplayName { get; set; }
+
+        public string IconImageId { get; set; }
+
+        [Required]
+        public string SerialNumber { get; set; }
+
         public string UserId { get; set; }
         public int? ProductId { get; set; }
         public string ProductModel { get; set; }

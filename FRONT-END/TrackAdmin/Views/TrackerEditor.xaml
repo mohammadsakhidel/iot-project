@@ -34,6 +34,8 @@
                     <RowDefinition Height="auto" />
                     <RowDefinition Height="auto" />
                     <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
                 </Grid.RowDefinitions>
 
                 <!--Manufacturer-->
@@ -49,37 +51,49 @@
                          Text="{Binding RawID, Mode=TwoWay, ValidatesOnNotifyDataErrors=True}"
                          Margin="{StaticResource padNormalBottom}"/>
 
+                <!--SerialNumber-->
+                <Label Grid.Row="2" Content="{x:Static r:Strings.SerialNumber}" Style="{StaticResource formLabel}" />
+                <TextBox Grid.Row="2" Grid.Column="1" Style="{StaticResource textbox}" 
+                         Text="{Binding SerialNumber, Mode=TwoWay, ValidatesOnNotifyDataErrors=True}"
+                         Margin="{StaticResource padNormalBottom}"/>
+
+                <!--DisplayName-->
+                <Label Grid.Row="3" Content="{x:Static r:Strings.DisplayName}" Style="{StaticResource formLabel}" />
+                <TextBox Grid.Row="3" Grid.Column="1" Style="{StaticResource textbox}" 
+                         Text="{Binding DisplayName, Mode=TwoWay, ValidatesOnNotifyDataErrors=True}"
+                         Margin="{StaticResource padNormalBottom}"/>
+
                 <!--UserId-->
-                <Label Grid.Row="2" Content="{x:Static r:Strings.UserId}" Style="{StaticResource formLabel}" />
-                <ComboBox Grid.Row="2" Grid.Column="1" Style="{StaticResource combobox}" 
+                <Label Grid.Row="4" Content="{x:Static r:Strings.UserId}" Style="{StaticResource formLabel}" />
+                <ComboBox Grid.Row="4" Grid.Column="1" Style="{StaticResource combobox}" 
                           SelectedValue="{Binding UserId, Mode=TwoWay, ValidatesOnNotifyDataErrors=True}"
                           Margin="{StaticResource padNormalBottom}" IsEditable="True" Text="{Binding UserIdInput}" 
                           ItemsSource="{Binding Users}" SelectedValuePath="Id" DisplayMemberPath="Desc"
                           IsDropDownOpen="{Binding UserIdInput, Converter={StaticResource cIsNotEmptyOrPattern}, ConverterParameter={x:Static cn:Patterns.USER_DESC}, Mode=OneWay}" />
 
                 <!--CommandSet-->
-                <Label Grid.Row="3" Content="{x:Static r:Strings.CommandSet}" Style="{StaticResource formLabel}" />
-                <ComboBox Grid.Row="3" Grid.Column="1" Style="{StaticResource combobox}" 
+                <Label Grid.Row="5" Content="{x:Static r:Strings.CommandSet}" Style="{StaticResource formLabel}" />
+                <ComboBox Grid.Row="5" Grid.Column="1" Style="{StaticResource combobox}" 
                           SelectedValue="{Binding CommandSet, Mode=TwoWay, ValidatesOnNotifyDataErrors=True}" 
                           Margin="{StaticResource padNormalBottom}" ItemsSource="{Binding CommandSetItems}"
                           SelectedValuePath="Key" DisplayMemberPath="Value" SelectedIndex="0">
                 </ComboBox>
 
                 <!--ProductID-->
-                <Label Grid.Row="4" Content="{x:Static r:Strings.ProductId}" Style="{StaticResource formLabel}" />
-                <TextBox Grid.Row="4" Grid.Column="1" Style="{StaticResource textbox}" 
+                <Label Grid.Row="6" Content="{x:Static r:Strings.ProductId}" Style="{StaticResource formLabel}" />
+                <TextBox Grid.Row="6" Grid.Column="1" Style="{StaticResource textbox}" 
                          Text="{Binding ProductId, Mode=TwoWay, ValidatesOnNotifyDataErrors=True}"
                          Margin="{StaticResource padNormalBottom}"/>
 
                 <!--ProductModel-->
-                <Label Grid.Row="5" Content="{x:Static r:Strings.ProductModel}" Style="{StaticResource formLabel}" />
-                <TextBox Grid.Row="5" Grid.Column="1" Style="{StaticResource textbox}" 
+                <Label Grid.Row="7" Content="{x:Static r:Strings.ProductModel}" Style="{StaticResource formLabel}" />
+                <TextBox Grid.Row="7" Grid.Column="1" Style="{StaticResource textbox}" 
                          Text="{Binding ProductModel, Mode=TwoWay, ValidatesOnNotifyDataErrors=True}"
                          Margin="{StaticResource padNormalBottom}"/>
 
                 <!--Explanation-->
-                <Label Grid.Row="6" Content="{x:Static r:Strings.Explanation}" Style="{StaticResource formLabel}" />
-                <TextBox Grid.Row="6" Grid.Column="1" Style="{StaticResource textbox}" 
+                <Label Grid.Row="8" Content="{x:Static r:Strings.Explanation}" Style="{StaticResource formLabel}" />
+                <TextBox Grid.Row="8" Grid.Column="1" Style="{StaticResource textbox}" 
                          Text="{Binding Explanation, Mode=TwoWay, ValidatesOnNotifyDataErrors=True}"
                          Margin="{StaticResource padNormalBottom}" AcceptsReturn="True" TextWrapping="Wrap"
                          Height="80" />
