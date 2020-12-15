@@ -17,6 +17,7 @@ namespace TrackDataAccess.Database {
         public DbSet<Tracker> Trackers { get; set; }
         public DbSet<Report> Reports { get; set; }
         public DbSet<CommandLog> CommandLogs { get; set; }
+        public DbSet<Image> Images { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder) {
 
