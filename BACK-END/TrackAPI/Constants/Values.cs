@@ -9,5 +9,6 @@ namespace TrackAPI.Constants {
         public const int PAGESIZE = 50;
         public const string DATETIME_FORMAT = "yyyy'-'MM'-'dd'T'HH':'mm':'ss";
         public const int SQUARE_IMAGE_SIDES = 400;
+        public const string IMAGES_FOLDER = "Content/Images/";
     }
 }

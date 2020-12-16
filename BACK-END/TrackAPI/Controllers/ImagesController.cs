@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -17,24 +18,37 @@ using TrackLib.Utils;
 
 namespace TrackAPI.Controllers {
 
-    [Route("api/[controller]")]
+    [Route("v1/[controller]")]
     [ApiController]
     public class ImagesController : ControllerBase {
 
+        private readonly IWebHostEnvironment _host;
         private readonly IImageService _imageService;
-        public ImagesController(IImageService imageService) {
+        public ImagesController(IImageService imageService, IWebHostEnvironment host) {
             _imageService = imageService;
+            _host = host;
         }
 
         #region ------------------ GET -------------------
-        [Authorize]
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetAsync(string id) {
+        public async Task<IActionResult> GetAsync(string id, string d) {
             try {
 
                 var model = await _imageService.GetAsync(id);
-                if (model == null)
-                    return NotFound();
+                if (model == null) {
+
+                    // No default image requested?
+                    if (string.IsNullOrEmpty(d))
+                        return NotFound();
+
+                    // Default image requested
+                    var folder = PathUtil.Resolve(_host.ContentRootPath, Values.IMAGES_FOLDER);
+                    var filePath = Path.Combine(folder, $"{d.ToLower()}.jpg");
+                    if (!System.IO.File.Exists(filePath))
+                        return NotFound();
+
+                    return File(System.IO.File.ReadAllBytes(filePath), MediaTypeNames.Image.Jpeg);
+                }
 
                 return File(model.Bytes, MediaTypeNames.Image.Jpeg);
 
