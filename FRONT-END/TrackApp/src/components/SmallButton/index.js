@@ -1,4 +1,4 @@
-import { Icon } from 'native-base';
+import Icon from '../Icon';
 import React from 'react';
 import { TouchableOpacity, StyleSheet, Text, View } from 'react-native';
 import * as vars from '../../styles/vars';

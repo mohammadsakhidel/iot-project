@@ -1,9 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Text, View, Button, StyleSheet, ScrollView, ActivityIndicator, FlatList, Alert } from 'react-native';
-import { connect } from 'react-redux';
-import { incCounter } from '../../redux/actions';
-import { Strings } from '../../i18n/strings';
-import { Icon } from 'native-base';
+import { View, StyleSheet, ActivityIndicator, FlatList } from 'react-native';
 import AppContext from '../../helpers/app-context';
 import TrackerService from '../../api/services/tracker-service';
 import TrackerItem from '../TrackerItem';

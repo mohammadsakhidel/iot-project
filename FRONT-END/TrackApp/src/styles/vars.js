@@ -30,6 +30,7 @@ export const COLOR_GRAY_L2 = '#cccccc';
 export const COLOR_GRAY_L3 = '#e6e6e6';
 export const COLOR_GRAY_LIGHTEST = '#ffffff';
 export const COLOR_LINK = '#0097e8';
+export const COLOR_ERROR = '#d90036';
 
 
 export const PAD_NORMAL = 15;

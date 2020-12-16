@@ -1,6 +1,5 @@
-import { Text } from 'native-base';
 import React from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Text } from 'react-native';
 import * as vars from '../../styles/vars';
 
 export default function PageHeader({ children }) {

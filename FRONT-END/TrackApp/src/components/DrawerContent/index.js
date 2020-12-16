@@ -33,7 +33,7 @@ export default function DrawerContent(props) {
                     }} />
 
                     <SmallButton
-                        iconName="create"
+                        iconName="edit"
                         title={Strings.EditProfile}
                         style={{ marginHorizontal: vars.PAD_NORMAL }}
                         buttonStyle={styles.editProfileButton} />
@@ -49,14 +49,16 @@ export default function DrawerContent(props) {
                     title={Strings.WebsiteHome}
                     onPress={() => { }}
                 />
+
                 <DrawerMenuItem
-                    iconName="mail"
+                    iconName="envelope"
                     title={Strings.ContactUs}
                     onPress={() => { }}
                     borderBottom={true}
                 />
+
                 <DrawerMenuItem
-                    iconName="log-out"
+                    iconName="sign-out"
                     title={Strings.Logout}
                     onPress={() => {
                         Alert.alert(
@@ -77,6 +79,7 @@ export default function DrawerContent(props) {
                         );
                     }}
                 />
+
             </View>
 
         </View>

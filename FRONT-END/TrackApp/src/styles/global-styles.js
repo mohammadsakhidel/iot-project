@@ -2,7 +2,7 @@ import * as vars from './vars';
 
 export const header = {
     backgroundColor: vars.COLOR_SECONDARY,
-    alignItems: 'center'
+    height: 60,
 };
 
 export const headerTitle = {
@@ -31,5 +31,5 @@ export const linkButton = {
 };
 
 export const error = {
-    color: '#d90036'
+    color: vars.COLOR_ERROR
 };

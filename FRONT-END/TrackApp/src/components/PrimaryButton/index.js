@@ -1,4 +1,4 @@
-import { Icon, Spinner } from 'native-base';
+import Icon from '../Icon';
 import React from 'react';
 import { ActivityIndicator, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import * as vars from '../../styles/vars';
@@ -16,10 +16,13 @@ export default function PrimaryButton(props) {
 
     const getIcon = () => {
         return (
-            <Icon name={icon} style={[styles.icon, {
-                color: (disabled ? vars.COLOR_GRAY_L1 : vars.COLOR_GRAY_LIGHTEST),
-                display: (isLoading ? 'none' : 'flex')
-            }]} />
+            <Icon name={icon}
+                style={[styles.icon, {
+                    display: (isLoading ? 'none' : 'flex')
+                }]}
+                color={(disabled ? vars.COLOR_GRAY_L1 : vars.COLOR_GRAY_LIGHTEST)}
+                size={vars.ICO_BIT_SMALLER}
+            />
         );
     };
 

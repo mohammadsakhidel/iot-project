@@ -10,7 +10,7 @@ export default class AuthService {
             const url = `${ApiSettings.BaseUrl}/auth/token`;
             let response = await axios.post(url, dto);
             return { done: true, data: response.data };
-    
+
         } catch (e) {
             return e.response && e.response.status == StatusCodes.BAD_REQUEST
                 ? { done: false, data: Strings.InvalidCredentials }

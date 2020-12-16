@@ -1,10 +1,10 @@
 import React from 'react';
-import { View, StyleSheet, ScrollView, Keyboard } from 'react-native';
+import { View, StyleSheet, ScrollView, Keyboard, Text } from 'react-native';
 import AppContext from '../../helpers/app-context';
 import AppHeader from '../AppHeader';
 import * as vars from '../../styles/vars';
 import * as globalStyles from '../../styles/global-styles';
-import { Item, Input, Text } from 'native-base';
+import { Input } from 'react-native-elements';
 import PageHeader from '../PageHeader';
 import { Strings } from '../../i18n/strings';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
@@ -94,21 +94,20 @@ export default class LoginScreen extends Component {
                         {Strings.LoginPageTitle}
                     </PageHeader>
 
-                    <Item>
-                        <Input placeholder={Strings.UsernameOrEmail}
-                            onChangeText={text => this.setState({ userName: text })}
-                            defaultValue={this.state.userName} />
-                    </Item>
-                    <Item>
-                        <Input placeholder={Strings.Password}
-                            textContentType="password"
-                            secureTextEntry={true}
-                            defaultValue={this.state.password}
-                            onChangeText={text => this.setState({ password: text })}
-                        />
-                    </Item>
+                    <Input
+                        placeholder={Strings.UsernameOrEmail}
+                        onChangeText={text => this.setState({ userName: text })}
+                        defaultValue={this.state.userName} />
 
-                    <PrimaryButton icon="arrow-forward" iconRight
+                    <Input
+                        placeholder={Strings.Password}
+                        textContentType="password"
+                        secureTextEntry={true}
+                        defaultValue={this.state.password}
+                        onChangeText={text => this.setState({ password: text })}
+                    />
+
+                    <PrimaryButton icon="chevron-right" iconRight
                         disabled={this.state.isLoading} isLoading={this.state.isLoading}
                         style={styles.loginButton} onPress={this.onLoginPress}>
                         {Strings.Login}

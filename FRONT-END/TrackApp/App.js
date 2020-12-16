@@ -75,8 +75,8 @@ export default class App extends Component {
     try {
 
       await Font.loadAsync({
-        Roboto: require('native-base/Fonts/Roboto.ttf'),
-        Roboto_medium: require('native-base/Fonts/Roboto_medium.ttf'),
+        Roboto: require('./src/styles/fonts/roboto/Roboto-Regular.ttf'),
+        Roboto_medium: require('./src/styles/fonts/roboto/Roboto-Medium.ttf'),
         ...Ionicons.font,
       });
 
