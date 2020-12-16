@@ -69,7 +69,7 @@ export default class LoginScreen extends Component {
                 }
 
             } catch (e) {
-                this.setState({ isLoading: false, errors: [Strings.ErrorMessage] });
+                this.setState({ isLoading: false, errors: [Strings.ErrorMessage, e.message] });
             }
         });
 

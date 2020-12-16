@@ -1,11 +1,13 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Text, View, Button, StyleSheet, ScrollView, ActivityIndicator, FlatList } from 'react-native';
+import { Text, View, Button, StyleSheet, ScrollView, ActivityIndicator, FlatList, Alert } from 'react-native';
 import { connect } from 'react-redux';
 import { incCounter } from '../../redux/actions';
 import { Strings } from '../../i18n/strings';
 import { Icon } from 'native-base';
 import AppContext from '../../helpers/app-context';
 import TrackerService from '../../api/services/tracker-service';
+import TrackerItem from '../TrackerItem';
+import { showError } from '../FlashMessageWrapper';
 
 export default function TrackersScreen(props) {
 
@@ -18,15 +20,21 @@ export default function TrackersScreen(props) {
 
     // Load Trackers: 
     useEffect(() => {
-        TrackerService.list(appContext.user.token).then(result => {
-            if (result.done) {
-                setTimeout(() => {
-                    setState({ ...state, isLoading: false, trackers: result.data });
-                }, 2000);
-            } else {
-                setState({ ...state, isLoading: false, error: Strings.ErrorMessageLoading });
-            }
-        });
+        console.log(appContext.user.token);
+        TrackerService.list(appContext.user.token)
+            .then(result => {
+                if (result.done) {
+                    setTimeout(() => {
+                        setState({ ...state, isLoading: false, trackers: result.data });
+                    }, 2000);
+                } else {
+                    setState({ ...state, isLoading: false });
+                    throw new Error(result.data);
+                }
+            })
+            .catch(error => {
+                showError(error);
+            });
     }, []);
 
     return (
@@ -39,9 +47,7 @@ export default function TrackersScreen(props) {
                     <FlatList
                         data={state.trackers}
                         renderItem={({ item }) => (
-                            <Text style={{ paddingVertical: 200, borderBottomColor: 'red', borderBottomWidth: 2 }}>
-                                {item.id}
-                            </Text>
+                            <TrackerItem item={item} />
                         )}
                     />
                 )
