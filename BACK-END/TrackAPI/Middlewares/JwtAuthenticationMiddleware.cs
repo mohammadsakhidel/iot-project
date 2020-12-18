@@ -45,7 +45,7 @@ namespace TrackAPI.Middlewares {
                     ValidateIssuerSigningKey = true,
                     ValidateIssuer = true,
                     ValidateAudience = true,
-                    ValidateLifetime = true,
+                    ValidateLifetime = false, // Temporarily for testing porpuse.
                     ClockSkew = TimeSpan.Zero
                 }, out _);
             } catch {
