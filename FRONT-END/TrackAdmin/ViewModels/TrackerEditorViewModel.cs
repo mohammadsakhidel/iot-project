@@ -108,12 +108,14 @@ namespace TrackAdmin.ViewModels {
             }
         }
 
-        private int? productId;
-        public int? ProductId {
-            get { return productId; }
+        private string productType;
+        public string ProductType {
+            get { return productType; }
             set {
-                productId = value;
-                OnPropertyChanged(nameof(ProductId));
+                productType = value;
+                RemoveValidationErrors(nameof(ProductType));
+                ValidateRequiredProp(nameof(ProductType), value);
+                OnPropertyChanged(nameof(ProductType));
             }
         }
 
@@ -122,6 +124,8 @@ namespace TrackAdmin.ViewModels {
             get { return productModel; }
             set {
                 productModel = value;
+                RemoveValidationErrors(nameof(ProductModel));
+                ValidateRequiredProp(nameof(ProductModel), value);
                 OnPropertyChanged(nameof(ProductModel));
             }
         }
@@ -220,6 +224,13 @@ namespace TrackAdmin.ViewModels {
                 };
             }
         }
+
+        public Dictionary<string, string> ProductTypeItems {
+            get {
+                return ProductTypes.All()
+                    .ToDictionary(t => t, t => StringManager.Get($"ProductType_{t}"));
+            }
+        }
         #endregion
 
         #region Methods:
@@ -237,7 +248,7 @@ namespace TrackAdmin.ViewModels {
                     DisplayName = DisplayName,
                     UserId = UserId,
                     CommandSet = CommandSet,
-                    ProductId = ProductId,
+                    ProductType = ProductType,
                     ProductModel = ProductModel,
                     Explanation = Explanation
                 };
@@ -270,7 +281,7 @@ namespace TrackAdmin.ViewModels {
                     DisplayName = DisplayName,
                     UserId = UserId,
                     CommandSet = CommandSet,
-                    ProductId = ProductId,
+                    ProductType = ProductType,
                     ProductModel = ProductModel,
                     Explanation = Explanation
                 };
@@ -300,7 +311,7 @@ namespace TrackAdmin.ViewModels {
             DisplayName = tracker?.DisplayName;
             UserId = tracker?.UserId;
             CommandSet = tracker?.CommandSet;
-            ProductId = tracker?.ProductId;
+            ProductType = tracker?.ProductType;
             ProductModel = tracker?.ProductModel;
             Explanation = tracker?.Explanation;
         }

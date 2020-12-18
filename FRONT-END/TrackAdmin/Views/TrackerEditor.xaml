@@ -79,11 +79,12 @@
                           SelectedValuePath="Key" DisplayMemberPath="Value" SelectedIndex="0">
                 </ComboBox>
 
-                <!--ProductID-->
-                <Label Grid.Row="6" Content="{x:Static r:Strings.ProductId}" Style="{StaticResource formLabel}" />
-                <TextBox Grid.Row="6" Grid.Column="1" Style="{StaticResource textbox}" 
-                         Text="{Binding ProductId, Mode=TwoWay, ValidatesOnNotifyDataErrors=True}"
-                         Margin="{StaticResource padNormalBottom}"/>
+                <!--ProductType-->
+                <Label Grid.Row="6" Content="{x:Static r:Strings.ProductType}" Style="{StaticResource formLabel}" />
+                <ComboBox Grid.Row="6" Grid.Column="1" Style="{StaticResource combobox}" 
+                          SelectedValue="{Binding ProductType, Mode=TwoWay, ValidatesOnNotifyDataErrors=True}" 
+                          Margin="{StaticResource padNormalBottom}" ItemsSource="{Binding ProductTypeItems}"
+                          SelectedValuePath="Key" DisplayMemberPath="Value" SelectedIndex="0"/>
 
                 <!--ProductModel-->
                 <Label Grid.Row="7" Content="{x:Static r:Strings.ProductModel}" Style="{StaticResource formLabel}" />

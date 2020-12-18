@@ -222,6 +222,15 @@
   <data name="ProductModel" xml:space="preserve">
     <value>Product Model</value>
   </data>
+  <data name="ProductType" xml:space="preserve">
+    <value>Product Type</value>
+  </data>
+  <data name="ProductType_cartracker" xml:space="preserve">
+    <value>Car Tracker</value>
+  </data>
+  <data name="ProductType_kidswatch" xml:space="preserve">
+    <value>Kids Watch</value>
+  </data>
   <data name="RawID" xml:space="preserve">
     <value>RawID</value>
   </data>

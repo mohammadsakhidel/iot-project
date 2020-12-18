@@ -11,7 +11,7 @@ namespace TrackAdmin.DTOs {
         public string Manufacturer { get; set; }
         public string RawID { get; set; }
         public string CommandSet { get; set; }
-        public int? ProductId { get; set; }
+        public string ProductType { get; set; }
         public string ProductModel { get; set; }
         public string Explanation { get; set; }
         public string DisplayName { get; set; }

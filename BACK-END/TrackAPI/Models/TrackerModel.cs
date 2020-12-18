@@ -28,7 +28,11 @@ namespace TrackAPI.Models {
         public string SerialNumber { get; set; }
 
         public string UserId { get; set; }
-        public int? ProductId { get; set; }
+
+        [Required]
+        public string ProductType { get; set; }
+
+        [Required]
         public string ProductModel { get; set; }
         public string CreationTime { get; set; }
         public DateTime? LastConnection { get; set; }

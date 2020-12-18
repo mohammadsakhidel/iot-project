@@ -376,6 +376,33 @@ namespace TrackAdmin.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Product Type.
+        /// </summary>
+        public static string ProductType {
+            get {
+                return ResourceManager.GetString("ProductType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Car Tracker.
+        /// </summary>
+        public static string ProductType_cartracker {
+            get {
+                return ResourceManager.GetString("ProductType_cartracker", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Kids Watch.
+        /// </summary>
+        public static string ProductType_kidswatch {
+            get {
+                return ResourceManager.GetString("ProductType_kidswatch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to RawID.
         /// </summary>
         public static string RawID {

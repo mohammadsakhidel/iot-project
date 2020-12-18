@@ -25,9 +25,12 @@ namespace TrackDataAccess.Models {
         [Column("manufacturer")]
         public string Manufacturer { get; set; }
 
-        [Column("product_id")]
-        public int? ProductId { get; set; }
+        [Required]
+        [MaxLength(32)]
+        [Column("product_type")]
+        public string ProductType { get; set; }
 
+        [Required]
         [MaxLength(64)]
         [Column("product_model")]
         public string ProductModel { get; set; }

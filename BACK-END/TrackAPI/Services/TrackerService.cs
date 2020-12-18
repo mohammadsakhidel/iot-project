@@ -76,7 +76,7 @@ namespace TrackAPI.Services {
             tracker.RawID = model.RawID;
             tracker.Manufacturer = model.Manufacturer;
             tracker.CommandSet = model.CommandSet;
-            tracker.ProductId = model.ProductId;
+            tracker.ProductType = model.ProductType;
             tracker.ProductModel = model.ProductModel;
             tracker.UserId = model.UserId;
             tracker.Explanation = model.Explanation;
