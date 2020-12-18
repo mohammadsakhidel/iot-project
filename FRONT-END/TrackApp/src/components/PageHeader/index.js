@@ -1,5 +1,6 @@
 import React from 'react';
-import { StyleSheet, Text } from 'react-native';
+import { StyleSheet } from 'react-native';
+import Text from '../Text';
 import * as vars from '../../styles/vars';
 
 export default function PageHeader({ children }) {
@@ -12,6 +13,7 @@ export default function PageHeader({ children }) {
 
 const styles = StyleSheet.create({
     headerText: {
+        fontFamily: 'TitleFont',
         fontWeight: 'bold',
         color: vars.COLOR_PRIMARY,
         fontSize: vars.FS_LARGE,

@@ -12,6 +12,11 @@ import Entry from './src/components/Entry';
 import FlashMessage, { showError } from './src/components/FlashMessageWrapper';
 import { Strings } from './src/i18n/strings';
 
+const customFonts = {
+  ContentFont: require('@expo-google-fonts/roboto/Roboto_400Regular.ttf'),
+  TitleFont: require('@expo-google-fonts/ubuntu/Ubuntu_400Regular.ttf')
+};
+
 export default class App extends Component {
 
   constructor(props) {
@@ -75,8 +80,7 @@ export default class App extends Component {
     try {
 
       await Font.loadAsync({
-        Roboto: require('./src/styles/fonts/roboto/Roboto-Regular.ttf'),
-        Roboto_medium: require('./src/styles/fonts/roboto/Roboto-Medium.ttf'),
+        ...customFonts,
         ...Ionicons.font,
       });
 

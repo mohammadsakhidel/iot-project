@@ -1,5 +1,6 @@
 import React from 'react';
-import { View, StyleSheet, ScrollView, Keyboard, Text } from 'react-native';
+import { View, StyleSheet, ScrollView, Keyboard } from 'react-native';
+import Text from '../Text';
 import AppContext from '../../helpers/app-context';
 import AppHeader from '../AppHeader';
 import * as vars from '../../styles/vars';

@@ -1,6 +1,7 @@
 import Icon from '../Icon';
 import React from 'react';
-import { ActivityIndicator, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, StyleSheet, TouchableOpacity, View } from 'react-native';
+import Text from '../Text';
 import * as vars from '../../styles/vars';
 
 export default function PrimaryButton(props) {

@@ -3,7 +3,7 @@ export const FS_XXLARGE = Math.round(2 * FS_NORMAL);
 export const FS_XLARGE = Math.round(1.5 * FS_NORMAL);
 export const FS_LARGE = Math.round(1.3 * FS_NORMAL);
 export const FS_BIT_LARGER = Math.round(1.1 * FS_NORMAL);
-export const FS_BIT_SMALLER = Math.round(0.9 * FS_NORMAL);
+export const FS_BIT_SMALLER = Math.round(0.87 * FS_NORMAL);
 export const FS_SMALL = Math.round(0.75 * FS_NORMAL);
 export const FS_TINY = Math.round(0.65 * FS_NORMAL);
 

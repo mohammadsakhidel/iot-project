@@ -16,7 +16,6 @@ export default function TrackersScreen(props) {
 
     // Load Trackers: 
     useEffect(() => {
-        console.log(appContext.user.token);
         TrackerService.list(appContext.user.token)
             .then(result => {
                 if (result.done) {

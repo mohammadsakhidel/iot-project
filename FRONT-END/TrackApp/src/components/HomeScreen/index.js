@@ -5,7 +5,8 @@ import MapScreen from '../MapScreen';
 import NotificationsScreen from '../NotificationsScreen';
 import MessagesScreen from '../MessagesScreen';
 import Icon from '../Icon';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
+import Text from '../Text';
 import { Strings } from '../../i18n/strings';
 import * as vars from '../../styles/vars';
 import AppHeader from '../AppHeader';
@@ -38,30 +39,30 @@ export default function HomeScreen(props) {
             <Tab.Navigator backBehavior="none" tabBarOptions={{ style: styles.tabBar, activeTintColor: vars.COLOR_PRIMARY, inactiveTintColor: vars.COLOR_SECONDARY_LIGHTEST }}>
                 <Tab.Screen name='Trackers' component={TrackersScreen} options={{
                     tabBarIcon: ({ focused, color }) => (
-                        <Icon name="th" style={{ ...styles.tabIcon, ...getIconStyle(focused, color) }} />
+                        <Icon name="th" style={getIconStyle(focused, color)} />
                     ),
                     tabBarLabel: ({ focused, color }) => (
-                        <Text style={{ ...styles.tabLabel, ...getLabelStyle(focused, color) }}>
+                        <Text style={[styles.tabLabel, getLabelStyle(focused, color)]}>
                             {Strings.Trackers}
                         </Text>
                     )
                 }} />
                 <Tab.Screen name='Map' component={MapScreen} options={{
                     tabBarIcon: ({ focused, color }) => (
-                        <Icon name="map-marker" style={{ ...styles.tabIcon, ...getIconStyle(focused, color) }} />
+                        <Icon name="map-marker" style={getIconStyle(focused, color)} />
                     ),
                     tabBarLabel: ({ focused, color }) => (
-                        <Text style={{ ...styles.tabLabel, ...getLabelStyle(focused, color) }}>
+                        <Text style={[styles.tabLabel, getLabelStyle(focused, color)]}>
                             {Strings.Map}
                         </Text>
                     )
                 }} />
                 <Tab.Screen name='Notifications' component={NotificationsScreen} options={{
                     tabBarIcon: ({ focused, color }) => (
-                        <Icon name="bell" style={{ ...styles.tabIcon, ...getIconStyle(focused, color) }} />
+                        <Icon name="bell" style={getIconStyle(focused, color)} />
                     ),
                     tabBarLabel: ({ focused, color }) => (
-                        <Text style={{ ...styles.tabLabel, ...getLabelStyle(focused, color) }}>
+                        <Text style={[styles.tabLabel, getLabelStyle(focused, color)]}>
                             {Strings.Notifications}
                         </Text>
                     )
@@ -71,7 +72,7 @@ export default function HomeScreen(props) {
                         <Icon name="envelope" style={getIconStyle(focused, color)} />
                     ),
                     tabBarLabel: ({ focused, color }) => (
-                        <Text style={{ ...styles.tabLabel, ...getLabelStyle(focused, color) }}>
+                        <Text style={[styles.tabLabel, getLabelStyle(focused, color)]}>
                             {Strings.Messages}
                         </Text>
                     )
@@ -95,6 +96,7 @@ const styles = StyleSheet.create({
         borderTopColor: vars.COLOR_SECONDARY_L1
     },
     tabLabel: {
-        fontSize: vars.FS_SMALL
+        fontSize: vars.FS_BIT_SMALLER,
+        color: vars.COLOR_GRAY_LIGHTEST
     }
 });

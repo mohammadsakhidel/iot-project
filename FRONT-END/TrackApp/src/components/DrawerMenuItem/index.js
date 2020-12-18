@@ -1,6 +1,7 @@
 import Icon from '../Icon';
 import React from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, TouchableOpacity, View } from 'react-native';
+import Text from '../Text';
 import * as vars from '../../styles/vars';
 
 export default function DrawerMenuItem(props) {
@@ -40,7 +41,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: vars.PAD_NORMAL
     },
     text: {
-        padding: vars.PAD_HALF,
-        fontSize: vars.FS_BIT_LARGER
+        padding: vars.PAD_HALF
+        //fontSize: vars.FS_BIT_LARGER
     }
 });

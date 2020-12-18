@@ -1,5 +1,6 @@
 import React, { useContext } from 'react';
-import { StyleSheet, Text, View, Image, Alert } from "react-native";
+import { StyleSheet, View, Image, Alert } from "react-native";
+import Text from '../Text';
 import * as vars from '../../styles/vars';
 import { Strings } from '../../i18n/strings';
 import SmallButton from '../SmallButton';
@@ -99,7 +100,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         color: vars.COLOR_PRIMARY_L2,
         fontSize: vars.FS_BIT_LARGER,
-        marginTop: vars.PAD_NORMAL
+        marginTop: vars.PAD_BIT_MORE
     },
     profileImage: {
         width: 70,

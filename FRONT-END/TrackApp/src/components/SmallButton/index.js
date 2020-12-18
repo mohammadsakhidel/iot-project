@@ -1,6 +1,7 @@
 import Icon from '../Icon';
 import React from 'react';
-import { TouchableOpacity, StyleSheet, Text, View } from 'react-native';
+import { TouchableOpacity, StyleSheet, View } from 'react-native';
+import Text from '../Text';
 import * as vars from '../../styles/vars';
 
 export default function SmallButton(props) {
