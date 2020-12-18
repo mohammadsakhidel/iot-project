@@ -7,11 +7,16 @@ export default function Text(props) {
     const {
         children,
         style,
+        bold,
         ...rest
     } = props;
 
     return (
-        <ReactNativeText {...rest} style={[styles.text, style]}>
+        <ReactNativeText {...rest} style={[
+            styles.text,
+            style,
+            bold ? { fontWeight: 'bold' } : {}
+        ]}>
             {children}
         </ReactNativeText>
     );

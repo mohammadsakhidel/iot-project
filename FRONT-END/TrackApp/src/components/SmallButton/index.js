@@ -39,14 +39,13 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         borderWidth: StyleSheet.hairlineWidth,
         borderColor: vars.COLOR_PRIMARY_D1,
-        paddingHorizontal: vars.PAD_HALF,
-        paddingVertical: 2,
+        padding: vars.PAD_SMALL,
         backgroundColor: vars.COLOR_PRIMARY
     },
     text: {
         color: vars.COLOR_GRAY_LIGHTEST,
         fontSize: vars.FS_BIT_SMALLER,
-        marginHorizontal: vars.PAD_HALF
+        marginLeft: vars.PAD_SMALL
     },
     icon: {
         color: vars.COLOR_GRAY_LIGHTEST,

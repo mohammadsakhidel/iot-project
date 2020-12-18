@@ -36,7 +36,16 @@ export default function HomeScreen(props) {
                 leftIconName="menu"
                 onLeftPress={onHeaderLeftButtonPress} />
 
-            <Tab.Navigator backBehavior="none" tabBarOptions={{ style: styles.tabBar, activeTintColor: vars.COLOR_PRIMARY, inactiveTintColor: vars.COLOR_SECONDARY_LIGHTEST }}>
+            <Tab.Navigator backBehavior="none"
+                tabBarOptions={{
+                    style: styles.tabBar,
+                    activeTintColor: vars.COLOR_PRIMARY,
+                    inactiveTintColor: vars.COLOR_SECONDARY_LIGHTEST
+                }}
+                sceneContainerStyle={{
+                    backgroundColor: vars.COLOR_GRAY_LIGHTEST
+                }}>
+
                 <Tab.Screen name='Trackers' component={TrackersScreen} options={{
                     tabBarIcon: ({ focused, color }) => (
                         <Icon name="th" style={getIconStyle(focused, color)} />
