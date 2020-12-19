@@ -1,17 +1,18 @@
 import Icon from '../Icon';
 import React from 'react';
-import { ActivityIndicator, StyleSheet, TouchableOpacity, View } from 'react-native';
-import Text from '../Text';
+import { StyleSheet } from 'react-native';
+import Button from '../Button';
 import * as vars from '../../styles/vars';
 
 export default function PrimaryButton(props) {
 
     const {
         icon,
-        children,
-        iconRight,
+        title,
         disabled,
         isLoading,
+        iconRight,
+        style,
         ...rest
     } = props;
 
@@ -28,31 +29,16 @@ export default function PrimaryButton(props) {
     };
 
     return (
-        <TouchableOpacity disabled={disabled} {...rest}>
-            <View style={[styles.container, {
-                backgroundColor: (disabled ? vars.COLOR_GRAY_L3 : vars.COLOR_PRIMARY)
-            }]}>
-
-                {(!iconRight ? getIcon() : null)}
-
-                <Text style={[styles.text, {
-                    color: (disabled ? vars.COLOR_GRAY_L1 : vars.COLOR_GRAY_LIGHTEST),
-                    display: (isLoading ? 'none' : 'flex')
-                }]}>{children}</Text>
-
-                {(iconRight ? getIcon() : null)}
-
-                {isLoading
-                    ? (
-                        <View style={{ flexDirection: 'row' }}>
-                            <ActivityIndicator size="small" color={vars.COLOR_GRAY} />
-                        </View>
-                    )
-                    : null
-                }
-
-            </View>
-        </TouchableOpacity>
+        <Button
+            title={title}
+            icon={getIcon()}
+            loading={isLoading}
+            disabled={disabled}
+            buttonStyle={[style, styles.button]}
+            disabledStyle={styles.disabledButton}
+            iconRight={iconRight}
+            {...rest}
+        />
     );
 }
 
@@ -76,5 +62,11 @@ const styles = StyleSheet.create({
         padding: 0,
         margin: 0,
         fontSize: vars.FS_SMALL
+    },
+    button: {
+        backgroundColor: vars.COLOR_PRIMARY
+    },
+    disabledButton: {
+        backgroundColor: vars.COLOR_PRIMARY_D1
     }
 });

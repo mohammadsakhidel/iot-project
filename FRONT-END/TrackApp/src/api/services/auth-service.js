@@ -12,9 +12,9 @@ export default class AuthService {
             return { done: true, data: response.data };
 
         } catch (e) {
-            return e.response && e.response.status == StatusCodes.BAD_REQUEST
-                ? { done: false, data: Strings.InvalidCredentials }
-                : { done: false, data: Strings.ErrorMessage };
+            if (e.response && e.response.status == StatusCodes.BAD_REQUEST)
+                return { done: false, data: Strings.InvalidCredentials };
+            throw e;
         }
     }
 }

@@ -17,6 +17,7 @@ import LoginDTO from '../../api/dtos/login-dto';
 import AppUser from '../../helpers/app-user';
 import * as RouteNames from '../../constants/route-names';
 import { NavigationContext } from '@react-navigation/native';
+import { getErrorMessage } from '../FlashMessageWrapper';
 
 export default class LoginScreen extends Component {
 
@@ -70,7 +71,7 @@ export default class LoginScreen extends Component {
                 }
 
             } catch (e) {
-                this.setState({ isLoading: false, errors: [Strings.ErrorMessage, e.message] });
+                this.setState({ isLoading: false, errors: [getErrorMessage(e)] });
             }
         });
 
@@ -108,11 +109,15 @@ export default class LoginScreen extends Component {
                         onChangeText={text => this.setState({ password: text })}
                     />
 
-                    <PrimaryButton icon="chevron-right" iconRight
-                        disabled={this.state.isLoading} isLoading={this.state.isLoading}
-                        style={styles.loginButton} onPress={this.onLoginPress}>
-                        {Strings.Login}
-                    </PrimaryButton>
+                    <PrimaryButton
+                        icon="chevron-right"
+                        title={Strings.Login}
+                        iconRight
+                        disabled={this.state.isLoading}
+                        isLoading={this.state.isLoading}
+                        style={styles.loginButton}
+                        onPress={this.onLoginPress}
+                    />
 
                     <NavigationContext.Consumer>
                         {navigation => {

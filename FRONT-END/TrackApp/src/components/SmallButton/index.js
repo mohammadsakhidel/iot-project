@@ -1,7 +1,7 @@
 import Icon from '../Icon';
 import React from 'react';
-import { TouchableOpacity, StyleSheet, View } from 'react-native';
-import Text from '../Text';
+import { TouchableOpacity, StyleSheet } from 'react-native';
+import Button from '../Button';
 import * as vars from '../../styles/vars';
 
 export default function SmallButton(props) {
@@ -10,25 +10,21 @@ export default function SmallButton(props) {
         title,
         buttonStyle,
         iconName,
+        style,
         ...rest
     } = props;
 
     return (
-        <TouchableOpacity {...rest}>
-            <View style={[styles.button, buttonStyle]} >
-
-                <Icon
-                    name={iconName}
-                    style={styles.icon}
-                    fontSize={vars.FS_SMALL}
-                />
-
-                <Text style={styles.text}>
-                    {title}
-                </Text>
-
-            </View>
-        </TouchableOpacity>
+        <Button
+            TouchableComponent={TouchableOpacity}
+            title={title}
+            buttonStyle={[styles.button, style, buttonStyle]}
+            titleStyle={styles.text}
+            icon={(
+                <Icon name={iconName} style={styles.icon} />
+            )}
+            {...rest}
+        />
     );
 }
 

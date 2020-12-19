@@ -2,10 +2,10 @@ import React from 'react';
 import { View, StyleSheet, ActivityIndicator } from 'react-native';
 import Text from '../Text';
 import * as vars from '../../styles/vars';
-import { Card, Image } from 'react-native-elements';
+import { Image } from 'react-native-elements';
 import TrackerService from '../../api/services/tracker-service';
-import SmallButton from '../SmallButton';
 import { Strings } from '../../i18n/strings';
+import LinkButton from '../LinkButton';
 
 export default function TrackerItem(props) {
 
@@ -21,7 +21,19 @@ export default function TrackerItem(props) {
             <View style={styles.textContainer}>
                 <Text bold>{item.displayName}</Text>
                 <View style={styles.actionsContainer}>
-                    <SmallButton iconName="wrench" title={ Strings.Configure } />
+                    <LinkButton
+                        icon="cog"
+                        iconStyle={styles.actionIcon}
+                        title={Strings.Configure}
+                        titleStyle={styles.action}
+                    />
+
+                    <LinkButton
+                        icon="trash"
+                        iconStyle={{ ...styles.actionIcon, ...styles.removeActionIcon }}
+                        title={Strings.Remove}
+                        titleStyle={[styles.action, styles.removeAction]}
+                    />
                 </View>
             </View>
         </View>
@@ -40,11 +52,23 @@ const styles = StyleSheet.create({
         marginTop: vars.PAD_HALF
     },
     icon: {
-        width: 80,
-        height: 80
+        width: 70,
+        height: 70
     },
     actionsContainer: {
         flexDirection: 'row',
-        marginTop: vars.PAD_NORMAL
+        marginTop: vars.PAD_HALF
+    },
+    action: {
+        fontSize: vars.FS_BIT_SMALLER
+    },
+    removeAction: {
+        color: vars.COLOR_ERROR
+    },
+    actionIcon: {
+        fontSize: vars.ICO_SMALL
+    },
+    removeActionIcon: {
+        color: vars.COLOR_ERROR
     }
 });

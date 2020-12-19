@@ -12,8 +12,12 @@ export default function FlashMessageWrapper(props) {
 
 export function showError(error) {
     showMessage({
-        message: (error instanceof Error ? error.message : error),
+        message: getErrorMessage(error),
         type: 'danger',
         icon: 'danger'
     });
+}
+
+export function getErrorMessage(error) {
+    return (error instanceof Error ? error.message : error);
 }

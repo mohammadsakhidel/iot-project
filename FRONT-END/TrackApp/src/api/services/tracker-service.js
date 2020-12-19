@@ -13,10 +13,7 @@ export default class TrackerService {
             return { done: true, data: resp.data };
 
         } catch (e) {
-            // return e.response
-            //     ? { done: false, data: e.response.data }
-            //     : { done: false, data: e.message };
-            return { done: false, data: e.message };
+            throw e;
         }
     }
 
