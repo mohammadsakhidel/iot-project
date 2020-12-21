@@ -28,5 +28,6 @@
     "Yes": "Yes",
     "Cancel": "Cancel",
     "Configure": "Configure",
-    "Remove": "Remove"
+    "Remove": "Remove",
+    "RemoveTrackerSureMessage": "Are you sure you want to remove the tracker from your list? You'd be able to add it again."
 }
