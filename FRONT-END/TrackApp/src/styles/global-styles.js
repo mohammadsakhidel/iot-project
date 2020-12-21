@@ -6,13 +6,9 @@ export const header = {
 };
 
 export const headerTitle = {
-    fontWeight: 'bold',
-    color: vars.COLOR_PRIMARY
-};
-
-export const headerSubtitle = {
-    fontWeight: 'bold',
-    color: vars.COLOR_SECONDARY_LIGHTEST
+    // fontWeight: 'bold',
+    color: vars.COLOR_PRIMARY,
+    //fontSize: vars.FS_LARGE
 };
 
 export const page = {

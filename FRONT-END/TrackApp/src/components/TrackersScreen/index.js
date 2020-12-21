@@ -61,7 +61,7 @@ export default class TrackersScreen extends Component {
                                             <TrackerItem
                                                 item={item}
                                                 removeTrackerFunc={this.removeTrackerFunc}
-                                                configureTrackerFunc={(tracker) => navigation.navigate(RouteNames.CONFIG_TRACKER)}
+                                                configureTrackerFunc={(tracker) => navigation.navigate(RouteNames.CONFIG_TRACKER, tracker)}
                                                 reloadDataFunc={this.reloadDataFunc}
                                             />
                                         )}

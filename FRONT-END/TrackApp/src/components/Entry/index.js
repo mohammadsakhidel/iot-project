@@ -7,6 +7,8 @@ import HomeLoginSwitch from '../HomeLoginSwitch';
 import { Strings } from '../../i18n/strings';
 import TrackerAddScreen from '../TrackerAddScreen';
 import TrackerConfigScreen from '../TrackerConfigScreen';
+import * as GlobalStyles from '../../styles/global-styles';
+import * as vars from '../../styles/vars';
 
 const Stack = createStackNavigator();
 
@@ -14,7 +16,11 @@ export default function Entry() {
     return (
         <NavigationContainer >
             <NavigationContext.Provider>
-                <Stack.Navigator>
+                <Stack.Navigator screenOptions={{
+                    headerStyle: GlobalStyles.header,
+                    headerTitleStyle: GlobalStyles.headerTitle,
+                    headerTintColor: vars.COLOR_GRAY_LIGHTEST
+                }}>
 
                     <Stack.Screen
                         name={RouteNames.HOME_LOGIN_SWITCH}

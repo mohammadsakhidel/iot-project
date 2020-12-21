@@ -8,9 +8,13 @@ export default class TrackerConfigScreen extends Component {
     }
 
     render() {
+
+        const { route } = this.props;
+
         return (
             <View>
                 <Text>Config Tracker</Text>
+                <Text>{ JSON.stringify(route?.params) }</Text>
             </View>
         );
     }
