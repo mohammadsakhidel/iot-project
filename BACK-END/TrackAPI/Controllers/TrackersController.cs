@@ -158,6 +158,29 @@ namespace TrackAPI.Controllers {
                 return ex.GetActionResult();
             }
         }
+
+        [HttpPut("{trackerId}/user")]
+        public async Task<IActionResult> AssignUser(string trackerId) {
+            try {
+
+                var tracker = await _trackerService.GetAsync(trackerId);
+                if (tracker == null)
+                    return NotFound();
+
+                var userId = HttpContext.User.Claims.SingleOrDefault(c => c.Type == ClaimNames.USER_ID)?.Value;
+                if (string.IsNullOrEmpty(userId))
+                    throw new ApplicationException("UserID cannot be null.");
+
+                var (done, message) = await _trackerService.AssignUser(trackerId, userId);
+                if (!done)
+                    return BadRequest(message);
+
+                return Ok();
+
+            } catch (Exception e) {
+                return e.GetActionResult();
+            }
+        }
         #endregion
 
         #region ------------- DELETE ACTIONS --------------
@@ -174,6 +197,32 @@ namespace TrackAPI.Controllers {
 
             } catch (Exception ex) {
                 return ex.GetActionResult();
+            }
+        }
+
+        [HttpDelete("{trackerId}/user")]
+        public async Task<IActionResult> UnassignUser(string trackerId) {
+            try {
+
+                var tracker = await _trackerService.GetAsync(trackerId);
+                if (tracker == null)
+                    return NotFound();
+
+                var userId = HttpContext.User.Claims.SingleOrDefault(c => c.Type == ClaimNames.USER_ID)?.Value;
+                if (string.IsNullOrEmpty(userId))
+                    throw new ApplicationException("UserID cannot be null.");
+
+                if (userId != tracker.UserId)
+                    return BadRequest("Tracker doesn't belong to this user.");
+
+                var (done, message) = await _trackerService.UnassignUser(trackerId);
+                if (!done)
+                    return BadRequest(message);
+
+                return Ok();
+
+            } catch (Exception e) {
+                return e.GetActionResult();
             }
         }
         #endregion

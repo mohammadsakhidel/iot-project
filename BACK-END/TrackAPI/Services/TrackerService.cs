@@ -148,5 +148,29 @@ namespace TrackAPI.Services {
             });
             return trackers.Select(t => _mapper.Map<Tracker, TrackerModel>(t)).ToList();
         }
+
+        public async Task<(bool, string)> AssignUser(string trackerId, string userId) {
+            var tracker = await _trackerRepository.GetAsync(trackerId);
+            if (tracker == null)
+                return (false, "Tracker not found.");
+
+            if (!string.IsNullOrEmpty(tracker.UserId))
+                return (false, ErrorCodes.USER_ASSIGNED);
+
+            tracker.UserId = userId;
+            await _trackerRepository.SaveAsync();
+
+            return (true, string.Empty);
+        }
+
+        public async Task<(bool, string)> UnassignUser(string trackerId) {
+            var tracker = await _trackerRepository.GetAsync(trackerId);
+            if (tracker == null)
+                return (false, "Tracker not found.");
+
+            tracker.UserId = string.Empty;
+            await _trackerRepository.SaveAsync();
+            return (true, string.Empty);
+        }
     }
 }
