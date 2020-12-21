@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import { View, Button } from 'react-native';
 import Text from '../Text';
-import { BarCodeScanner } from 'expo-barcode-scanner';
-import { StyleSheet } from 'react-native';
+import BarCodeScanner from '../BarCodeScanner';
+import { StyleSheet, Dimensions, TouchableOpacity } from 'react-native';
 import * as vars from '../../styles/vars';
 import ScreenMessage from '../ScreenMessage';
 import { Strings } from '../../i18n/strings';
 import * as GlobalStyles from '../../styles/global-styles';
+import { Image } from 'react-native';
 
 export default class TrackerAddScreen extends Component {
     constructor(props) {
@@ -21,6 +22,7 @@ export default class TrackerAddScreen extends Component {
 
         // Bindings: 
         this.onBarCodeScanned = this.onBarCodeScanned.bind(this);
+
     }
 
     async componentDidMount() {
@@ -35,15 +37,21 @@ export default class TrackerAddScreen extends Component {
             this.state.hasPermission
                 ? (
                     <View style={styles.container}>
-                        <BarCodeScanner
-                            style={styles.scanner}
-                            onBarCodeScanned={this.state.scanned ? undefined : this.onBarCodeScanned}
+
+                        <BarCodeScanner 
+                            onBarCodeScanned={this.onBarCodeScanned}
+                            onManualPress={this.onManualPress}
+                            onCancelPress={this.onCancelPress}
                         />
-                        {this.state.scanned &&
-                            <Button
-                                title="Tap to scan again..."
-                                onPress={() => this.setState({ scanned: false })}
-                            />}
+
+                        <View style={styles.panel}>
+                            {this.state.scanned &&
+                                <Button
+                                    title="Tap to scan again..."
+                                    onPress={() => this.setState({ scanned: false })}
+                                />
+                            }
+                        </View>
                     </View>
                 )
                 : (
@@ -64,18 +72,29 @@ export default class TrackerAddScreen extends Component {
         );
     }
 
+    onCancelPress() {
+        console.log("Cancelled");
+    }
+
+    onManualPress() {
+        console.log("Manual Pressed...");
+    }
+
     onBarCodeScanned({ type, data }) {
         console.log(`Type: ${type}, Value: ${data}`);
-        this.setState({ scanned: true, barCodeType: type, barCodeValue: data });
+        //this.setState({ scanned: true, barCodeType: type, barCodeValue: data });
     }
 }
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        padding: vars.PAD_DOUBLE
+        padding: 0
     },
-    scanner: {
-        height: 200
+    panel: {
+        position: 'absolute',
+        bottom: 0,
+        left: 0,
+        right: 0
     }
 });

@@ -35,7 +35,7 @@ export default function Entry() {
                     <Stack.Screen
                         name={RouteNames.ADD_TRACKER}
                         component={TrackerAddScreen}
-                        options={{ headerTitle: Strings.AddTrackerTitle }} />
+                        options={{ headerShown: false }} />
 
                     <Stack.Screen
                         name={RouteNames.CONFIG_TRACKER}

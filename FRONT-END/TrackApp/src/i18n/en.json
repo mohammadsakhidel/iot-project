@@ -34,5 +34,7 @@
     "AddTrackerTitle": "Add Tracker",
     "ConfigTrackerTitle": "Configure Tracker",
     "PermissionRequestingCamera": "Requesting for camera permission",
-    "PermissionNoAccessCamera": "No access to camera"
+    "PermissionNoAccessCamera": "No access to camera",
+    "ScanBarCode": "Scan the bar code on the device",
+    "InputManually": "Input Manually"
 }
