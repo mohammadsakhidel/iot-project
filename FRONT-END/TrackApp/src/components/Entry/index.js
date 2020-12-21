@@ -5,6 +5,8 @@ import * as RouteNames from '../../constants/route-names';
 import ForgottenPasswordScreen from '../ForgottenPasswordScreen';
 import HomeLoginSwitch from '../HomeLoginSwitch';
 import { Strings } from '../../i18n/strings';
+import TrackerAddScreen from '../TrackerAddScreen';
+import TrackerConfigScreen from '../TrackerConfigScreen';
 
 const Stack = createStackNavigator();
 
@@ -14,15 +16,25 @@ export default function Entry() {
             <NavigationContext.Provider>
                 <Stack.Navigator>
 
-                    <Stack.Screen 
-                        name={RouteNames.HOME_LOGIN_SWITCH} 
-                        component={HomeLoginSwitch} 
+                    <Stack.Screen
+                        name={RouteNames.HOME_LOGIN_SWITCH}
+                        component={HomeLoginSwitch}
                         options={{ headerShown: false }} />
 
-                    <Stack.Screen 
-                        name={RouteNames.FORGOTTEN_PASSWORD_SCREEN} 
+                    <Stack.Screen
+                        name={RouteNames.FORGOTTEN_PASSWORD_SCREEN}
                         component={ForgottenPasswordScreen}
                         options={{ headerTitle: Strings.ForgetPassword }} />
+
+                    <Stack.Screen
+                        name={RouteNames.ADD_TRACKER}
+                        component={TrackerAddScreen}
+                        options={{ headerTitle: Strings.AddTrackerTitle }} />
+
+                    <Stack.Screen
+                        name={RouteNames.CONFIG_TRACKER}
+                        component={TrackerConfigScreen}
+                        options={{ headerTitle: Strings.ConfigTrackerTitle }} />
 
                 </Stack.Navigator>
             </NavigationContext.Provider>

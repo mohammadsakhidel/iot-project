@@ -60,9 +60,13 @@ export default class TrackerItem extends Component {
     };
 
     onConfigurePress() {
+        const {
+            item,
+            configureTrackerFunc
+        } = this.props;
 
+        configureTrackerFunc(item);
     }
-
 
     render() {
         const { item } = this.props;

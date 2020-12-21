@@ -9,6 +9,8 @@ import RefreshControl from '../RefreshControl';
 import List from '../List';
 import { Strings } from '../../i18n/strings';
 import FloatingButton from '../FloatingButton';
+import { NavigationContext } from '@react-navigation/native';
+import * as RouteNames from '../../constants/route-names';
 
 export default class TrackersScreen extends Component {
 
@@ -49,30 +51,36 @@ export default class TrackersScreen extends Component {
                         </View>
                     )
                     : (
-                        <View style={{ flex: 1 }}>
-                            <List
-                                emptyListMessage={Strings.EmptyTrackersList}
-                                data={this.state.trackers}
-                                renderItem={({ item }) => (
-                                    <TrackerItem
-                                        item={item}
-                                        removeTrackerFunc={this.removeTrackerFunc}
-                                        configureTrackerFunc={this.configureTrackerFunc}
-                                        reloadDataFunc={this.reloadDataFunc}
+                        <NavigationContext.Consumer>
+                            {navigation => (
+                                <View style={{ flex: 1 }}>
+                                    <List
+                                        emptyListMessage={Strings.EmptyTrackersList}
+                                        data={this.state.trackers}
+                                        renderItem={({ item }) => (
+                                            <TrackerItem
+                                                item={item}
+                                                removeTrackerFunc={this.removeTrackerFunc}
+                                                configureTrackerFunc={(tracker) => navigation.navigate(RouteNames.CONFIG_TRACKER)}
+                                                reloadDataFunc={this.reloadDataFunc}
+                                            />
+                                        )}
+                                        refreshControl={(
+                                            <RefreshControl
+                                                refreshing={this.state.isRefreshing}
+                                                onRefresh={this.onRefresh}
+                                            />
+                                        )}
                                     />
-                                )}
-                                refreshControl={(
-                                    <RefreshControl
-                                        refreshing={this.state.isRefreshing}
-                                        onRefresh={this.onRefresh}
+                                    <FloatingButton
+                                        icon="plus"
+                                        onPress={() => {
+                                            navigation.navigate(RouteNames.ADD_TRACKER);
+                                        }}
                                     />
-                                )}
-                            />
-                            <FloatingButton
-                                icon="plus"
-                                onPress={this.onAddTracker}
-                            />
-                        </View>
+                                </View>
+                            )}
+                        </NavigationContext.Consumer>
                     )
                 }
             </View>

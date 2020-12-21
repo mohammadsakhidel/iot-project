@@ -30,5 +30,7 @@
     "Configure": "Configure",
     "Remove": "Remove",
     "RemoveTrackerSureMessage": "Are you sure you want to remove the tracker from your list? You'd be able to add it again.",
-    "EmptyTrackersList": "Nothing to show.\nIf you've got a tracker, you can add it to the list using the below button."
+    "EmptyTrackersList": "Nothing to show.\nIf you've got a tracker, you can add it to the list using the below button.",
+    "AddTrackerTitle": "Add Tracker",
+    "ConfigTrackerTitle": "Configure Tracker"
 }
