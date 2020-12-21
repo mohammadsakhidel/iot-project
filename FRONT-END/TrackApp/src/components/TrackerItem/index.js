@@ -104,6 +104,7 @@ export default class TrackerItem extends Component {
     }
 }
 
+/* #region  Styles */
 const styles = StyleSheet.create({
     container: {
         padding: vars.PAD_BIT_MORE,
@@ -147,3 +148,4 @@ const styles = StyleSheet.create({
         justifyContent: 'center'
     }
 });
+/* #endregion */

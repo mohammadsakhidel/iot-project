@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
-import { View, StyleSheet, ActivityIndicator, FlatList, Alert } from 'react-native';
+import { View, StyleSheet, Alert } from 'react-native';
 import AppContext from '../../helpers/app-context';
 import TrackerService from '../../api/services/tracker-service';
 import TrackerItem from '../TrackerItem';
 import { showError } from '../FlashMessageWrapper';
 import Loading from '../Loading';
 import RefreshControl from '../RefreshControl';
+import List from '../List';
 import { Strings } from '../../i18n/strings';
+import FloatingButton from '../FloatingButton';
 
 export default class TrackersScreen extends Component {
 
@@ -30,6 +32,7 @@ export default class TrackersScreen extends Component {
         this.removeTrackerFunc = this.removeTrackerFunc.bind(this);
         this.configureTrackerFunc = this.configureTrackerFunc.bind(this);
         this.reloadDataFunc = this.reloadDataFunc.bind(this);
+        this.onAddTracker = this.onAddTracker.bind(this);
     }
 
     async componentDidMount() {
@@ -38,23 +41,18 @@ export default class TrackersScreen extends Component {
 
     render() {
         return (
-            <View style={styles.container} >
-                {
-                    this.state.isLoading
-                        ? (
-                            <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-                                <Loading size="large" />
-                            </View>
-                        )
-                        : (
-                            <FlatList
+            <View style={styles.container}>
+                {this.state.isLoading
+                    ? (
+                        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+                            <Loading size="large" />
+                        </View>
+                    )
+                    : (
+                        <View style={{ flex: 1 }}>
+                            <List
+                                emptyListMessage={Strings.EmptyTrackersList}
                                 data={this.state.trackers}
-                                refreshControl={(
-                                    <RefreshControl
-                                        refreshing={this.state.isRefreshing}
-                                        onRefresh={this.onRefresh}
-                                    />
-                                )}
                                 renderItem={({ item }) => (
                                     <TrackerItem
                                         item={item}
@@ -63,8 +61,19 @@ export default class TrackersScreen extends Component {
                                         reloadDataFunc={this.reloadDataFunc}
                                     />
                                 )}
+                                refreshControl={(
+                                    <RefreshControl
+                                        refreshing={this.state.isRefreshing}
+                                        onRefresh={this.onRefresh}
+                                    />
+                                )}
                             />
-                        )
+                            <FloatingButton
+                                icon="plus"
+                                onPress={this.onAddTracker}
+                            />
+                        </View>
+                    )
                 }
             </View>
         );
@@ -80,6 +89,10 @@ export default class TrackersScreen extends Component {
             await this.loadTrackers();
         });
     };
+
+    onAddTracker() {
+        Alert.alert("add tracker");
+    }
     /* #endregion */
 
     /* #region  Methods */
@@ -122,6 +135,7 @@ export default class TrackersScreen extends Component {
     /* #endregion */
 };
 
+/* #region  Styles */
 const styles = StyleSheet.create({
     container: {
         flex: 1
@@ -132,3 +146,4 @@ const styles = StyleSheet.create({
         color: 'red'
     }
 });
+/* #endregion */
