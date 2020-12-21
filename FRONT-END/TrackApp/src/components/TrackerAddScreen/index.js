@@ -8,6 +8,8 @@ import ScreenMessage from '../ScreenMessage';
 import { Strings } from '../../i18n/strings';
 import * as GlobalStyles from '../../styles/global-styles';
 import { Image } from 'react-native';
+import { NavigationContext } from '@react-navigation/native';
+import * as RouteNames from '../../constants/route-names';
 
 export default class TrackerAddScreen extends Component {
     constructor(props) {
@@ -36,23 +38,27 @@ export default class TrackerAddScreen extends Component {
         return (
             this.state.hasPermission
                 ? (
-                    <View style={styles.container}>
+                    <NavigationContext.Consumer>
+                        {navigation => (
+                            <View style={styles.container}>
 
-                        <BarCodeScanner 
-                            onBarCodeScanned={this.onBarCodeScanned}
-                            onManualPress={this.onManualPress}
-                            onCancelPress={this.onCancelPress}
-                        />
-
-                        <View style={styles.panel}>
-                            {this.state.scanned &&
-                                <Button
-                                    title="Tap to scan again..."
-                                    onPress={() => this.setState({ scanned: false })}
+                                <BarCodeScanner
+                                    onBarCodeScanned={this.onBarCodeScanned}
+                                    onManualPress={this.onManualPress}
+                                    onCancelPress={() => navigation.navigate(RouteNames.HOME_LOGIN_SWITCH)}
                                 />
-                            }
-                        </View>
-                    </View>
+
+                                <View style={styles.panel}>
+                                    {this.state.scanned &&
+                                        <Button
+                                            title="Tap to scan again..."
+                                            onPress={() => this.setState({ scanned: false })}
+                                        />
+                                    }
+                                </View>
+                            </View>
+                        )}
+                    </NavigationContext.Consumer>
                 )
                 : (
                     <View style={{ flex: 1, justifyContent: 'center' }}>
@@ -70,10 +76,6 @@ export default class TrackerAddScreen extends Component {
                     </View>
                 )
         );
-    }
-
-    onCancelPress() {
-        console.log("Cancelled");
     }
 
     onManualPress() {
