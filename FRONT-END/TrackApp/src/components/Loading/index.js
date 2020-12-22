@@ -14,7 +14,7 @@ export default function Loading(props) {
     return (
         <ActivityIndicator
             style={[style, styles.loading]}
-            color={vars.COLOR_PRIMARY}
+            color={color ?? vars.COLOR_PRIMARY}
             {...rest}
         />
     );

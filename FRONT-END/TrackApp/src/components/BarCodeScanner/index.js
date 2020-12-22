@@ -10,19 +10,11 @@ export default class BarCodeScanner extends Component {
     constructor(props) {
         super(props);
 
-        this.state = {
-            scanned: false
-        };
-
         // Bindings:
         this.handleBarCodeScanned = this.handleBarCodeScanned.bind(this);
     }
 
     handleBarCodeScanned(event) {
-        this.setState({
-            scanned: true
-        });
-
         const {
             onBarCodeScanned
         } = this.props;
@@ -45,7 +37,7 @@ export default class BarCodeScanner extends Component {
         return (
             <ExpoBarCodeScanner
                 style={[StyleSheet.absoluteFill, styles.scanner]}
-                onBarCodeScanned={this.state.scanned ? undefined : this.handleBarCodeScanned}>
+                onBarCodeScanned={this.handleBarCodeScanned}>
 
                 <Text style={styles.scannerTitle}>
                     {Strings.ScanBarCode}

@@ -159,11 +159,11 @@ namespace TrackAPI.Controllers {
             }
         }
 
-        [HttpPut("{trackerId}/user")]
-        public async Task<IActionResult> AssignUser(string trackerId) {
+        [HttpPut("{serialNumber}/user")]
+        public async Task<IActionResult> AssignUser(string serialNumber) {
             try {
 
-                var tracker = await _trackerService.GetAsync(trackerId);
+                var tracker = await _trackerService.FindBySerialAsync(serialNumber);
                 if (tracker == null)
                     return NotFound();
 
@@ -171,7 +171,7 @@ namespace TrackAPI.Controllers {
                 if (string.IsNullOrEmpty(userId))
                     throw new ApplicationException("UserID cannot be null.");
 
-                var (done, message) = await _trackerService.AssignUser(trackerId, userId);
+                var (done, message) = await _trackerService.AssignUser(tracker.Id, userId);
                 if (!done)
                     return BadRequest(message);
 

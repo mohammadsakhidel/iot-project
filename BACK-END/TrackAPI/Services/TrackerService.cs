@@ -172,5 +172,15 @@ namespace TrackAPI.Services {
             await _trackerRepository.SaveAsync();
             return (true, string.Empty);
         }
+
+        public async Task<TrackerModel> FindBySerialAsync(string serialNumber) {
+            var tracker = await Task.Run(() => { 
+                return _trackerRepository.Filter(t => t.SerialNumber == serialNumber).FirstOrDefault();
+            });
+            if (tracker == null)
+                return null;
+
+            return _mapper.Map<TrackerModel>(tracker);
+        }
     }
 }

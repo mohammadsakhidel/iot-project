@@ -36,5 +36,6 @@
     "PermissionRequestingCamera": "Requesting for camera permission",
     "PermissionNoAccessCamera": "No access to camera",
     "ScanBarCode": "Scan the bar code on the device",
-    "InputManually": "Input Manually"
+    "InputManually": "Input Manually",
+    "Rescan": "Rescan"
 }

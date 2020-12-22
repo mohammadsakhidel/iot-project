@@ -8,6 +8,7 @@ namespace TrackAPI.Services {
     public interface ITrackerService {
         Task<(bool, string)> CreateAsync(TrackerModel model);
         Task<TrackerModel> GetAsync(string id);
+        Task<TrackerModel> FindBySerialAsync(string serialNumber);
         Task<List<TrackerModel>> TakeAsync(int skip, int take);
         Task<List<TrackerModel>> GetUserTrackers(string userId);
         Task<List<TrackerModel>> SearchAsync(TrackerSearchModel model);
@@ -16,5 +17,6 @@ namespace TrackAPI.Services {
         Task<List<TrackerReportModel>> GetReportsAsync(string trackerId, DateTime? date);
         Task<(bool, string)> AssignUser(string trackerId, string userId);
         Task<(bool, string)> UnassignUser(string trackerId);
+
     }
 }

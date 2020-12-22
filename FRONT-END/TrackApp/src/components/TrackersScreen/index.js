@@ -11,22 +11,15 @@ import { Strings } from '../../i18n/strings';
 import FloatingButton from '../FloatingButton';
 import { NavigationContext } from '@react-navigation/native';
 import * as RouteNames from '../../constants/route-names';
+import { getRandom } from '../../utils/text-util';
+import Store from '../../redux/store';
 
 export default class TrackersScreen extends Component {
-
-
     /* #region  Component Lifecycle */
     static contextType = AppContext;
 
     constructor(props) {
         super(props);
-
-        this.state = {
-            trackers: [],
-            isLoading: true,
-            isRefreshing: false,
-            error: ''
-        };
 
         // Binding Methods:
         this.loadTrackers = this.loadTrackers.bind(this);
@@ -35,10 +28,26 @@ export default class TrackersScreen extends Component {
         this.configureTrackerFunc = this.configureTrackerFunc.bind(this);
         this.reloadDataFunc = this.reloadDataFunc.bind(this);
         this.onAddTracker = this.onAddTracker.bind(this);
+        this.storeSubscription = this.storeSubscription.bind(this);
+
+        // State:
+        this.state = {
+            trackers: [],
+            isLoading: true,
+            isRefreshing: false,
+            error: '',
+            dialogKey: '',
+            unsubscribeStore: Store.subscribe(this.storeSubscription)
+        };
     }
 
     async componentDidMount() {
         await this.loadTrackers();
+    }
+
+    componentWillUnmount() {
+        if (this.state.unsubscribeStore)
+            this.state.unsubscribeStore();
     }
 
     render() {
@@ -75,7 +84,8 @@ export default class TrackersScreen extends Component {
                                     <FloatingButton
                                         icon="plus"
                                         onPress={() => {
-                                            navigation.navigate(RouteNames.ADD_TRACKER);
+                                            this.state.dialogKey = getRandom(6);
+                                            navigation.navigate(RouteNames.ADD_TRACKER, { dialogKey: this.state.dialogKey });
                                         }}
                                     />
                                 </View>
@@ -104,6 +114,13 @@ export default class TrackersScreen extends Component {
     /* #endregion */
 
     /* #region  Methods */
+    async storeSubscription() {
+        const storeState = Store.getState();
+        if (storeState.dialogResult.key == this.state.dialogKey && storeState.dialogResult.value == true) {
+            await this.loadTrackers();
+        }
+    }
+
     async getTrackersAsync() {
         const result = await TrackerService.list(this.context.user.token);
         if (result.done)
