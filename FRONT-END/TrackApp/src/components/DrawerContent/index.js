@@ -6,6 +6,7 @@ import { Strings } from '../../i18n/strings';
 import SmallButton from '../SmallButton';
 import DrawerMenuItem from '../DrawerMenuItem';
 import AppContext from '../../helpers/app-context';
+import { Avatar } from 'react-native-elements';
 
 export default function DrawerContent(props) {
 
@@ -29,9 +30,14 @@ export default function DrawerContent(props) {
             <View style={styles.header}>
                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
 
-                    <Image style={styles.profileImage} source={{
-                        uri: `https://www.gravatar.com/avatar/${user.emailHash.toLowerCase()}?s=200&d=identicon`
-                    }} />
+                    <Avatar
+                        rounded
+                        size="large"
+                        placeholderStyle={{ backgroundColor: vars.COLOR_SECONDARY }}
+                        source={{
+                            uri: `https://www.gravatar.com/avatar/${user.emailHash.toLowerCase()}?s=200&d=identicon`
+                        }}
+                    />
 
                     <SmallButton
                         iconName="edit"

@@ -37,5 +37,8 @@
     "PermissionNoAccessCamera": "No access to camera",
     "ScanBarCode": "Scan the bar code on the device",
     "InputManually": "Input Manually",
-    "Rescan": "Rescan"
+    "Rescan": "Rescan",
+    "DeviceNotFound": "Device not found.",
+    "UserPreviouslyAssigned": "Device has already been added by another account.",
+    "Reload": "Reload"
 }

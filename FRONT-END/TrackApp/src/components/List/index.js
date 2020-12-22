@@ -2,7 +2,9 @@ import React from 'react';
 import { StyleSheet, FlatList, View } from 'react-native';
 import * as vars from '../../styles/vars';
 import Icon from '../Icon';
+import LinkButton from '../LinkButton';
 import Text from '../Text';
+import { Strings } from '../../i18n/strings';
 
 /**
  * 
@@ -14,6 +16,7 @@ export default function List(props) {
     const {
         data,
         emptyListMessage,
+        reloadFunc,
         ...rest
     } = props;
 
@@ -25,8 +28,9 @@ export default function List(props) {
             />
         ) : (
             <View style={styles.container}>
-                <Icon name="dropbox" style={styles.icon} />
+                <Icon name="dropbox" style={styles.icon} size={vars.ICO_LARGE} />
                 <Text style={styles.text}>{emptyListMessage}</Text>
+                {reloadFunc && <LinkButton title={Strings.Reload} icon="refresh" onPress={reloadFunc} />}
             </View>
         );
 }

@@ -64,7 +64,7 @@ class TrackerAddScreen extends Component {
                                         {this.state.isLoading && <Loading size="small" />}
                                         {this.state.error ? (
                                             <View>
-                                                <Text style={GlobalStyles.error}>{this.state.error}</Text>
+                                                <Text style={{ ...GlobalStyles.error, textAlign: 'center' }}>{this.state.error}</Text>
                                                 <LinkButton title={Strings.Rescan} icon="refresh" onPress={this.onRescanPress} />
                                             </View>
                                         ) : null}

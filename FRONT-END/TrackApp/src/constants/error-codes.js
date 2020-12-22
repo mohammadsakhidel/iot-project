@@ -1,0 +1,1 @@
+export const USER_ASSIGNED = "USER_ASSIGNED";

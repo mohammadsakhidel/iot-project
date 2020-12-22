@@ -29,6 +29,7 @@ export default class TrackersScreen extends Component {
         this.reloadDataFunc = this.reloadDataFunc.bind(this);
         this.onAddTracker = this.onAddTracker.bind(this);
         this.storeSubscription = this.storeSubscription.bind(this);
+        this.retryLoadingFunc = this.retryLoadingFunc.bind(this);
 
         // State:
         this.state = {
@@ -65,6 +66,7 @@ export default class TrackersScreen extends Component {
                                 <View style={{ flex: 1 }}>
                                     <List
                                         emptyListMessage={Strings.EmptyTrackersList}
+                                        reloadFunc={this.retryLoadingFunc}
                                         data={this.state.trackers}
                                         renderItem={({ item }) => (
                                             <TrackerItem
@@ -99,6 +101,14 @@ export default class TrackersScreen extends Component {
     /* #endregion */
 
     /* #region  Event Handlers */
+    retryLoadingFunc() {
+        this.setState({
+            isLoading: true
+        }, async () => {
+            await this.loadTrackers();
+        });
+    }
+
     onRefresh() {
         this.setState({
             isLoading: true,

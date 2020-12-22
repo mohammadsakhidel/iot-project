@@ -1,5 +1,8 @@
 import http from '../helpers/http-client';
 import * as ApiSettings from '../api-settings.json';
+import { StatusCodes } from 'http-status-codes';
+import { Strings } from '../../i18n/strings';
+import * as ErrorCodes from '../../constants/error-codes';
 
 export default class TrackerService {
 
@@ -37,6 +40,12 @@ export default class TrackerService {
             return { done: true, data: resp.data };
 
         } catch (e) {
+            if (e.response && e.response.status == StatusCodes.NOT_FOUND)
+                return { done: false, data: Strings.DeviceNotFound };
+            else if (e.response && e.response.status == StatusCodes.BAD_REQUEST
+                && e.response.data == ErrorCodes.USER_ASSIGNED)
+                return { done: false, data: Strings.UserPreviouslyAssigned };
+
             throw e;
         }
     }

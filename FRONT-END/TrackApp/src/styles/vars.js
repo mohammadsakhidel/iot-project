@@ -8,6 +8,8 @@ export const FS_SMALL = Math.round(0.75 * FS_NORMAL);
 export const FS_TINY = Math.round(0.65 * FS_NORMAL);
 
 export const ICO_NORMAL = 24;
+export const ICO_BIT_LARGER = Math.round(1.2 * ICO_NORMAL);
+export const ICO_LARGE = Math.round(1.5 * ICO_NORMAL);
 export const ICO_BIT_SMALLER = Math.round(0.80 * ICO_NORMAL);
 export const ICO_SMALL = Math.round(0.70 * ICO_NORMAL);
 export const ICO_TINY = Math.round(0.50 * ICO_NORMAL);

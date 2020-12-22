@@ -76,7 +76,8 @@ export default class TrackerItem extends Component {
                 <Image
                     source={{ uri: TrackerService.getIconUrl(item) }}
                     style={styles.icon}
-                    PlaceholderContent={<Loading size="small" />}
+                    PlaceholderContent={<Loading size="small" color={vars.COLOR_GRAY_L2} />}
+                    placeholderStyle={{ backgroundColor: vars.COLOR_GRAY_LIGHTEST }}
                 />
                 <View style={styles.textContainer}>
                     <Text bold>{item.displayName}</Text>
