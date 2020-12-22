@@ -15,13 +15,14 @@ export const ICO_SMALL = Math.round(0.70 * ICO_NORMAL);
 export const ICO_TINY = Math.round(0.50 * ICO_NORMAL);
 
 
-export const COLOR_PRIMARY = '#e47911';
-export const COLOR_PRIMARY_L1 = '#f2963d';
-export const COLOR_PRIMARY_L2 = '#ffb670';
-export const COLOR_PRIMARY_L3 = '#ffd7b0';
-export const COLOR_PRIMARY_D1 = '#b2601a';
-export const COLOR_SECONDARY = '#1f3428';//'#232f3e';
-export const COLOR_SECONDARY_L1 = '#314f3f';
+export const COLOR_PRIMARY = '#ffa20e';
+export const COLOR_PRIMARY_L1 = '#ffb118';
+export const COLOR_PRIMARY_L2 = '#ffb71b';
+export const COLOR_PRIMARY_L3 = '#fed58a';
+export const COLOR_PRIMARY_D1 = '#ff8e01';
+export const COLOR_SECONDARY = '#143e34';//'#232f3e';
+export const COLOR_SECONDARY_L1 = '#215d37';
+export const COLOR_SECONDARY_L2 = '#2f7038';
 export const COLOR_SECONDARY_D1 = '#111111';
 export const COLOR_SECONDARY_LIGHTEST = '#ffffff';
 export const COLOR_TERNARY = '#48a3c6';
