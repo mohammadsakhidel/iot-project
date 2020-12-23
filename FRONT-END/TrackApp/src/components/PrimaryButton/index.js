@@ -13,16 +13,25 @@ export default function PrimaryButton(props) {
         isLoading,
         iconRight,
         style,
+        iconStyle,
         ...rest
     } = props;
 
     const getIcon = () => {
+
+        const iconColor = (disabled ? vars.COLOR_GRAY_L1 : vars.COLOR_GRAY_LIGHTEST);
+
         return (
-            <Icon name={icon}
-                style={[styles.icon, {
-                    display: (isLoading ? 'none' : 'flex')
-                }]}
-                color={(disabled ? vars.COLOR_GRAY_L1 : vars.COLOR_GRAY_LIGHTEST)}
+            <Icon
+                name={icon}
+                style={{
+                    ...styles.icon,
+                    ...{
+                        display: (isLoading ? 'none' : 'flex'),
+                        color: iconColor
+                    },
+                    ...iconStyle
+                }}
                 size={vars.ICO_BIT_SMALLER}
             />
         );
@@ -34,7 +43,7 @@ export default function PrimaryButton(props) {
             icon={getIcon()}
             loading={isLoading}
             disabled={disabled}
-            buttonStyle={[style, styles.button]}
+            buttonStyle={{ ...styles.button, ...style }}
             disabledStyle={styles.disabledButton}
             iconRight={iconRight}
             {...rest}

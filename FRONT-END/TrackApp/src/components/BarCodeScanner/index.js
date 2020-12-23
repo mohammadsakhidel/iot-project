@@ -40,7 +40,7 @@ export default class BarCodeScanner extends Component {
                 onBarCodeScanned={this.handleBarCodeScanned}>
 
                 <Text style={styles.scannerTitle}>
-                    {Strings.ScanBarCode}
+                    {Strings.ScanBarCodeTitle}
                 </Text>
                 <Image
                     source={require('../../styles/images/qr.png')}

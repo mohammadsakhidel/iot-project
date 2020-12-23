@@ -19,6 +19,10 @@ export const primaryButton = {
     backgroundColor: vars.COLOR_PRIMARY
 };
 
+export const secondaryButton = {
+    backgroundColor: vars.COLOR_GRAY_L1
+};
+
 export const linkButton = {
     color: vars.COLOR_LINK,
     textDecorationStyle: 'solid',

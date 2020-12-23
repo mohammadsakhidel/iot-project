@@ -16,6 +16,7 @@ import { getErrorMessage, showError } from '../FlashMessageWrapper';
 import TrackerService from '../../api/services/tracker-service';
 import { connect } from 'react-redux';
 import * as Actions from '../../redux/actions';
+import ManualDeviceAdd from '../ManualDeviceAdd';
 
 class TrackerAddScreen extends Component {
 
@@ -26,13 +27,15 @@ class TrackerAddScreen extends Component {
             hasPermission: null,
             scanned: false,
             isLoading: false,
-            error: ''
+            error: '',
+            method: 'barcode'
         };
 
         // Bindings: 
         this.onBarCodeScanned = this.onBarCodeScanned.bind(this);
         this.onRescanPress = this.onRescanPress.bind(this);
         this.onManualPress = this.onManualPress.bind(this);
+        this.onScanPress = this.onScanPress.bind(this);
     }
 
     async componentDidMount() {
@@ -50,14 +53,27 @@ class TrackerAddScreen extends Component {
                         {navigation => (
                             <View style={styles.container}>
 
-                                <BarCodeScanner
-                                    onBarCodeScanned={(event) => {
-                                        event.navigation = navigation;
-                                        this.onBarCodeScanned(event);
-                                    }}
-                                    onManualPress={this.onManualPress}
-                                    onCancelPress={() => this.onCancelPress(navigation)}
-                                />
+                                {this.state.method == 'manual'
+                                    ? (
+                                        <ManualDeviceAdd
+                                            onAddPress={(data) => {
+                                                this.onBarCodeScanned({ data, navigation });
+                                            }}
+                                            onCancelPress={() => this.onCancelPress(navigation)}
+                                            onScanPress={this.onScanPress}
+                                        />
+                                    )
+                                    : (
+                                        <BarCodeScanner
+                                            onBarCodeScanned={(event) => {
+                                                event.navigation = navigation;
+                                                this.onBarCodeScanned(event);
+                                            }}
+                                            onManualPress={this.onManualPress}
+                                            onCancelPress={() => this.onCancelPress(navigation)}
+                                        />
+                                    )
+                                }
 
                                 {this.state.scanned ? (
                                     <View style={styles.panel}>
@@ -65,7 +81,11 @@ class TrackerAddScreen extends Component {
                                         {this.state.error ? (
                                             <View>
                                                 <Text style={{ ...GlobalStyles.error, textAlign: 'center' }}>{this.state.error}</Text>
-                                                <LinkButton title={Strings.Rescan} icon="refresh" onPress={this.onRescanPress} />
+                                                <LinkButton
+                                                    title={(this.state.method === 'barcode' ? Strings.Rescan : Strings.Retry)}
+                                                    icon="refresh"
+                                                    onPress={this.onRescanPress}
+                                                />
                                             </View>
                                         ) : null}
                                     </View>
@@ -93,10 +113,15 @@ class TrackerAddScreen extends Component {
     }
 
     onManualPress() {
-        console.log("Manual Pressed...");
+        this.setState({ method: 'manual' });
+    }
+
+    onScanPress() {
+        this.setState({ method: 'barcode' });
     }
 
     onBarCodeScanned({ data, navigation }) {
+        console.log(data);
         if (!this.state.scanned) {
             this.setState({ scanned: true, isLoading: true }, async () => {
                 try {

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, StyleSheet, Alert } from 'react-native';
+import { View, StyleSheet, Alert, TouchableOpacity } from 'react-native';
 import Text from '../Text';
 import * as vars from '../../styles/vars';
 import { Image } from 'react-native-elements';
@@ -72,39 +72,41 @@ export default class TrackerItem extends Component {
         const { item } = this.props;
 
         return (
-            <View style={styles.container}>
-                <Image
-                    source={{ uri: TrackerService.getIconUrl(item) }}
-                    style={styles.icon}
-                    PlaceholderContent={<Loading size="small" color={vars.COLOR_GRAY_L2} />}
-                    placeholderStyle={{ backgroundColor: vars.COLOR_GRAY_LIGHTEST }}
-                />
-                <View style={styles.textContainer}>
-                    <Text bold>{item.displayName}</Text>
-                    <View style={styles.actionsContainer}>
-                        <LinkButton
-                            icon="cog"
-                            iconStyle={styles.actionIcon}
-                            title={Strings.Configure}
-                            titleStyle={styles.action}
-                            onPress={this.onConfigurePress}
-                        />
+            <TouchableOpacity onPress={this.onConfigurePress}>
+                <View style={styles.container}>
+                    <Image
+                        source={{ uri: TrackerService.getIconUrl(item) }}
+                        style={styles.icon}
+                        PlaceholderContent={<Loading size="small" color={vars.COLOR_GRAY_L2} />}
+                        placeholderStyle={{ backgroundColor: vars.COLOR_GRAY_LIGHTEST }}
+                    />
+                    <View style={styles.textContainer}>
+                        <Text bold>{item.displayName}</Text>
+                        <View style={styles.actionsContainer}>
+                            <LinkButton
+                                icon="cogs"
+                                iconStyle={styles.actionIcon}
+                                title={Strings.Configure}
+                                titleStyle={styles.action}
+                                onPress={this.onConfigurePress}
+                            />
 
-                        <LinkButton
-                            icon="trash"
-                            iconStyle={{ ...styles.actionIcon, ...styles.removeActionIcon }}
-                            title={Strings.Remove}
-                            titleStyle={[styles.action, styles.removeAction]}
-                            onPress={this.onRemovePress}
-                        />
+                            <LinkButton
+                                icon="trash"
+                                iconStyle={{ ...styles.actionIcon, ...styles.removeActionIcon }}
+                                title={Strings.Remove}
+                                titleStyle={[styles.action, styles.removeAction]}
+                                onPress={this.onRemovePress}
+                            />
+                        </View>
                     </View>
+                    {this.state.isLoading ? (
+                        <View style={styles.loading}>
+                            <Loading size="small" />
+                        </View>
+                    ) : null}
                 </View>
-                { this.state.isLoading ? (
-                    <View style={styles.loading}>
-                        <Loading size="small" />
-                    </View>
-                ) : null}
-            </View>
+            </TouchableOpacity>
         );
     }
 }
@@ -112,7 +114,7 @@ export default class TrackerItem extends Component {
 /* #region  Styles */
 const styles = StyleSheet.create({
     container: {
-        padding: vars.PAD_BIT_MORE,
+        padding: vars.PAD_NORMAL,
         borderBottomWidth: StyleSheet.hairlineWidth,
         borderBottomColor: vars.COLOR_GRAY_L3,
         flexDirection: 'row'
