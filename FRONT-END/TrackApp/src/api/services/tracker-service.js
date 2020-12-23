@@ -43,8 +43,11 @@ export default class TrackerService {
             if (e.response && e.response.status == StatusCodes.NOT_FOUND)
                 return { done: false, data: Strings.DeviceNotFound };
             else if (e.response && e.response.status == StatusCodes.BAD_REQUEST
-                && e.response.data == ErrorCodes.USER_ASSIGNED)
+                && e.response.data == ErrorCodes.ALREADY_ADDED)
                 return { done: false, data: Strings.UserPreviouslyAssigned };
+            else if (e.response && e.response.status == StatusCodes.BAD_REQUEST
+                && e.response.data == ErrorCodes.NOT_ALLOWED)
+                return { done: false, data: Strings.UserNotAllowedToAddDevice };
 
             throw e;
         }

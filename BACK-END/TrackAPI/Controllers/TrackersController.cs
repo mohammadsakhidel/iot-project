@@ -212,10 +212,7 @@ namespace TrackAPI.Controllers {
                 if (string.IsNullOrEmpty(userId))
                     throw new ApplicationException("UserID cannot be null.");
 
-                if (userId != tracker.UserId)
-                    return BadRequest("Tracker doesn't belong to this user.");
-
-                var (done, message) = await _trackerService.UnassignUser(trackerId);
+                var (done, message) = await _trackerService.UnassignUser(trackerId, userId);
                 if (!done)
                     return BadRequest(message);
 

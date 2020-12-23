@@ -16,7 +16,7 @@ namespace TrackAPI.Services {
         Task<(bool, string)> RemoveAsync(string id);
         Task<List<TrackerReportModel>> GetReportsAsync(string trackerId, DateTime? date);
         Task<(bool, string)> AssignUser(string trackerId, string userId);
-        Task<(bool, string)> UnassignUser(string trackerId);
+        Task<(bool, string)> UnassignUser(string trackerId, string userId);
 
     }
 }

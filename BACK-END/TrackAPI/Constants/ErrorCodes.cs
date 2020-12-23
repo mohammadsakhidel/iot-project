@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 
 namespace TrackAPI.Constants {
     public static class ErrorCodes {
-        public const string USER_ASSIGNED = "USER_ASSIGNED";
+        public const string ALREADY_ADDED = "ALREADY_ADDED";
+        public const string NOT_ALLOWED = "NOT_ALLOWED";
     }
 }

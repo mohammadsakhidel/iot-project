@@ -16,11 +16,14 @@ namespace TrackAPI.Services {
         private readonly UserManager<AppUser> _userManager;
         private readonly ITrackerRepository _trackerRepository;
         private readonly IReportRepository _reportRepository;
+        private readonly IUserRepository _userRepository;
         private readonly IMapper _mapper;
         public TrackerService(ITrackerRepository trackerRepository, IMapper mapper,
-            IReportRepository reportRepository, UserManager<AppUser> userManager) {
+            IReportRepository reportRepository, UserManager<AppUser> userManager,
+            IUserRepository userRepository) {
             _trackerRepository = trackerRepository;
             _reportRepository = reportRepository;
+            _userRepository = userRepository;
             _mapper = mapper;
             _userManager = userManager;
         }
@@ -144,32 +147,48 @@ namespace TrackAPI.Services {
 
         public async Task<List<TrackerModel>> GetUserTrackers(string userId) {
             var trackers = await Task.Run(() => {
-                return _trackerRepository.Filter(t => t.UserId == userId);
+                return _userRepository.GetTrackers(userId);
             });
             return trackers.Select(t => _mapper.Map<Tracker, TrackerModel>(t)).ToList();
         }
 
         public async Task<(bool, string)> AssignUser(string trackerId, string userId) {
-            var tracker = await _trackerRepository.GetAsync(trackerId);
+            var tracker = await _trackerRepository.GetWithIncludeAsync(trackerId);
             if (tracker == null)
                 return (false, "Tracker not found.");
 
-            if (!string.IsNullOrEmpty(tracker.UserId))
-                return (false, ErrorCodes.USER_ASSIGNED);
+            if (string.IsNullOrEmpty(tracker.UserId)) {
 
-            tracker.UserId = userId;
-            await _trackerRepository.SaveAsync();
+                tracker.UserId = userId;
+                tracker.Users.Add(new TrackerUser { UserId = userId });
+                await _trackerRepository.SaveAsync();
+
+            } else {
+
+                if (tracker.Users.Select(ut => ut.UserId).Contains(userId))
+                    return (false, ErrorCodes.ALREADY_ADDED);
+
+                if (tracker.UserId != userId && !tracker.AllowedUsers.Select(au => au.UserId).Contains(userId))
+                    return (false, ErrorCodes.NOT_ALLOWED);
+
+                tracker.Users.Add(new TrackerUser { UserId = userId });
+                await _trackerRepository.SaveAsync();
+
+            }
 
             return (true, string.Empty);
         }
 
-        public async Task<(bool, string)> UnassignUser(string trackerId) {
-            var tracker = await _trackerRepository.GetAsync(trackerId);
+        public async Task<(bool, string)> UnassignUser(string trackerId, string userId) {
+            var tracker = await _trackerRepository.GetWithIncludeAsync(trackerId);
             if (tracker == null)
                 return (false, "Tracker not found.");
 
-            tracker.UserId = string.Empty;
-            await _trackerRepository.SaveAsync();
+            if (tracker.Users.Select(au => au.UserId).Contains(userId)) {
+                tracker.Users.Remove(tracker.Users.Single(au => au.UserId == userId));
+                await _trackerRepository.SaveAsync();
+            }
+
             return (true, string.Empty);
         }
 

@@ -39,6 +39,7 @@
     "InputManually": "Input Manually",
     "Rescan": "Rescan",
     "DeviceNotFound": "Device not found.",
-    "UserPreviouslyAssigned": "Device has already been added by another account.",
+    "UserPreviouslyAssigned": "Device has already been added.",
+    "UserNotAllowedToAddDevice": "You need a permission by the owner to add this device.",
     "Reload": "Reload"
 }

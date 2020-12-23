@@ -35,6 +35,9 @@ namespace TrackDataAccess.Models {
         [Column("product_model")]
         public string ProductModel { get; set; }
 
+        /// <summary>
+        /// Owner user's ID.
+        /// </summary>
         [MaxLength(64)]
         [Column("user_id")]
         public string UserId { get; set; }
@@ -68,6 +71,11 @@ namespace TrackDataAccess.Models {
         [MaxLength(128)]
         [Column("serial_number")]
         public string SerialNumber { get; set; }
+
+        #region Navigation Props:
+        public List<TrackerUser> Users { get; set; }
+        public List<TrackerAllowedUser> AllowedUsers { get; set; }
+        #endregion
 
     }
 }

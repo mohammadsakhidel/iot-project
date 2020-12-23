@@ -1,1 +1,2 @@
-export const USER_ASSIGNED = "USER_ASSIGNED";
+export const ALREADY_ADDED = "ALREADY_ADDED";
+export const NOT_ALLOWED = "NOT_ALLOWED";
