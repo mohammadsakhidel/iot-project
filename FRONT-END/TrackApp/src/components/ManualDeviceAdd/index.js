@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { StyleSheet } from 'react-native';
 import { View } from 'react-native';
 import { Input } from 'react-native-elements';
@@ -16,6 +16,12 @@ export default function ManualDeviceAdd(props) {
         serialNumber: ''
     });
 
+    const serialNumberInput = useRef(null);
+    
+    useEffect(() => {
+        serialNumberInput.current.focus();
+    }, []);
+
     const {
         onAddPress,
         onCancelPress,
@@ -28,7 +34,8 @@ export default function ManualDeviceAdd(props) {
             <Input
                 label={Strings.SerialNumber}
                 onChangeText={text => setState({ serialNumber: text })}
-                defaultValue={state.serialNumber} />
+                defaultValue={state.serialNumber}
+                ref={serialNumberInput} />
 
             <View style={styles.buttons}>
 
