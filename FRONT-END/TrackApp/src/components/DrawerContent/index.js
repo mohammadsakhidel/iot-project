@@ -7,6 +7,7 @@ import SmallButton from '../SmallButton';
 import DrawerMenuItem from '../DrawerMenuItem';
 import AppContext from '../../helpers/app-context';
 import { Avatar } from 'react-native-elements';
+import { LinearGradient } from 'expo-linear-gradient';
 
 export default function DrawerContent(props) {
 
@@ -28,6 +29,14 @@ export default function DrawerContent(props) {
 
             {/* Header */}
             <View style={styles.header}>
+                <LinearGradient
+                    style={styles.headerBackground}
+                    colors={[
+                        vars.COLOR_SECONDARY_D1,
+                        vars.COLOR_SECONDARY
+                    ]}
+                />
+
                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
 
                     <Avatar
@@ -99,8 +108,15 @@ const styles = StyleSheet.create({
         flex: 1
     },
     header: {
-        backgroundColor: vars.COLOR_SECONDARY,
+        //backgroundColor: vars.COLOR_SECONDARY,
         padding: vars.PAD_BIT_MORE
+    },
+    headerBackground: {
+        position: 'absolute',
+        left: 0,
+        right: 0,
+        top: 0,
+        bottom: 0
     },
     userName: {
         fontWeight: 'bold',
