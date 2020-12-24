@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, StyleSheet, Alert, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, Alert, TouchableOpacity, TouchableHighlight } from 'react-native';
 import Text from '../Text';
 import * as vars from '../../styles/vars';
 import { Image } from 'react-native-elements';
@@ -61,7 +61,7 @@ export default class TrackerItem extends Component {
         const { item } = this.props;
 
         return (
-            <TouchableOpacity onPress={this.onConfigurePress}>
+            <TouchableHighlight onPress={this.onConfigurePress} underlayColor={vars.COLOR_GRAY_L3}>
                 <View style={styles.container}>
                     <Image
                         source={{ uri: TrackerService.getIconUrl(item) }}
@@ -96,7 +96,7 @@ export default class TrackerItem extends Component {
                         </View>
                     ) : null}
                 </View>
-            </TouchableOpacity>
+            </TouchableHighlight>
         );
     }
 
@@ -196,12 +196,13 @@ const styles = StyleSheet.create({
         flexDirection: 'row'
     },
     textContainer: {
-        marginHorizontal: vars.PAD_HALF,
-        marginTop: vars.PAD_HALF
+        marginHorizontal: vars.PAD_HALF
+        //marginTop: vars.PAD_HALF
     },
     icon: {
-        width: 75,
-        height: 75
+        width: 70,
+        height: 70,
+        borderRadius: 10
     },
     actionsContainer: {
         flexDirection: 'row'

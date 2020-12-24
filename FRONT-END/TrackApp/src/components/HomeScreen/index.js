@@ -22,7 +22,7 @@ export default function HomeScreen(props) {
     });
     const getIconStyle = (focused, color) => ({
         color: color,
-        fontSize: (focused ? vars.ICO_NORMAL : vars.ICO_SMALL)
+        fontSize: (focused ? vars.ICO_BIT_SMALLER : vars.ICO_SMALL)
     });
     const onHeaderLeftButtonPress = () => {
         props.navigation.openDrawer();

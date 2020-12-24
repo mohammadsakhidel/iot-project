@@ -23,6 +23,7 @@ export const COLOR_PRIMARY_D1 = '#ff8e01';
 export const COLOR_SECONDARY = '#143e34';//'#232f3e';
 export const COLOR_SECONDARY_L1 = '#215d37';
 export const COLOR_SECONDARY_L2 = '#2f7038';
+export const COLOR_SECONDARY_L3 = '#8bb391';
 export const COLOR_SECONDARY_D1 = '#111111';
 export const COLOR_SECONDARY_LIGHTEST = '#ffffff';
 export const COLOR_TERNARY = '#48a3c6';
