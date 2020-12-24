@@ -6,8 +6,6 @@ import * as ErrorCodes from '../../constants/error-codes';
 
 export default class TrackerService {
 
-
-
     static async list(token) {
         try {
 
@@ -55,6 +53,24 @@ export default class TrackerService {
 
     static getIconUrl(tracker) {
         return `${ApiSettings.BaseUrl}/images/${tracker.iconImageId ?? 'defaulticon'}?d=${tracker.productType}`;
+    }
+
+    /**
+     * @param {String} trackerId 
+     * @param {String} token 
+     * @returns {{ done: Boolean, data: String, error: String }}
+     */
+    static async status(trackerId, token) {
+        try {
+
+            const url = `${ApiSettings.BaseUrl}/commands/connect/${trackerId}`;
+            console.log(url);
+            const resp = await http(token).post(url);
+            return resp.data;
+
+        } catch (e) {
+            throw e;
+        }
     }
 
 }

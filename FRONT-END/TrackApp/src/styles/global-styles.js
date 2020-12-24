@@ -33,3 +33,12 @@ export const linkButton = {
 export const error = {
     color: vars.COLOR_ERROR
 };
+
+export const success = {
+    color: vars.COLOR_SUCCESS
+};
+
+export const smallText = {
+    fontSize: vars.FS_SMALL,
+    color: vars.COLOR_GRAY_L1
+};

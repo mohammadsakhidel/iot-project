@@ -44,5 +44,10 @@
     "SerialNumber": "Serial Number",
     "Retry": "Retry",
     "Add": "Add",
-    "ScanBarCode": "Scan BarCode"
+    "ScanBarCode": "Scan BarCode",
+    "StatusLoading": "Status loading...",
+    "Online": "Online",
+    "Offline": "Offline",
+    "Since": "since",
+    "ErrorCheckingStatus": "Checking device status failed"
 }

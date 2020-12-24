@@ -148,11 +148,12 @@ namespace TrackAPI.Controllers {
                 #endregion
 
                 var trackerModel = _mapper.Map<TrackerModel>(tracker);
+                var errorData = (response.Error == ErrorCodes.TRACKER_OFFLINE ? tracker.LastConnection?.ToString(Values.DATETIME_FORMAT) : string.Empty);
 
                 return Ok(new ApiResult {
                     Done = response.Done,
                     Error = response.Error ?? string.Empty,
-                    Data = response.Done ? JsonSerializer.Serialize<TrackerModel>(trackerModel) : string.Empty
+                    Data = response.Done ? JsonSerializer.Serialize(trackerModel) : errorData
                 });
 
             } catch (Exception ex) {

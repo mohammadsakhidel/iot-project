@@ -4,7 +4,7 @@ export const FS_XLARGE = Math.round(1.5 * FS_NORMAL);
 export const FS_LARGE = Math.round(1.3 * FS_NORMAL);
 export const FS_BIT_LARGER = Math.round(1.1 * FS_NORMAL);
 export const FS_BIT_SMALLER = Math.round(0.87 * FS_NORMAL);
-export const FS_SMALL = Math.round(0.75 * FS_NORMAL);
+export const FS_SMALL = Math.round(0.78 * FS_NORMAL);
 export const FS_TINY = Math.round(0.65 * FS_NORMAL);
 
 export const ICO_NORMAL = 24;
@@ -34,7 +34,7 @@ export const COLOR_GRAY_L3 = '#e6e6e6';
 export const COLOR_GRAY_LIGHTEST = '#ffffff';
 export const COLOR_LINK = '#0097e8';
 export const COLOR_ERROR = '#d90036';
-
+export const COLOR_SUCCESS = '#00ad7f';
 
 export const PAD_NORMAL = 15;
 export const PAD_HALF = 0.5 * PAD_NORMAL;
