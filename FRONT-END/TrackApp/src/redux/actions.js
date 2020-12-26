@@ -1,8 +1,8 @@
 // Constant Action Names:
-export const ACTION_SET_DIALOG_RESULT = 'ACTION_SET_DIALOG_RESULT';
+export const ACTION_SET_TRACKERS = "SET_TRACKERS";
 
 // Functions Returning Action Objects:
-export const setDialogResult = (result) => ({
-    type: ACTION_SET_DIALOG_RESULT,
-    payload: result
+export const setTrackers = (trackers) => ({
+    type: ACTION_SET_TRACKERS,
+    payload: trackers
 });

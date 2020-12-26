@@ -12,9 +12,11 @@ import FloatingButton from '../FloatingButton';
 import { NavigationContext } from '@react-navigation/native';
 import * as RouteNames from '../../constants/route-names';
 import { getRandom } from '../../utils/text-util';
-import Store from '../../redux/store';
+import { Text } from 'react-native';
+import { connect } from 'react-redux';
+import * as Actions from '../../redux/actions';
 
-export default class TrackersScreen extends Component {
+class TrackersScreen extends Component {
     /* #region  Component Lifecycle */
     static contextType = AppContext;
 
@@ -28,17 +30,13 @@ export default class TrackersScreen extends Component {
         this.configureTrackerFunc = this.configureTrackerFunc.bind(this);
         this.reloadDataFunc = this.reloadDataFunc.bind(this);
         this.onAddTracker = this.onAddTracker.bind(this);
-        this.storeSubscription = this.storeSubscription.bind(this);
         this.retryLoadingFunc = this.retryLoadingFunc.bind(this);
 
         // State:
         this.state = {
-            trackers: [],
             isLoading: true,
             isRefreshing: false,
-            error: '',
-            dialogKey: '',
-            unsubscribeStore: Store.subscribe(this.storeSubscription)
+            error: ''
         };
     }
 
@@ -46,12 +44,12 @@ export default class TrackersScreen extends Component {
         await this.loadTrackers();
     }
 
-    componentWillUnmount() {
-        if (this.state.unsubscribeStore)
-            this.state.unsubscribeStore();
-    }
-
     render() {
+
+        const {
+            trackers
+        } = this.props;
+
         return (
             <View style={styles.container}>
                 {this.state.isLoading
@@ -67,7 +65,7 @@ export default class TrackersScreen extends Component {
                                     <List
                                         emptyListMessage={Strings.EmptyTrackersList}
                                         reloadFunc={this.retryLoadingFunc}
-                                        data={this.state.trackers}
+                                        data={trackers}
                                         renderItem={({ item }) => (
                                             <TrackerItem
                                                 item={item}
@@ -86,8 +84,7 @@ export default class TrackersScreen extends Component {
                                     <FloatingButton
                                         icon="plus"
                                         onPress={() => {
-                                            this.state.dialogKey = getRandom(6);
-                                            navigation.navigate(RouteNames.ADD_TRACKER, { dialogKey: this.state.dialogKey });
+                                            navigation.navigate(RouteNames.ADD_TRACKER);
                                         }}
                                     />
                                 </View>
@@ -124,13 +121,6 @@ export default class TrackersScreen extends Component {
     /* #endregion */
 
     /* #region  Methods */
-    async storeSubscription() {
-        const storeState = Store.getState();
-        if (storeState.dialogResult.key == this.state.dialogKey && storeState.dialogResult.value == true) {
-            await this.loadTrackers();
-        }
-    }
-
     async getTrackersAsync() {
         const result = await TrackerService.list(this.context.user.token);
         if (result.done)
@@ -145,9 +135,11 @@ export default class TrackersScreen extends Component {
             const data = await this.getTrackersAsync();
             this.setState({
                 isLoading: false,
-                isRefreshing: false,
-                trackers: data
+                isRefreshing: false
             });
+
+            const { setTrackers } = this.props;
+            setTrackers(data);
 
         } catch (e) {
             this.setState({ isLoading: false, isRefreshing: false });
@@ -157,7 +149,8 @@ export default class TrackersScreen extends Component {
 
     async reloadDataFunc() {
         const data = await this.getTrackersAsync();
-        this.setState({ trackers: data });
+        const { setTrackers } = this.props;
+        setTrackers(data);
     }
 
     async removeTrackerFunc(tracker) {
@@ -168,7 +161,7 @@ export default class TrackersScreen extends Component {
 
     }
     /* #endregion */
-};
+}
 
 /* #region  Styles */
 const styles = StyleSheet.create({
@@ -182,3 +175,19 @@ const styles = StyleSheet.create({
     }
 });
 /* #endregion */
+
+const mapStateToProps = (state) => {
+    return {
+        trackers: state.trackers
+    };
+};
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        setTrackers: (trackers) => {
+            dispatch(Actions.setTrackers(trackers));
+        }
+    };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(TrackersScreen);

@@ -64,7 +64,6 @@ export default class TrackerService {
         try {
 
             const url = `${ApiSettings.BaseUrl}/commands/connect/${trackerId}`;
-            console.log(url);
             const resp = await http(token).post(url);
             return resp.data;
 

@@ -1,13 +1,18 @@
 import * as Actions from '../actions';
 
 const initialState = {
-    dialogResult: { key: '', value: '' }
+    trackers: []
 };
 
 const mainReducer = (state = initialState, action) => {
+
     switch (action.type) {
-        case Actions.ACTION_SET_DIALOG_RESULT:
-            return Object.assign({}, state, { dialogResult: action.payload });
+        case Actions.ACTION_SET_TRACKERS:
+            const newArray = [...action.payload];
+            return {
+                ...state,
+                trackers: newArray
+            };
         default:
             return state;
     }

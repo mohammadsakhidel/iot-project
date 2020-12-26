@@ -1,13 +1,12 @@
 import React, { Component } from 'react';
-import { View, Button } from 'react-native';
+import { View } from 'react-native';
 import Text from '../Text';
 import BarCodeScanner from '../BarCodeScanner';
-import { StyleSheet, Dimensions, TouchableOpacity } from 'react-native';
+import { StyleSheet } from 'react-native';
 import * as vars from '../../styles/vars';
 import ScreenMessage from '../ScreenMessage';
 import { Strings } from '../../i18n/strings';
 import * as GlobalStyles from '../../styles/global-styles';
-import { Image } from 'react-native';
 import { NavigationContext } from '@react-navigation/native';
 import * as RouteNames from '../../constants/route-names';
 import Loading from '../Loading';
@@ -121,7 +120,6 @@ class TrackerAddScreen extends Component {
     }
 
     onBarCodeScanned({ data, navigation }) {
-        console.log(data);
         if (!this.state.scanned) {
             this.setState({ scanned: true, isLoading: true }, async () => {
                 try {
@@ -131,15 +129,14 @@ class TrackerAddScreen extends Component {
                         throw new Error(result.data);
 
                     const {
-                        route,
-                        setDialogResult
+                        trackers,
+                        setTrackers
                     } = this.props;
 
-                    const dialogKey = route?.params?.dialogKey;
-                    if (dialogKey)
-                        setDialogResult({ key: dialogKey, value: true });
-
+                    trackers.push(result.data);
+                    setTrackers(trackers);
                     navigation.navigate(RouteNames.HOME_LOGIN_SWITCH);
+
                 } catch (e) {
                     this.setState({ isLoading: false, error: getErrorMessage(e) });
                 }
@@ -149,15 +146,6 @@ class TrackerAddScreen extends Component {
 
     onCancelPress(navigation) {
         try {
-            const {
-                route,
-                setDialogResult
-            } = this.props;
-
-            const dialogKey = route?.params?.dialogKey;
-            if (dialogKey)
-                setDialogResult({ key: dialogKey, value: false });
-
             navigation.navigate(RouteNames.HOME_LOGIN_SWITCH);
         } catch (e) {
             showError(e);
@@ -177,16 +165,6 @@ class TrackerAddScreen extends Component {
     }
 }
 
-const mapDispatchToProps = (dispatch) => {
-    return {
-        setDialogResult: (result) => {
-            dispatch(Actions.setDialogResult(result))
-        }
-    };
-};
-
-export default connect(null, mapDispatchToProps)(TrackerAddScreen);
-
 const styles = StyleSheet.create({
     container: {
         flex: 1,
@@ -205,3 +183,19 @@ const styles = StyleSheet.create({
 
     }
 });
+
+const mapStateToProps = (state) => {
+    return {
+        trackers: state.trackers
+    };
+};
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        setTrackers: (trackers) => {
+            dispatch(Actions.setTrackers(trackers));
+        }
+    };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(TrackerAddScreen);

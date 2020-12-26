@@ -171,11 +171,11 @@ namespace TrackAPI.Controllers {
                 if (string.IsNullOrEmpty(userId))
                     throw new ApplicationException("UserID cannot be null.");
 
-                var (done, message) = await _trackerService.AssignUser(tracker.Id, userId);
+                var (done, messageOrAssignedTracker) = await _trackerService.AssignUser(tracker.Id, userId);
                 if (!done)
-                    return BadRequest(message);
+                    return BadRequest(messageOrAssignedTracker);
 
-                return Ok();
+                return Ok(messageOrAssignedTracker);
 
             } catch (Exception e) {
                 return e.GetActionResult();

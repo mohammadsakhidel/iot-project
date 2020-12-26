@@ -152,7 +152,7 @@ namespace TrackAPI.Services {
             return trackers.Select(t => _mapper.Map<Tracker, TrackerModel>(t)).ToList();
         }
 
-        public async Task<(bool, string)> AssignUser(string trackerId, string userId) {
+        public async Task<(bool, object)> AssignUser(string trackerId, string userId) {
             var tracker = await _trackerRepository.GetWithIncludeAsync(trackerId);
             if (tracker == null)
                 return (false, "Tracker not found.");
@@ -176,7 +176,7 @@ namespace TrackAPI.Services {
 
             }
 
-            return (true, string.Empty);
+            return (true, _mapper.Map<TrackerModel>(tracker));
         }
 
         public async Task<(bool, string)> UnassignUser(string trackerId, string userId) {
