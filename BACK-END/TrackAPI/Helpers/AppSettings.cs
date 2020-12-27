@@ -7,6 +7,7 @@ namespace TrackAPI.Helpers {
     public class AppSettings {
         public JWTSettings JWT { get; set; }
         public WorkerSettings Worker { get; set; }
+        public PollingSettings Polling { get; set; }
     }
 
     public class JWTSettings {
@@ -22,5 +23,9 @@ namespace TrackAPI.Helpers {
         public int PortNumber { get; set; }
         public int BufferSize { get; set; }
         public int ResponseTimeoutMillis { get; set; }
+    }
+
+    public class PollingSettings {
+        public int TimeoutSeconds { get; set; }
     }
 }
