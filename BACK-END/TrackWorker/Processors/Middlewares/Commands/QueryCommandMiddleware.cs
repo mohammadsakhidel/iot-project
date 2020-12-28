@@ -32,7 +32,7 @@ namespace TrackWorker.Processors.Middlewares.Commands {
             if (request == null)
                 return false;
 
-            return CommandTypes.AllQueryCommands().Contains(request.Type);
+            return CommandSet.GetAllQueryCommands().Contains(request.Type);
         }
 
         public override bool OperateOnMessage(PipelineContext context) {
@@ -73,7 +73,7 @@ namespace TrackWorker.Processors.Middlewares.Commands {
                 if (!trackerReplied || !validReply) {
                     var errorResponse = new CommandResponse {
                         Done = false,
-                        Error = CommandErrors.TRACKER_NO_REPLY
+                        Error = ErrorCodes.TRACKER_NO_REPLY
                     };
                     context.Message.Socket.Send(errorResponse.Serialize());
                 } else {
@@ -87,7 +87,7 @@ namespace TrackWorker.Processors.Middlewares.Commands {
             } catch (Exception ex) {
                 var errorResponse = new CommandResponse {
                     Done = false,
-                    Error = CommandErrors.SERVER_ERROR,
+                    Error = ErrorCodes.SERVER_ERROR,
                     Payload = ex.Message
                 };
                 context.Message.Socket.Send(errorResponse.Serialize());

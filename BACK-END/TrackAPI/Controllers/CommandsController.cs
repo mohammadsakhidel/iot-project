@@ -50,8 +50,8 @@ namespace TrackAPI.Controllers {
                     return BadRequest("Tracker ID is not valid.");
 
                 // Command Type:
-                var commandSet = CommandSets.All()[tracker.CommandSet];
-                if (!commandSet.ContainsKey(model.CommandType))
+                var commandSet = CommandSet.Get(tracker.CommandSet, HttpContext.RequestServices);
+                if (!commandSet.IsCommandSupported(model.CommandType))
                     return BadRequest("Invalid Command.");
 
                 // User:
@@ -83,7 +83,7 @@ namespace TrackAPI.Controllers {
                     TrackerId = tracker.Id,
                     Type = command.Type,
                     Payload = command.Payload,
-                    UserId = userId, 
+                    UserId = userId,
                     Response = response != null ? JsonSerializer.Serialize(response) : "",
                     CreationTime = DateTime.UtcNow.ToString(Values.DATETIME_FORMAT)
                 };
@@ -120,9 +120,9 @@ namespace TrackAPI.Controllers {
                 if (!isAdming && (string.IsNullOrEmpty(userId) || tracker.UserId != userId))
                     return BadRequest("User not able to execute commands on this tracker.");
 
-                var commandType = CommandTypes.AllQueryCommands().First();
-                var commandSet = CommandSets.All()[tracker.CommandSet];
-                if (!commandSet.ContainsKey(commandType))
+                var commandType = CommandSet.GetAllQueryCommands().First();
+                var commandSet = CommandSet.Get(tracker.CommandSet, HttpContext.RequestServices);
+                if (!commandSet.IsCommandSupported(commandType))
                     return BadRequest("Version query command not supported.");
                 #endregion
 
@@ -166,9 +166,11 @@ namespace TrackAPI.Controllers {
         public IActionResult GetCommandSets() {
             try {
 
-                var sets = CommandSets.All()
-                    .ToDictionary(r => r.Key, r => r.Value.Select(kv => kv.Key)
-                    .ToArray());
+                var sets = CommandSet.GetAllSets(HttpContext.RequestServices)
+                    .ToDictionary(
+                        cs => cs.Name,
+                        cs => cs.SupportedCommands.Select(c => c.CommonName).ToArray()
+                    );
 
                 return Ok(sets);
             } catch (Exception ex) {

@@ -14,7 +14,7 @@ namespace TrackWorker.Processors.Middlewares.Commands {
         public static (bool, string) DoBasicValidation(PipelineContext context, ITrackerRepository trackerRepository, bool payloadRequired = true) {
 
             var isValid = true;
-            var validationError = CommandErrors.INVALID_REQUEST;
+            var validationError = ErrorCodes.INVALID_REQUEST;
 
             // Deserialize Command:
             var bytes = Convert.FromBase64String(context.Message.Base64Text);
@@ -24,14 +24,14 @@ namespace TrackWorker.Processors.Middlewares.Commands {
             var isTrackerOnline = TrackerConnections.IsTrackerOnline(request.TrackerID);
             if (!isTrackerOnline) {
                 isValid = false;
-                validationError = CommandErrors.TRACKER_OFFLINE;
+                validationError = ErrorCodes.TRACKER_OFFLINE;
             }
 
             // Check database for tracker existence:
             var trackerExists = trackerRepository.Get(request.TrackerID) != null;
             if (!trackerExists) {
                 isValid = false;
-                validationError = CommandErrors.INVALID_REQUEST;
+                validationError = ErrorCodes.INVALID_REQUEST;
             }
 
             return (isValid, validationError);

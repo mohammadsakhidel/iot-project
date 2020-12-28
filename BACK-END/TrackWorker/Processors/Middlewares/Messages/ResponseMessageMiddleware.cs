@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using TrackLib.Commands;
 using TrackLib.Constants;
 using TrackLib.Utils;
 using TrackWorker.Helpers;
@@ -19,11 +20,14 @@ namespace TrackWorker.Processors.Middlewares.Messages {
                 return false;
 
             var parsed = ThreeGElecMessage.TryParse(message.Base64Text, out var messageObj);
+            if (!parsed)
+                return false;
+
             var messageType = messageObj.ContentItems.FirstOrDefault();
             if (string.IsNullOrEmpty(messageType))
                 return false;
 
-            return CommandTypes.All().Contains(messageType);
+            return CommandSet.GetAllCommands().Contains(messageType);
         }
 
         public override bool OperateOnMessage(PipelineContext context) {
