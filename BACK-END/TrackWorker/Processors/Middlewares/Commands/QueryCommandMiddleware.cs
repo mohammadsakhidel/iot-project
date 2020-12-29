@@ -57,8 +57,13 @@ namespace TrackWorker.Processors.Middlewares.Commands {
                 _ = TrackerConnections.TryGet(request.TrackerID, out var trackerConnection);
 
                 // Send command to the tracker:
-                var commandText = ThreeGElecMessage.GetCommandText(tracker.Manufacturer,
-                    tracker.RawID, request.Type, string.Empty);
+                var commandSet = CommandSet.Get(tracker.CommandSet, Program.Host.Services);
+                var commandText = ThreeGElecMessage.GetCommandText(
+                    tracker.Manufacturer,
+                    tracker.RawID, 
+                    commandSet[request.Type], 
+                    string.Empty
+                );
                 var commandBytes = Encoding.ASCII.GetBytes(commandText);
                 int sentBytes = trackerConnection.Socket.Send(commandBytes);
                 if (sentBytes <= 0)
@@ -68,7 +73,7 @@ namespace TrackWorker.Processors.Middlewares.Commands {
                 var trackerReplied = trackerConnection.ResponseQueue.TryTake(out var trackerReplyBase64,
                         _appSettings.SocketOptions.CommandReplyTimeoutMillis);
                 var validReply = ThreeGElecMessage.TryParse(trackerReplyBase64, out var replyMessage)
-                    && replyMessage.ContentItems[0] == request.Type;
+                    && replyMessage.ContentItems[0] == commandSet[request.Type];
 
                 if (!trackerReplied || !validReply) {
                     var errorResponse = new CommandResponse {

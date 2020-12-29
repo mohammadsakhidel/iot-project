@@ -8,6 +8,21 @@ using System.Threading.Tasks;
 namespace TrackLib.Commands {
 
     public class CommandRequest {
+
+        public CommandRequest() {
+
+        }
+
+        public CommandRequest(string trackerId, string type)
+            : this(trackerId, type, string.Empty) {
+        }
+
+        public CommandRequest(string trackerId, string type, string payload) {
+            TrackerID = trackerId;
+            Type = type;
+            Payload = payload;
+        }
+
         public string Type { get; set; }
         public string TrackerID { get; set; }
         public string Payload { get; set; }
@@ -25,6 +40,7 @@ namespace TrackLib.Commands {
                 return null;
             }
         }
+
     }
 
 }

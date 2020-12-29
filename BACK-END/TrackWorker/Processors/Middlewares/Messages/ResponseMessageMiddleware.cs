@@ -27,7 +27,9 @@ namespace TrackWorker.Processors.Middlewares.Messages {
             if (string.IsNullOrEmpty(messageType))
                 return false;
 
-            return CommandSet.GetAllCommands().Contains(messageType);
+            var commandSet = CommandSet.Get(CommandSet.SET_DEFAULT, Program.Host.Services);
+            var isResponseMessage = commandSet.SupportedCommands.Select(c => c.NativeCommand).Contains(messageType);
+            return isResponseMessage;
         }
 
         public override bool OperateOnMessage(PipelineContext context) {

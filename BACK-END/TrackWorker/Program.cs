@@ -43,6 +43,8 @@ namespace TrackWorker {
                     services.AddDbContext(hostContext.Configuration);
                     services.AddRepositories();
 
+                    services.AddHelpers();
+
                 });
     }
 }

@@ -15,7 +15,7 @@ namespace TrackAPI.Sockets {
             _appSettings = options.Value;
         }
 
-        public Task<CommandResponse> SendAsync(CommandRequest request, string host = "") {
+        public Task<CommandResponse> ExecuteAsync(CommandRequest request, string host = "") {
             return Task.Run(() => {
                 try {
                     // Send Command:

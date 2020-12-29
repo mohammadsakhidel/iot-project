@@ -63,20 +63,19 @@ namespace TrackAPI.Controllers {
 
                 #region Arrange:
                 // Command
-                var command = new CommandRequest {
-                    TrackerID = model.TrackerId,
-                    Type = commandSet[model.CommandType],
-                    Payload = model.Payload ?? ""
-                };
+                var command = new CommandRequest(
+                    model.TrackerId,
+                    commandSet[model.CommandType],
+                    model.Payload ?? ""
+                );
 
                 // Host
-                var host = _appSettings.Worker.UseTrackerLastConnection && !string.IsNullOrEmpty(tracker.LastConnectedServer)
-                    ? tracker.LastConnectedServer : _appSettings.Worker.DefaultServer;
+                var host = _appSettings.Worker.GetHost(tracker.LastConnectedServer);
                 #endregion
 
                 #region Execute & Log Command:
                 // Send command:
-                var response = await _commandExecutor.SendAsync(command, host);
+                var response = await _commandExecutor.ExecuteAsync(command, host);
 
                 // Add Log:
                 var log = new CommandLogModel {
@@ -120,29 +119,28 @@ namespace TrackAPI.Controllers {
                 if (!isAdming && (string.IsNullOrEmpty(userId) || tracker.UserId != userId))
                     return BadRequest("User not able to execute commands on this tracker.");
 
-                var commandType = CommandSet.GetAllQueryCommands().First();
+                var commandType = CommandSet.COMMAND_CHECK_STATUS;
                 var commandSet = CommandSet.Get(tracker.CommandSet, HttpContext.RequestServices);
                 if (!commandSet.IsCommandSupported(commandType))
-                    return BadRequest("Version query command not supported.");
+                    return BadRequest("Check status command not supported.");
                 #endregion
 
                 #region Arrange:
                 var versionQueryCommand = commandSet[commandType];
 
                 // Command
-                var command = new CommandRequest {
-                    TrackerID = tracker.Id,
-                    Type = versionQueryCommand,
-                    Payload = ""
-                };
+                var command = new CommandRequest(
+                    tracker.Id,
+                    versionQueryCommand,
+                    string.Empty
+                );
 
                 // Host
-                var host = _appSettings.Worker.UseTrackerLastConnection && !string.IsNullOrEmpty(tracker.LastConnectedServer)
-                    ? tracker.LastConnectedServer : _appSettings.Worker.DefaultServer;
+                var host = _appSettings.Worker.GetHost(tracker.LastConnectedServer);
                 #endregion
 
                 #region Execute Command:
-                var response = await _commandExecutor.SendAsync(command, host);
+                var response = await _commandExecutor.ExecuteAsync(command, host);
                 if (response == null)
                     throw new ApplicationException("Command execution failed.");
                 #endregion
@@ -161,18 +159,26 @@ namespace TrackAPI.Controllers {
             }
         }
 
-        [HttpGet("sets")]
+        [HttpGet("sets/{name?}")]
         [Authorize]
-        public IActionResult GetCommandSets() {
+        public IActionResult GetCommandSets(string name) {
             try {
 
-                var sets = CommandSet.GetAllSets(HttpContext.RequestServices)
-                    .ToDictionary(
-                        cs => cs.Name,
-                        cs => cs.SupportedCommands.Select(c => c.CommonName).ToArray()
-                    );
+                if (!string.IsNullOrEmpty(name)) {
+                    var set = CommandSet.Get(name, HttpContext.RequestServices);
+                    if (set == null)
+                        return NotFound($"Set '{name}' not found.");
 
-                return Ok(sets);
+                    return Ok(set.SupportedCommands.Select(c => c.CommonName).ToArray());
+
+                } else {
+                    var sets = CommandSet.GetAllSets(HttpContext.RequestServices)
+                        .ToDictionary(
+                            cs => cs.Name,
+                            cs => cs.SupportedCommands.Select(c => c.CommonName).ToArray()
+                        );
+                    return Ok(sets);
+                }
             } catch (Exception ex) {
                 return ex.GetActionResult();
             }

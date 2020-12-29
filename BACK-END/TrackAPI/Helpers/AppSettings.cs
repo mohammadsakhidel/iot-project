@@ -23,9 +23,16 @@ namespace TrackAPI.Helpers {
         public int PortNumber { get; set; }
         public int BufferSize { get; set; }
         public int ResponseTimeoutMillis { get; set; }
+
+        public string GetHost(string trackerLastConnectedServer) {
+            return UseTrackerLastConnection && !string.IsNullOrEmpty(trackerLastConnectedServer)
+                   ? trackerLastConnectedServer
+                   : DefaultServer;
+        }
     }
 
     public class PollingSettings {
         public int TimeoutSeconds { get; set; }
+        public int StatusCheckDelaySeconds { get; set; }
     }
 }

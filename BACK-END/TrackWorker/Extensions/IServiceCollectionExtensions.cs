@@ -10,6 +10,7 @@ using TrackWorker.Processors.Middlewares;
 using TrackWorker.Processors.Pipelines;
 using TrackWorker.Processors.Middlewares.Messages;
 using TrackWorker.Processors.Middlewares.Commands;
+using TrackLib.Commands;
 
 namespace TrackWorker.Extensions {
     public static class IServiceCollectionExtensions {
@@ -79,6 +80,9 @@ namespace TrackWorker.Extensions {
                     .Options;
                 return new TrackDbContext(options);
             });
+        }
+        public static void AddHelpers(this IServiceCollection services) {
+            services.AddTransient<DefaultCommandSet, DefaultCommandSet>();
         }
     }
 }

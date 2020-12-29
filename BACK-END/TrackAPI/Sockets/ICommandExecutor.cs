@@ -6,6 +6,6 @@ using TrackLib.Commands;
 
 namespace TrackAPI.Sockets {
     public interface ICommandExecutor {
-        Task<CommandResponse> SendAsync(CommandRequest request, string host = "");
+        Task<CommandResponse> ExecuteAsync(CommandRequest request, string host = "");
     }
 }

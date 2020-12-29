@@ -48,6 +48,7 @@ namespace TrackLib.Commands {
         public const string COMMAND_SWITCH_AUTO_ANSWER = "AUTO_ANSWER";
 
         // GET VALUE COMMANDS
+        public const string COMMAND_CHECK_STATUS = "CHECK_STATUS";
         public const string COMMAND_GET_VERSION = "VERSION";
         public const string COMMAND_GET_CURRENT_SETTINGS = "CURRENT_SETTINGS";
         #endregion
@@ -81,15 +82,16 @@ namespace TrackLib.Commands {
 
         #region Static Member:
         public static CommandSet Get(string name, IServiceProvider sp) {
-            return name switch {
+            var set = name switch {
                 SET_DEFAULT => sp.GetService(typeof(DefaultCommandSet)) as CommandSet,
                 _ => null
             };
+            return set;
         }
 
         public static List<CommandSet> GetAllSets(IServiceProvider sp) {
             return new List<CommandSet> {
-                Get(CommandSet.SET_DEFAULT, sp)
+                Get(SET_DEFAULT, sp)
             };
         }
 
@@ -134,6 +136,7 @@ namespace TrackLib.Commands {
 
         public static List<string> GetAllQueryCommands() {
             return new List<string> {
+                COMMAND_CHECK_STATUS,
                 COMMAND_GET_VERSION,
                 COMMAND_GET_CURRENT_SETTINGS
             };
@@ -145,5 +148,6 @@ namespace TrackLib.Commands {
                 .ToList();
         }
         #endregion
+
     }
 }

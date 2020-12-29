@@ -48,6 +48,7 @@ namespace TrackLib.Commands {
                 (COMMAND_SWITCH_SMS_FUNC, "SMSONOFF"),
                 (COMMAND_SWITCH_AUTO_ANSWER, "GSMANT"),
 
+                (COMMAND_CHECK_STATUS, "VERNO"),
                 (COMMAND_GET_VERSION, "VERNO"),
                 (COMMAND_GET_CURRENT_SETTINGS, "TS")
 
