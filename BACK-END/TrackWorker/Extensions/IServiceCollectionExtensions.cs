@@ -24,14 +24,14 @@ namespace TrackWorker.Extensions {
         public static void AddMiddlewares(this IServiceCollection services) {
 
             // Messages:
-            services.AddTransient<ILinkMessageMiddleware, LinkMessageMiddleware>();
-            services.AddTransient<ILocationMessageMiddleware, LocationMessageMiddleware>();
-            services.AddTransient<IAlarmMessageMiddleware, AlarmMessageMiddleware>();
-            services.AddTransient<IResponseMessageMiddleware, ResponseMessageMiddleware>();
+            services.AddTransient<IGpsWatchLinkMiddleware, GpsWatchLinkMiddleware>();
+            services.AddTransient<IGpsWatchLocationMiddleware, GpsWatchLocationMiddleware>();
+            services.AddTransient<IGpsWatchAlarmMiddleware, GpsWatchAlarmMiddleware>();
+            services.AddTransient<IGpsWatchReplyMiddleware, GpsWatchReplyMiddleware>();
 
             // Commands:
-            services.AddTransient<ISendValueCommandMiddleware, SetValueCommandMiddleware>();
-            services.AddTransient<IQueryCommandMiddleware, QueryCommandMiddleware>();
+            services.AddTransient<IGpsWatchCommandMiddleware, SetValueCommandMiddleware>();
+            services.AddTransient<IGpsWatchQueryMiddleware, GpsWatchQueryMiddleware>();
 
         }
         public static void AddPipelines(this IServiceCollection services) {
@@ -40,10 +40,10 @@ namespace TrackWorker.Extensions {
                 var pipeline = new MessagePipeline();
 
                 // Middlewares:
-                pipeline.UseMiddleware<ILocationMessageMiddleware>();
-                pipeline.UseMiddleware<IAlarmMessageMiddleware>();
-                pipeline.UseMiddleware<ILinkMessageMiddleware>();
-                pipeline.UseMiddleware<IResponseMessageMiddleware>();
+                pipeline.UseMiddleware<IGpsWatchLocationMiddleware>();
+                pipeline.UseMiddleware<IGpsWatchAlarmMiddleware>();
+                pipeline.UseMiddleware<IGpsWatchLinkMiddleware>();
+                pipeline.UseMiddleware<IGpsWatchReplyMiddleware>();
 
                 return pipeline;
             });
@@ -52,8 +52,8 @@ namespace TrackWorker.Extensions {
                 var pipeline = new CommandPipeline();
 
                 // Middlewares...
-                pipeline.UseMiddleware<ISendValueCommandMiddleware>();
-                pipeline.UseMiddleware<IQueryCommandMiddleware>();
+                pipeline.UseMiddleware<IGpsWatchCommandMiddleware>();
+                pipeline.UseMiddleware<IGpsWatchQueryMiddleware>();
 
                 return pipeline;
             });
@@ -82,7 +82,7 @@ namespace TrackWorker.Extensions {
             });
         }
         public static void AddHelpers(this IServiceCollection services) {
-            services.AddTransient<DefaultCommandSet, DefaultCommandSet>();
+            services.AddTransient<GpsWatchCommandSet, GpsWatchCommandSet>();
         }
     }
 }

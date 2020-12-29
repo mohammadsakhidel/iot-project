@@ -7,8 +7,8 @@ using TrackLib.Constants;
 using TrackLib.Utils;
 
 namespace TrackWorker.Helpers {
-    public class ThreeGElecMessage {
-        private ThreeGElecMessage() {
+    public class GpsWatchMessage {
+        private GpsWatchMessage() {
 
         }
 
@@ -29,7 +29,7 @@ namespace TrackWorker.Helpers {
         }
 
         // Static Methods:
-        public static bool TryParse(string base64Message, out ThreeGElecMessage parsedMessage) {
+        public static bool TryParse(string base64Message, out GpsWatchMessage parsedMessage) {
             parsedMessage = null;
             if (!TextUtil.IsBase64String(base64Message))
                 return false;
@@ -47,7 +47,7 @@ namespace TrackWorker.Helpers {
 
             var contentSeperator = new Regex(@"\s*,\s*");
 
-            parsedMessage = new ThreeGElecMessage() {
+            parsedMessage = new GpsWatchMessage() {
                 Manufacturer = parts[0],
                 TrackerId = parts[1],
                 ContentLengthHex = parts[2],

@@ -13,7 +13,7 @@ namespace TrackWorker.Tests.Models {
             // Arrange:
 
             // Act: 
-            var result = ThreeGElecMessage.TryParse(base64Message, out var message);
+            var result = GpsWatchMessage.TryParse(base64Message, out var message);
 
             // Assert:
             Assert.Equal(expected.parseResult, result);

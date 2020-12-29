@@ -15,7 +15,7 @@ namespace TrackWorker.Processors.Middlewares.Messages {
                 return false;
 
             // Parse Message:
-            var messageParsed = ThreeGElecMessage.TryParse(context.Message.Base64Text, out var message);
+            var messageParsed = GpsWatchMessage.TryParse(context.Message.Base64Text, out var message);
             if (!messageParsed)
                 return false;
 

@@ -119,7 +119,7 @@ namespace TrackAPI.Controllers {
                 if (!isAdming && (string.IsNullOrEmpty(userId) || tracker.UserId != userId))
                     return BadRequest("User not able to execute commands on this tracker.");
 
-                var commandType = CommandSet.COMMAND_CHECK_STATUS;
+                var commandType = CommandSet.COMMAND_GET_STATUS;
                 var commandSet = CommandSet.Get(tracker.CommandSet, HttpContext.RequestServices);
                 if (!commandSet.IsCommandSupported(commandType))
                     return BadRequest("Check status command not supported.");

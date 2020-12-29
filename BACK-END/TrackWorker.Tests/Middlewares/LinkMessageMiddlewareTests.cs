@@ -23,9 +23,9 @@ namespace TrackWorker.Tests.Middlewares {
 
         [Theory]
         [MemberData(nameof(ValidateMessageData))]
-        public void ValidateMessageTest(Message message, bool expected) {
+        public void ValidateMessageTest(TrackerMessage message, bool expected) {
             // Arrange:
-            var middleware = new LinkMessageMiddleware(null);
+            var middleware = new GpsWatchLinkMiddleware(null);
 
             // Act:
             var validated = middleware.IsMatch(message);
@@ -45,7 +45,7 @@ namespace TrackWorker.Tests.Middlewares {
             mockRepo.Setup(repo => repo.SaveAsync()).Callback(() => {
                 _output.WriteLine("Mock SaveAsync called.");
             });
-            var middleware = new LinkMessageMiddleware(mockRepo.Object);
+            var middleware = new GpsWatchLinkMiddleware(mockRepo.Object);
 
             // Act:
             var result = middleware.OperateOnMessage(context);
@@ -53,7 +53,7 @@ namespace TrackWorker.Tests.Middlewares {
             // Assert:
             Assert.Equal(expected, result);
             if (expected) {
-                var messageParsed = ThreeGElecMessage.TryParse(context.Message.Base64Text, out var threeGElecMsg);
+                var messageParsed = GpsWatchMessage.TryParse(context.Message.Base64Text, out var threeGElecMsg);
                 Assert.True(messageParsed);
                 Assert.NotNull(threeGElecMsg);
                 Assert.NotEmpty(mockTracker.LastConnectedServer);
@@ -70,39 +70,39 @@ namespace TrackWorker.Tests.Middlewares {
 
             // Empty Message Text
             yield return new object[] {
-                new Message { Base64Text = "" }, false
+                new TrackerMessage { Base64Text = "" }, false
             };
 
             // NULL Message Text
             yield return new object[] {
-                new Message { Base64Text = null }, false
+                new TrackerMessage { Base64Text = null }, false
             };
 
             // Invalid base64 text:
             yield return new object[] {
-                new Message { Base64Text = "this is not Base64" }, false
+                new TrackerMessage { Base64Text = "this is not Base64" }, false
             };
 
             // Base64 but invalid message:
             yield return new object[] {
-                new Message { Base64Text = "SGVsbG8gSG93IEFyZSBZb3U/" }, false
+                new TrackerMessage { Base64Text = "SGVsbG8gSG93IEFyZSBZb3U/" }, false
             };
 
             // Base64 valid but irrelevant middleware message:
             yield return new object[] {
-                new Message { Base64Text = "W1NHKjg4MDAwMDAwMTUqMDAwMipVS10=" }, false
+                new TrackerMessage { Base64Text = "W1NHKjg4MDAwMDAwMTUqMDAwMipVS10=" }, false
             };
 
             // Valid Message
             yield return new object[] {
-                new Message { Base64Text = "W1NHKjg4MDAwMDAwMTUqMDAwMipMS10=" }, true
+                new TrackerMessage { Base64Text = "W1NHKjg4MDAwMDAwMTUqMDAwMipMS10=" }, true
             };
 
         }
         public static IEnumerable<object[]> OperateOnMessageData() {
             // Invalid Tracker ID:
             yield return new object[] {
-                new PipelineContext { Message = new Message { Base64Text = "W1NHKjg4MDAwMDAwKjAwMDIqTEtd" } },
+                new PipelineContext { Message = new TrackerMessage { Base64Text = "W1NHKjg4MDAwMDAwKjAwMDIqTEtd" } },
                 false
             };
             // Valid Tracker ID:
@@ -110,7 +110,7 @@ namespace TrackWorker.Tests.Middlewares {
             mockSocket.Setup(socket => socket.Send(It.IsAny<byte[]>())).Returns(0);
             mockSocket.Setup(socket => socket.GetRealSocket()).Returns(() => null);
             yield return new object[] {
-                new PipelineContext { Message = new Message { Base64Text = "W1NHKjg4MDAwMDAwMTUqMDAwMipMS10=", Socket = mockSocket.Object } },
+                new PipelineContext { Message = new TrackerMessage { Base64Text = "W1NHKjg4MDAwMDAwMTUqMDAwMipMS10=", Socket = mockSocket.Object } },
                 true
             };
         }

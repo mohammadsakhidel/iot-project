@@ -9,9 +9,9 @@ using TrackWorker.Processors.Pipelines;
 
 namespace TrackWorker.Processors.Queues {
     public abstract class Queue : IQueue {
-        private readonly BlockingCollection<Message> _queue = new BlockingCollection<Message>();
+        private readonly BlockingCollection<TrackerMessage> _queue = new BlockingCollection<TrackerMessage>();
 
-        public async Task AddAsync(Message message) {
+        public async Task AddAsync(TrackerMessage message) {
             var pipeline = GetPipeline();
             await pipeline.DispatchAsync(message, true);
             if (pipeline.GetContext().MessageValid)

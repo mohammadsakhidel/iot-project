@@ -10,10 +10,10 @@ using TrackWorker.Processors.Pipelines;
 using TrackWorker.Shared;
 
 namespace TrackWorker.Processors.Middlewares.Messages {
-    public class LinkMessageMiddleware : Middleware, ILinkMessageMiddleware {
+    public class GpsWatchLinkMiddleware : Middleware, IGpsWatchLinkMiddleware {
 
         private readonly ITrackerRepository _trackerRepository;
-        public LinkMessageMiddleware(ITrackerRepository trackerRepository) {
+        public GpsWatchLinkMiddleware(ITrackerRepository trackerRepository) {
             _trackerRepository = trackerRepository;
         }
 
@@ -26,7 +26,7 @@ namespace TrackWorker.Processors.Middlewares.Messages {
             #endregion
 
             #region PROCESSING:
-            _ = ThreeGElecMessage.TryParse(context.Message.Base64Text, out var message);
+            _ = GpsWatchMessage.TryParse(context.Message.Base64Text, out var message);
             var tracker = _trackerRepository.Get(message.UniqueID);
 
             // Update tracker last connection fields:
@@ -46,7 +46,7 @@ namespace TrackWorker.Processors.Middlewares.Messages {
             });
 
             // Respond to tracker & save to context:
-            var response = ThreeGElecMessage.GetCommandText(message.Manufacturer, message.TrackerId, message.MessageType.Length.ToString("X4"), message.MessageType);
+            var response = GpsWatchMessage.GetCommandText(message.Manufacturer, message.TrackerId, message.MessageType.Length.ToString("X4"), message.MessageType);
             var responseBytes = Encoding.ASCII.GetBytes(response);
             context.Message.Socket.Send(responseBytes);
             #endregion
@@ -54,7 +54,7 @@ namespace TrackWorker.Processors.Middlewares.Messages {
             return true;
         }
 
-        public override bool IsMatch(Message message) {
+        public override bool IsMatch(TrackerMessage message) {
 
             if (message == null || string.IsNullOrEmpty(message.Base64Text)
                 || !TextUtil.IsBase64String(message.Base64Text))

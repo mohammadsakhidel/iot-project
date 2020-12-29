@@ -3,6 +3,6 @@ using System.Collections.Generic;
 using System.Text;
 
 namespace TrackWorker.Processors.Middlewares.Messages {
-    public interface IAlarmMessageMiddleware : IMiddleware {
+    public interface IGpsWatchLocationMiddleware : IMiddleware {
     }
 }

@@ -7,7 +7,7 @@ using TrackWorker.Helpers;
 
 namespace TrackWorker.Processors.Queues {
     public interface IQueue {
-        Task AddAsync(Message message);
+        Task AddAsync(TrackerMessage message);
         Task StartWachingAsync(CancellationToken stoppingToken);
     }
 }

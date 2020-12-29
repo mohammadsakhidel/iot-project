@@ -24,7 +24,7 @@ namespace TrackWorker.Processors.Pipelines {
 
         }
 
-        public async Task DispatchAsync(Message message, bool onlyValidate = false) {
+        public async Task DispatchAsync(TrackerMessage message, bool onlyValidate = false) {
             try {
 
                 _context = new PipelineContext() {

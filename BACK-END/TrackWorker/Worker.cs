@@ -84,7 +84,7 @@ namespace TrackWorker {
         private async void MessageListener_OnDataReceivedAsync(object sender, Events.DataReceivedEventArgs e) {
             try {
 
-                var message = new Message {
+                var message = new TrackerMessage {
                     Socket = new SocketWrapper(e.ClientSocket),
                     Base64Text = e.Base64Data,
                     TimeOfCreate = DateTime.UtcNow
@@ -100,7 +100,7 @@ namespace TrackWorker {
         private async void CommandListener_OnDataReceivedAsync(object sender, Events.DataReceivedEventArgs e) {
             try {
 
-                var message = new Message {
+                var message = new TrackerMessage {
                     Socket = new SocketWrapper(e.ClientSocket),
                     Base64Text = e.Base64Data,
                     TimeOfCreate = DateTime.UtcNow

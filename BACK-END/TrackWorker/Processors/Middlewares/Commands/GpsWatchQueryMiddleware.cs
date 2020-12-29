@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using TrackDataAccess.Repositories;
 using TrackLib.Constants;
@@ -14,13 +13,26 @@ using TrackWorker.Processors.Pipelines;
 using TrackWorker.Shared;
 
 namespace TrackWorker.Processors.Middlewares.Commands {
-    public class SetValueCommandMiddleware : Middleware, ISendValueCommandMiddleware {
+    public class GpsWatchQueryMiddleware : Middleware, IGpsWatchQueryMiddleware {
 
         private readonly ITrackerRepository _trackerRepository;
         private readonly AppSettings _appSettings;
-        public SetValueCommandMiddleware(ITrackerRepository trackerRepository, IOptions<AppSettings> appSettings) {
+        public GpsWatchQueryMiddleware(ITrackerRepository trackerRepository, IOptions<AppSettings> appSettings) {
             _trackerRepository = trackerRepository;
             _appSettings = appSettings.Value;
+        }
+
+        public override bool IsMatch(TrackerMessage message) {
+            if (message == null || string.IsNullOrEmpty(message.Base64Text)
+                || !TextUtil.IsBase64String(message.Base64Text))
+                return false;
+
+            var bytes = Convert.FromBase64String(message.Base64Text);
+            var request = CommandRequest.Deserialize(bytes);
+            if (request == null)
+                return false;
+
+            return MiddlewareSupportedCommands.Contains(request.Type);
         }
 
         public override bool OperateOnMessage(PipelineContext context) {
@@ -46,11 +58,11 @@ namespace TrackWorker.Processors.Middlewares.Commands {
 
                 // Send command to the tracker:
                 var commandSet = CommandSet.Get(tracker.CommandSet, Program.Host.Services);
-                var commandText = ThreeGElecMessage.GetCommandText(
+                var commandText = GpsWatchMessage.GetCommandText(
                     tracker.Manufacturer,
-                    tracker.RawID, 
-                    commandSet[request.Type], 
-                    request.Payload
+                    tracker.RawID,
+                    commandSet[request.Type],
+                    string.Empty
                 );
                 var commandBytes = Encoding.ASCII.GetBytes(commandText);
                 int sentBytes = trackerConnection.Socket.Send(commandBytes);
@@ -60,7 +72,7 @@ namespace TrackWorker.Processors.Middlewares.Commands {
                 // Wait for the tracker response:
                 var trackerReplied = trackerConnection.ResponseQueue.TryTake(out var trackerReplyBase64,
                         _appSettings.SocketOptions.CommandReplyTimeoutMillis);
-                var validReply = ThreeGElecMessage.TryParse(trackerReplyBase64, out var replyMessage)
+                var validReply = GpsWatchMessage.TryParse(trackerReplyBase64, out var replyMessage)
                     && replyMessage.ContentItems[0] == commandSet[request.Type];
 
                 if (!trackerReplied || !validReply) {
@@ -70,7 +82,7 @@ namespace TrackWorker.Processors.Middlewares.Commands {
                     };
                     context.Message.Socket.Send(errorResponse.Serialize());
                 } else {
-                    var response = new CommandResponse { Done = true };
+                    var response = new CommandResponse { Done = true, Payload = replyMessage.MessagePayload };
                     context.Message.Socket.Send(response.Serialize());
                 }
                 #endregion
@@ -88,18 +100,12 @@ namespace TrackWorker.Processors.Middlewares.Commands {
             }
         }
 
-        public override bool IsMatch(Message message) {
-            if (message == null || string.IsNullOrEmpty(message.Base64Text)
-                || !TextUtil.IsBase64String(message.Base64Text))
-                return false;
-
-            var bytes = Convert.FromBase64String(message.Base64Text);
-            var request = CommandRequest.Deserialize(bytes);
-            if (request == null)
-                return false;
-
-            return CommandSet.GetAllPostCommands().Contains(request.Type);
-        }
-
+        #region MIDDLEWARE SUPPORTED COMMANDS:
+        private static readonly string[] MiddlewareSupportedCommands = new string[] {
+            CommandSet.COMMAND_GET_STATUS,
+            CommandSet.COMMAND_GET_VERSION,
+            CommandSet.COMMAND_GET_CURRENT_SETTINGS
+        };
+        #endregion
     }
 }

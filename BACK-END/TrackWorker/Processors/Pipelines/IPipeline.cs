@@ -7,7 +7,7 @@ using TrackWorker.Helpers;
 namespace TrackWorker.Processors.Pipelines {
     public interface IPipeline {
         void UseMiddleware<TMiddleWare>();
-        Task DispatchAsync(Message message, bool onlyValidate = false);
+        Task DispatchAsync(TrackerMessage message, bool onlyValidate = false);
         PipelineContext GetContext();
     }
 }

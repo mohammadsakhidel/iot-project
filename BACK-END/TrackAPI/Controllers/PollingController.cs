@@ -97,7 +97,7 @@ namespace TrackAPI.Controllers {
                 while (!token.IsCancellationRequested) {
 
                     // Send Request to check status:
-                    var request = new CommandRequest(tracker.Id, CommandSet.COMMAND_CHECK_STATUS);
+                    var request = new CommandRequest(tracker.Id, CommandSet.COMMAND_GET_STATUS);
                     var host = _appSettings.Worker.GetHost(tracker.LastConnectedServer);
                     var response = await _commandExecutor.ExecuteAsync(request, host);
 
@@ -124,7 +124,7 @@ namespace TrackAPI.Controllers {
                 while (!token.IsCancellationRequested) {
 
                     // Send Request to check status:
-                    var request = new CommandRequest(tracker.Id, CommandSet.COMMAND_CHECK_STATUS);
+                    var request = new CommandRequest(tracker.Id, CommandSet.COMMAND_GET_STATUS);
                     var host = _appSettings.Worker.GetHost(tracker.LastConnectedServer);
                     var response = await _commandExecutor.ExecuteAsync(request, host);
 
@@ -151,7 +151,7 @@ namespace TrackAPI.Controllers {
                 while (!token.IsCancellationRequested) {
 
                     // Send Request to check status:
-                    var request = new CommandRequest(tracker.Id, CommandSet.COMMAND_CHECK_STATUS);
+                    var request = new CommandRequest(tracker.Id, CommandSet.COMMAND_GET_STATUS);
                     var host = _appSettings.Worker.GetHost(tracker.LastConnectedServer);
                     var response = await _commandExecutor.ExecuteAsync(request, host);
 

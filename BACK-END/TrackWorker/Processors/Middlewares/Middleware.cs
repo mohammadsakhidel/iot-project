@@ -22,7 +22,7 @@ namespace TrackWorker.Processors.Middlewares {
                 Next?.Invoke(context);
             }
         }
-        public abstract bool IsMatch(Message message);
+        public abstract bool IsMatch(TrackerMessage message);
         public abstract bool OperateOnMessage(PipelineContext context);
     }
 }

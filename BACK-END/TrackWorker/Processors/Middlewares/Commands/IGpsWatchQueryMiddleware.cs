@@ -5,6 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace TrackWorker.Processors.Middlewares.Commands {
-    public interface IQueryCommandMiddleware : IMiddleware {
+    public interface IGpsWatchQueryMiddleware : IMiddleware {
     }
 }

@@ -4,8 +4,8 @@ using System.Text;
 using TrackLib.Utils;
 
 namespace TrackWorker.Helpers {
-    public class ThreeGElecReportData {
-        private ThreeGElecReportData() {
+    public class GpsWatchReportData {
+        private GpsWatchReportData() {
 
         }
 
@@ -63,8 +63,8 @@ namespace TrackWorker.Helpers {
             }
         }
 
-        public static ThreeGElecReportData FromArray(string[] array) {
-            var message = new ThreeGElecReportData();
+        public static GpsWatchReportData FromArray(string[] array) {
+            var message = new GpsWatchReportData();
 
             message.ReportType = array[0];
 
