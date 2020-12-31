@@ -13,6 +13,23 @@ const mainReducer = (state = initialState, action) => {
                 ...state,
                 trackers: newArray
             };
+        case Actions.ACTION_CHANGE_STATUS:
+            const event = action.payload;
+            console.log(event);
+            const trackers = [...state.trackers];
+
+            // Find & Update Tracker:
+            const tracker = trackers.find(t => t.id == event.source);
+            if (!tracker)
+                return state;
+            tracker.status = event.data[0];
+            tracker.lastConnection = event.data.length > 1 ? event.data[1] : "";
+
+            // Return new State:
+            return {
+                ...state,
+                trackers
+            };
         default:
             return state;
     }

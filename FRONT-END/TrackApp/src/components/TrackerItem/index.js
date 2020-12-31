@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, StyleSheet, Alert, TouchableOpacity, TouchableHighlight } from 'react-native';
+import { View, StyleSheet, Alert, TouchableHighlight } from 'react-native';
 import Text from '../Text';
 import * as vars from '../../styles/vars';
 import { Image } from 'react-native-elements';
@@ -11,9 +11,7 @@ import { showError } from '../FlashMessageWrapper';
 import * as GlobalStyles from '../../styles/global-styles';
 import AppContext from '../../helpers/app-context';
 import Icon from '../Icon';
-import * as ErrorCodes from '../../constants/error-codes';
-import moment from 'moment';
-import * as Formats from '../../constants/formats';
+import { formatDateString } from '../../utils/text-util';
 
 export default class TrackerItem extends Component {
 
@@ -32,29 +30,6 @@ export default class TrackerItem extends Component {
         // Bindings:
         this.onRemovePress = this.onRemovePress.bind(this);
         this.onConfigurePress = this.onConfigurePress.bind(this);
-    }
-
-    async componentDidMount() {
-        try {
-            const { item } = this.props;
-            const response = await TrackerService.status(item.id, this.context.user.token);
-
-            let lastConnectionTime = null;
-            if (!response.done && response.error === ErrorCodes.TRACKER_OFFLINE) {
-                const dt = new Date(Date.parse(response.data));
-                lastConnectionTime = moment(dt).format(Formats.DISPLAY_DATETIME_FORMAT);
-            }
-
-            this.setState({
-                status: (response.done == true ? 'online' : 'offline'),
-                lastConnect: lastConnectionTime
-            });
-
-        } catch (e) {
-            this.setState({
-                status: 'error'
-            });
-        }
     }
 
     render() {
@@ -145,8 +120,12 @@ export default class TrackerItem extends Component {
     }
 
     renderStatus() {
-        switch (this.state.status) {
+
+        const { item } = this.props;
+
+        switch (item.status) {
             case null:
+            case undefined:
                 return (
                     <Text style={GlobalStyles.smallText}>
                         {Strings.StatusLoading}
@@ -167,8 +146,11 @@ export default class TrackerItem extends Component {
                         <Icon name="circle" style={styles.offlineIcon} />
                         <Text style={styles.offline}>
                             {
-                                Strings.Offline + ' ' + Strings.Since + ' ' +
-                                (this.state.lastConnect ?? '')
+                                Strings.Offline +
+                                (item.lastConnection != null
+                                    ? ' ' + Strings.Since + ' ' + formatDateString(item.lastConnection)
+                                    : ''
+                                )
                             }
                         </Text>
                     </View>

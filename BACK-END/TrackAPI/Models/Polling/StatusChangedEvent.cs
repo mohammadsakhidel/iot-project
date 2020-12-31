@@ -6,10 +6,10 @@ using TrackAPI.Constants;
 
 namespace TrackAPI.Models.Polling {
     public class StatusChangedEvent : PollingEvent {
-        public StatusChangedEvent(string source, string status) {
+        public StatusChangedEvent(string source, string status, string additionalData = "") {
             Name = PollingEvents.STATUS_CHANGED;
             Source = source;
-            Data = new string[] { status };
+            Data = new string[] { status, additionalData };
         }
     }
 }

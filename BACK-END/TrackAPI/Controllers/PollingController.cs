@@ -37,11 +37,8 @@ namespace TrackAPI.Controllers {
         [HttpPost]
         [Authorize]
         public async Task<IActionResult> GetAllEvents(PollingInput input) {
+            var cts = new CancellationTokenSource();
             try {
-
-                var cts = new CancellationTokenSource();
-
-
 
                 #region Start Tasks:
                 var timeoutTask = Task.Run(() => {
@@ -51,13 +48,14 @@ namespace TrackAPI.Controllers {
                 });
 
                 var statusCheckTasks = new List<Task<PollingEvent>>();
-                foreach (var currentStatus in input.TrackersStatus) {
-                    if (currentStatus.Value.ToLower() == TrackerStatusValues.ONLINE.ToLower()) {
-                        statusCheckTasks.Add(WaitForOfflineEvent(currentStatus.Key, cts.Token));
-                    } else if (currentStatus.Value.ToLower() == TrackerStatusValues.OFFLINE.ToLower()) {
-                        statusCheckTasks.Add(WaitForOnlineEvent(currentStatus.Key, cts.Token));
+                foreach (var tStatus in input.TrackersStatus) {
+                    tStatus.Status ??= string.Empty;
+                    if (tStatus.Status.ToLower() == TrackerStatusValues.ONLINE.ToLower()) {
+                        statusCheckTasks.Add(WaitForOfflineEvent(tStatus.TrackerId, cts.Token));
+                    } else if (tStatus.Status.ToLower() == TrackerStatusValues.OFFLINE.ToLower()) {
+                        statusCheckTasks.Add(WaitForOnlineEvent(tStatus.TrackerId, cts.Token));
                     } else {
-                        statusCheckTasks.Add(FindTrackerCurrentStatus(currentStatus.Key, cts.Token));
+                        statusCheckTasks.Add(FindTrackerCurrentStatus(tStatus.TrackerId, cts.Token));
                     }
                 }
                 #endregion
@@ -68,18 +66,20 @@ namespace TrackAPI.Controllers {
                 );
                 var isTimeout = completedTask == timeoutTask;
                 var @event = completedTask.Result;
-                
+
 
                 // Cancel running tasks:
                 cts.Cancel();
 
+                var jsonOptions = new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
                 return Ok(new ApiResult {
                     Done = @event != null,
-                    Data = @event != null ? JsonSerializer.Serialize(@event) : string.Empty,
+                    Data = @event != null ? JsonSerializer.Serialize(@event, jsonOptions) : string.Empty,
                     Error = isTimeout ? ErrorCodes.POLLING_TIMEOUT : string.Empty
                 });
 
             } catch (Exception ex) {
+                try { cts.Cancel(); } catch { }
                 return ex.GetActionResult();
             }
         }
@@ -90,7 +90,7 @@ namespace TrackAPI.Controllers {
             return Task.Run(async () => {
                 PollingEvent result = null;
                 TrackerModel tracker = null;
-                lock(_trackerService) {
+                lock (_trackerService) {
                     tracker = _trackerService.GetAsync(trackerId).Result;
                 }
 
@@ -129,7 +129,11 @@ namespace TrackAPI.Controllers {
                     var response = await _commandExecutor.ExecuteAsync(request, host);
 
                     if (response != null && !response.Done && response.Error == ErrorCodes.TRACKER_OFFLINE) {
-                        result = new StatusChangedEvent(tracker.Id, TrackerStatusValues.OFFLINE);
+                        result = new StatusChangedEvent(
+                            tracker.Id, 
+                            TrackerStatusValues.OFFLINE, 
+                            tracker.LastConnection.HasValue ? tracker.LastConnection.Value.ToString(Values.DATETIME_FORMAT) : string.Empty
+                        );
                         break;
                     }
 
@@ -159,7 +163,11 @@ namespace TrackAPI.Controllers {
                         result = new StatusChangedEvent(tracker.Id, TrackerStatusValues.ONLINE);
                         break;
                     } else if (response != null && !response.Done && response.Error == ErrorCodes.TRACKER_OFFLINE) {
-                        result = new StatusChangedEvent(tracker.Id, TrackerStatusValues.OFFLINE);
+                        result = new StatusChangedEvent(
+                            tracker.Id, 
+                            TrackerStatusValues.OFFLINE,
+                            tracker.LastConnection.HasValue ? tracker.LastConnection.Value.ToString(Values.DATETIME_FORMAT) : string.Empty
+                        );
                         break;
                     }
 
