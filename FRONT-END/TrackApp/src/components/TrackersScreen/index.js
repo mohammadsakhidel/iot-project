@@ -47,7 +47,8 @@ class TrackersScreen extends Component {
     render() {
 
         const {
-            trackers
+            trackers,
+            connections
         } = this.props;
 
         return (
@@ -69,6 +70,7 @@ class TrackersScreen extends Component {
                                         renderItem={({ item }) => (
                                             <TrackerItem
                                                 item={item}
+                                                connection={connections[item.id]}
                                                 removeTrackerFunc={this.removeTrackerFunc}
                                                 configureTrackerFunc={(tracker) => navigation.navigate(RouteNames.CONFIG_TRACKER, tracker)}
                                                 reloadDataFunc={this.reloadDataFunc}
@@ -178,7 +180,8 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = (state) => {
     return {
-        trackers: state.trackers
+        trackers: state.trackers,
+        connections: state.connections
     };
 };
 

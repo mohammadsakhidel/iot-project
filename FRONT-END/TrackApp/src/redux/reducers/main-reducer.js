@@ -1,7 +1,8 @@
 import * as Actions from '../actions';
 
 const initialState = {
-    trackers: []
+    trackers: [],
+    connections: {}
 };
 
 const mainReducer = (state = initialState, action) => {
@@ -15,20 +16,17 @@ const mainReducer = (state = initialState, action) => {
             };
         case Actions.ACTION_CHANGE_STATUS:
             const event = action.payload;
-            console.log(event);
-            const trackers = [...state.trackers];
-
-            // Find & Update Tracker:
-            const tracker = trackers.find(t => t.id == event.source);
-            if (!tracker)
-                return state;
-            tracker.status = event.data[0];
-            tracker.lastConnection = event.data.length > 1 ? event.data[1] : "";
+            const cons = state.connections;
+            const conEntry = {
+                status: event.data[0],
+                lastConnection: event.data.length > 1 ? event.data[1] : ""
+            };
+            cons[event.source] = conEntry;
 
             // Return new State:
             return {
                 ...state,
-                trackers
+                connections: { ...cons }
             };
         default:
             return state;

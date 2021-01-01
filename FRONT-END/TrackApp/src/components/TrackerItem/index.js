@@ -121,9 +121,9 @@ export default class TrackerItem extends Component {
 
     renderStatus() {
 
-        const { item } = this.props;
+        const { connection } = this.props;
 
-        switch (item.status) {
+        switch (connection?.status) {
             case null:
             case undefined:
                 return (
@@ -147,8 +147,8 @@ export default class TrackerItem extends Component {
                         <Text style={styles.offline}>
                             {
                                 Strings.Offline +
-                                (item.lastConnection != null
-                                    ? ' ' + Strings.Since + ' ' + formatDateString(item.lastConnection)
+                                (connection.lastConnection != ''
+                                    ? ' ' + Strings.Since + ' ' + formatDateString(connection.lastConnection)
                                     : ''
                                 )
                             }

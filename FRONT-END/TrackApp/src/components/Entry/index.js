@@ -81,6 +81,7 @@ class Entry extends Component {
 
                 const {
                     trackers,
+                    connections,
                     changeTrackerStatus
                 } = this.props;
                 if (trackers == null || trackers.length == 0)
@@ -90,10 +91,9 @@ class Entry extends Component {
                 const pollingInput = {
                     TrackersStatus: trackers.map(t => ({
                         trackerId: t.id,
-                        status: t.status ?? ""
+                        status: connections[t.id]?.status ?? ""
                     }))
                 };
-                console.log(JSON.stringify(pollingInput));
                 const response = await PollingService.poll(token, pollingInput);
 
                 if (response.done) {
@@ -111,7 +111,6 @@ class Entry extends Component {
                 }
 
             } catch (_) {
-
             } finally {
                 await new Promise(resolve => setTimeout(resolve, AppSettings.PollingDelay ?? 3000));
             }
@@ -121,7 +120,8 @@ class Entry extends Component {
 }
 
 const mapStateToProps = (state) => ({
-    trackers: state.trackers
+    trackers: state.trackers,
+    connections: state.connections
 });
 
 const mapDispatchToProps = (dispatch) => ({
