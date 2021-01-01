@@ -42,5 +42,14 @@ namespace TrackWorker.Shared {
         public static bool Exists(string uniqueId) {
             return _trackers.ContainsKey(uniqueId);
         }
+
+        public static string FindBySocket(Socket socket) {
+            foreach (var item in _trackers) {
+                if (item.Value.Socket == socket)
+                    return item.Key;
+            }
+
+            return string.Empty;
+        }
     }
 }

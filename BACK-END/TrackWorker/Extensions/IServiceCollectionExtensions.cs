@@ -24,14 +24,14 @@ namespace TrackWorker.Extensions {
         public static void AddMiddlewares(this IServiceCollection services) {
 
             // Messages:
-            services.AddTransient<IGpsWatchLinkMiddleware, GpsWatchLinkMiddleware>();
-            services.AddTransient<IGpsWatchLocationMiddleware, GpsWatchLocationMiddleware>();
-            services.AddTransient<IGpsWatchAlarmMiddleware, GpsWatchAlarmMiddleware>();
-            services.AddTransient<IGpsWatchReplyMiddleware, GpsWatchReplyMiddleware>();
+            services.AddSingleton<IGpsWatchLinkMiddleware, GpsWatchLinkMiddleware>();
+            services.AddSingleton<IGpsWatchLocationMiddleware, GpsWatchLocationMiddleware>();
+            services.AddSingleton<IGpsWatchAlarmMiddleware, GpsWatchAlarmMiddleware>();
+            services.AddSingleton<IGpsWatchReplyMiddleware, GpsWatchReplyMiddleware>();
 
             // Commands:
-            services.AddTransient<IGpsWatchCommandMiddleware, SetValueCommandMiddleware>();
-            services.AddTransient<IGpsWatchQueryMiddleware, GpsWatchQueryMiddleware>();
+            services.AddSingleton<IGpsWatchCommandMiddleware, SetValueCommandMiddleware>();
+            services.AddSingleton<IGpsWatchQueryMiddleware, GpsWatchQueryMiddleware>();
 
         }
         public static void AddPipelines(this IServiceCollection services) {
@@ -64,8 +64,8 @@ namespace TrackWorker.Extensions {
             services.AddSingleton<ICommandQueue, CommandQueue>();
         }
         public static void AddRepositories(this IServiceCollection services) {
-            services.AddTransient<ITrackerRepository, TrackerRepository>();
-            services.AddTransient<IReportRepository, ReportRepository>();
+            services.AddScoped<ITrackerRepository, TrackerRepository>();
+            services.AddScoped<IReportRepository, ReportRepository>();
         }
         public static void AddDbContext(this IServiceCollection services, IConfiguration configuration) {
             // For dotnet ef tool:
@@ -74,12 +74,12 @@ namespace TrackWorker.Extensions {
             });
             //^^^^^^^^^^^^^^^^^^^^
 
-            services.AddTransient<TrackDbContext>(sp => {
-                var options = new DbContextOptionsBuilder<TrackDbContext>()
-                    .UseMySQL(configuration.GetValue<string>("Database:ConnectionStrings:TrackDB"))
-                    .Options;
-                return new TrackDbContext(options);
-            });
+            //services.AddScoped(sp => {
+            //    var options = new DbContextOptionsBuilder<TrackDbContext>()
+            //        .UseMySQL(configuration.GetValue<string>("Database:ConnectionStrings:TrackDB"))
+            //        .Options;
+            //    return new TrackDbContext(options);
+            //});
         }
         public static void AddHelpers(this IServiceCollection services) {
             services.AddTransient<GpsWatchCommandSet, GpsWatchCommandSet>();

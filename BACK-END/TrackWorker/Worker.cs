@@ -18,6 +18,7 @@ using TrackWorker.Listeners;
 using TrackWorker.Helpers;
 using TrackWorker.Processors.Queues;
 using TrackWorker.Shared;
+using TrackDataAccess.Repositories;
 
 namespace TrackWorker {
     public class Worker : BackgroundService {
@@ -27,6 +28,7 @@ namespace TrackWorker {
         private readonly ICommandListener _commandListener;
         private readonly IMessageQueue _messageQueue;
         private readonly ICommandQueue _commandQueue;
+
         public Worker(ILogger<Worker> logger, IOptions<AppSettings> appSettings,
             IMessageListener messageListener, ICommandListener commandListener,
             IMessageQueue messageQueue, ICommandQueue commandQueue) {
@@ -70,7 +72,7 @@ namespace TrackWorker {
                 var commandQueueListenerTask = _commandQueue.StartWachingAsync(stoppingToken);
                 #endregion
 
-                await Task.WhenAll(messageListenerTask, commandListenerTask, 
+                await Task.WhenAll(messageListenerTask, commandListenerTask,
                     messageQueueListenerTask, commandQueueListenerTask, globalStateTask);
 
             } catch (Exception ex) {
@@ -112,8 +114,20 @@ namespace TrackWorker {
             }
         }
 
-        private void MessageListener_OnClientDisconnected(object sender, Events.ClientDisconnectedEventArgs e) {
-            //throw new NotImplementedException();
+        private async void MessageListener_OnClientDisconnected(object sender, Events.ClientDisconnectedEventArgs e) {
+            try {
+                var trackerRepository = Program.Services.GetService(typeof(ITrackerRepository)) as ITrackerRepository;
+                var trackerId = TrackerConnections.FindBySocket(e.ClientSocket);
+                if (!string.IsNullOrEmpty(trackerId)) {
+                    var tracker = await trackerRepository.GetAsync(trackerId, true);
+                    if (tracker != null) {
+                        tracker.Status = TrackerStatusValues.OFFLINE;
+                        await trackerRepository.SaveAsync();
+                    }
+                }
+            } catch (Exception ex) {
+                _logger.LogError(ex.LogMessage(nameof(MessageListener_OnClientDisconnected)));
+            }
         }
         #endregion
     }

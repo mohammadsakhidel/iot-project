@@ -11,11 +11,16 @@ using TrackWorker.Extensions;
 namespace TrackWorker {
     public class Program {
 
-        public static IHost Host { get; private set; }
+        public static IServiceProvider Services { get; private set; }
 
         public static void Main(string[] args) {
-            Host = CreateHostBuilder(args).Build();
-            Host.Run();
+            IHost host = CreateHostBuilder(args).Build();
+
+            // Main scope:
+            var scope = host.Services.CreateScope();
+            Services = scope.ServiceProvider;
+
+            host.Run();
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>

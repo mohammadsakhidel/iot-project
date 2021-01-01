@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace TrackAPI.Constants {
+namespace TrackLib.Constants {
     public class TrackerStatusValues {
         public const string ONLINE = "online";
         public const string OFFLINE = "offline";

@@ -15,26 +15,20 @@ namespace TrackWorker.Processors.Middlewares.Messages {
 
         private const string REPORT_TYPE = "location";
 
-        private readonly ITrackerRepository _trackerRepository;
-        private readonly IReportRepository _reportRepository;
-        public GpsWatchLocationMiddleware(ITrackerRepository trackerRepository,
-            IReportRepository locationRepository) {
-
-            _trackerRepository = trackerRepository;
-            _reportRepository = locationRepository;
-
-        }
-
         public override bool OperateOnMessage(PipelineContext context) {
+
+            var trackerRepository = context.Services.GetService(typeof(ITrackerRepository)) as ITrackerRepository;
+            var reportRepository = context.Services.GetService(typeof(IReportRepository)) as IReportRepository;
+
             #region VALIDATION:
-            var isValid = MessageHelper.Validate(context, _trackerRepository);
+            var isValid = MessageHelper.Validate(context, trackerRepository);
             if (!isValid)
                 return false;
             #endregion
 
             #region PROCESSING:
             _ = GpsWatchMessage.TryParse(context.Message.Base64Text, out var message);
-            var tracker = _trackerRepository.Get(message.UniqueID);
+            var tracker = trackerRepository.Get(message.UniqueID);
             var reportData = GpsWatchReportData.FromArray(message.ContentItems.ToArray());
 
             var report = new Report {
@@ -54,8 +48,8 @@ namespace TrackWorker.Processors.Middlewares.Messages {
                 TrackerState = reportData.TrackerStateBinary,
                 CreationTime = DateTime.UtcNow
             };
-            _reportRepository.Add(report);
-            _reportRepository.SaveAsync().Wait();
+            reportRepository.Add(report);
+            reportRepository.SaveAsync().Wait();
             #endregion
 
             return true;

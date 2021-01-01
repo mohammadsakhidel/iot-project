@@ -15,10 +15,8 @@ using TrackWorker.Shared;
 namespace TrackWorker.Processors.Middlewares.Commands {
     public class GpsWatchQueryMiddleware : Middleware, IGpsWatchQueryMiddleware {
 
-        private readonly ITrackerRepository _trackerRepository;
         private readonly AppSettings _appSettings;
-        public GpsWatchQueryMiddleware(ITrackerRepository trackerRepository, IOptions<AppSettings> appSettings) {
-            _trackerRepository = trackerRepository;
+        public GpsWatchQueryMiddleware(IOptions<AppSettings> appSettings) {
             _appSettings = appSettings.Value;
         }
 
@@ -38,9 +36,11 @@ namespace TrackWorker.Processors.Middlewares.Commands {
         public override bool OperateOnMessage(PipelineContext context) {
             try {
 
+                var trackerRepository = context.Services.GetService(typeof(ITrackerRepository)) as ITrackerRepository;
+
                 #region VALIDATION:
                 // Do Basic Validation:
-                (var isValid, var validationError) = CommandHelper.DoBasicValidation(context, _trackerRepository);
+                (var isValid, var validationError) = CommandHelper.DoBasicValidation(context, trackerRepository);
                 var requestBytes = Convert.FromBase64String(context.Message.Base64Text);
                 var request = CommandRequest.Deserialize(requestBytes);
 
@@ -53,11 +53,11 @@ namespace TrackWorker.Processors.Middlewares.Commands {
                 #endregion
 
                 #region PROCESS:
-                var tracker = _trackerRepository.Get(request.TrackerID);
+                var tracker = trackerRepository.Get(request.TrackerID);
                 _ = TrackerConnections.TryGet(request.TrackerID, out var trackerConnection);
 
                 // Send command to the tracker:
-                var commandSet = CommandSet.Get(tracker.CommandSet, Program.Host.Services);
+                var commandSet = CommandSet.Get(tracker.CommandSet, Program.Services);
                 var commandText = GpsWatchMessage.GetCommandText(
                     tracker.Manufacturer,
                     tracker.RawID,

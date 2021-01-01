@@ -48,10 +48,12 @@ namespace TrackAPI.Services {
             return (true, tracker.Id);
         }
 
-        public async Task<TrackerModel> GetAsync(string id) {
+        public async Task<TrackerModel> GetAsync(string id, bool reload = false) {
             var tracker = await _trackerRepository.GetAsync(id);
             if (tracker == null)
                 return null;
+            if (reload)
+                _trackerRepository.Reload(tracker);
 
             return _mapper.Map<TrackerModel>(tracker);
         }

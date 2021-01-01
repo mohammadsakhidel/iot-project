@@ -31,8 +31,20 @@ namespace TrackDataAccess.Repositories.Base {
             return Context.Find<TEntity>(id);
         }
 
+
         public async Task<TEntity> GetAsync(params object[] id) {
             return await Context.FindAsync<TEntity>(id);
+        }
+
+        public async Task<TEntity> GetAsync(object id, bool refresh) {
+
+            var entity = await Context.FindAsync<TEntity>(id);
+            if (entity == null)
+                return null;
+            if (refresh)
+                Reload(entity);
+
+            return entity;
         }
 
         public async Task<IEnumerable<TEntity>> TakeAsync<TOrderbyProp>(int skip, int take, Func<TEntity, TOrderbyProp> orderbyPropSelector, bool desc = false) {
@@ -53,6 +65,15 @@ namespace TrackDataAccess.Repositories.Base {
 
         public async Task SaveAsync() {
             await Context.SaveChangesAsync();
+        }
+
+        public void Dispose() {
+            if (Context != null)
+                Context.Dispose();
+        }
+
+        public void Reload(TEntity entity) {
+            Context.Entry<TEntity>(entity).Reload();
         }
     }
 }

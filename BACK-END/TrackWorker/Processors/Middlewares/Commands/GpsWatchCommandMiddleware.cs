@@ -16,19 +16,18 @@ using TrackWorker.Shared;
 namespace TrackWorker.Processors.Middlewares.Commands {
     public class SetValueCommandMiddleware : Middleware, IGpsWatchCommandMiddleware {
 
-        private readonly ITrackerRepository _trackerRepository;
         private readonly AppSettings _appSettings;
-        public SetValueCommandMiddleware(ITrackerRepository trackerRepository, IOptions<AppSettings> appSettings) {
-            _trackerRepository = trackerRepository;
+        public SetValueCommandMiddleware(IOptions<AppSettings> appSettings) {
             _appSettings = appSettings.Value;
         }
 
         public override bool OperateOnMessage(PipelineContext context) {
             try {
 
-                #region VALIDATION:
+                var trackerRepository = context.Services.GetService(typeof(ITrackerRepository)) as ITrackerRepository;
 
-                (var isValid, var validationError) = CommandHelper.DoBasicValidation(context, _trackerRepository);
+                #region VALIDATION:
+                (var isValid, var validationError) = CommandHelper.DoBasicValidation(context, trackerRepository);
                 var requestBytes = Convert.FromBase64String(context.Message.Base64Text);
                 var request = CommandRequest.Deserialize(requestBytes);
 
@@ -41,11 +40,11 @@ namespace TrackWorker.Processors.Middlewares.Commands {
                 #endregion
 
                 #region PROCESS:
-                var tracker = _trackerRepository.Get(request.TrackerID);
+                var tracker = trackerRepository.Get(request.TrackerID);
                 _ = TrackerConnections.TryGet(request.TrackerID, out var trackerConnection);
 
 
-                var commandSet = CommandSet.Get(tracker.CommandSet, Program.Host.Services);
+                var commandSet = CommandSet.Get(tracker.CommandSet, Program.Services);
                 var commandText = GpsWatchMessage.GetCommandText(
                     tracker.Manufacturer,
                     tracker.RawID,

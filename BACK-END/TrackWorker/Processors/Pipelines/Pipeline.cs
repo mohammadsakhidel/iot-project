@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,7 +16,7 @@ namespace TrackWorker.Processors.Pipelines {
 
         public void UseMiddleware<TMiddleware>() {
 
-            var middleware = (Middleware)Program.Host.Services.GetService(typeof(TMiddleware));
+            var middleware = (Middleware)Program.Services.GetService(typeof(TMiddleware));
 
             if (_middlewares.Any())
                 _middlewares[_middlewares.Count - 1].Next = middleware;
@@ -27,20 +28,22 @@ namespace TrackWorker.Processors.Pipelines {
         public async Task DispatchAsync(TrackerMessage message, bool onlyValidate = false) {
             try {
 
-                _context = new PipelineContext() {
-                    Message = message,
-                    OnlyValidate = onlyValidate
-                };
-
                 if (!_middlewares.Any())
                     throw new InvalidOperationException("No middleware defined.");
 
                 await Task.Run(() => {
-                    _middlewares[0].Invoke(_context);
+                    using (var scope = Program.Services.CreateScope()) {
+                        _context = new PipelineContext() {
+                            Message = message,
+                            OnlyValidate = onlyValidate,
+                            Services = scope.ServiceProvider
+                        };
+                        _middlewares[0].Invoke(_context);
+                    }
                 });
 
             } catch (Exception ex) {
-                var logger = (ILogger<Worker>)Program.Host.Services.GetService(typeof(ILogger<Worker>));
+                var logger = (ILogger<Worker>)Program.Services.GetService(typeof(ILogger<Worker>));
                 logger.LogError(ex.LogMessage(nameof(DispatchAsync)));
             }
         }

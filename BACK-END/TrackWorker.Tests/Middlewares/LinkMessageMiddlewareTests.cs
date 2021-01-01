@@ -25,7 +25,7 @@ namespace TrackWorker.Tests.Middlewares {
         [MemberData(nameof(ValidateMessageData))]
         public void ValidateMessageTest(TrackerMessage message, bool expected) {
             // Arrange:
-            var middleware = new GpsWatchLinkMiddleware(null);
+            var middleware = new GpsWatchLinkMiddleware();
 
             // Act:
             var validated = middleware.IsMatch(message);
@@ -45,7 +45,7 @@ namespace TrackWorker.Tests.Middlewares {
             mockRepo.Setup(repo => repo.SaveAsync()).Callback(() => {
                 _output.WriteLine("Mock SaveAsync called.");
             });
-            var middleware = new GpsWatchLinkMiddleware(mockRepo.Object);
+            var middleware = new GpsWatchLinkMiddleware();
 
             // Act:
             var result = middleware.OperateOnMessage(context);

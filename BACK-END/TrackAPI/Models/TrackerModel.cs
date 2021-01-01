@@ -35,6 +35,7 @@ namespace TrackAPI.Models {
         [Required]
         public string ProductModel { get; set; }
         public string CreationTime { get; set; }
+        public string Status { get; set; }
         public DateTime? LastConnection { get; set; }
         public string LastConnectedServer { get; set; }
     }

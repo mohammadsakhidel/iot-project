@@ -24,7 +24,7 @@ namespace TrackWorker.Processors.Queues {
                     var message = _queue.Take();
                     GetPipeline().DispatchAsync(message); // I didn't await cause I'm gonna process another message :)
                 }
-            });
+            }, stoppingToken);
         }
 
         #region Abstract Methods:

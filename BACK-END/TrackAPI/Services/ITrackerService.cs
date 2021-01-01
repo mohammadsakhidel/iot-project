@@ -7,7 +7,7 @@ using TrackAPI.Models;
 namespace TrackAPI.Services {
     public interface ITrackerService {
         Task<(bool, string)> CreateAsync(TrackerModel model);
-        Task<TrackerModel> GetAsync(string id);
+        Task<TrackerModel> GetAsync(string id, bool reload = false);
         Task<TrackerModel> FindBySerialAsync(string serialNumber);
         Task<List<TrackerModel>> TakeAsync(int skip, int take);
         Task<List<TrackerModel>> GetUserTrackers(string userId);

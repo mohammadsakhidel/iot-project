@@ -85,7 +85,7 @@ namespace TrackWorker.Listeners {
                                 }
                             }
                         } catch (Exception ex) {
-                            var _logger = (ILogger<Worker>)Program.Host.Services.GetService(typeof(ILogger<Worker>));
+                            var _logger = (ILogger<Worker>)Program.Services.GetService(typeof(ILogger<Worker>));
                             _logger.LogError(ex.LogMessage(nameof(StartListeningAsync)));
                         }
                     });

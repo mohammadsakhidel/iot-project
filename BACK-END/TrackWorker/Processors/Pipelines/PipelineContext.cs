@@ -6,6 +6,7 @@ using TrackWorker.Processors.Middlewares;
 
 namespace TrackWorker.Processors.Pipelines {
     public class PipelineContext {
+        public IServiceProvider Services { get; set; }
         public TrackerMessage Message { get; set; }
         public bool OnlyValidate { get; set; }
 

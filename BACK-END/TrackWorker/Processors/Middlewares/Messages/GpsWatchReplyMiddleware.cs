@@ -27,7 +27,7 @@ namespace TrackWorker.Processors.Middlewares.Messages {
             if (string.IsNullOrEmpty(messageType))
                 return false;
 
-            var commandSet = CommandSet.Get(CommandSet.SET_GPSWATCH, Program.Host.Services);
+            var commandSet = CommandSet.Get(CommandSet.SET_GPSWATCH, Program.Services);
             var isResponseMessage = commandSet.SupportedCommands.Select(c => c.NativeCommand).Contains(messageType);
             return isResponseMessage;
         }
