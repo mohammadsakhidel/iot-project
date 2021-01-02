@@ -16,6 +16,7 @@ using TrackAPI.Helpers;
 using TrackAPI.Models;
 using TrackDataAccess.Models.Identity;
 using TrackDataAccess.Repositories;
+using TrackLib.Constants;
 using TrackLib.Utils;
 
 namespace TrackAPI.Services {
@@ -271,7 +272,7 @@ namespace TrackAPI.Services {
                 City = claims.SingleOrDefault(c => c.Type == ClaimNames.CITY)?.Value,
                 Address = claims.SingleOrDefault(c => c.Type == ClaimNames.ADDRESS)?.Value,
                 Explanation = appUser.Explanation,
-                CreationTime = appUser.CreationTime.ToString(Values.DATETIME_FORMAT)
+                CreationTime = appUser.CreationTime.ToString(SharedValues.DATETIME_FORMAT)
             };
         }
 

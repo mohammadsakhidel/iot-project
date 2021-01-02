@@ -119,7 +119,7 @@ namespace TrackAPI.Controllers {
                         result = new StatusChangedEvent(
                             tracker.Id,
                             TrackerStatusValues.OFFLINE,
-                            tracker.LastConnection.HasValue ? tracker.LastConnection.Value.ToString(Values.DATETIME_FORMAT) : string.Empty
+                            tracker.LastConnection.HasValue ? tracker.LastConnection.Value.ToString(SharedValues.DATETIME_FORMAT) : string.Empty
                         );
                         break;
                     }
@@ -147,7 +147,7 @@ namespace TrackAPI.Controllers {
                     result = new StatusChangedEvent(
                         tracker.Id,
                         TrackerStatusValues.OFFLINE,
-                        tracker.LastConnection.HasValue ? tracker.LastConnection.Value.ToString(Values.DATETIME_FORMAT) : string.Empty
+                        tracker.LastConnection.HasValue ? tracker.LastConnection.Value.ToString(SharedValues.DATETIME_FORMAT) : string.Empty
                     );
                 }
 

@@ -23,10 +23,5 @@ namespace TrackDataAccess.Models {
         [Column("user_id")]
         public string UserId { get; set; }
 
-        [Required]
-        [MaxLength(16)]
-        [Column("tracker_id")]
-        public string TrackerId { get; set; }
-
     }
 }

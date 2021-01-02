@@ -20,6 +20,7 @@ using TrackWorker.Processors.Queues;
 using TrackWorker.Shared;
 using TrackDataAccess.Repositories;
 using TrackWorker.Services;
+using TrackWorker.ServerEvents;
 
 namespace TrackWorker {
     public class Worker : BackgroundService {
@@ -112,15 +113,37 @@ namespace TrackWorker {
 
         private async void MessageListener_OnClientDisconnected(object sender, Events.ClientDisconnectedEventArgs e) {
             try {
-                var trackerRepository = Program.Services.GetService(typeof(ITrackerRepository)) as ITrackerRepository;
+
                 var trackerId = TrackerConnections.FindBySocket(e.ClientSocket);
                 if (!string.IsNullOrEmpty(trackerId)) {
-                    var tracker = await trackerRepository.GetAsync(trackerId, true);
+                    var trackerRepository = Program.Services.GetService(typeof(ITrackerRepository)) as ITrackerRepository;
+                    var tracker = await trackerRepository.GetWithIncludeAsync(trackerId);
+                    trackerRepository.Reload(tracker);
+                    
                     if (tracker != null) {
+
+                        // Notify connected users:
+                        foreach (var user in tracker.Users) {
+                            if (UserConnections.Contains(user.UserId)) {
+                                var socket = UserConnections.Get(user.UserId).Socket;
+                                var @event = new StatusChangedServerEvent(
+                                    tracker.Id, 
+                                    TrackerStatusValues.OFFLINE, 
+                                    tracker.LastConnection.HasValue ? tracker.LastConnection.Value.ToString(SharedValues.DATETIME_FORMAT) : string.Empty
+                                );
+
+                                @event.Send(socket);
+                            }
+                        }
+
+                        // Save offline status in DB:
                         tracker.Status = TrackerStatusValues.OFFLINE;
                         await trackerRepository.SaveAsync();
+
                     }
                 }
+
+
             } catch (Exception ex) {
                 _logger.LogError(ex.LogMessage(nameof(MessageListener_OnClientDisconnected)));
             }
@@ -143,7 +166,7 @@ namespace TrackWorker {
 
         private void UserListener_OnClientDisconnected(object sender, Events.ClientDisconnectedEventArgs e) {
             try {
-
+                
             } catch (Exception ex) {
                 _logger.LogError(ex.LogMessage(nameof(UserListener_OnClientDisconnected)));
             }
@@ -169,7 +192,9 @@ namespace TrackWorker {
                 #endregion
 
                 // Add User Connection:
-                TrackerConnections.AddUser(accessCode.TrackerId, accessCode.UserId, e.ClientSocket);
+                UserConnections.Add(accessCode.UserId, new UserConnection { 
+                    Socket = e.ClientSocket
+                });
 
 
             } catch (Exception ex) {

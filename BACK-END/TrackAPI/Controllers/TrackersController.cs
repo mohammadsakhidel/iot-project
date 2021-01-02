@@ -19,14 +19,11 @@ namespace TrackAPI.Controllers {
         #region -------------- CONSTRUCTION ---------------
         private readonly ITrackerService _trackerService;
         private readonly ICommandService _commandService;
-        private readonly IAccessCodeService _accessCodeService;
 
         public TrackersController(ITrackerService trackerService, 
-            ICommandService commandService,
-            IAccessCodeService accessCodeService) {
+            ICommandService commandService) {
             _trackerService = trackerService;
             _commandService = commandService;
-            _accessCodeService = accessCodeService;
         }
         #endregion
 
@@ -109,34 +106,6 @@ namespace TrackAPI.Controllers {
 
                 var trackers = await _trackerService.GetUserTrackers(userId);
                 return Ok(trackers);
-
-            } catch (Exception ex) {
-                return ex.GetActionResult();
-            }
-        }
-
-        [Authorize]
-        [HttpGet("{trackerId}/accesscode")]
-        public async Task<IActionResult> GetAccessCode(string trackerId) {
-            try {
-
-                var tracker = await _trackerService.GetAsync(trackerId);
-                if (tracker == null)
-                    return NotFound("Tracker not found.");
-
-                var userId = HttpContext.User.Claims.SingleOrDefault(c => c.Type == ClaimNames.USER_ID)?.Value;
-                if (string.IsNullOrEmpty(userId))
-                    throw new ApplicationException("UserID cannot be null.");
-
-                var accessCode = new AccessCodeModel { 
-                    Id = Guid.NewGuid().ToString(),
-                    TrackerId = trackerId,
-                    UserId = userId,
-                    CreationTime = DateTime.UtcNow
-                };
-                await _accessCodeService.AddAsync(accessCode);
-
-                return Ok(accessCode.Id);
 
             } catch (Exception ex) {
                 return ex.GetActionResult();

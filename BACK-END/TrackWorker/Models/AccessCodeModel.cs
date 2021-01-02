@@ -11,8 +11,6 @@ namespace TrackWorker.Models {
 
         public string UserId { get; set; }
 
-        public string TrackerId { get; set; }
-
         public DateTime CreationTime { get; set; }
 
     }

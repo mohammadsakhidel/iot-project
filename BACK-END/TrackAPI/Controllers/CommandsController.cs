@@ -84,7 +84,7 @@ namespace TrackAPI.Controllers {
                     Payload = command.Payload,
                     UserId = userId,
                     Response = response != null ? JsonSerializer.Serialize(response) : "",
-                    CreationTime = DateTime.UtcNow.ToString(Values.DATETIME_FORMAT)
+                    CreationTime = DateTime.UtcNow.ToString(SharedValues.DATETIME_FORMAT)
                 };
                 await _commandService.AddLogAsync(log);
 
@@ -146,7 +146,7 @@ namespace TrackAPI.Controllers {
                 #endregion
 
                 var trackerModel = _mapper.Map<TrackerModel>(tracker);
-                var errorData = (response.Error == ErrorCodes.TRACKER_OFFLINE ? tracker.LastConnection?.ToString(Values.DATETIME_FORMAT) : string.Empty);
+                var errorData = (response.Error == ErrorCodes.TRACKER_OFFLINE ? tracker.LastConnection?.ToString(SharedValues.DATETIME_FORMAT) : string.Empty);
 
                 return Ok(new ApiResult {
                     Done = response.Done,

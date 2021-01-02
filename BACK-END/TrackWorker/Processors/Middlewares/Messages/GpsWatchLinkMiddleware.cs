@@ -8,6 +8,7 @@ using TrackLib.Constants;
 using TrackLib.Utils;
 using TrackWorker.Helpers;
 using TrackWorker.Processors.Pipelines;
+using TrackWorker.ServerEvents;
 using TrackWorker.Shared;
 
 namespace TrackWorker.Processors.Middlewares.Messages {
@@ -25,7 +26,7 @@ namespace TrackWorker.Processors.Middlewares.Messages {
 
             #region PROCESSING:
             _ = GpsWatchMessage.TryParse(context.Message.Base64Text, out var message);
-            var tracker = trackerRepository.Get(message.UniqueID);
+            var tracker = trackerRepository.GetWithIncludeAsync(message.UniqueID).Result;
 
             // Update tracker last connection fields:
             string publicIP = GlobalState.PublicIPAddress;
@@ -40,8 +41,18 @@ namespace TrackWorker.Processors.Middlewares.Messages {
             trackerRepository.SaveAsync().Wait();
 
             // Add tracker to connected trackers list:
-            TrackerConnections.Add(message.UniqueID, new TrackerConnection { 
+            TrackerConnections.Add(message.UniqueID, new TrackerConnection {
                 Socket = context.Message.Socket.GetRealSocket()
+            });
+
+            // Send status changed server event to all listening users:
+            tracker.Users.ForEach(user => {
+                if (UserConnections.Contains(user.UserId)) {
+                    var socket = UserConnections.Get(user.UserId).Socket;
+                    var @event = new StatusChangedServerEvent(tracker.Id, TrackerStatusValues.ONLINE);
+
+                    @event.Send(socket);
+                }
             });
 
             // Respond to tracker & save to context:
