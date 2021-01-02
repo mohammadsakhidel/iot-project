@@ -12,7 +12,9 @@ namespace TrackWorker.Helpers {
         public int BufferSize { get; set; }
         public ListenerOptions MessageListener { get; set; }
         public ListenerOptions CommandListener { get; set; }
+        public ListenerOptions UserListener { get; set; }
         public int CommandReplyTimeoutMillis { get; set; }
+        public int UserAccessTokenValidMins { get; set; }
     }
 
     public class ListenerOptions {

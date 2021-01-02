@@ -20,6 +20,7 @@ namespace TrackDataAccess.Database {
         public DbSet<Image> Images { get; set; }
         public DbSet<TrackerUser> UserTrackers { get; set; }
         public DbSet<TrackerAllowedUser> TrackerAllowedUsers { get; set; }
+        public DbSet<AccessCode> AccessCodes { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder) {
 

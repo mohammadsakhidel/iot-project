@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Sockets;
 using System.Text;
 using TrackWorker.Extensions;
@@ -18,6 +19,26 @@ namespace TrackWorker.Shared {
                 else {
                     if (_trackers[uniqueId].Socket != connection.Socket)
                         _trackers[uniqueId] = connection;
+                }
+            }
+        }
+
+        public static void AddUser(string trackerId, string userId, Socket socket) {
+            lock (_lock) {
+                if (_trackers.ContainsKey(trackerId)) {
+                    var con = _trackers[trackerId];
+                    if (con.Users != null) {
+
+                        // remove previous connection:
+                        if (con.Users.Any(u => u.UserId == userId))
+                            con.Users.Remove(con.Users.First(u => u.UserId == userId));
+
+                        // add new connection:
+                        con.Users.Add((userId, socket));
+
+                    } else {
+                        con.Users = new List<(string UserId, Socket Socket)> { (userId, socket) };
+                    }
                 }
             }
         }

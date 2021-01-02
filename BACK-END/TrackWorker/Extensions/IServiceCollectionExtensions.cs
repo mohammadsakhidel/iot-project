@@ -11,6 +11,8 @@ using TrackWorker.Processors.Pipelines;
 using TrackWorker.Processors.Middlewares.Messages;
 using TrackWorker.Processors.Middlewares.Commands;
 using TrackLib.Commands;
+using AutoMapper;
+using TrackWorker.Services;
 
 namespace TrackWorker.Extensions {
     public static class IServiceCollectionExtensions {
@@ -20,6 +22,7 @@ namespace TrackWorker.Extensions {
         public static void AddMessageListener(this IServiceCollection services) {
             services.AddSingleton<IMessageListener, MessageListener>();
             services.AddSingleton<ICommandListener, CommandListener>();
+            services.AddSingleton<IUserListener, UserListener>();
         }
         public static void AddMiddlewares(this IServiceCollection services) {
 
@@ -66,6 +69,10 @@ namespace TrackWorker.Extensions {
         public static void AddRepositories(this IServiceCollection services) {
             services.AddScoped<ITrackerRepository, TrackerRepository>();
             services.AddScoped<IReportRepository, ReportRepository>();
+            services.AddScoped<IAccessCodeRepository, AccessCodeRepository>();
+        }
+        public static void AddServices(this IServiceCollection services) {
+            services.AddScoped<IAccessCodeService, AccessCodeService>();
         }
         public static void AddDbContext(this IServiceCollection services, IConfiguration configuration) {
             // For dotnet ef tool:
@@ -83,6 +90,12 @@ namespace TrackWorker.Extensions {
         }
         public static void AddHelpers(this IServiceCollection services) {
             services.AddTransient<GpsWatchCommandSet, GpsWatchCommandSet>();
+        }
+        public static void AddAutoMapper(this IServiceCollection services) {
+            IMapper mapper = new MapperConfiguration(mc => {
+                mc.AddProfile(new MappingProfile());
+            }).CreateMapper();
+            services.AddSingleton(mapper);
         }
     }
 }

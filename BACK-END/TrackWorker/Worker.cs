@@ -19,6 +19,7 @@ using TrackWorker.Helpers;
 using TrackWorker.Processors.Queues;
 using TrackWorker.Shared;
 using TrackDataAccess.Repositories;
+using TrackWorker.Services;
 
 namespace TrackWorker {
     public class Worker : BackgroundService {
@@ -28,16 +29,21 @@ namespace TrackWorker {
         private readonly ICommandListener _commandListener;
         private readonly IMessageQueue _messageQueue;
         private readonly ICommandQueue _commandQueue;
+        private readonly IUserListener _userListener;
+        private readonly AppSettings _appSettings;
 
         public Worker(ILogger<Worker> logger, IOptions<AppSettings> appSettings,
             IMessageListener messageListener, ICommandListener commandListener,
-            IMessageQueue messageQueue, ICommandQueue commandQueue) {
+            IMessageQueue messageQueue, ICommandQueue commandQueue,
+            IUserListener userListener, IOptions<AppSettings> options) {
 
             _logger = logger;
             _messageListener = messageListener;
             _commandListener = commandListener;
             _messageQueue = messageQueue;
             _commandQueue = commandQueue;
+            _userListener = userListener;
+            _appSettings = options.Value;
 
         }
 
@@ -62,6 +68,11 @@ namespace TrackWorker {
                 // Listener for command messager to be sent to the device:
                 var commandListenerTask = _commandListener.StartListeningAsync(stoppingToken);
                 _commandListener.OnDataReceived += CommandListener_OnDataReceivedAsync;
+
+                // Listener for User connections:
+                var userListenerTask = _userListener.StartListeningAsync(stoppingToken);
+                _userListener.OnDataReceived += UserListener_OnDataReceivedAsync;
+                _userListener.OnClientDisconnected += UserListener_OnClientDisconnected;
                 #endregion
 
                 #region Start Queue Listeners:
@@ -99,6 +110,22 @@ namespace TrackWorker {
             }
         }
 
+        private async void MessageListener_OnClientDisconnected(object sender, Events.ClientDisconnectedEventArgs e) {
+            try {
+                var trackerRepository = Program.Services.GetService(typeof(ITrackerRepository)) as ITrackerRepository;
+                var trackerId = TrackerConnections.FindBySocket(e.ClientSocket);
+                if (!string.IsNullOrEmpty(trackerId)) {
+                    var tracker = await trackerRepository.GetAsync(trackerId, true);
+                    if (tracker != null) {
+                        tracker.Status = TrackerStatusValues.OFFLINE;
+                        await trackerRepository.SaveAsync();
+                    }
+                }
+            } catch (Exception ex) {
+                _logger.LogError(ex.LogMessage(nameof(MessageListener_OnClientDisconnected)));
+            }
+        }
+
         private async void CommandListener_OnDataReceivedAsync(object sender, Events.DataReceivedEventArgs e) {
             try {
 
@@ -114,19 +141,39 @@ namespace TrackWorker {
             }
         }
 
-        private async void MessageListener_OnClientDisconnected(object sender, Events.ClientDisconnectedEventArgs e) {
+        private void UserListener_OnClientDisconnected(object sender, Events.ClientDisconnectedEventArgs e) {
             try {
-                var trackerRepository = Program.Services.GetService(typeof(ITrackerRepository)) as ITrackerRepository;
-                var trackerId = TrackerConnections.FindBySocket(e.ClientSocket);
-                if (!string.IsNullOrEmpty(trackerId)) {
-                    var tracker = await trackerRepository.GetAsync(trackerId, true);
-                    if (tracker != null) {
-                        tracker.Status = TrackerStatusValues.OFFLINE;
-                        await trackerRepository.SaveAsync();
-                    }
-                }
+
             } catch (Exception ex) {
-                _logger.LogError(ex.LogMessage(nameof(MessageListener_OnClientDisconnected)));
+                _logger.LogError(ex.LogMessage(nameof(UserListener_OnClientDisconnected)));
+            }
+        }
+
+        private async void UserListener_OnDataReceivedAsync(object sender, Events.DataReceivedEventArgs e) {
+            try {
+
+                var dataBytes = Convert.FromBase64String(e.Base64Data);
+                var accessCodeText = Encoding.UTF8.GetString(dataBytes);
+
+                #region Validate Access Token:
+                var accessCodeService = Program.Services.GetService(typeof(IAccessCodeService)) as IAccessCodeService;
+                var accessCode = await accessCodeService.GetAsync(accessCodeText);
+
+                // Invalid Access Code:
+                if (accessCode == null)
+                    return;
+
+                // Expired Access Code:
+                if (accessCode.CreationTime.AddMinutes(_appSettings.SocketOptions.UserAccessTokenValidMins) < DateTime.UtcNow)
+                    return;
+                #endregion
+
+                // Add User Connection:
+                TrackerConnections.AddUser(accessCode.TrackerId, accessCode.UserId, e.ClientSocket);
+
+
+            } catch (Exception ex) {
+                _logger.LogError(ex.LogMessage(nameof(UserListener_OnDataReceivedAsync)));
             }
         }
         #endregion

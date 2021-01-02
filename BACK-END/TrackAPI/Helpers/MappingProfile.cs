@@ -33,6 +33,10 @@ namespace TrackAPI.Helpers {
             // Image <--> ImageModel
             CreateMap<ImageModel, Image>();
             CreateMap<Image, ImageModel>();
+
+            // AccessCode <--> AccessCodeModel
+            CreateMap<AccessCodeModel, AccessCode>();
+            CreateMap<AccessCode, AccessCodeModel>();
         }
     }
 }
