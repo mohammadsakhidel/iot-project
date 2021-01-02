@@ -13,8 +13,16 @@ namespace TrackWorker.Helpers {
         public MappingProfile() {
 
             // AccessCode <--> AccessCodeModel
-            CreateMap<AccessCodeModel, AccessCode>();
-            CreateMap<AccessCode, AccessCodeModel>();
+            CreateMap<AccessCodeModel, AccessCode>().ReverseMap();
+
+            // Tracker <--> TrackerModel
+            CreateMap<TrackerModel, Tracker>().ReverseMap();
+
+            // TrackerUser <--> TrackerUserModel
+            CreateMap<TrackerUserModel, TrackerUser>().ReverseMap();
+
+            // Report <--> ReportModel
+            CreateMap<ReportModel, Report>().ReverseMap();
 
         }
 

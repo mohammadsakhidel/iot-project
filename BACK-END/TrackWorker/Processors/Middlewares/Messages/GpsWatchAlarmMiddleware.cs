@@ -1,14 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Text;
 using System.Text.RegularExpressions;
-using TrackDataAccess.Models;
-using TrackDataAccess.Repositories;
 using TrackLib.Constants;
 using TrackLib.Utils;
 using TrackWorker.Helpers;
+using TrackWorker.Models;
 using TrackWorker.Processors.Pipelines;
-using TrackWorker.Shared;
+using TrackWorker.Services;
 
 namespace TrackWorker.Processors.Middlewares.Messages {
     public class GpsWatchAlarmMiddleware : Middleware, IGpsWatchAlarmMiddleware {
@@ -17,21 +15,21 @@ namespace TrackWorker.Processors.Middlewares.Messages {
 
         public override bool OperateOnMessage(PipelineContext context) {
 
-            var trackerRepository = context.Services.GetService(typeof(ITrackerRepository)) as ITrackerRepository;
-            var reportRepository = context.Services.GetService(typeof(IReportRepository)) as IReportRepository;
+            var trackerService = context.Services.GetService(typeof(ITrackerService)) as ITrackerService;
+            var reportService = context.Services.GetService(typeof(IReportService)) as IReportService;
 
             #region VALIDATION:
-            var isValid = MessageHelper.Validate(context, trackerRepository);
+            var isValid = MessageHelper.Validate(context, trackerService);
             if (!isValid)
                 return false;
             #endregion
 
             #region SAVE IN DATABASE:
             _ = GpsWatchMessage.TryParse(context.Message.Base64Text, out var message);
-            var tracker = trackerRepository.Get(message.UniqueID);
+            var tracker = trackerService.Get(message.UniqueID);
             var reportData = GpsWatchReportData.FromArray(message.ContentItems.ToArray());
 
-            var report = new Report {
+            var report = new ReportModel {
                 ReportType = REPORT_TYPE,
                 TrackerId = tracker.Id,
                 ReportTime = reportData.ReportTime,
@@ -48,8 +46,7 @@ namespace TrackWorker.Processors.Middlewares.Messages {
                 TrackerState = reportData.TrackerStateBinary,
                 CreationTime = DateTime.UtcNow
             };
-            reportRepository.Add(report);
-            reportRepository.SaveAsync().Wait();
+            reportService.AddAsync(report).Wait();
             #endregion
 
             #region REPLY TO TRACKER:

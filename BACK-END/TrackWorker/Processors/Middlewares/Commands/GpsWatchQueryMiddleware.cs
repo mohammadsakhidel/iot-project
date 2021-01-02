@@ -1,16 +1,14 @@
 ﻿using Microsoft.Extensions.Options;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using TrackDataAccess.Repositories;
 using TrackLib.Constants;
 using TrackLib.Commands;
 using TrackLib.Utils;
 using TrackWorker.Helpers;
 using TrackWorker.Processors.Pipelines;
 using TrackWorker.Shared;
+using TrackWorker.Services;
 
 namespace TrackWorker.Processors.Middlewares.Commands {
     public class GpsWatchQueryMiddleware : Middleware, IGpsWatchQueryMiddleware {
@@ -36,11 +34,11 @@ namespace TrackWorker.Processors.Middlewares.Commands {
         public override bool OperateOnMessage(PipelineContext context) {
             try {
 
-                var trackerRepository = context.Services.GetService(typeof(ITrackerRepository)) as ITrackerRepository;
+                var trackerService = context.Services.GetService(typeof(ITrackerService)) as ITrackerService;
 
                 #region VALIDATION:
                 // Do Basic Validation:
-                (var isValid, var validationError) = CommandHelper.DoBasicValidation(context, trackerRepository);
+                (var isValid, var validationError) = CommandHelper.DoBasicValidation(context, trackerService);
                 var requestBytes = Convert.FromBase64String(context.Message.Base64Text);
                 var request = CommandRequest.Deserialize(requestBytes);
 
@@ -53,7 +51,7 @@ namespace TrackWorker.Processors.Middlewares.Commands {
                 #endregion
 
                 #region PROCESS:
-                var tracker = trackerRepository.Get(request.TrackerID);
+                var tracker = trackerService.Get(request.TrackerID);
                 _ = TrackerConnections.TryGet(request.TrackerID, out var trackerConnection);
 
                 // Send command to the tracker:

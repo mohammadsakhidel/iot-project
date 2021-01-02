@@ -1,17 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TrackDataAccess.Repositories;
 using TrackLib.Constants;
 using TrackLib.Commands;
 using TrackWorker.Processors.Pipelines;
 using TrackWorker.Shared;
+using TrackWorker.Services;
 
 namespace TrackWorker.Processors.Middlewares.Commands {
     public static class CommandHelper {
-        public static (bool, string) DoBasicValidation(PipelineContext context, ITrackerRepository trackerRepository, bool payloadRequired = true) {
+        public static (bool, string) DoBasicValidation(PipelineContext context, ITrackerService trackerService, bool payloadRequired = true) {
 
             var isValid = true;
             var validationError = ErrorCodes.INVALID_REQUEST;
@@ -28,7 +24,7 @@ namespace TrackWorker.Processors.Middlewares.Commands {
             }
 
             // Check database for tracker existence:
-            var trackerExists = trackerRepository.Get(request.TrackerID) != null;
+            var trackerExists = trackerService.Get(request.TrackerID) != null;
             if (!trackerExists) {
                 isValid = false;
                 validationError = ErrorCodes.INVALID_REQUEST;

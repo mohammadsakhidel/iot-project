@@ -1,14 +1,12 @@
-﻿using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Text;
 using System.Text.RegularExpressions;
-using TrackDataAccess.Repositories;
 using TrackLib.Constants;
 using TrackLib.Utils;
 using TrackWorker.Helpers;
 using TrackWorker.Processors.Pipelines;
 using TrackWorker.ServerEvents;
+using TrackWorker.Services;
 using TrackWorker.Shared;
 
 namespace TrackWorker.Processors.Middlewares.Messages {
@@ -16,17 +14,17 @@ namespace TrackWorker.Processors.Middlewares.Messages {
 
         public override bool OperateOnMessage(PipelineContext context) {
 
-            var trackerRepository = context.Services.GetService(typeof(ITrackerRepository)) as ITrackerRepository;
+            var trackerService = context.Services.GetService(typeof(ITrackerService)) as ITrackerService;
 
             #region VALIDATION:
-            var isValid = MessageHelper.Validate(context, trackerRepository);
+            var isValid = MessageHelper.Validate(context, trackerService);
             if (!isValid)
                 return false;
             #endregion
 
             #region PROCESSING:
             _ = GpsWatchMessage.TryParse(context.Message.Base64Text, out var message);
-            var tracker = trackerRepository.GetWithIncludeAsync(message.UniqueID).Result;
+            var tracker = trackerService.GetWithIncludeAsync(message.UniqueID).Result;
 
             // Update tracker last connection fields:
             string publicIP = GlobalState.PublicIPAddress;
@@ -34,11 +32,12 @@ namespace TrackWorker.Processors.Middlewares.Messages {
                 publicIP = SocketUtil.FindPublicIPAddressAsync().Result;
                 GlobalState.SetPublicIPAddress(publicIP);
             }
-            tracker.Status = TrackerStatusValues.ONLINE;
-            if (!string.IsNullOrEmpty(publicIP))
-                tracker.LastConnectedServer = publicIP;
-            tracker.LastConnection = DateTime.UtcNow;
-            trackerRepository.SaveAsync().Wait();
+            trackerService.UpdateLastConnectAsync(
+                tracker.Id, 
+                TrackerStatusValues.ONLINE, 
+                publicIP, 
+                DateTime.UtcNow
+            ).Wait();
 
             // Add tracker to connected trackers list:
             TrackerConnections.Add(message.UniqueID, new TrackerConnection {

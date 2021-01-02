@@ -1,13 +1,7 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Sockets;
 using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -18,7 +12,6 @@ using TrackWorker.Listeners;
 using TrackWorker.Helpers;
 using TrackWorker.Processors.Queues;
 using TrackWorker.Shared;
-using TrackDataAccess.Repositories;
 using TrackWorker.Services;
 using TrackWorker.ServerEvents;
 
@@ -116,9 +109,8 @@ namespace TrackWorker {
 
                 var trackerId = TrackerConnections.FindBySocket(e.ClientSocket);
                 if (!string.IsNullOrEmpty(trackerId)) {
-                    var trackerRepository = Program.Services.GetService(typeof(ITrackerRepository)) as ITrackerRepository;
-                    var tracker = await trackerRepository.GetWithIncludeAsync(trackerId);
-                    trackerRepository.Reload(tracker);
+                    var trackerService = Program.Services.GetService(typeof(ITrackerService)) as ITrackerService;
+                    var tracker = await trackerService.GetWithIncludeAsync(trackerId, true);
                     
                     if (tracker != null) {
 
@@ -137,8 +129,7 @@ namespace TrackWorker {
                         }
 
                         // Save offline status in DB:
-                        tracker.Status = TrackerStatusValues.OFFLINE;
-                        await trackerRepository.SaveAsync();
+                        await trackerService.UpdateStatusAsync(tracker.Id, TrackerStatusValues.OFFLINE);
 
                     }
                 }

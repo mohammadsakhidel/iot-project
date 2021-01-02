@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TrackDataAccess.Repositories;
-using TrackWorker.Helpers;
+﻿using TrackWorker.Helpers;
 using TrackWorker.Processors.Pipelines;
+using TrackWorker.Services;
 
 namespace TrackWorker.Processors.Middlewares.Messages {
     public static class MessageHelper {
-        public static bool Validate(PipelineContext context, ITrackerRepository trackerRepository) {
+        public static bool Validate(PipelineContext context, ITrackerService trackerService) {
             // Null Inputs check:
             if (context == null || context.Message == null)
                 return false;
@@ -20,7 +15,7 @@ namespace TrackWorker.Processors.Middlewares.Messages {
                 return false;
 
             // Check database for tracker existence:
-            var tracker = trackerRepository.Get(message.UniqueID);
+            var tracker = trackerService.Get(message.UniqueID);
             if (tracker == null || tracker.Id != message.UniqueID)
                 return false;
 

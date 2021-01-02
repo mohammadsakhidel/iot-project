@@ -73,6 +73,8 @@ namespace TrackWorker.Extensions {
         }
         public static void AddServices(this IServiceCollection services) {
             services.AddScoped<IAccessCodeService, AccessCodeService>();
+            services.AddScoped<ITrackerService, TrackerService>();
+            services.AddScoped<IReportService, ReportService>();
         }
         public static void AddDbContext(this IServiceCollection services, IConfiguration configuration) {
             // For dotnet ef tool:
