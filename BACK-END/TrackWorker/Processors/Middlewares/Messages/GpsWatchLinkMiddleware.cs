@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Extensions.Options;
+using System;
 using System.Text;
 using System.Text.RegularExpressions;
 using TrackLib.Constants;
@@ -11,6 +12,11 @@ using TrackWorker.Shared;
 
 namespace TrackWorker.Processors.Middlewares.Messages {
     public class GpsWatchLinkMiddleware : Middleware, IGpsWatchLinkMiddleware {
+
+        private readonly AppSettings _appSettings;
+        public GpsWatchLinkMiddleware(IOptions<AppSettings> options) {
+            _appSettings = options.Value;
+        }
 
         public override bool OperateOnMessage(PipelineContext context) {
 
@@ -27,15 +33,10 @@ namespace TrackWorker.Processors.Middlewares.Messages {
             var tracker = trackerService.GetWithIncludeAsync(message.UniqueID).Result;
 
             // Update tracker last connection fields:
-            string publicIP = GlobalState.PublicIPAddress;
-            if (string.IsNullOrEmpty(publicIP)) {
-                publicIP = SocketUtil.FindPublicIPAddressAsync().Result;
-                GlobalState.SetPublicIPAddress(publicIP);
-            }
             trackerService.UpdateLastConnectAsync(
                 tracker.Id, 
                 TrackerStatusValues.ONLINE, 
-                publicIP, 
+                _appSettings.ServerName, 
                 DateTime.UtcNow
             ).Wait();
 

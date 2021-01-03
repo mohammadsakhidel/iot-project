@@ -1,4 +1,5 @@
-﻿using Moq;
+﻿using Microsoft.Extensions.Options;
+using Moq;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -25,7 +26,10 @@ namespace TrackWorker.Tests.Middlewares {
         [MemberData(nameof(ValidateMessageData))]
         public void ValidateMessageTest(TrackerMessage message, bool expected) {
             // Arrange:
-            var middleware = new GpsWatchLinkMiddleware();
+            IOptions<AppSettings> options = Options.Create(new AppSettings { 
+                ServerName = "ws1"
+            });
+            var middleware = new GpsWatchLinkMiddleware(options);
 
             // Act:
             var validated = middleware.IsMatch(message);
@@ -45,7 +49,10 @@ namespace TrackWorker.Tests.Middlewares {
             mockRepo.Setup(repo => repo.SaveAsync()).Callback(() => {
                 _output.WriteLine("Mock SaveAsync called.");
             });
-            var middleware = new GpsWatchLinkMiddleware();
+            IOptions<AppSettings> options = Options.Create(new AppSettings {
+                ServerName = "ws1"
+            });
+            var middleware = new GpsWatchLinkMiddleware(options);
 
             // Act:
             var result = middleware.OperateOnMessage(context);

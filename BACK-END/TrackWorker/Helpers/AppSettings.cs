@@ -4,8 +4,11 @@ using System.Text;
 
 namespace TrackWorker.Helpers {
     public class AppSettings {
+
         public const string SECTION_NAME = "AppSettings";
+        public string ServerName { get; set; }
         public SocketOptions SocketOptions { get; set; }
+
     }
 
     public class SocketOptions {

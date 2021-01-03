@@ -46,13 +46,6 @@ namespace TrackWorker {
 
             try {
 
-                #region Set Global State Values:
-                var globalStateTask = Task.Run(() => {
-                    var ip = SocketUtil.FindPublicIPAddressAsync(5).Result;
-                    GlobalState.SetPublicIPAddress(ip);
-                });
-                #endregion
-
                 #region Start Listeners:
                 // Listener for messages from trackers:
                 var messageListenerTask = _messageListener.StartListeningAsync(stoppingToken);
@@ -78,7 +71,7 @@ namespace TrackWorker {
                 #endregion
 
                 await Task.WhenAll(messageListenerTask, commandListenerTask,
-                    messageQueueListenerTask, commandQueueListenerTask, globalStateTask);
+                    messageQueueListenerTask, commandQueueListenerTask);
 
             } catch (Exception ex) {
                 _logger.LogError(ex.LogMessage(nameof(ExecuteAsync)));
