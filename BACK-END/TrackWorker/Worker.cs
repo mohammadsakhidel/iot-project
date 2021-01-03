@@ -180,6 +180,10 @@ namespace TrackWorker {
                     Socket = e.ClientSocket
                 });
 
+                // Return User Connected Server Event:
+                var @event = new UserConnectedServerEvent(_appSettings.ServerName);
+                @event.Send(e.ClientSocket);
+
 
             } catch (Exception ex) {
                 _logger.LogError(ex.LogMessage(nameof(UserListener_OnDataReceivedAsync)));

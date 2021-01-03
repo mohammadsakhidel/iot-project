@@ -7,5 +7,6 @@ using System.Threading.Tasks;
 namespace TrackWorker.Constants {
     public static class ServerEventNames {
         public const string STATUS_CHANGED = "STATUS_CHANGED";
+        public const string USER_CONNECTED = "USER_CONNECTED";
     }
 }
