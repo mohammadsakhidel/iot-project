@@ -57,9 +57,8 @@ namespace TrackWorker {
                 _commandListener.OnDataReceived += CommandListener_OnDataReceivedAsync;
 
                 // Listener for User connections:
-                var userListenerTask = _userListener.StartListeningAsync(stoppingToken);
+                _userListener.StartListening(_appSettings.SocketOptions.UserListener.PortNumber);
                 _userListener.OnDataReceived += UserListener_OnDataReceivedAsync;
-                _userListener.OnClientDisconnected += UserListener_OnClientDisconnected;
                 #endregion
 
                 #region Start Queue Listeners:
@@ -110,14 +109,14 @@ namespace TrackWorker {
                         // Notify connected users:
                         foreach (var user in tracker.Users) {
                             if (UserConnections.Contains(user.UserId)) {
-                                var socket = UserConnections.Get(user.UserId).Socket;
+                                var client = UserConnections.Get(user.UserId).Client;
                                 var @event = new StatusChangedServerEvent(
                                     tracker.Id, 
                                     TrackerStatusValues.OFFLINE, 
                                     tracker.LastConnection.HasValue ? tracker.LastConnection.Value.ToString(SharedValues.DATETIME_FORMAT) : string.Empty
                                 );
 
-                                @event.Send(socket);
+                                await client.Socket.Send(@event.Serialize());
                             }
                         }
 
@@ -148,19 +147,10 @@ namespace TrackWorker {
             }
         }
 
-        private void UserListener_OnClientDisconnected(object sender, Events.ClientDisconnectedEventArgs e) {
-            try {
-                
-            } catch (Exception ex) {
-                _logger.LogError(ex.LogMessage(nameof(UserListener_OnClientDisconnected)));
-            }
-        }
-
-        private async void UserListener_OnDataReceivedAsync(object sender, Events.DataReceivedEventArgs e) {
+        private async void UserListener_OnDataReceivedAsync(object sender, Events.WebSocketDataReceivedEventArgs e) {
             try {
 
-                var dataBytes = Convert.FromBase64String(e.Base64Data);
-                var accessCodeText = Encoding.UTF8.GetString(dataBytes);
+                var accessCodeText = e.Message;
 
                 #region Validate Access Token:
                 var accessCodeService = Program.Services.GetService(typeof(IAccessCodeService)) as IAccessCodeService;
@@ -177,13 +167,12 @@ namespace TrackWorker {
 
                 // Add User Connection:
                 UserConnections.Add(accessCode.UserId, new UserConnection { 
-                    Socket = e.ClientSocket
+                    Client = e.Client
                 });
 
                 // Return User Connected Server Event:
                 var @event = new UserConnectedServerEvent(_appSettings.ServerName);
-                @event.Send(e.ClientSocket);
-
+                await e.Client.Socket.Send(@event.Serialize());
 
             } catch (Exception ex) {
                 _logger.LogError(ex.LogMessage(nameof(UserListener_OnDataReceivedAsync)));

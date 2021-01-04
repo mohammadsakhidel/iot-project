@@ -12,20 +12,11 @@ namespace TrackWorker.ServerEvents {
         public string Source { get; set; }
         public string[] Data { get; set; }
 
-        public bool Send(Socket socket) {
-            try {
-
-                var jsonString = JsonSerializer.Serialize(this, new JsonSerializerOptions {
-                    PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-                });
-                var bytes = Encoding.UTF8.GetBytes(jsonString);
-                socket.Send(bytes);
-
-                return true;
-
-            } catch {
-                return false;
-            }
+        public string Serialize() {
+            var jsonString = JsonSerializer.Serialize(this, new JsonSerializerOptions {
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+            });
+            return jsonString;
         }
 
     }

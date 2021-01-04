@@ -5,6 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace TrackWorker.Listeners {
-    public interface IUserListener : IListener {
+    public interface IUserListener : IWebSocketListener {
     }
 }

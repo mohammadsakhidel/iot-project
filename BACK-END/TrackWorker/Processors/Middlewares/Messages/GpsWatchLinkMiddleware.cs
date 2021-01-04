@@ -48,10 +48,10 @@ namespace TrackWorker.Processors.Middlewares.Messages {
             // Send status changed server event to all listening users:
             tracker.Users.ForEach(user => {
                 if (UserConnections.Contains(user.UserId)) {
-                    var socket = UserConnections.Get(user.UserId).Socket;
+                    var client = UserConnections.Get(user.UserId).Client;
                     var @event = new StatusChangedServerEvent(tracker.Id, TrackerStatusValues.ONLINE);
 
-                    @event.Send(socket);
+                    client.Socket.Send(@event.Serialize()).Wait();
                 }
             });
 
