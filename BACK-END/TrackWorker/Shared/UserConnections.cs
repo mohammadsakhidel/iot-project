@@ -16,7 +16,7 @@ namespace TrackWorker.Shared {
                 if (!_users.ContainsKey(userId))
                     _users.Add(userId, connection);
                 else {
-                    if (_users[userId].Client != connection.Client)
+                    if (_users[userId].Client.Socket != connection.Client.Socket)
                         _users[userId] = connection;
                 }
             }
