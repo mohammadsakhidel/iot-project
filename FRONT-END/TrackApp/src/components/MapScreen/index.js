@@ -7,38 +7,64 @@ export default class MapScreen extends Component {
     constructor(props) {
         super(props);
 
-        this.ws = new WebSocket("ws://192.168.43.95:8125");
-        this.ws.onopen = event => {
-            this.setState({
-                message: "CONNECTION OPENED"
-            });
-        };
-        this.ws.onmessage = event => {
-            this.setState({
-                message: event.data
-            });
-        };
-        this.ws.onclose = event => {
-            this.setState({
-                message: "CONNECTION CLOSED"
-            });
-        };
-
         // State:
         this.state = {
             message: ''
         };
 
         // Bindings:
+        this.wsConnect = this.wsConnect.bind(this);
+        this.wsOnOpen = this.wsOnOpen.bind(this);
+        this.wsOnMessage = this.wsOnMessage.bind(this);
+        this.wsOnClose = this.wsOnClose.bind(this);
+        this.wsOnError = this.wsOnError.bind(this);
         this.onPress = this.onPress.bind(this);
 
     }
 
     componentDidMount() {
+        //this.wsConnect();
     }
 
     onPress() {
-        this.ws.send("a4c923f8-63a1-4181-a95f-041a218dc8d1");
+        if (this.ws)
+            this.ws.send("2786b3c0-2182-4c1f-bf78-8e6c23e1ea7a");
+    }
+
+    wsConnect() {
+        this.setState({ message: "CONNECTING..." });
+        this.ws = new WebSocket("ws://192.168.43.95:8125");
+
+        this.ws.onopen = this.wsOnOpen;
+        this.ws.onmessage = this.wsOnMessage;
+        this.ws.onclose = this.wsOnClose;
+        this.ws.onerror = this.wsOnError;
+    }
+
+    wsOnOpen(event) {
+        this.setState({
+            message: "CONNECTION OPENED"
+        });
+    }
+
+    wsOnMessage(event) {
+        this.setState({
+            message: event.data
+        });
+    }
+
+    wsOnClose(event) {
+        this.setState({
+            message: "CONNECTION CLOSED"
+        });
+
+        setTimeout(() => this.wsConnect(), 1000);
+    }
+
+    wsOnError(event) {
+        this.setState({
+            message: "ERROR"
+        });
     }
 
     render() {

@@ -15,12 +15,12 @@ namespace TrackAPI.Sockets {
             _appSettings = options.Value;
         }
 
-        public Task<CommandResponse> ExecuteAsync(CommandRequest request, string host = "") {
+        public Task<CommandResponse> ExecuteAsync(CommandRequest request, WorkerServerInfo host) {
             return Task.Run(() => {
                 try {
                     // Send Command:
                     using var socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-                    socket.Connect((!string.IsNullOrEmpty(host) ? host : _appSettings.Worker.DefaultServer), _appSettings.Worker.PortNumber);
+                    socket.Connect(host.IP, host.CommandPort);
                     int bytesSent = socket.Send(request.Serialize());
                     if (bytesSent <= 0)
                         return null;

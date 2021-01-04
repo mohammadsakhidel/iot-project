@@ -70,7 +70,7 @@ class TrackersScreen extends Component {
                                         renderItem={({ item }) => (
                                             <TrackerItem
                                                 item={item}
-                                                connection={connections[item.id]}
+                                                connection={connections[item.id] ?? { status: item.status, lastConnection: item.lastConnection }}
                                                 removeTrackerFunc={this.removeTrackerFunc}
                                                 configureTrackerFunc={(tracker) => navigation.navigate(RouteNames.CONFIG_TRACKER, tracker)}
                                                 reloadDataFunc={this.reloadDataFunc}

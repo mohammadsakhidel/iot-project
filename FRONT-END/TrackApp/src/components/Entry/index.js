@@ -10,12 +10,11 @@ import TrackerConfigScreen from '../TrackerConfigScreen';
 import * as GlobalStyles from '../../styles/global-styles';
 import * as vars from '../../styles/vars';
 import AppContext from '../../helpers/app-context';
-import * as AppSettings from '../../appsettings.json';
-import PollingService from '../../api/services/polling-service';
-import * as EventNames from '../../constants/event-names';
 import { connect } from 'react-redux';
 import * as Actions from '../../redux/actions';
-
+import * as EventNames from '../../constants/event-names';
+import { showError } from '../FlashMessageWrapper';
+import EventsService from '../../api/services/events-service';
 
 const Stack = createStackNavigator();
 
@@ -25,10 +24,22 @@ class Entry extends Component {
 
     constructor(props) {
         super(props);
+
+        // Bindings:
+        this.getAccessCodeAndConnect = this.getAccessCodeAndConnect.bind(this);
+        this.wsConnect = this.wsConnect.bind(this);
+        this.wsOnOpen = this.wsOnOpen.bind(this);
+        this.wsOnMessage = this.wsOnMessage.bind(this);
+        this.wsOnClose = this.wsOnClose.bind(this);
+        this.wsOnError = this.wsOnError.bind(this);
     }
 
-    componentDidMount() {
-        this.pollAsync();
+    async componentDidMount() {
+        try {
+            await this.getAccessCodeAndConnect();
+        } catch (e) {
+            showError(e);
+        }
     }
 
     render() {
@@ -71,52 +82,85 @@ class Entry extends Component {
         );
     }
 
-    async pollAsync() {
+    async getAccessCodeAndConnect() {
 
-        while (true) {
+        // Get Connections Info from API:
+        let connectionsInfo = null;
+        while (connectionsInfo == null) {
             try {
 
-                if (this.context.user == null)
-                    continue;
+                const token = this.context.user.token;
+                const apiResult = await EventsService.getConnectionInfoAsync(token);
+                if (apiResult.done) {
 
-                const {
-                    trackers,
-                    connections,
-                    changeTrackerStatus
-                } = this.props;
-                if (trackers == null || trackers.length == 0)
-                    continue;
+                    connectionsInfo = apiResult.data;
 
-                const token = this.context.token;
-                const pollingInput = {
-                    TrackersStatus: trackers.map(t => ({
-                        trackerId: t.id,
-                        status: connections[t.id]?.status ?? ""
-                    }))
-                };
-                const response = await PollingService.poll(token, pollingInput);
-
-                if (response.done) {
-                    const apiResult = response.data;
-                    if (apiResult.done) {
-                        const event = JSON.parse(apiResult.data);
-                        switch (event.name) {
-                            case EventNames.STATUS_CHANGED:
-                                changeTrackerStatus(event);
-                                break;
-                            default:
-                                break;
-                        }
-                    }
                 }
 
-            } catch (_) {
-            } finally {
-                await new Promise(resolve => setTimeout(resolve, AppSettings.PollingDelay ?? 3000));
-            }
+            } catch { }
         }
 
+        // Connect to WebSocket servers:
+        const { accessCode, servers } = connectionsInfo;
+        servers.forEach(server => {
+            this.wsConnect(server[0], server[1], accessCode);
+        });
+
     }
+
+    wsConnect(server, port, accessCode) {
+        if (!server || !port || !accessCode)
+            return;
+
+        this.accessCode = accessCode;
+        this.ws = new WebSocket(`ws://${server}:${port}`);
+
+        this.ws.onopen = this.wsOnOpen;
+        this.ws.onmessage = this.wsOnMessage;
+        this.ws.onclose = this.wsOnClose;
+        this.ws.onerror = this.wsOnError;
+    }
+
+    wsOnOpen(e) {
+        try {
+            if (this.ws) {
+                this.ws.send(this.accessCode);
+            }
+        } catch (e) {
+            showError(e);
+        }
+    }
+
+    wsOnMessage(e) {
+        try {
+            const event = JSON.parse(e.data);
+
+            const {
+                changeTrackerStatus
+            } = this.props;
+
+            switch (event.name) {
+                case EventNames.STATUS_CHANGED:
+                    changeTrackerStatus(event);
+                    break;
+                default:
+                    break;
+            }
+        } catch (e) {
+            showError(e);
+        }
+    }
+
+    wsOnClose(e) {
+        setTimeout(async () => {
+            await this.getAccessCodeAndConnect()
+        }, 1000);
+    }
+
+    wsOnError(e) {
+        //console.log('WS Connection Error.\n' + JSON.stringify(e));
+    }
+
 }
 
 const mapStateToProps = (state) => ({

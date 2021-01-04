@@ -19,20 +19,28 @@ namespace TrackAPI.Helpers {
 
     public class WorkerSettings {
         public bool UseTrackerLastConnection { get; set; }
-        public string DefaultServer { get; set; }
-        public int PortNumber { get; set; }
         public int BufferSize { get; set; }
         public int ResponseTimeoutMillis { get; set; }
+        public WorkerServerInfo[] Servers { get; set; }
 
-        public string GetHost(string trackerLastConnectedServer) {
-            return UseTrackerLastConnection && !string.IsNullOrEmpty(trackerLastConnectedServer)
-                   ? trackerLastConnectedServer
-                   : DefaultServer;
+        public WorkerServerInfo GetHost(string trackerLastConnectedServer) {
+            var lastConnectedServer = UseTrackerLastConnection && !string.IsNullOrEmpty(trackerLastConnectedServer)
+                   ? Servers.SingleOrDefault(s => s.Name == trackerLastConnectedServer.ToUpper())
+                   : null;
+
+            return lastConnectedServer ?? Servers.First();
         }
     }
 
     public class PollingSettings {
         public int TimeoutSeconds { get; set; }
         public int StatusCheckDelaySeconds { get; set; }
+    }
+
+    public class WorkerServerInfo {
+        public string Name { get; set; }
+        public string IP { get; set; }
+        public int CommandPort { get; set; }
+        public int UserPort { get; set; }
     }
 }

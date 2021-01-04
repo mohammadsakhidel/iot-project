@@ -36,7 +36,7 @@ namespace TrackWorker.Processors.Middlewares.Messages {
             trackerService.UpdateLastConnectAsync(
                 tracker.Id, 
                 TrackerStatusValues.ONLINE, 
-                _appSettings.ServerName, 
+                _appSettings.ServerName.ToUpper(), 
                 DateTime.UtcNow
             ).Wait();
 
