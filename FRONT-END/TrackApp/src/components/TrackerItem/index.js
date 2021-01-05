@@ -147,7 +147,7 @@ export default class TrackerItem extends Component {
                         <Text style={styles.offline}>
                             {
                                 Strings.Offline +
-                                (connection.lastConnection != ''
+                                (connection.lastConnection
                                     ? ' ' + Strings.Since + ' ' + formatDateString(connection.lastConnection)
                                     : ''
                                 )
