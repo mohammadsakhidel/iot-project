@@ -13,8 +13,19 @@ export default function SettingsItem(props) {
     const {
         icon,
         onPress,
-        children
+        children,
+        iconColor,
+        textColor
     } = props;
+
+    const propSets = {
+        chevron: {
+            color: vars.COLOR_SECONDARY_L3
+        },
+        icon: {
+            color: iconColor ?? vars.COLOR_SECONDARY_L3
+        }
+    };
 
     const chevronShown = props.chevronShown ?? true;
 
@@ -22,7 +33,7 @@ export default function SettingsItem(props) {
         <ListItem bottomDivider onPress={onPress}>
             <Icon name={icon} {...propSets.icon} />
             <ListItem.Content>
-                <ListItem.Title>
+                <ListItem.Title style={(textColor ? { color: textColor } : {})}>
                     {children}
                 </ListItem.Title>
             </ListItem.Content>
@@ -30,12 +41,3 @@ export default function SettingsItem(props) {
         </ListItem>
     );
 }
-
-const propSets = {
-    chevron: {
-        color: vars.COLOR_SECONDARY_L3
-    },
-    icon: {
-        color: vars.COLOR_SECONDARY_L3
-    }
-};

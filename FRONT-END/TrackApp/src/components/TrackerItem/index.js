@@ -47,23 +47,23 @@ export default class TrackerItem extends Component {
                     <View style={styles.textContainer}>
                         <Text bold>{item.displayName}</Text>
                         {this.renderStatus()}
-                        <View style={styles.actionsContainer}>
-                            <LinkButton
-                                icon="cogs"
-                                iconStyle={styles.actionIcon}
-                                title={Strings.Configure}
-                                titleStyle={styles.action}
-                                onPress={this.onConfigurePress}
-                            />
+                    </View>
+                    <View style={styles.actionsContainer}>
+                        {/* <LinkButton
+                            icon="cogs"
+                            iconStyle={styles.actionIcon}
+                            title={Strings.Configure}
+                            titleStyle={styles.action}
+                            onPress={this.onConfigurePress}
+                        /> */}
 
-                            <LinkButton
-                                icon="trash"
-                                iconStyle={{ ...styles.actionIcon, ...styles.removeActionIcon }}
-                                title={Strings.Remove}
-                                titleStyle={[styles.action, styles.removeAction]}
-                                onPress={this.onRemovePress}
-                            />
-                        </View>
+                        <LinkButton
+                            icon="trash"
+                            iconStyle={{ ...styles.actionIcon, ...styles.removeActionIcon }}
+                            title=""
+                            titleStyle={styles.removeAction}
+                            onPress={this.onRemovePress}
+                        />
                     </View>
                     {this.state.isLoading ? (
                         <View style={styles.loading}>
@@ -172,22 +172,24 @@ export default class TrackerItem extends Component {
 /* #region  Styles */
 const styles = StyleSheet.create({
     container: {
-        padding: vars.PAD_NORMAL,
+        paddingVertical: vars.PAD_NORMAL,
         borderBottomWidth: StyleSheet.hairlineWidth,
         borderBottomColor: vars.COLOR_GRAY_L3,
-        flexDirection: 'row'
+        flexDirection: 'row',
+        alignItems: 'stretch'
     },
     textContainer: {
-        marginHorizontal: vars.PAD_HALF
-        //marginTop: vars.PAD_HALF
+        flex: 1,
+        justifyContent: 'center'
     },
     icon: {
-        width: 70,
-        height: 70,
-        borderRadius: 10
+        width: 65,
+        height: 65,
+        borderRadius: 10,
+        marginHorizontal: vars.PAD_NORMAL
     },
     actionsContainer: {
-        flexDirection: 'row'
+        justifyContent: 'center'
     },
     action: {
         fontSize: vars.FS_BIT_SMALLER
@@ -215,7 +217,8 @@ const styles = StyleSheet.create({
     online: {
         ...GlobalStyles.smallText,
         ...GlobalStyles.success,
-        marginHorizontal: vars.PAD_HALF
+        marginHorizontal: vars.PAD_HALF,
+        fontWeight: 'bold'
     },
     onlineIcon: {
         ...GlobalStyles.success,

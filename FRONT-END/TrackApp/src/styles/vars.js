@@ -35,7 +35,7 @@ export const COLOR_GRAY_L3 = '#e6e6e6';
 export const COLOR_GRAY_LIGHTEST = '#ffffff';
 export const COLOR_LINK = '#0097e8';
 export const COLOR_ERROR = '#d90036';
-export const COLOR_SUCCESS = '#00ad7f';
+export const COLOR_SUCCESS = '#00a378';
 
 export const PAD_NORMAL = 15;
 export const PAD_HALF = 0.5 * PAD_NORMAL;

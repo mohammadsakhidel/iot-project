@@ -133,6 +133,7 @@ class Entry extends Component {
 
     wsOnMessage(e) {
         try {
+            //console.log(e.data);
             const event = JSON.parse(e.data);
 
             const {

@@ -71,5 +71,6 @@
     "CheckVersion": "Device Platform Version",
     "Wakeup": "Wake Up!",
     "NoDisturbanceTime": "No Disturbance Time",
-    "FindDevice": "Look For Device"
+    "FindDevice": "Look For Device",
+    "Actions": "Actions"
 }

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, StyleSheet, ScrollView } from 'react-native';
+import { View, StyleSheet, ScrollView, Alert } from 'react-native';
 import Text from '../Text';
 import { Avatar, ListItem } from 'react-native-elements';
 import Icon from '../Icon';
@@ -8,108 +8,183 @@ import * as vars from '../../styles/vars';
 import { Strings } from '../../i18n/strings';
 import SettingsItem from '../SettingsItem';
 import SettingsSection from '../SettingsSection';
+import AppContext from '../../helpers/app-context';
+import { NavigationContext } from '@react-navigation/native';
+import * as RouteNames from '../../constants/route-names';
+import { connect } from 'react-redux';
+import * as Actions from '../../redux/actions';
 
-export default function TrackerConfigScreen(props) {
-    const { route } = props;
-    const tracker = route.params;
+class TrackerConfigScreen extends Component {
 
-    return (
-        <View style={styles.container}>
+    static contextType = AppContext;
 
-            <ListItem bottomDivider onPress={() => { }}>
-                <Avatar
-                    rounded
-                    size="large"
-                    source={{ uri: TrackerService.getIconUrl(tracker) }}
-                />
-                <ListItem.Content>
-                    <ListItem.Title>
-                        {tracker.displayName}
-                    </ListItem.Title>
-                </ListItem.Content>
-                <ListItem.Chevron
-                    name="edit"
-                    type="font-awesome"
-                    size={vars.ICO_NORMAL}
-                    color={vars.COLOR_SECONDARY_L3}
-                />
-            </ListItem>
+    constructor(props) {
+        super(props);
 
-            <ScrollView style={styles.settingsContainer}>
+        // Bindings:
+        this.onRemovePress = this.onRemovePress.bind(this);
+        this.removeTrackerFunc = this.removeTrackerFunc.bind(this);
+    }
 
-                <SettingsSection title={Strings.PrivacySettings}>
-                    <SettingsItem icon="qrcode" onPress={() => { }}>
-                        {Strings.QRCode}
-                    </SettingsItem>
-                    <SettingsItem icon="users" onPress={() => { }}>
-                        {Strings.AllowedUsers}
-                    </SettingsItem>
-                    <SettingsItem icon="key" onPress={() => { }}>
-                        {Strings.DevicePassword}
-                    </SettingsItem>
-                </SettingsSection>
+    render() {
+        const { route } = this.props;
+        const tracker = route.params;
 
-                <SettingsSection title={Strings.DeviceSettings}>
-                    <SettingsItem icon="mobile" onPress={() => { }}>
-                        {Strings.CenterNumber}
-                    </SettingsItem>
-                    <SettingsItem icon="address-book" onPress={() => { }}>
-                        {Strings.Contacts}
-                    </SettingsItem>
-                    <SettingsItem icon="exclamation-circle" onPress={() => { }}>
-                        {Strings.SOSNumbers}
-                    </SettingsItem>
-                    <SettingsItem icon="bell" onPress={() => { }}>
-                        {Strings.AlarmSettings}
-                    </SettingsItem>
-                    <SettingsItem icon="bell-slash" onPress={() => { }}>
-                        {Strings.NoDisturbanceTime}
-                    </SettingsItem>
-                    <SettingsItem icon="globe" onPress={() => { }}>
-                        {Strings.ServerAndPortNumber}
-                    </SettingsItem>
-                    <SettingsItem icon="history" onPress={() => { }}>
-                        {Strings.UploadInterval}
-                    </SettingsItem>
-                    <SettingsItem icon="language" onPress={() => { }}>
-                        {Strings.LanguageAndTimezone}
-                    </SettingsItem>
-                </SettingsSection>
+        return (
+            <NavigationContext.Consumer>
+                {navigation => (
+                    <View style={styles.container}>
 
-                <SettingsSection title={Strings.Commands}>
-                    <SettingsItem icon="info-circle" onPress={() => { }}>
-                        {Strings.CheckVersion}
-                    </SettingsItem>
-                    <SettingsItem icon="phone" onPress={() => { }}>
-                        {Strings.MakeCall}
-                    </SettingsItem>
-                    <SettingsItem icon="phone-square" onPress={() => { }}>
-                        {Strings.FindDevice}
-                    </SettingsItem>
-                    <SettingsItem icon="bullhorn" onPress={() => { }}>
-                        {Strings.Wakeup}
-                    </SettingsItem>
-                    <SettingsItem icon="repeat" onPress={() => { }}>
-                        {Strings.Restart}
-                    </SettingsItem>
-                    <SettingsItem icon="power-off" onPress={() => { }}>
-                        {Strings.PowerOff}
-                    </SettingsItem>
-                    <SettingsItem icon="minus-circle" onPress={() => { }}>
-                        {Strings.ResetFactory}
-                    </SettingsItem>
-                </SettingsSection>
+                        <ListItem bottomDivider onPress={() => { }}>
+                            <Avatar
+                                rounded
+                                size="large"
+                                source={{ uri: TrackerService.getIconUrl(tracker) }}
+                            />
+                            <ListItem.Content>
+                                <ListItem.Title>
+                                    {tracker.displayName}
+                                </ListItem.Title>
+                            </ListItem.Content>
+                            <ListItem.Chevron
+                                name="edit"
+                                type="font-awesome"
+                                size={vars.ICO_NORMAL}
+                                color={vars.COLOR_SECONDARY_L3}
+                            />
+                        </ListItem>
 
-                <View>
-                    <Text style={styles.footer}>
-                        {Strings.Footer}
-                    </Text>
-                </View>
+                        <ScrollView style={styles.settingsContainer}>
 
-            </ScrollView>
+                            <SettingsSection title={Strings.PrivacySettings}>
+                                <SettingsItem icon="qrcode" onPress={() => { }}>
+                                    {Strings.QRCode}
+                                </SettingsItem>
+                                <SettingsItem icon="users" onPress={() => { }}>
+                                    {Strings.AllowedUsers}
+                                </SettingsItem>
+                                <SettingsItem icon="key" onPress={() => { }}>
+                                    {Strings.DevicePassword}
+                                </SettingsItem>
+                            </SettingsSection>
 
-        </View>
-    );
+                            <SettingsSection title={Strings.DeviceSettings}>
+                                <SettingsItem icon="mobile" onPress={() => { }}>
+                                    {Strings.CenterNumber}
+                                </SettingsItem>
+                                <SettingsItem icon="address-book" onPress={() => { }}>
+                                    {Strings.Contacts}
+                                </SettingsItem>
+                                <SettingsItem icon="exclamation-circle" onPress={() => { }}>
+                                    {Strings.SOSNumbers}
+                                </SettingsItem>
+                                <SettingsItem icon="bell" onPress={() => { }}>
+                                    {Strings.AlarmSettings}
+                                </SettingsItem>
+                                <SettingsItem icon="bell-slash" onPress={() => { }}>
+                                    {Strings.NoDisturbanceTime}
+                                </SettingsItem>
+                                <SettingsItem icon="globe" onPress={() => { }}>
+                                    {Strings.ServerAndPortNumber}
+                                </SettingsItem>
+                                <SettingsItem icon="history" onPress={() => { }}>
+                                    {Strings.UploadInterval}
+                                </SettingsItem>
+                                <SettingsItem icon="language" onPress={() => { }}>
+                                    {Strings.LanguageAndTimezone}
+                                </SettingsItem>
+                            </SettingsSection>
+
+                            <SettingsSection title={Strings.Commands}>
+                                <SettingsItem icon="info-circle" onPress={() => { }}>
+                                    {Strings.CheckVersion}
+                                </SettingsItem>
+                                <SettingsItem icon="phone" onPress={() => { }}>
+                                    {Strings.MakeCall}
+                                </SettingsItem>
+                                <SettingsItem icon="phone-square" onPress={() => { }}>
+                                    {Strings.FindDevice}
+                                </SettingsItem>
+                                <SettingsItem icon="bullhorn" onPress={() => { }}>
+                                    {Strings.Wakeup}
+                                </SettingsItem>
+                                <SettingsItem icon="repeat" onPress={() => { }}>
+                                    {Strings.Restart}
+                                </SettingsItem>
+                                <SettingsItem icon="power-off" onPress={() => { }}>
+                                    {Strings.PowerOff}
+                                </SettingsItem>
+                                <SettingsItem icon="minus-circle" onPress={() => { }}>
+                                    {Strings.ResetFactory}
+                                </SettingsItem>
+                            </SettingsSection>
+
+                            <SettingsSection title={Strings.Actions}>
+                                <SettingsItem icon="trash" chevronShown={false}
+                                    iconColor={vars.COLOR_ERROR}
+                                    textColor={vars.COLOR_ERROR}
+                                    onPress={() => this.onRemovePress(navigation)}>
+
+                                    {Strings.Remove}
+
+                                </SettingsItem>
+                            </SettingsSection>
+
+                            <View>
+                                <Text style={styles.footer}>
+                                    {Strings.Footer}
+                                </Text>
+                            </View>
+
+                        </ScrollView>
+
+                    </View>
+                )}
+            </NavigationContext.Consumer>
+        );
+    }
+
+    onRemovePress(navigation) {
+
+        const { 
+            route,
+            removeTracker
+        } = this.props;
+        const item = route.params;
+
+        Alert.alert(
+            item.displayName,
+            Strings.RemoveTrackerSureMessage,
+            [
+                {
+                    text: Strings.Yes,
+                    onPress: () => {
+                        this.setState({ isLoading: true }, async () => {
+                            try {
+                                await this.removeTrackerFunc(item);
+                                removeTracker(item.id);
+                                navigation.navigate(RouteNames.HOME_LOGIN_SWITCH);
+                            } catch (e) {
+                                this.setState({ isLoading: false });
+                                showError(e);
+                            }
+                        });
+                    }
+                },
+                {
+                    text: Strings.Cancel,
+                    onPress: () => { }
+                }
+            ]
+        );
+
+    };
+
+    async removeTrackerFunc(tracker) {
+        await TrackerService.remove(tracker.id, this.context.user.token);
+    }
+
+
 }
 
 const styles = StyleSheet.create({
@@ -126,3 +201,19 @@ const styles = StyleSheet.create({
         fontSize: vars.FS_BIT_LARGER
     }
 });
+
+const mapStateToProps = (state) => {
+    return {
+        trackers: state.trackers
+    };
+};
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        removeTracker: (trackerId) => {
+            dispatch(Actions.removeTracker(trackerId));
+        }
+    };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(TrackerConfigScreen);
