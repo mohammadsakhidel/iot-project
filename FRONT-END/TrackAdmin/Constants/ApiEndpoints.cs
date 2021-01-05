@@ -16,5 +16,7 @@ namespace TrackAdmin.Constants {
         public const string COMMANDS = "commands";
         public const string COMMANDS_CONNECT = "commands/connect";
         public const string COMMANDS_SETS = "commands/sets";
+
+        public const string IMAGES_ICONS = "images/icons";
     }
 }

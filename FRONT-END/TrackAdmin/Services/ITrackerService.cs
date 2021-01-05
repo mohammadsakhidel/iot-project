@@ -14,5 +14,6 @@ namespace TrackAdmin.Services {
         Task<(bool done, string message)> UpdateAsync(TrackerDto tracker);
         Task<List<TrackerReportDto>> GetReportsAsync(string trackerId, string date);
         Task<List<CommandLogDto>> GetCommandLogsAsync(string trackerId, string date);
+        Task<string[]> GetDefaultIconNamesAsync();
     }
 }

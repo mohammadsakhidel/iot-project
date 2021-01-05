@@ -16,6 +16,7 @@ namespace TrackAdmin.DTOs {
         public string Explanation { get; set; }
         public string DisplayName { get; set; }
         public string IconImageId { get; set; }
+        public string DefaultIcon { get; set; }
         public string SerialNumber { get; set; }
         public string CreationTime { get; set; }
         public string LastConnection { get; set; }

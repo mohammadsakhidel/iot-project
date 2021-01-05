@@ -136,5 +136,22 @@ namespace TrackAdmin.Services {
             return logs;
 
         }
+
+        public async Task<string[]> GetDefaultIconNamesAsync() {
+
+            // Http Client Preparation:
+            var services = ((App)Application.Current).ServiceProvider;
+            using var http = (HttpClient)services.GetService(typeof(HttpClient));
+
+            // Send Request:
+            var endpoint = ApiUtils.Combine(_configuration["API:Host"], ApiEndpoints.IMAGES_ICONS);
+            var response = await http.GetAsync(endpoint);
+            response.EnsureSuccessStatusCode();
+
+            // Deserialization:
+            var icons = await response.Content.ReadAsAsync<string[]>();
+            return icons;
+
+        }
     }
 }

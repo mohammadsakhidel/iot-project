@@ -214,6 +214,15 @@ namespace TrackAdmin.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Default Icon Name.
+        /// </summary>
+        public static string DefaultIcon {
+            get {
+                return ResourceManager.GetString("DefaultIcon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Delete.
         /// </summary>
         public static string Delete {

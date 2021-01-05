@@ -24,6 +24,8 @@ namespace TrackAPI.Models {
 
         public string IconImageId { get; set; }
 
+        public string DefaultIcon { get; set; }
+
         [Required]
         public string SerialNumber { get; set; }
 

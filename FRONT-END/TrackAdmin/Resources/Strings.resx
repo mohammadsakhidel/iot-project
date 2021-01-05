@@ -168,6 +168,9 @@
   <data name="DateFormat" xml:space="preserve">
     <value>YEAR-MONTH-DAY</value>
   </data>
+  <data name="DefaultIcon" xml:space="preserve">
+    <value>Default Icon Name</value>
+  </data>
   <data name="Delete" xml:space="preserve">
     <value>Delete</value>
   </data>

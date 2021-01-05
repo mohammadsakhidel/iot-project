@@ -71,6 +71,10 @@ namespace TrackDataAccess.Models {
         [Column("icon_image_id")]
         public string IconImageId { get; set; }
 
+        [MaxLength(64)]
+        [Column("default_icon")]
+        public string DefaultIcon { get; set; }
+
         [Required]
         [MaxLength(128)]
         [Column("serial_number")]

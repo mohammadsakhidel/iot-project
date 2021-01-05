@@ -52,7 +52,7 @@ export default class TrackerService {
     }
 
     static getIconUrl(tracker) {
-        return `${ApiSettings.BaseUrl}/images/${tracker.iconImageId ?? 'defaulticon'}?d=${tracker.productType}`;
+        return `${ApiSettings.BaseUrl}/images/${tracker.iconImageId ?? 'defaulticon'}?d=${tracker.defaultIcon ? tracker.defaultIcon : tracker.productType}`;
     }
 
     /**

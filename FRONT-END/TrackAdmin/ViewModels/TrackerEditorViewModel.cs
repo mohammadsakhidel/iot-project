@@ -130,6 +130,28 @@ namespace TrackAdmin.ViewModels {
             }
         }
 
+        private string defaultIcon;
+        public string DefaultIcon {
+            get { return defaultIcon; }
+            set {
+                defaultIcon = value;
+                OnPropertyChanged(nameof(DefaultIcon));
+            }
+        }
+
+        private string[] defaultIcons;
+        public string[] DefaultIcons {
+            get {
+                if (defaultIcons == null)
+                    _ = LoadDefaultIconsAsync();
+
+                return defaultIcons;
+            } set {
+                defaultIcons = value;
+                OnPropertyChanged(nameof(DefaultIcons));
+            }
+        }
+
         private string explanation;
         public string Explanation {
             get { return explanation; }
@@ -250,6 +272,7 @@ namespace TrackAdmin.ViewModels {
                     CommandSet = CommandSet,
                     ProductType = ProductType,
                     ProductModel = ProductModel,
+                    DefaultIcon = DefaultIcon,
                     Explanation = Explanation
                 };
                 (var done, var message) = await _trackerService.CreateAsync(tracker);
@@ -283,6 +306,7 @@ namespace TrackAdmin.ViewModels {
                     CommandSet = CommandSet,
                     ProductType = ProductType,
                     ProductModel = ProductModel,
+                    DefaultIcon = DefaultIcon,
                     Explanation = Explanation
                 };
                 (var done, var message) = await _trackerService.UpdateAsync(tracker);
@@ -313,6 +337,7 @@ namespace TrackAdmin.ViewModels {
             CommandSet = tracker?.CommandSet;
             ProductType = tracker?.ProductType;
             ProductModel = tracker?.ProductModel;
+            DefaultIcon = tracker?.DefaultIcon;
             Explanation = tracker?.Explanation;
         }
 
@@ -333,6 +358,16 @@ namespace TrackAdmin.ViewModels {
                     Users = await _userService.QueryAsync(UserIdInput);
                 }, 1000);
 
+            }
+
+        }
+
+        private async Task LoadDefaultIconsAsync() {
+            try {
+                var icons = await _trackerService.GetDefaultIconNamesAsync();
+                DefaultIcons = (new string[] { "" }).Concat(icons).ToArray();
+            } catch (Exception ex) {
+                _ = ShowError(ex.Message);
             }
 
         }

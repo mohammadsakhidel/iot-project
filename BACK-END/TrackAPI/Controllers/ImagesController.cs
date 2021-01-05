@@ -56,6 +56,23 @@ namespace TrackAPI.Controllers {
                 return ex.GetActionResult();
             }
         }
+
+        [HttpGet("icons")]
+        public IActionResult GetIcons() {
+            try {
+
+                var folder = PathUtil.Resolve(_host.ContentRootPath, Values.IMAGES_FOLDER);
+                var allIcons = Directory.GetFiles(folder)
+                    .Select(f => Path.GetFileNameWithoutExtension(f))
+                    .ToArray();
+
+                return Ok(allIcons);
+                
+
+            } catch (Exception ex) {
+                return ex.GetActionResult();
+            }
+        }
         #endregion
 
         #region ------------------ POST ------------------
