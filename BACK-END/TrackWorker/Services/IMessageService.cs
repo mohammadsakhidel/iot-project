@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using TrackWorker.Models;
 
 namespace TrackWorker.Services {
-    public interface IReportService {
-        Task AddAsync(ReportModel report);
+    public interface IMessageService {
+        Task AddAsync(MessageModel report);
     }
 }

@@ -59,7 +59,7 @@ namespace TrackAPI.Controllers {
 
         [HttpGet("{trackerId}/reports/{date?}")]
         [Authorize(Policies.CanReadTracker)]
-        public async Task<IActionResult> Reports(string trackerId, string date) {
+        public async Task<IActionResult> Messages(string trackerId, string date) {
             try {
 
                 var tracker = await _trackerService.GetAsync(trackerId);
@@ -67,9 +67,9 @@ namespace TrackAPI.Controllers {
                     return NotFound();
 
                 var hasDate = DateTime.TryParse(date, out var reportDate);
-                var reports = await _trackerService.GetReportsAsync(trackerId, hasDate ? reportDate : null);
+                var messages = await _trackerService.GetMessagesAsync(trackerId, hasDate ? reportDate : null);
 
-                return Ok(reports);
+                return Ok(messages);
 
             } catch (Exception ex) {
                 return ex.GetActionResult();
@@ -86,9 +86,9 @@ namespace TrackAPI.Controllers {
                     return NotFound();
 
                 var hasDate = DateTime.TryParse(date, out var logsDate);
-                var reports = await _commandService.GetLogsAsync(trackerId, hasDate ? logsDate : null);
+                var logs = await _commandService.GetLogsAsync(trackerId, hasDate ? logsDate : null);
 
-                return Ok(reports);
+                return Ok(logs);
 
             } catch (Exception ex) {
                 return ex.GetActionResult();

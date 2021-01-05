@@ -1,15 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
-namespace TrackWorker.Models {
-    public class ReportModel {
-        public int Id { get; set; }
-        public string ReportType { get; set; }
-        public DateTime ReportTime { get; set; }
-        public string TrackerId { get; set; }
+namespace TrackAPI.Models {
+    public class GpsTrackerMessageModel : MessageModel {
+        public string MessageType { get; set; }
         public double Latitude { get; set; }
         public string LatitudeMark { get; set; }
         public double Longitude { get; set; }
@@ -21,6 +17,5 @@ namespace TrackWorker.Models {
         public double? SignalStrength { get; set; }
         public double? Battery { get; set; }
         public string TrackerState { get; set; }
-        public DateTime CreationTime { get; set; }
     }
 }

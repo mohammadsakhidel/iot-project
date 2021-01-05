@@ -24,7 +24,7 @@ namespace TrackWorker.Tests.Middlewares {
 
         [Theory]
         [MemberData(nameof(ValidateMessageData))]
-        public void ValidateMessageTest(TrackerMessage message, bool expected) {
+        public void ValidateMessageTest(Helpers.TrackerMessage message, bool expected) {
             // Arrange:
             IOptions<AppSettings> options = Options.Create(new AppSettings { 
                 ServerName = "ws1"
@@ -77,39 +77,39 @@ namespace TrackWorker.Tests.Middlewares {
 
             // Empty Message Text
             yield return new object[] {
-                new TrackerMessage { Base64Text = "" }, false
+                new Helpers.TrackerMessage { Base64Text = "" }, false
             };
 
             // NULL Message Text
             yield return new object[] {
-                new TrackerMessage { Base64Text = null }, false
+                new Helpers.TrackerMessage { Base64Text = null }, false
             };
 
             // Invalid base64 text:
             yield return new object[] {
-                new TrackerMessage { Base64Text = "this is not Base64" }, false
+                new Helpers.TrackerMessage { Base64Text = "this is not Base64" }, false
             };
 
             // Base64 but invalid message:
             yield return new object[] {
-                new TrackerMessage { Base64Text = "SGVsbG8gSG93IEFyZSBZb3U/" }, false
+                new Helpers.TrackerMessage { Base64Text = "SGVsbG8gSG93IEFyZSBZb3U/" }, false
             };
 
             // Base64 valid but irrelevant middleware message:
             yield return new object[] {
-                new TrackerMessage { Base64Text = "W1NHKjg4MDAwMDAwMTUqMDAwMipVS10=" }, false
+                new Helpers.TrackerMessage { Base64Text = "W1NHKjg4MDAwMDAwMTUqMDAwMipVS10=" }, false
             };
 
             // Valid Message
             yield return new object[] {
-                new TrackerMessage { Base64Text = "W1NHKjg4MDAwMDAwMTUqMDAwMipMS10=" }, true
+                new Helpers.TrackerMessage { Base64Text = "W1NHKjg4MDAwMDAwMTUqMDAwMipMS10=" }, true
             };
 
         }
         public static IEnumerable<object[]> OperateOnMessageData() {
             // Invalid Tracker ID:
             yield return new object[] {
-                new PipelineContext { Message = new TrackerMessage { Base64Text = "W1NHKjg4MDAwMDAwKjAwMDIqTEtd" } },
+                new PipelineContext { Message = new Helpers.TrackerMessage { Base64Text = "W1NHKjg4MDAwMDAwKjAwMDIqTEtd" } },
                 false
             };
             // Valid Tracker ID:
@@ -117,7 +117,7 @@ namespace TrackWorker.Tests.Middlewares {
             mockSocket.Setup(socket => socket.Send(It.IsAny<byte[]>())).Returns(0);
             mockSocket.Setup(socket => socket.GetRealSocket()).Returns(() => null);
             yield return new object[] {
-                new PipelineContext { Message = new TrackerMessage { Base64Text = "W1NHKjg4MDAwMDAwMTUqMDAwMipMS10=", Socket = mockSocket.Object } },
+                new PipelineContext { Message = new Helpers.TrackerMessage { Base64Text = "W1NHKjg4MDAwMDAwMTUqMDAwMipMS10=", Socket = mockSocket.Object } },
                 true
             };
         }

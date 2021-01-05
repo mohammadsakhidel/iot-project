@@ -14,7 +14,7 @@ namespace TrackAPI.Services {
         Task<List<TrackerModel>> SearchAsync(TrackerSearchModel model);
         Task<(bool, string)> UpdateAsync(TrackerModel model);
         Task<(bool, string)> RemoveAsync(string id);
-        Task<List<TrackerReportModel>> GetReportsAsync(string trackerId, DateTime? date);
+        Task<List<MessageModel>> GetMessagesAsync(string trackerId, DateTime? date);
         Task<(bool, object)> AssignUser(string trackerId, string userId);
         Task<(bool, string)> UnassignUser(string trackerId, string userId);
 

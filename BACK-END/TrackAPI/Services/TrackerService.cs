@@ -16,14 +16,14 @@ namespace TrackAPI.Services {
 
         private readonly UserManager<AppUser> _userManager;
         private readonly ITrackerRepository _trackerRepository;
-        private readonly IReportRepository _reportRepository;
+        private readonly IMessageRepository _messageRepository;
         private readonly IUserRepository _userRepository;
         private readonly IMapper _mapper;
         public TrackerService(ITrackerRepository trackerRepository, IMapper mapper,
-            IReportRepository reportRepository, UserManager<AppUser> userManager,
+            IMessageRepository messageRepository, UserManager<AppUser> userManager,
             IUserRepository userRepository) {
             _trackerRepository = trackerRepository;
-            _reportRepository = reportRepository;
+            _messageRepository = messageRepository;
             _userRepository = userRepository;
             _mapper = mapper;
             _userManager = userManager;
@@ -133,17 +133,17 @@ namespace TrackAPI.Services {
             return models.ToList();
         }
 
-        public async Task<List<TrackerReportModel>> GetReportsAsync(string trackerId, DateTime? date) {
+        public async Task<List<MessageModel>> GetMessagesAsync(string trackerId, DateTime? date) {
 
             var reportDate = date ?? DateTime.UtcNow;
-            var reports = await Task.Run(() => {
-                return _reportRepository.Filter(r =>
+            var messages = await Task.Run(() => {
+                return _messageRepository.Filter(r =>
                             r.TrackerId == trackerId &&
                             r.CreationTime.Date == reportDate.Date
                         ).ToList();
             });
 
-            var models = reports.Select(r => _mapper.Map<TrackerReportModel>(r)).ToList();
+            var models = messages.Select(r => _mapper.Map<MessageModel>(r)).ToList();
             return models;
 
         }

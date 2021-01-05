@@ -20,10 +20,11 @@ namespace TrackAPI.Helpers {
                     opt.MapFrom(src => src.CreationTime.ToString(SharedValues.DATETIME_FORMAT)));
 
             // Report <--> TrackerReportModel
-            CreateMap<TrackerReportModel, Report>();
-            CreateMap<Report, TrackerReportModel>()
+            CreateMap<Message, MessageModel>()
+                .Include<GpsTrackerMessage, GpsTrackerMessageModel>()
                 .ForMember(dest => dest.CreationTime, opt =>
                     opt.MapFrom(src => src.CreationTime.ToString(SharedValues.DATETIME_FORMAT)));
+            CreateMap<GpsTrackerMessage, GpsTrackerMessageModel>();
 
             // CommandLog <--> CommandLogModel
             CreateMap<CommandLogModel, CommandLog>();

@@ -21,9 +21,10 @@ namespace TrackWorker.Helpers {
             // TrackerUser <--> TrackerUserModel
             CreateMap<TrackerUserModel, TrackerUser>().ReverseMap();
 
-            // Report <--> ReportModel
-            CreateMap<ReportModel, Report>().ReverseMap();
-
+            // Message <--> MessageModel
+            CreateMap<MessageModel, Message>()
+                .Include<GpsTrackerMessageModel, GpsTrackerMessage>();
+            CreateMap<GpsTrackerMessageModel, GpsTrackerMessage>();
         }
 
     }

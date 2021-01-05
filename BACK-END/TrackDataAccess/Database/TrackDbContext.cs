@@ -15,7 +15,7 @@ namespace TrackDataAccess.Database {
         }
 
         public DbSet<Tracker> Trackers { get; set; }
-        public DbSet<Report> Reports { get; set; }
+        public DbSet<Message> Messages { get; set; }
         public DbSet<CommandLog> CommandLogs { get; set; }
         public DbSet<Image> Images { get; set; }
         public DbSet<TrackerUser> UserTrackers { get; set; }
@@ -74,6 +74,17 @@ namespace TrackDataAccess.Database {
 
             modelBuilder.Entity<TrackerAllowedUser>().HasOne(au => au.Tracker)
                 .WithMany(t => t.AllowedUsers).HasForeignKey(au => au.TrackerId);
+            #endregion
+
+            #region Messages TPH Config:
+            modelBuilder.Entity<GpsTrackerMessage>();
+            modelBuilder.Entity<Message>()
+                .HasDiscriminator<string>("discriminator")
+                .HasValue<Message>("message")
+                .HasValue<GpsTrackerMessage>("gps_message");
+            modelBuilder.Entity<Message>()
+                .Property("discriminator")
+                .HasMaxLength(32);
             #endregion
 
         }

@@ -16,7 +16,7 @@ namespace TrackWorker.Processors.Middlewares.Messages {
         public override bool OperateOnMessage(PipelineContext context) {
 
             var trackerService = context.Services.GetService(typeof(ITrackerService)) as ITrackerService;
-            var reportService = context.Services.GetService(typeof(IReportService)) as IReportService;
+            var reportService = context.Services.GetService(typeof(IMessageService)) as IMessageService;
 
             #region VALIDATION:
             var isValid = MessageHelper.Validate(context, trackerService);
@@ -29,10 +29,10 @@ namespace TrackWorker.Processors.Middlewares.Messages {
             var tracker = trackerService.Get(message.UniqueID);
             var reportData = GpsWatchReportData.FromArray(message.ContentItems.ToArray());
 
-            var report = new ReportModel {
-                ReportType = REPORT_TYPE,
+            var report = new GpsTrackerMessageModel {
+                MessageType = REPORT_TYPE,
                 TrackerId = tracker.Id,
-                ReportTime = reportData.ReportTime,
+                MessageTime = reportData.ReportTime,
                 Latitude = reportData.Latitude,
                 LatitudeMark = reportData.LatitudeMark.ToString(),
                 Longitude = reportData.Longitude,

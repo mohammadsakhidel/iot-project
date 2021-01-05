@@ -28,14 +28,14 @@ namespace TrackAPI.Services {
         public async Task<List<CommandLogModel>> GetLogsAsync(string trackerId, DateTime? date) {
 
             var logsDate = date ?? DateTime.UtcNow;
-            var reports = await Task.Run(() => {
+            var logs = await Task.Run(() => {
                 return _commandLogRepository.Filter(r =>
                             r.TrackerId == trackerId &&
                             r.CreationTime.Date == logsDate.Date
                         ).ToList();
             });
 
-            var models = reports.Select(r => _mapper.Map<CommandLogModel>(r)).ToList();
+            var models = logs.Select(r => _mapper.Map<CommandLogModel>(r)).ToList();
             return models;
 
         }

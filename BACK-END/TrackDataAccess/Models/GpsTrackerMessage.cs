@@ -5,29 +5,10 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TrackDataAccess.Models.Base;
 
 namespace TrackDataAccess.Models {
-    [Table("reports")]
-    public class Report : Entity {
-
-        [Column("id")]
-        public int Id { get; set; }
-
-        [Required]
-        [MaxLength(16)]
-        [Column("report_type")]
-        public string ReportType { get; set; }
-
-        [Required]
-        [Column("report_time")]
-        public DateTime ReportTime { get; set; }
-
-        [Required]
-        [MaxLength(16)]
-        [ForeignKey("Tracker")]
-        [Column("tracker_id")]
-        public string TrackerId { get; set; }
+    [Table("gps_tracker_messages")]
+    public class GpsTrackerMessage : Message {
 
         [Required]
         [Column("latitude")]
@@ -47,6 +28,15 @@ namespace TrackDataAccess.Models {
         [Column("longitude_mark")]
         public string LongitudeMark { get; set; }
 
+        [Required]
+        [MaxLength(16)]
+        [Column("message_type")]
+        public string MessageType { get; set; } // alarm or location
+
+        [Required]
+        [Column("message_time")]
+        public DateTime MessageTime { get; set; }
+
         [Column("is_valid")]
         public bool IsValid { get; set; }
 
@@ -61,19 +51,15 @@ namespace TrackDataAccess.Models {
         [Column("altitude")]
         public double? Altitude { get; set; }
 
+        [MaxLength(64)]
+        [Column("tracker_state")]
+        public string TrackerState { get; set; }
+
         [Column("signal_strength")]
         public double? SignalStrength { get; set; }
 
         [Column("battery")]
         public double? Battery { get; set; }
-
-        [MaxLength(64)]
-        [Column("tracker_state")]
-        public string TrackerState { get; set; }
-
-        #region Navigation Properties:
-        public Tracker Tracker { get; set; }
-        #endregion
 
     }
 }
