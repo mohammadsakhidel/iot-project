@@ -41,6 +41,7 @@ namespace TrackAPI.Services {
             var tracker = _mapper.Map<Tracker>(model);
             tracker.Id = $"{model.Manufacturer}-{model.RawID}".ToUpper();
             tracker.CreationTime = DateTime.UtcNow;
+            tracker.Status = TrackerStatusValues.OFFLINE;
 
             _trackerRepository.Add(tracker);
             await _trackerRepository.SaveAsync();
