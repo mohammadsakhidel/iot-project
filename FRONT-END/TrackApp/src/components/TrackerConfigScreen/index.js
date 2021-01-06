@@ -13,6 +13,7 @@ import { NavigationContext } from '@react-navigation/native';
 import * as RouteNames from '../../constants/route-names';
 import { connect } from 'react-redux';
 import * as Actions from '../../redux/actions';
+import TrackerStatus from '../TrackerStatus';
 
 class TrackerConfigScreen extends Component {
 
@@ -27,7 +28,10 @@ class TrackerConfigScreen extends Component {
     }
 
     render() {
-        const { route } = this.props;
+        const {
+            route,
+            connections
+        } = this.props;
         const tracker = route.params;
 
         return (
@@ -45,6 +49,10 @@ class TrackerConfigScreen extends Component {
                                 <ListItem.Title>
                                     {tracker.displayName}
                                 </ListItem.Title>
+                                <TrackerStatus
+                                    status={(connections[tracker.id]?.status ?? tracker.status)}
+                                    lastConnection={(connections[tracker.id]?.lastConnection ?? tracker.lastConnection)}
+                                />
                             </ListItem.Content>
                             <ListItem.Chevron
                                 name="edit"
@@ -146,7 +154,7 @@ class TrackerConfigScreen extends Component {
 
     onRemovePress(navigation) {
 
-        const { 
+        const {
             route,
             removeTracker
         } = this.props;
@@ -204,7 +212,8 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = (state) => {
     return {
-        trackers: state.trackers
+        trackers: state.trackers,
+        connections: state.connections
     };
 };
 

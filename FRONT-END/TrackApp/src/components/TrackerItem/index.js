@@ -11,7 +11,8 @@ import { showError } from '../FlashMessageWrapper';
 import * as GlobalStyles from '../../styles/global-styles';
 import AppContext from '../../helpers/app-context';
 import Icon from '../Icon';
-import { formatDateString } from '../../utils/text-util';
+
+import TrackerStatus from '../TrackerStatus';
 
 export default class TrackerItem extends Component {
 
@@ -33,7 +34,7 @@ export default class TrackerItem extends Component {
     }
 
     render() {
-        const { item } = this.props;
+        const { item, connection } = this.props;
 
         return (
             <TouchableHighlight onPress={this.onConfigurePress} underlayColor={vars.COLOR_GRAY_L3}>
@@ -46,7 +47,7 @@ export default class TrackerItem extends Component {
                     />
                     <View style={styles.textContainer}>
                         <Text bold>{item.displayName}</Text>
-                        {this.renderStatus()}
+                        <TrackerStatus status={connection.status} lastConnection={connection.lastConnection} />
                     </View>
                     <View style={styles.actionsContainer}>
                         {/* <LinkButton
@@ -119,54 +120,6 @@ export default class TrackerItem extends Component {
         configureTrackerFunc(item);
     }
 
-    renderStatus() {
-
-        const { connection } = this.props;
-
-        switch (connection?.status) {
-            case null:
-            case undefined:
-                return (
-                    <Text style={GlobalStyles.smallText}>
-                        {Strings.StatusLoading}
-                    </Text>
-                );
-            case 'online':
-                return (
-                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                        <Icon name="circle" style={styles.onlineIcon} />
-                        <Text style={styles.online}>
-                            {Strings.Online}
-                        </Text>
-                    </View>
-                );
-            case 'offline':
-                return (
-                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                        <Icon name="circle" style={styles.offlineIcon} />
-                        <Text style={styles.offline}>
-                            {
-                                Strings.Offline +
-                                (connection.lastConnection
-                                    ? ' ' + Strings.Since + ' ' + formatDateString(connection.lastConnection)
-                                    : ''
-                                )
-                            }
-                        </Text>
-                    </View>
-                );
-            case 'error':
-                return (
-                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                        <Text style={styles.errorStatus}>
-                            {Strings.ErrorCheckingStatus}
-                        </Text>
-                    </View>
-                );
-            default:
-                return null;
-        }
-    }
 }
 
 /* #region  Styles */
@@ -214,28 +167,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center'
     },
-    online: {
-        ...GlobalStyles.smallText,
-        ...GlobalStyles.success,
-        marginHorizontal: vars.PAD_HALF,
-        fontWeight: 'bold'
-    },
-    onlineIcon: {
-        ...GlobalStyles.success,
-        fontSize: vars.ICO_TINY
-    },
-    offline: {
-        ...GlobalStyles.smallText,
-        marginHorizontal: vars.PAD_HALF
-    },
-    offlineIcon: {
-        color: vars.COLOR_GRAY_L1,
-        fontSize: vars.ICO_TINY
-    },
-    errorStatus: {
-        ...GlobalStyles.smallText,
-        ...GlobalStyles.error,
-        marginHorizontal: vars.PAD_HALF
-    }
+
 });
 /* #endregion */
