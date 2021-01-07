@@ -72,5 +72,6 @@
     "Wakeup": "Wake Up!",
     "NoDisturbanceTime": "No Disturbance Time",
     "FindDevice": "Look For Device",
-    "Actions": "Actions"
+    "Actions": "Actions",
+    "TrackerQRCodePageDesc": "This is the QR code of this device. If you share it with someone, they can scan it with their ozTracker app to add the device to their list. A user needs a permission from this device's owner."
 }

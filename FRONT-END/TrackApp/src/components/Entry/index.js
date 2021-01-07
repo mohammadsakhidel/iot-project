@@ -15,6 +15,7 @@ import * as Actions from '../../redux/actions';
 import * as EventNames from '../../constants/event-names';
 import { showError } from '../FlashMessageWrapper';
 import EventsService from '../../api/services/events-service';
+import QRCodeScreen from '../QRCodeScreen';
 
 const Stack = createStackNavigator();
 
@@ -74,6 +75,12 @@ class Entry extends Component {
                             name={RouteNames.CONFIG_TRACKER}
                             component={TrackerConfigScreen}
                             options={{ headerTitle: Strings.ConfigTrackerTitle }}
+                        />
+
+                        <Stack.Screen
+                            name={RouteNames.QR_CODE_SCREEN}
+                            component={QRCodeScreen}
+                            options={{ headerTitle: Strings.QRCode }}
                         />
 
                     </Stack.Navigator>

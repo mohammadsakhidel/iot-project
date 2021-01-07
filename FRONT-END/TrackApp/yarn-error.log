@@ -14,7 +14,7 @@ Platform:
   win32 x64
 
 Trace: 
-  Error: EPERM: operation not permitted, unlink 'D:\TeamProjects\Git\DotMumGit\FRONT-END\TrackApp\node_modules\@babel\generator\node_modules\.bin'
+  Error: EPERM: operation not permitted, unlink 'D:\TeamProjects\Git\DotMumGit\FRONT-END\TrackApp\node_modules\@babel\plugin-external-helpers\lib'
 
 npm manifest: 
   {
@@ -50,6 +50,7 @@ npm manifest:
       "react-native-elements": "^3.0.0-alpha.1",
       "react-native-flash-message": "^0.1.18",
       "react-native-gesture-handler": "~1.7.0",
+      "react-native-qrcode-svg": "^6.0.6",
       "react-native-reanimated": "~1.13.0",
       "react-native-screens": "~2.10.1",
       "react-native-web": "~0.13.12",

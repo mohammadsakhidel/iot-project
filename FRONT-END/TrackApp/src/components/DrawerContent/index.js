@@ -8,6 +8,7 @@ import DrawerMenuItem from '../DrawerMenuItem';
 import AppContext from '../../helpers/app-context';
 import { Avatar } from 'react-native-elements';
 import { LinearGradient } from 'expo-linear-gradient';
+import UserService from '../../api/services/user-service';
 
 export default function DrawerContent(props) {
 
@@ -44,7 +45,7 @@ export default function DrawerContent(props) {
                         size="large"
                         placeholderStyle={{ backgroundColor: vars.COLOR_SECONDARY }}
                         source={{
-                            uri: `https://www.gravatar.com/avatar/${user.emailHash.toLowerCase()}?s=200&d=identicon`
+                            uri: UserService.getAvatarUrl(user)
                         }}
                     />
 

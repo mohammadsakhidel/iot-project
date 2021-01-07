@@ -82,7 +82,10 @@ export default class App extends Component {
     try {
       this.setState({ user: appUser }, async () => {
         try {
+
+          // Save in storage:
           await AsyncStorage.setItem('@user', JSON.stringify(appUser));
+
         } catch (e) {
           showError(e);
         }
