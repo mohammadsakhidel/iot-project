@@ -16,6 +16,7 @@ import TrackerService from '../../api/services/tracker-service';
 import { connect } from 'react-redux';
 import * as Actions from '../../redux/actions';
 import ManualDeviceAdd from '../ManualDeviceAdd';
+import RenderError from '../RenderError';
 
 class TrackerAddScreen extends Component {
 
@@ -27,7 +28,8 @@ class TrackerAddScreen extends Component {
             scanned: false,
             isLoading: false,
             error: '',
-            method: 'barcode'
+            method: 'barcode',
+            renderError: null
         };
 
         // Bindings: 
@@ -38,13 +40,24 @@ class TrackerAddScreen extends Component {
     }
 
     async componentDidMount() {
-        const { status } = await BarCodeScanner.requestPermissionsAsync();
-        this.setState({
-            hasPermission: status == 'granted'
-        });
+        try {
+            const { status } = await BarCodeScanner.requestPermissionsAsync();
+            this.setState({
+                hasPermission: status == 'granted'
+            });
+        } catch (e) {
+            this.setState({ renderError: e });
+        }
     }
 
     render() {
+
+        if (this.state.renderError) {
+            return (
+                <RenderError error={this.state.renderError} />
+            );
+        }
+
         return (
             this.state.hasPermission
                 ? (

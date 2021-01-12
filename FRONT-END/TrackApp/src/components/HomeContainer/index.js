@@ -7,7 +7,7 @@ import DrawerContent from '../DrawerContent';
 import AppContext from '../../helpers/app-context';
 import * as EventNames from '../../constants/event-names';
 import { showError } from '../FlashMessageWrapper';
-import { getConnectionInfoAsync } from '../../api/services/events-service';
+import EventsService from '../../api/services/events-service';
 import { connect } from 'react-redux';
 import * as Actions from '../../redux/actions';
 
@@ -31,7 +31,9 @@ class HomeContainer extends Component {
   }
 
   componentDidMount() {
-    this.getAccessCodeAndConnect();
+    setTimeout(async () => {
+      await this.getAccessCodeAndConnect();
+    }, 500);
   }
 
   render() {
@@ -53,7 +55,7 @@ class HomeContainer extends Component {
       try {
 
         const token = this.context.user.token;
-        const apiResult = await getConnectionInfoAsync(token);
+        const apiResult = await EventsService.getConnectionInfoAsync(token);
         if (apiResult.done) {
 
           connectionsInfo = apiResult.data;
@@ -64,28 +66,30 @@ class HomeContainer extends Component {
     }
 
     // Connect to WebSocket servers:
-    const { accessCode, servers } = connectionsInfo;
-    servers.forEach(server => {
-      this.wsConnect(server[0], server[1], accessCode);
-    });
+    try {
+
+      const { accessCode, servers } = connectionsInfo;
+      servers.forEach(server => {
+        this.wsConnect(server[0], server[1], accessCode);
+      });
+
+    } catch (e) {
+      showError(e);
+    }
 
   }
 
   wsConnect(server, port, accessCode) {
-    try {
-      if (!server || !port || !accessCode)
-        return;
+    if (!server || !port || !accessCode)
+      return;
 
-      this.accessCode = accessCode;
-      this.ws = new WebSocket(`ws://${server}:${port}`);
+    this.accessCode = accessCode;
+    this.ws = new WebSocket(`ws://${server}:${port}`);
 
-      this.ws.onopen = this.wsOnOpen;
-      this.ws.onmessage = this.wsOnMessage;
-      this.ws.onclose = this.wsOnClose;
-      this.ws.onerror = this.wsOnError;
-    } catch (e) {
-      showError(e);
-    }
+    this.ws.onopen = this.wsOnOpen;
+    this.ws.onmessage = this.wsOnMessage;
+    this.ws.onclose = this.wsOnClose;
+    this.ws.onerror = this.wsOnError;
   }
 
   wsOnOpen(e) {
