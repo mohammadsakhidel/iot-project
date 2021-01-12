@@ -1,15 +1,17 @@
 import React, { Component } from 'react';
-import { StyleSheet, View } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import * as Font from 'expo-font';
-import { AppLoading } from 'expo';
+import { StyleSheet } from 'react-native';
+import FlashMessage, { getErrorMessage } from './src/components/FlashMessageWrapper';
 import { Ionicons } from '@expo/vector-icons';
-import store from './src/redux/store';
+import * as Font from 'expo-font';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { AppLoading } from 'expo';
+import { View } from 'react-native';
 import { Provider } from 'react-redux';
 import AppContext from './src/helpers/app-context';
+import Store from './src/redux/store';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Entry from './src/components/Entry';
-import FlashMessage, { showError } from './src/components/FlashMessageWrapper';
+import RenderError from './src/components/RenderError';
 
 const customFonts = {
   ContentFont: require('@expo-google-fonts/roboto/Roboto_400Regular.ttf'),
@@ -23,6 +25,7 @@ export default class App extends Component {
 
     this.state = {
       isReady: false,
+      renderError: null,
       user: null,
       login: (appUser) => {
         this.saveUser(appUser);
@@ -54,18 +57,26 @@ export default class App extends Component {
       }, 1000);
 
     } catch (e) {
-      showError(e);
+      this.setState({ error: getErrorMessage(e) });
     }
   }
 
   render() {
 
+    if (this.state.renderError) {
+      return (
+        <RenderError error={this.state.renderError} />
+      );
+    }
+
     if (!this.state.isReady) {
-      return <AppLoading />;
+      return (
+        <AppLoading />
+      );
     }
 
     return (
-      <Provider store={store}>
+      <Provider store={Store}>
         <AppContext.Provider value={this.state}>
           <SafeAreaView style={{ flex: 1 }}>
             <View style={styles.container}>
@@ -76,38 +87,48 @@ export default class App extends Component {
         </AppContext.Provider>
       </Provider>
     );
+
   }
 
   saveUser(appUser) {
     try {
-      this.setState({ user: appUser }, async () => {
+
+      // Save in storage:
+      AsyncStorage.setItem('@user', JSON.stringify(appUser)).then(() => {
         try {
 
-          // Save in storage:
-          await AsyncStorage.setItem('@user', JSON.stringify(appUser));
+          // Update state:
+          this.setState({ user: appUser });
 
         } catch (e) {
           showError(e);
         }
       });
+
     } catch (e) {
-      showError(e);
+      this.setState({ error: getErrorMessage(e) });
     }
   }
 
   removeUser() {
     try {
       if (this.state.user != null) {
-        this.setState({ user: null }, async () => {
+
+        // Remvoe from memory:
+        AsyncStorage.removeItem('@user').then(() => {
+
           try {
-            await AsyncStorage.removeItem('@user');
+            // Updaet state:
+            this.setState({ user: null });
           } catch (e) {
             showError(e);
           }
+
         });
+
       }
     } catch (e) {
-      showError(e);
+      this.setState({ error: getErrorMessage(e) });
     }
   }
 
