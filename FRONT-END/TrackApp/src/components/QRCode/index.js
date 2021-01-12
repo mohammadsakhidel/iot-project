@@ -1,6 +1,5 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
-import { QRCode as ReactNativeQRCode } from 'react-native-custom-qr-codes-expo';
 import Text from '../Text';
 
 /**
@@ -16,10 +15,7 @@ export default function QRCode(props) {
 
 
     return (
-        <ReactNativeQRCode
-            content={value}
-            size={size ?? 200}
-        />
+        <Text>QR Code: {value}</Text>
     );
 
 }
