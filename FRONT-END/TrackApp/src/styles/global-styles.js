@@ -2,7 +2,7 @@ import * as vars from './vars';
 
 export const header = {
     backgroundColor: vars.COLOR_SECONDARY,
-    height: 60,
+    height: 55,
 };
 
 export const headerTitle = {

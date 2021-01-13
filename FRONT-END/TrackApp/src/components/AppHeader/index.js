@@ -1,7 +1,7 @@
 import React from 'react';
 import * as globalStyles from '../../styles/global-styles';
 import { Header } from 'react-native-elements';
-import { Image, View, Platform, StyleSheet } from 'react-native';
+import { Image, View, Platform, StyleSheet, Text } from 'react-native';
 import * as vars from '../../styles/vars';
 import { StatusBar } from 'expo-status-bar';
 
@@ -58,6 +58,7 @@ export default function AppHeader(props) {
 
 const styles = StyleSheet.create({
     titleImage: {
-        width: 100
+        width: 100,
+        height: 19
     }
 });

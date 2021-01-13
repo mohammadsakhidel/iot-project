@@ -4,7 +4,7 @@ import FlashMessage, { getErrorMessage } from './src/components/FlashMessageWrap
 import { Ionicons } from '@expo/vector-icons';
 import * as Font from 'expo-font';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { AppLoading } from 'expo';
+import AppLoading from 'expo-app-loading';
 import { View } from 'react-native';
 import { Provider } from 'react-redux';
 import AppContext from './src/helpers/app-context';
