@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import Text from '../Text';
+import SvgQRCode from 'react-native-qrcode-svg';
 
 /**
  * 
@@ -15,7 +16,7 @@ export default function QRCode(props) {
 
 
     return (
-        <Text>QR Code: {value}</Text>
+        <SvgQRCode value={value} size={size} />
     );
 
 }

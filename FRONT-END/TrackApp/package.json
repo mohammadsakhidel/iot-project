@@ -34,9 +34,11 @@
     "react-native-elements": "^3.1.0",
     "react-native-flash-message": "^0.1.18",
     "react-native-gesture-handler": "~1.8.0",
+    "react-native-qrcode-svg": "^6.0.6",
     "react-native-reanimated": "~1.13.0",
     "react-native-safe-area-context": "3.1.9",
     "react-native-screens": "~2.15.0",
+    "react-native-svg": "12.1.0",
     "react-native-vector-icons": "^7.1.0",
     "react-native-web": "~0.13.12",
     "react-redux": "^7.2.2",
@@ -48,7 +50,5 @@
     "@babel/core": "~7.9.0"
   },
   "private": true,
-  "peerDependencies": {
-    "react-native-svg": "^12.1.0"
-  }
+  "peerDependencies": {}
 }
