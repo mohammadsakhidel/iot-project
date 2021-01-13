@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
-import { View } from 'react-native';
+import { Keyboard, View, StyleSheet } from 'react-native';
 import Text from '../Text';
 import BarCodeScanner from '../BarCodeScanner';
-import { StyleSheet } from 'react-native';
 import * as vars from '../../styles/vars';
 import ScreenMessage from '../ScreenMessage';
 import { Strings } from '../../i18n/strings';
@@ -69,6 +68,7 @@ class TrackerAddScreen extends Component {
                                     ? (
                                         <ManualDeviceAdd
                                             onAddPress={(data) => {
+                                                Keyboard.dismiss();
                                                 this.onBarCodeScanned({ data, navigation });
                                             }}
                                             onCancelPress={() => this.onCancelPress(navigation)}
