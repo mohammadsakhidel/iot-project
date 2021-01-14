@@ -8,21 +8,32 @@ import * as GlobalStyles from '../../styles/global-styles';
 import SectionHeader from '../SectionHeader';
 import PrimaryButton from '../PrimaryButton';
 import Text from '../Text';
+import { getErrorMessage } from '../FlashMessageWrapper';
+import FormError from '../FormError';
+import UserService from '../../api/services/user-service';
+import AppContext from '../../helpers/app-context';
+import LinkButton from '../LinkButton';
 
-export default class AllowUser extends Component {//({ navigation, route }) {
+export default class AllowUser extends Component {
+
+    static contextType = AppContext;
 
     constructor(props) {
         super(props);
 
         // State:
         this.state = {
+            userNameOrEmail: null,
             user: null,
-            permissions: {}
+            permissions: {},
+            isFinding: false,
+            findingError: null
         };
 
         // Bindings:
         this.onOKPress = this.onOKPress.bind(this);
         this.onFindPress = this.onFindPress.bind(this);
+        this.onBackToSearchPress = this.onBackToSearchPress.bind(this);
 
     }
 
@@ -54,17 +65,50 @@ export default class AllowUser extends Component {//({ navigation, route }) {
     }
 
     onFindPress() {
-        const tracker = this.props.route?.params;
+        this.setState({ isFinding: true, findingError: null }, async () => {
+            try {
 
-        const defaultPermissions = {};
-        tracker.commands.forEach(c => {
-            defaultPermissions[c] = true;
+                // Validate:
+                if (!this.state.userNameOrEmail) {
+                    throw new Error(Strings.ErrorEnterUserEmail);
+                }
+
+                // Call API:
+                const result = await UserService.find(this.context.user.token, this.state.userNameOrEmail);
+                if (!result.done)
+                    throw new Error(result.data);
+                const user = result.data;
+
+                // Set State's User and Permissions:
+                const tracker = this.props.route?.params;
+                const permissions = {};
+                tracker.commands.forEach(c => {
+                    permissions[c] = true;
+                });
+                this.setState({
+                    user: user,
+                    permissions: permissions,
+                    isFinding: false
+                });
+
+            } catch (e) {
+                this.setState({
+                    isFinding: false,
+                    findingError: getErrorMessage(e)
+                });
+            }
         });
+    }
 
+    onBackToSearchPress() {
         this.setState({
-            user: { name: "Mohammad Sakhidel" },
-            permissions: defaultPermissions
+            userNameOrEmail: null,
+            user: null,
+            permissions: {},
+            isFinding: false,
+            findingError: null
         });
+        this.input.focus();
     }
 
     onItemSelectionChange(command) {
@@ -87,8 +131,20 @@ export default class AllowUser extends Component {//({ navigation, route }) {
                         <Input
                             label={Strings.UsernameOrEmail}
                             ref={(input) => { this.input = input; }}
+                            onChangeText={(text) => { this.setState({ userNameOrEmail: text }); }}
                         />
-                        <PrimaryButton icon="search" title={Strings.FindUser} onPress={this.onFindPress} />
+                        <PrimaryButton
+                            icon="search"
+                            title={Strings.FindUser}
+                            onPress={this.onFindPress}
+                            isLoading={this.state.isFinding}
+                            disabled={this.state.isFinding}
+                        />
+                        {this.state.findingError && (
+                            <View style={styles.findingError}>
+                                <FormError error={this.state.findingError} />
+                            </View>
+                        )}
                     </View>
                 )}
 
@@ -101,13 +157,20 @@ export default class AllowUser extends Component {//({ navigation, route }) {
                                 size="large"
                                 placeholderStyle={{ backgroundColor: vars.COLOR_GRAY_L3 }}
                                 source={{
-                                    uri: "https://scholarshipscorner.website/wp-content/uploads/2019/09/stencil-2019-09-16T135948.210.png"
+                                    uri: UserService.getAvatarUrl(this.state.user)
                                 }}
                                 containerStyle={styles.userAvatar}
                             />
-                            <Text style={styles.userName}>
-                                Mohammad Sakhidel
-                            </Text>
+                            <View style={styles.userNameContainer}>
+                                <Text style={styles.userName}>
+                                    {this.state.user ? `${this.state.user.givenName} ${this.state.user.surname}` : ''}
+                                </Text>
+                                <LinkButton
+                                    title={Strings.Back}
+                                    icon="caret-left"
+                                    onPress={this.onBackToSearchPress}
+                                />
+                            </View>
                         </View>
 
                         <SectionHeader title={Strings.UserPermissions} />
@@ -154,6 +217,9 @@ const styles = StyleSheet.create({
     userAvatar: {
         ...GlobalStyles.marginEndNormal
     },
+    userNameContainer: {
+        
+    },
     userName: {
         fontSize: vars.FS_BIT_LARGER,
         color: vars.COLOR_GRAY,
@@ -161,5 +227,8 @@ const styles = StyleSheet.create({
     },
     permissionsContainer: {
         flex: 1
+    },
+    findingError: {
+        marginTop: vars.PAD_NORMAL
     }
 });

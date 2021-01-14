@@ -18,6 +18,7 @@
     "ErrorMessageLoading": "An error occurred while connecting to the server, please try again.",
     "ErrorEnterUserName": "Enter your username or email please.",
     "ErrorEnterPassword": "Enter your password please.",
+    "ErrorEnterUserEmail": "Enter user's email or username please.",
     "InvalidCredentials": "Username or password is not valid.",
     "EditProfile": "Edit Profile",
     "Logout": "Sign out",
@@ -39,6 +40,7 @@
     "InputManually": "Input Manually",
     "Rescan": "Rescan",
     "DeviceNotFound": "Device not found.",
+    "UserNotFound": "User not found.",
     "UserPreviouslyAssigned": "Device has already been added.",
     "UserNotAllowedToAddDevice": "You need a permission by the owner to add this device.",
     "Reload": "Reload",
@@ -76,5 +78,6 @@
     "TrackerQRCodePageDesc": "This is the QR code of this device. If you share it with someone, they can scan it with their ozTracker app to add the device to their list. A user needs a permission from this device's owner.",
     "AllowUser": "Add Permitted User",
     "FindUser": "Find User",
-    "UserPermissions": "User Permissions"
+    "UserPermissions": "User Permissions",
+    "Back": "Back"
 }
