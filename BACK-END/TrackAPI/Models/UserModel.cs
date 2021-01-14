@@ -43,5 +43,7 @@ namespace TrackAPI.Models {
 
         public string CreationTime { get; set; }
 
+        public string EmailHash { get; set; }
+
     }
 }

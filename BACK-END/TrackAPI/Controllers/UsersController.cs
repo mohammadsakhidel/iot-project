@@ -10,6 +10,7 @@ using TrackAPI.Constants;
 using TrackAPI.Extensions;
 using TrackAPI.Models;
 using TrackAPI.Services;
+using TrackLib.Utils;
 
 namespace TrackAPI.Controllers {
 
@@ -130,6 +131,24 @@ namespace TrackAPI.Controllers {
                     throw new ApplicationException(error);
 
                 return NoContent();
+
+            } catch (Exception ex) {
+                return ex.GetActionResult();
+            }
+        }
+
+        [HttpGet("info/{username}")]
+        [Authorize]
+        public async Task<IActionResult> Find(string username) {
+            try {
+
+                var user = await _userService.FindByUsernameAsync(username);
+                if (user == null)
+                    return NotFound();
+
+                user.EmailHash = TextUtil.CreateMD5(user.Email);
+
+                return Ok(user);
 
             } catch (Exception ex) {
                 return ex.GetActionResult();
