@@ -3,6 +3,7 @@ import React from 'react';
 import { TouchableOpacity, StyleSheet } from 'react-native';
 import Button from '../Button';
 import * as vars from '../../styles/vars';
+import * as GlobalStyles from '../../styles/global-styles';
 
 export default function SmallButton(props) {
 
@@ -39,9 +40,9 @@ const styles = StyleSheet.create({
         backgroundColor: vars.COLOR_PRIMARY
     },
     text: {
+        ...GlobalStyles.marginStartSmall,
         color: vars.COLOR_GRAY_LIGHTEST,
-        fontSize: vars.FS_BIT_SMALLER,
-        marginLeft: vars.PAD_SMALL
+        fontSize: vars.FS_BIT_SMALLER
     },
     icon: {
         color: vars.COLOR_GRAY_LIGHTEST,

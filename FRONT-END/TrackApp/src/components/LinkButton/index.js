@@ -3,6 +3,7 @@ import { StyleSheet } from 'react-native';
 import Button from '../Button';
 import Icon from '../Icon';
 import * as vars from '../../styles/vars';
+import * as GlobalStyles from '../../styles/global-styles';
 
 export default function LinkButton(props) {
 
@@ -31,8 +32,8 @@ const styles = StyleSheet.create({
         fontSize: vars.FS_BIT_SMALLER
     },
     icon: {
+        ...GlobalStyles.marginEndSmall,
         color: vars.COLOR_LINK,
-        fontSize: vars.ICO_SMALL,
-        marginRight: vars.PAD_SMALL
+        fontSize: vars.ICO_SMALL
     }
 });

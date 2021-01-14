@@ -42,3 +42,27 @@ export const smallText = {
     fontSize: vars.FS_SMALL,
     color: vars.COLOR_GRAY_L1
 };
+
+export const marginStartNormal = {
+    marginLeft: vars.PAD_NORMAL
+};
+
+export const marginEndNormal = {
+    marginRight: vars.PAD_NORMAL
+};
+
+export const marginStartHalf = {
+    marginLeft: vars.PAD_HALF
+};
+
+export const marginEndHalf = {
+    marginRight: vars.PAD_HALF
+};
+
+export const marginStartSmall = {
+    marginLeft: vars.PAD_SMALL
+};
+
+export const marginEndSmall = {
+    marginRight: vars.PAD_SMALL
+};
