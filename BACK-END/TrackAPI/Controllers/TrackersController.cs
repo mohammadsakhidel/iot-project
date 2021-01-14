@@ -9,6 +9,7 @@ using TrackAPI.Constants;
 using TrackAPI.Extensions;
 using TrackAPI.Models;
 using TrackAPI.Services;
+using TrackLib.Commands;
 
 namespace TrackAPI.Controllers {
 
@@ -20,7 +21,7 @@ namespace TrackAPI.Controllers {
         private readonly ITrackerService _trackerService;
         private readonly ICommandService _commandService;
 
-        public TrackersController(ITrackerService trackerService, 
+        public TrackersController(ITrackerService trackerService,
             ICommandService commandService) {
             _trackerService = trackerService;
             _commandService = commandService;
@@ -105,6 +106,16 @@ namespace TrackAPI.Controllers {
                     throw new ApplicationException("UserID cannot be null.");
 
                 var trackers = await _trackerService.GetUserTrackers(userId);
+
+                // Set Commands Property:
+                trackers.ForEach(t => {
+                    var set = CommandSet.Get(t.CommandSet, HttpContext.RequestServices);
+                    t.Commands = (set != null
+                        ? set.SupportedCommands.Select(c => c.CommonName).ToArray()
+                        : Array.Empty<string>()
+                    );
+                });
+
                 return Ok(trackers);
 
             } catch (Exception ex) {

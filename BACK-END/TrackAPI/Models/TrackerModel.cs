@@ -40,5 +40,8 @@ namespace TrackAPI.Models {
         public string Status { get; set; }
         public DateTime? LastConnection { get; set; }
         public string LastConnectedServer { get; set; }
+
+        // Additional Properties:
+        public string[] Commands { get; set; }
     }
 }

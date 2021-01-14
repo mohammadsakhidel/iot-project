@@ -19,6 +19,7 @@ using TrackAPI.Sockets;
 using TrackDataAccess.Database;
 using TrackDataAccess.Models.Identity;
 using TrackDataAccess.Repositories;
+using TrackLib.Commands;
 
 namespace TrackAPI.Extensions {
     public static class IServiceCollectionExtensions {
@@ -94,6 +95,7 @@ namespace TrackAPI.Extensions {
 
         public static void AddHelpers(this IServiceCollection services) {
             services.AddScoped<ICommandExecutor, CommandExecutor>();
+            services.AddTransient<GpsWatchCommandSet, GpsWatchCommandSet>();
         }
 
     }
