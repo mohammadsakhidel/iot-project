@@ -17,6 +17,8 @@ namespace TrackAPI.Services {
         Task<List<MessageModel>> GetMessagesAsync(string trackerId, DateTime? date);
         Task<(bool, object)> AssignUser(string trackerId, string userId);
         Task<(bool, string)> UnassignUser(string trackerId, string userId);
+        Task AddPermittedUser(TrackerAllowedUserModel model);
+        Task RemovePermittedUser(string trackerId, string userId);
 
     }
 }

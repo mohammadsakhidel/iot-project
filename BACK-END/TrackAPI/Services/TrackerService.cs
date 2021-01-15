@@ -206,5 +206,17 @@ namespace TrackAPI.Services {
 
             return _mapper.Map<TrackerModel>(tracker);
         }
+
+        public async Task AddPermittedUser(TrackerAllowedUserModel model) {
+            
+            await _trackerRepository.AddPermittedUser(model.TrackerId, model.UserId, model.Permissions);
+
+        }
+
+        public async Task RemovePermittedUser(string trackerId, string userId) {
+
+            await _trackerRepository.RemovePermittedUser(trackerId, userId);
+
+        }
     }
 }

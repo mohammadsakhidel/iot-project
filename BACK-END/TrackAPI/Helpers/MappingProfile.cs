@@ -39,6 +39,7 @@ namespace TrackAPI.Helpers {
             // AccessCode <--> AccessCodeModel
             CreateMap<AccessCodeModel, AccessCode>();
             CreateMap<AccessCode, AccessCodeModel>();
+
         }
     }
 }

@@ -22,6 +22,11 @@ namespace TrackDataAccess.Models {
         [Column("user_id")]
         public string UserId { get; set; }
 
+        [Required]
+        [MaxLength(1024)]
+        [Column("permissions")]
+        public string Permissions { get; set; }
+
         public AppUser User { get; set; }
         public Tracker Tracker { get; set; }
 

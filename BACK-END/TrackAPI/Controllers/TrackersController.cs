@@ -20,11 +20,13 @@ namespace TrackAPI.Controllers {
         #region -------------- CONSTRUCTION ---------------
         private readonly ITrackerService _trackerService;
         private readonly ICommandService _commandService;
+        private readonly IUserService _userService;
 
         public TrackersController(ITrackerService trackerService,
-            ICommandService commandService) {
+            ICommandService commandService, IUserService userService) {
             _trackerService = trackerService;
             _commandService = commandService;
+            _userService = userService;
         }
         #endregion
 
@@ -153,6 +155,34 @@ namespace TrackAPI.Controllers {
                 return ex.GetActionResult();
             }
         }
+
+        [HttpPost("{trackerId}/permission")]
+        [Authorize]
+        public async Task<IActionResult> AddPermittedUserAsync(TrackerAllowedUserModel model) {
+            try {
+
+                // Validate Tracker & User IDs:
+                var tracker = await _trackerService.GetAsync(model.TrackerId);
+                if (tracker == null)
+                    return BadRequest("Invalid tracker Id.");
+
+                var userToBePermitted = _userService.GetAsync(model.UserId);
+                if (userToBePermitted == null)
+                    return BadRequest("Invalid user Id.");
+
+                // Check caller user access:
+                var userId = HttpContext.User.Claims.SingleOrDefault(c => c.Type == ClaimNames.USER_ID)?.Value;
+                if (userId != tracker.UserId)
+                    return BadRequest("Caller is not the owner.");
+
+                await _trackerService.AddPermittedUser(model);
+
+                return Ok();
+
+            } catch (Exception ex) {
+                return ex.GetActionResult();
+            }
+        }
         #endregion
 
         #region -------------- PUT ACTIONS ----------------
@@ -233,6 +263,34 @@ namespace TrackAPI.Controllers {
 
             } catch (Exception e) {
                 return e.GetActionResult();
+            }
+        }
+
+        [HttpDelete("{trackerId}/permission")]
+        [Authorize]
+        public async Task<IActionResult> RemovePermittedUserAsync(TrackerAllowedUserModel model) {
+            try {
+
+                // Validate Tracker & User IDs:
+                var tracker = await _trackerService.GetAsync(model.TrackerId);
+                if (tracker == null)
+                    return BadRequest("Invalid tracker Id.");
+
+                var userToBePermitted = _userService.GetAsync(model.UserId);
+                if (userToBePermitted == null)
+                    return BadRequest("Invalid user Id.");
+
+                // Check caller user access:
+                var userId = HttpContext.User.Claims.SingleOrDefault(c => c.Type == ClaimNames.USER_ID)?.Value;
+                if (userId != tracker.UserId)
+                    return BadRequest("Caller is not the owner.");
+
+                await _trackerService.RemovePermittedUser(model.TrackerId, model.UserId);
+
+                return Ok();
+
+            } catch (Exception ex) {
+                return ex.GetActionResult();
             }
         }
         #endregion

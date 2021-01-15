@@ -12,6 +12,26 @@ namespace TrackDataAccess.Repositories {
         public TrackerRepository(TrackDbContext context) : base(context) {
         }
 
+        public async Task AddPermittedUser(string trackerId, string userId, string permissions) {
+
+            var set = Context.Set<TrackerAllowedUser>();
+            var current = await set.SingleOrDefaultAsync(p => p.TrackerId == trackerId && p.UserId == userId);
+
+            if (current == null) {
+                var entity = new TrackerAllowedUser {
+                    TrackerId = trackerId,
+                    UserId = userId,
+                    Permissions = permissions
+                };
+                set.Add(entity);
+            } else {
+                current.Permissions = permissions;
+            }
+
+            await Context.SaveChangesAsync();
+
+        }
+
         public async Task<Tracker> GetWithIncludeAsync(params object[] id) {
             var tracker = await Context.Set<Tracker>()
                 .Include(t => t.Users)
@@ -19,6 +39,17 @@ namespace TrackDataAccess.Repositories {
                 .SingleOrDefaultAsync(t => t.Id == id[0].ToString());
 
             return tracker;
+        }
+
+        public async Task RemovePermittedUser(string trackerId, string userId) {
+
+            var set = Context.Set<TrackerAllowedUser>();
+            var entity = await set.SingleOrDefaultAsync(p => p.TrackerId == trackerId && p.UserId == userId);
+            if (entity != null) {
+                Context.Remove(entity);
+                await Context.SaveChangesAsync();
+            }
+
         }
     }
 }
