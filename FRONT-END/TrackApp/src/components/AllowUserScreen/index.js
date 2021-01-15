@@ -8,11 +8,13 @@ import * as GlobalStyles from '../../styles/global-styles';
 import SectionHeader from '../SectionHeader';
 import PrimaryButton from '../PrimaryButton';
 import Text from '../Text';
-import { getErrorMessage } from '../FlashMessageWrapper';
+import { getErrorMessage, showError } from '../FlashMessageWrapper';
 import FormError from '../FormError';
 import UserService from '../../api/services/user-service';
 import AppContext from '../../helpers/app-context';
 import LinkButton from '../LinkButton';
+import LoadingOver from '../LoadingOver';
+import TrackerService from '../../api/services/tracker-service';
 
 export default class AllowUser extends Component {
 
@@ -27,7 +29,8 @@ export default class AllowUser extends Component {
             user: null,
             permissions: {},
             isFinding: false,
-            findingError: null
+            findingError: null,
+            isSaving: false
         };
 
         // Bindings:
@@ -61,7 +64,34 @@ export default class AllowUser extends Component {
 
     // METHODS:
     onOKPress() {
-        Alert.alert('test add...');
+        this.setState({ isSaving: true }, async () => {
+            try {
+
+                // Arrange:
+                const { tracker } = this.props.route.params;
+                const grantedPermissions = Object.keys(this.state.permissions)
+                    .filter(key => this.state.permissions[key] === true);
+                const dto = {
+                    trackerId: tracker.id,
+                    userId: this.state.user.id,
+                    permissions: grantedPermissions.join()
+                };
+
+                // Call API:
+                const result = await TrackerService.addPermittedUser(dto, this.context.user.token);
+                if (!result.done)
+                    throw new Error(result.data);
+
+                // Update state & Navigate back:
+                this.setState({ isSaving: false }, () => {
+                    const { navigation } = this.props;
+                    navigation.goBack();
+                });
+
+            } catch (e) {
+                showError(e);
+            }
+        });
     }
 
     onFindPress() {
@@ -80,7 +110,7 @@ export default class AllowUser extends Component {
                 const user = result.data;
 
                 // Set State's User and Permissions:
-                const tracker = this.props.route?.params;
+                const { tracker } = this.props.route.params;
                 const permissions = {};
                 tracker.commands.forEach(c => {
                     permissions[c] = true;
@@ -108,7 +138,6 @@ export default class AllowUser extends Component {
             isFinding: false,
             findingError: null
         });
-        this.input.focus();
     }
 
     onItemSelectionChange(command) {
@@ -121,7 +150,7 @@ export default class AllowUser extends Component {
 
     render() {
 
-        const tracker = this.props.route?.params;
+        const { tracker } = this.props.route.params;
 
         return (
             <View style={styles.container}>
@@ -193,6 +222,8 @@ export default class AllowUser extends Component {
                             </View>
                         </ScrollView>
 
+                        <LoadingOver loading={this.state.isSaving} />
+
                     </View>
                 )}
 
@@ -218,7 +249,7 @@ const styles = StyleSheet.create({
         ...GlobalStyles.marginEndNormal
     },
     userNameContainer: {
-        
+        alignItems: 'flex-start'
     },
     userName: {
         fontSize: vars.FS_BIT_LARGER,

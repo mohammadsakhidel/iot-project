@@ -13,6 +13,7 @@ export default function IconButton({ name, size, color, ...rest }) {
                 size: size
             }}
             titleStyle={{ color: color }}
+            disabledStyle={{ opacity: 0.5 }}
             {...rest}
         />
     );

@@ -72,4 +72,25 @@ export default class TrackerService {
         }
     }
 
+    static async addPermittedUser(dto, token) {
+        try {
+
+            const url = `${ApiSettings.BaseUrl}/trackers/${dto.trackerId}/permission`;
+            const resp = await http(token).post(url, dto);
+            return { done: true, data: resp.data };
+
+        } catch (e) {
+            // if (e.response && e.response.status == StatusCodes.NOT_FOUND)
+            //     return { done: false, data: Strings.DeviceNotFound };
+            // else if (e.response && e.response.status == StatusCodes.BAD_REQUEST
+            //     && e.response.data == ErrorCodes.ALREADY_ADDED)
+            //     return { done: false, data: Strings.UserPreviouslyAssigned };
+            // else if (e.response && e.response.status == StatusCodes.BAD_REQUEST
+            //     && e.response.data == ErrorCodes.NOT_ALLOWED)
+            //     return { done: false, data: Strings.UserNotAllowedToAddDevice };
+
+            throw e;
+        }
+    }
+
 }

@@ -66,12 +66,14 @@ class TrackerConfigScreen extends Component {
 
                             <SettingsSection title={Strings.PrivacySettings}>
                                 <SettingsItem icon="qrcode" onPress={() => {
-                                    navigation.navigate(RouteNames.QR_CODE_SCREEN, tracker)
+                                    navigation.navigate(RouteNames.QR_CODE_SCREEN, tracker);
                                 }}>
                                     {Strings.QRCode}
                                 </SettingsItem>
                                 <SettingsItem icon="users" onPress={() => {
-                                    navigation.navigate(RouteNames.ALLOW_USER_SCREEN, tracker)
+                                    navigation.navigate(RouteNames.ALLOW_USER_SCREEN, {
+                                        tracker: tracker
+                                    });
                                 }}>
                                     {Strings.AllowedUsers}
                                 </SettingsItem>
