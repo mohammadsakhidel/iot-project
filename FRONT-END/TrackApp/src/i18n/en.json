@@ -79,5 +79,10 @@
     "AllowUser": "Add Permitted User",
     "FindUser": "Find User",
     "UserPermissions": "User Permissions",
-    "Back": "Back"
+    "Back": "Back",
+    "EmptyListMessage": "The list is empty.",
+    "AreYouSure": "Are you sure?",
+    "AreYouSureRemoveItem": "Are you sure you want to remove this item?",
+    "AnotherUser": "Another User",
+    "ErrorSelectUserFirst": "Select a user & associated permissions please."
 }

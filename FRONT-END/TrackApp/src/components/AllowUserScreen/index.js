@@ -54,44 +54,68 @@ export default class AllowUser extends Component {
             )
         });
 
-        // Focus:
-        setTimeout(() => {
-            this.input.focus();
-        }, 500);
+        // Is updating or creating?
+        const { tracker, user, permissions } = this.props.route.params;
+        if (user && permissions) {
+            const permissionsObj = {};
+            const rgx = /\s*,\s*/;
+            permissions.split(rgx).forEach(p => {
+                permissionsObj[p] = true;
+            });
+            this.setState({
+                user: user,
+                permissions: permissionsObj
+            });
+        } else {
 
+            // Focus:
+            setTimeout(() => {
+                this.input.focus();
+            }, 500);
 
+        }
     }
 
     // METHODS:
     onOKPress() {
-        this.setState({ isSaving: true }, async () => {
-            try {
+        try {
+            if (this.state.user == null)
+                throw new Error(Strings.ErrorSelectUserFirst);
 
-                // Arrange:
-                const { tracker } = this.props.route.params;
-                const grantedPermissions = Object.keys(this.state.permissions)
-                    .filter(key => this.state.permissions[key] === true);
-                const dto = {
-                    trackerId: tracker.id,
-                    userId: this.state.user.id,
-                    permissions: grantedPermissions.join()
-                };
+            this.setState({ isSaving: true }, async () => {
+                try {
 
-                // Call API:
-                const result = await TrackerService.addPermittedUser(dto, this.context.user.token);
-                if (!result.done)
-                    throw new Error(result.data);
+                    // Arrange:
+                    const { tracker } = this.props.route.params;
+                    const grantedPermissions = Object.keys(this.state.permissions)
+                        .filter(key => this.state.permissions[key] === true);
+                    const dto = {
+                        trackerId: tracker.id,
+                        userId: this.state.user.id,
+                        permissions: grantedPermissions.join()
+                    };
 
-                // Update state & Navigate back:
-                this.setState({ isSaving: false }, () => {
-                    const { navigation } = this.props;
-                    navigation.goBack();
-                });
+                    // Call API:
+                    const result = await TrackerService.addPermittedUser(dto, this.context.user.token);
+                    if (!result.done)
+                        throw new Error(result.data);
 
-            } catch (e) {
-                showError(e);
-            }
-        });
+                    // Update state & Navigate back:
+                    this.setState({ isSaving: false }, () => {
+                        const { navigation } = this.props;
+                        const { onGoBackFunc } = this.props.route.params;
+                        onGoBackFunc();
+                        navigation.goBack();
+                    });
+
+                } catch (e) {
+                    showError(e);
+                }
+            });
+
+        } catch (e) {
+            showError(e);
+        }
     }
 
     onFindPress() {
@@ -195,7 +219,7 @@ export default class AllowUser extends Component {
                                     {this.state.user ? `${this.state.user.givenName} ${this.state.user.surname}` : ''}
                                 </Text>
                                 <LinkButton
-                                    title={Strings.Back}
+                                    title={Strings.AnotherUser}
                                     icon="caret-left"
                                     onPress={this.onBackToSearchPress}
                                 />

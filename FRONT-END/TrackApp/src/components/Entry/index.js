@@ -14,6 +14,7 @@ import { connect } from 'react-redux';
 import * as Actions from '../../redux/actions';
 import QRCodeScreen from '../QRCodeScreen';
 import AllowUserScreen from '../AllowUserScreen';
+import PermittedUsersScreen from '../PermittedUsersScreen';
 
 const Stack = createStackNavigator();
 
@@ -76,6 +77,12 @@ export default class Entry extends Component {
                             name={RouteNames.QR_CODE_SCREEN}
                             component={QRCodeScreen}
                             options={{ headerTitle: Strings.QRCode }}
+                        />
+
+                        <Stack.Screen
+                            name={RouteNames.PERMITTED_USERS_SCREEN}
+                            component={PermittedUsersScreen}
+                            options={{ headerTitle: Strings.AllowedUsers }}
                         />
 
                         <Stack.Screen
