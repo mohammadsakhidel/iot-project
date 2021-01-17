@@ -218,5 +218,19 @@ namespace TrackAPI.Services {
             await _trackerRepository.RemovePermittedUser(trackerId, userId);
 
         }
+
+        public async Task<List<TrackerAllowedUserModel>> GetPermittedUsersAsync(string trackerId) {
+            var tracker = await _trackerRepository.GetWithIncludeAsync(trackerId);
+            return tracker.AllowedUsers
+                .Select(item => new TrackerAllowedUserModel { 
+                    Permissions = item.Permissions,
+                    User = UserService.MapEntityToModel(
+                        item.User, 
+                        item.User.Claims.Select(c => new System.Security.Claims.Claim(c.ClaimType, c.ClaimValue)),
+                        true
+                    )
+                })
+                .ToList();
+        }
     }
 }

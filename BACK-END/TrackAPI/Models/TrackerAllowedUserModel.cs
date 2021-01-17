@@ -16,5 +16,7 @@ namespace TrackAPI.Models {
         [Required]
         public string Permissions { get; set; }
 
+        public UserModel User { get; set; }
+
     }
 }

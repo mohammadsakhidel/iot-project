@@ -34,8 +34,8 @@ namespace TrackDataAccess.Repositories {
 
         public async Task<Tracker> GetWithIncludeAsync(params object[] id) {
             var tracker = await Context.Set<Tracker>()
-                .Include(t => t.Users)
-                .Include(t => t.AllowedUsers)
+                .Include(t => t.Users).ThenInclude(tu => tu.User)
+                .Include(t => t.AllowedUsers).ThenInclude(au => au.User).ThenInclude(u => u.Claims)
                 .SingleOrDefaultAsync(t => t.Id == id[0].ToString());
 
             return tracker;

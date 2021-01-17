@@ -86,7 +86,7 @@ namespace TrackAPI.Services {
             var users = await Task.Run(() => {
                 var list = new List<UserModel>();
                 foreach (var user in appUsers) {
-                    list.Add(mapEntityToModel(user, user.Claims.Select(c => new Claim(c.ClaimType, c.ClaimValue)).ToList()));
+                    list.Add(MapEntityToModel(user, user.Claims.Select(c => new Claim(c.ClaimType, c.ClaimValue)).ToList()));
                 }
                 return list;
             });
@@ -98,7 +98,7 @@ namespace TrackAPI.Services {
             var appUser = await _userManager.FindByNameAsync(userName);
             if (appUser != null) {
                 var claims = await _userManager.GetClaimsAsync(appUser);
-                return mapEntityToModel(appUser, claims);
+                return MapEntityToModel(appUser, claims);
             } else {
                 return null;
             }
@@ -108,7 +108,7 @@ namespace TrackAPI.Services {
             var appUser = await _userManager.FindByIdAsync(id);
             if (appUser != null) {
                 var claims = await _userManager.GetClaimsAsync(appUser);
-                return mapEntityToModel(appUser, claims);
+                return MapEntityToModel(appUser, claims);
             } else {
                 return null;
             }
@@ -123,7 +123,7 @@ namespace TrackAPI.Services {
                 var list = new List<UserModel>();
                 foreach (var user in appUsers) {
                     var claims = _userManager.GetClaimsAsync(user).Result;
-                    list.Add(mapEntityToModel(user, claims));
+                    list.Add(MapEntityToModel(user, claims));
                 }
                 return list;
             });
@@ -145,7 +145,7 @@ namespace TrackAPI.Services {
             var users = await Task.Run(() => {
                 var list = new List<UserModel>();
                 foreach (var user in appUsers) {
-                    list.Add(mapEntityToModel(user, user.Claims.Select(c => new Claim(c.ClaimType, c.ClaimValue)).ToList()));
+                    list.Add(MapEntityToModel(user, user.Claims.Select(c => new Claim(c.ClaimType, c.ClaimValue)).ToList()));
                 }
                 return list;
             });
@@ -251,7 +251,7 @@ namespace TrackAPI.Services {
                 if (!appUser.IsActive)
                     return (false, "User is not active.");
 
-                var token = await generateTokenAsync(appUser);
+                var token = await GenerateTokenAsync(appUser);
                 return (true, token);
 
             } else {
@@ -260,23 +260,24 @@ namespace TrackAPI.Services {
         }
 
         #region Private Methods:
-        private static UserModel mapEntityToModel(AppUser appUser, IEnumerable<Claim> claims) {
+        internal static UserModel MapEntityToModel(AppUser appUser, IEnumerable<Claim> claims, bool basicMap = false) {
             return new UserModel {
                 Id = appUser.Id,
                 GivenName = claims.SingleOrDefault(c => c.Type == ClaimNames.GIVEN_NAME)?.Value,
                 Surname = claims.SingleOrDefault(c => c.Type == ClaimNames.SURNAME)?.Value,
-                Email = appUser.Email,
-                PhoneNumber = appUser.PhoneNumber,
-                IsActive = appUser.IsActive,
-                State = claims.SingleOrDefault(c => c.Type == ClaimNames.STATE)?.Value,
-                City = claims.SingleOrDefault(c => c.Type == ClaimNames.CITY)?.Value,
-                Address = claims.SingleOrDefault(c => c.Type == ClaimNames.ADDRESS)?.Value,
-                Explanation = appUser.Explanation,
-                CreationTime = appUser.CreationTime.ToString(SharedValues.DATETIME_FORMAT)
+                EmailHash = TextUtil.CreateMD5(appUser.Email),
+                Email = !basicMap ? appUser.Email : null,
+                PhoneNumber = !basicMap ? appUser.PhoneNumber : null,
+                IsActive = !basicMap ? appUser.IsActive : null,
+                State = !basicMap ? claims.SingleOrDefault(c => c.Type == ClaimNames.STATE)?.Value : null,
+                City = !basicMap ? claims.SingleOrDefault(c => c.Type == ClaimNames.CITY)?.Value : null,
+                Address = !basicMap ? claims.SingleOrDefault(c => c.Type == ClaimNames.ADDRESS)?.Value : null,
+                Explanation = !basicMap ? appUser.Explanation : null,
+                CreationTime = !basicMap ? appUser.CreationTime.ToString(SharedValues.DATETIME_FORMAT) : null
             };
         }
 
-        private async Task<string> generateTokenAsync(AppUser appUser) {
+        private async Task<string> GenerateTokenAsync(AppUser appUser) {
             var secret = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_appSettings.JWT.SecretKey));
             var userClaims = await _userManager.GetClaimsAsync(appUser);
             var emailHash = TextUtil.CreateMD5(appUser.Email);
