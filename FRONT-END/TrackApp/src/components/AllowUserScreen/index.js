@@ -15,6 +15,7 @@ import AppContext from '../../helpers/app-context';
 import LinkButton from '../LinkButton';
 import LoadingOver from '../LoadingOver';
 import TrackerService from '../../api/services/tracker-service';
+import { getString } from '../../i18n/strings';
 
 export default class AllowUser extends Component {
 
@@ -239,7 +240,9 @@ export default class AllowUser extends Component {
                                             checkedColor={vars.COLOR_SECONDARY_L3}
                                         />
                                         <ListItem.Content>
-                                            <ListItem.Title>{command}</ListItem.Title>
+                                            <ListItem.Title>
+                                                {getString(command)}
+                                            </ListItem.Title>
                                         </ListItem.Content>
                                     </ListItem>
                                 ))}
