@@ -173,7 +173,7 @@ namespace TrackAPI.Services {
                 if (tracker.Users.Select(ut => ut.UserId).Contains(userId))
                     return (false, ErrorCodes.ALREADY_ADDED);
 
-                if (tracker.UserId != userId && !tracker.AllowedUsers.Select(au => au.UserId).Contains(userId))
+                if (tracker.UserId != userId && !tracker.PermittedUsers.Select(au => au.UserId).Contains(userId))
                     return (false, ErrorCodes.NOT_ALLOWED);
 
                 tracker.Users.Add(new TrackerUser { UserId = userId });
@@ -207,7 +207,7 @@ namespace TrackAPI.Services {
             return _mapper.Map<TrackerModel>(tracker);
         }
 
-        public async Task AddPermittedUser(TrackerAllowedUserModel model) {
+        public async Task AddPermittedUser(TrackerPermittedUserModel model) {
             
             await _trackerRepository.AddPermittedUser(model.TrackerId, model.UserId, model.Permissions);
 
@@ -219,10 +219,10 @@ namespace TrackAPI.Services {
 
         }
 
-        public async Task<List<TrackerAllowedUserModel>> GetPermittedUsersAsync(string trackerId) {
+        public async Task<List<TrackerPermittedUserModel>> GetPermittedUsersAsync(string trackerId) {
             var tracker = await _trackerRepository.GetWithIncludeAsync(trackerId);
-            return tracker.AllowedUsers
-                .Select(item => new TrackerAllowedUserModel { 
+            return tracker.PermittedUsers
+                .Select(item => new TrackerPermittedUserModel { 
                     Permissions = item.Permissions,
                     User = UserService.MapEntityToModel(
                         item.User, 

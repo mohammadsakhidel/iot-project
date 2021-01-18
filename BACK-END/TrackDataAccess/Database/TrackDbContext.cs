@@ -19,7 +19,7 @@ namespace TrackDataAccess.Database {
         public DbSet<CommandLog> CommandLogs { get; set; }
         public DbSet<Image> Images { get; set; }
         public DbSet<TrackerUser> UserTrackers { get; set; }
-        public DbSet<TrackerAllowedUser> TrackerAllowedUsers { get; set; }
+        public DbSet<TrackerPermittedUser> TrackerPermittedUsers { get; set; }
         public DbSet<AccessCode> AccessCodes { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder) {
@@ -66,14 +66,14 @@ namespace TrackDataAccess.Database {
                 .WithMany(t => t.Users).HasForeignKey(ut => ut.TrackerId);
             #endregion
 
-            #region TrackerAllowedUsers Config:
-            modelBuilder.Entity<TrackerAllowedUser>().HasKey(au => new { au.UserId, au.TrackerId });
+            #region TrackerPermittedUsers Config:
+            modelBuilder.Entity<TrackerPermittedUser>().HasKey(au => new { au.UserId, au.TrackerId });
 
-            modelBuilder.Entity<TrackerAllowedUser>().HasOne(au => au.User)
-                .WithMany(u => u.AllowedTrackers).HasForeignKey(au => au.UserId);
+            modelBuilder.Entity<TrackerPermittedUser>().HasOne(au => au.User)
+                .WithMany(u => u.PermittedTrackers).HasForeignKey(au => au.UserId);
 
-            modelBuilder.Entity<TrackerAllowedUser>().HasOne(au => au.Tracker)
-                .WithMany(t => t.AllowedUsers).HasForeignKey(au => au.TrackerId);
+            modelBuilder.Entity<TrackerPermittedUser>().HasOne(au => au.Tracker)
+                .WithMany(t => t.PermittedUsers).HasForeignKey(au => au.TrackerId);
             #endregion
 
             #region Messages TPH Config:

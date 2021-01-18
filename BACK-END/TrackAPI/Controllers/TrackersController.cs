@@ -185,7 +185,7 @@ namespace TrackAPI.Controllers {
 
         [HttpPost("{trackerId}/permissions")]
         [Authorize]
-        public async Task<IActionResult> AddPermittedUserAsync(TrackerAllowedUserModel model) {
+        public async Task<IActionResult> AddPermittedUserAsync(TrackerPermittedUserModel model) {
             try {
 
                 // Validate Tracker & User IDs:

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 
 namespace TrackAPI.Models {
-    public class TrackerAllowedUserModel {
+    public class TrackerPermittedUserModel {
         
         [Required]
         public string TrackerId { get; set; }

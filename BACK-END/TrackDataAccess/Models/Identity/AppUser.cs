@@ -30,7 +30,7 @@ namespace TrackDataAccess.Models.Identity {
         #region Navigation Props:
         public List<IdentityUserClaim<string>> Claims { get; set; }
         public List<TrackerUser> Trackers { get; set; }
-        public List<TrackerAllowedUser> AllowedTrackers { get; set; }
+        public List<TrackerPermittedUser> PermittedTrackers { get; set; }
         #endregion
     }
 }

@@ -14,11 +14,11 @@ namespace TrackDataAccess.Repositories {
 
         public async Task AddPermittedUser(string trackerId, string userId, string permissions) {
 
-            var set = Context.Set<TrackerAllowedUser>();
+            var set = Context.Set<TrackerPermittedUser>();
             var current = await set.SingleOrDefaultAsync(p => p.TrackerId == trackerId && p.UserId == userId);
 
             if (current == null) {
-                var entity = new TrackerAllowedUser {
+                var entity = new TrackerPermittedUser {
                     TrackerId = trackerId,
                     UserId = userId,
                     Permissions = permissions
@@ -35,7 +35,7 @@ namespace TrackDataAccess.Repositories {
         public async Task<Tracker> GetWithIncludeAsync(params object[] id) {
             var tracker = await Context.Set<Tracker>()
                 .Include(t => t.Users).ThenInclude(tu => tu.User)
-                .Include(t => t.AllowedUsers).ThenInclude(au => au.User).ThenInclude(u => u.Claims)
+                .Include(t => t.PermittedUsers).ThenInclude(au => au.User).ThenInclude(u => u.Claims)
                 .SingleOrDefaultAsync(t => t.Id == id[0].ToString());
 
             return tracker;
@@ -43,7 +43,7 @@ namespace TrackDataAccess.Repositories {
 
         public async Task RemovePermittedUser(string trackerId, string userId) {
 
-            var set = Context.Set<TrackerAllowedUser>();
+            var set = Context.Set<TrackerPermittedUser>();
             var entity = await set.SingleOrDefaultAsync(p => p.TrackerId == trackerId && p.UserId == userId);
             if (entity != null) {
                 Context.Remove(entity);

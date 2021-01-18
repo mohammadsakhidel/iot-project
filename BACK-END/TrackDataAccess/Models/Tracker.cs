@@ -82,7 +82,7 @@ namespace TrackDataAccess.Models {
 
         #region Navigation Props:
         public List<TrackerUser> Users { get; set; }
-        public List<TrackerAllowedUser> AllowedUsers { get; set; }
+        public List<TrackerPermittedUser> PermittedUsers { get; set; }
         #endregion
 
     }

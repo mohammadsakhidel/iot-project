@@ -9,8 +9,8 @@ using TrackDataAccess.Models.Identity;
 
 namespace TrackDataAccess.Models {
 
-    [Table("tracker_allowed_users")]
-    public class TrackerAllowedUser {
+    [Table("tracker_permitted_users")]
+    public class TrackerPermittedUser {
 
         [Required]
         [MaxLength(32)]
