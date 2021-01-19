@@ -65,7 +65,7 @@ namespace TrackAPI.Controllers {
                 // Command
                 var command = new CommandRequest(
                     model.TrackerId,
-                    commandSet[model.CommandType],
+                    model.CommandType,
                     model.Payload ?? ""
                 );
 
