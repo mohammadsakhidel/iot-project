@@ -11,6 +11,7 @@ import FormSuccess from '../FormSuccess';
 import CommandService from '../../api/services/command-service';
 import AppContext from '../../helpers/app-context';
 import * as ErrorCodes from '../../constants/error-codes';
+import * as Validators from '../../utils/command-validators';
 
 export default class CommandSindle extends Component {
 
@@ -44,7 +45,8 @@ export default class CommandSindle extends Component {
                 // Validate Input:
                 const { validator, validationError } = this.props.command;
                 if (validator) {
-                    const valResult = validator(this.state.payload);
+                    const validatorFunc = Validators[validator];
+                    const valResult = validatorFunc(this.state.payload);
                     if (!valResult) {
                         throw new Error(validationError);
                     }

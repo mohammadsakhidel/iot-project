@@ -14,7 +14,6 @@ import * as RouteNames from '../../constants/route-names';
 import { connect } from 'react-redux';
 import * as Actions from '../../redux/actions';
 import TrackerStatus from '../TrackerStatus';
-import * as Validators from '../../utils/command-validators';
 import * as Commands from '../../constants/command-names';
 
 class TrackerConfigScreen extends Component {
@@ -89,7 +88,7 @@ class TrackerConfigScreen extends Component {
                                             type: "single",
                                             label: `${Strings.DevicePassword}:`,
                                             inputType: "string",
-                                            validator: Validators.devicePasswordValidator,
+                                            validator: "devicePasswordValidator",
                                             validationError: Strings.DevicePasswordValidationError
                                         }
                                     });
@@ -109,7 +108,7 @@ class TrackerConfigScreen extends Component {
                                             type: "single",
                                             label: `${Strings.CenterNumber}:`,
                                             inputType: "string",
-                                            validator: Validators.phoneNumberValidator,
+                                            validator: "phoneNumberValidator",
                                             validationError: Strings.CenterNumberValidationError
                                         }
                                     });
