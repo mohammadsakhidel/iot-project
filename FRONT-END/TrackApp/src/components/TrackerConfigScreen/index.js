@@ -15,6 +15,7 @@ import { connect } from 'react-redux';
 import * as Actions from '../../redux/actions';
 import TrackerStatus from '../TrackerStatus';
 import * as Validators from '../../utils/command-validators';
+import * as Commands from '../../constants/command-names';
 
 class TrackerConfigScreen extends Component {
 
@@ -84,7 +85,7 @@ class TrackerConfigScreen extends Component {
                                         pageTitle: Strings.DevicePassword,
                                         desc: Strings.DevicePasswordDesc,
                                         command: {
-                                            name: "PASSWORD",
+                                            name: Commands.PASSWORD,
                                             type: "single",
                                             label: `${Strings.DevicePassword}:`,
                                             inputType: "string",
@@ -98,7 +99,21 @@ class TrackerConfigScreen extends Component {
                             </SettingsSection>
 
                             <SettingsSection title={Strings.DeviceSettings}>
-                                <SettingsItem icon="mobile" onPress={() => { }}>
+                                <SettingsItem icon="mobile" onPress={() => {
+                                    navigation.navigate(RouteNames.COMMAND_SCREEN, {
+                                        tracker: tracker,
+                                        pageTitle: Strings.CenterNumber,
+                                        desc: Strings.CenterNumberDesc,
+                                        command: {
+                                            name: Commands.CENTER_NUMBER,
+                                            type: "single",
+                                            label: `${Strings.CenterNumber}:`,
+                                            inputType: "string",
+                                            validator: Validators.phoneNumberValidator,
+                                            validationError: Strings.CenterNumberValidationError
+                                        }
+                                    });
+                                }}>
                                     {Strings.CenterNumber}
                                 </SettingsItem>
                                 <SettingsItem icon="address-book" onPress={() => { }}>

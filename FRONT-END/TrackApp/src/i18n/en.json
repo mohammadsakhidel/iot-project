@@ -62,6 +62,8 @@
     "DevicePasswordDesc": "Sets the device message control password. This password is checked whenever a phone number other than center number sends SMS commands to the device.",
     "DevicePasswordValidationError": "Please specify a password having at least 6 alphanumeric characters.",
     "CenterNumber": "Center Mobile Number",
+    "CenterNumberDesc": "Sets the center number of device. This mobile number can then send SMS commands to the device.",
+    "CenterNumberValidationError": "Please enter a valid phone number.",
     "ServerAndPortNumber": "Server & Port Number",
     "SOSNumbers": "SOS Numbers",
     "UploadInterval": "Upload Interval",
