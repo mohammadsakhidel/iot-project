@@ -59,6 +59,8 @@
     "AllowedUsers": "Permitted Users",
     "QRCode": "QR Code",
     "DevicePassword": "Device Password",
+    "DevicePasswordDesc": "Sets the device message control password. This password is checked whenever a phone number other than center number sends SMS commands to the device.",
+    "DevicePasswordValidationError": "Please specify a password having at least 6 alphanumeric characters.",
     "CenterNumber": "Center Mobile Number",
     "ServerAndPortNumber": "Server & Port Number",
     "SOSNumbers": "SOS Numbers",
@@ -85,7 +87,12 @@
     "AreYouSureRemoveItem": "Are you sure you want to remove this item?",
     "AnotherUser": "Another User",
     "ErrorSelectUserFirst": "Select a user & associated permissions please.",
-    "Qzsldweoir": "----------------------- COMMAND NAMES ----------------------------",
+    "SendCommand": "Send Command",
+    "CommandSentMessage": "Successfully sent to the device.",
+    "ErrorCodeTrackerOffline": "Device is not online.",
+    "----------------------------------": "----------------------- COMMAND NAMES ----------------------------",
+    "---------------------------------": "----------------------- COMMAND NAMES ----------------------------",
+    "--------------------------------": "----------------------- COMMAND NAMES ----------------------------",
     "UPLOAD_INTERVAL": "Upload Interval Setting",
     "CENTER_NUMBER": "Center Number Setting",
     "SECOND_CENTER_NUMBER": "Secondary Center Number Setting",
@@ -122,5 +129,8 @@
     "SWITCH_AUTO_ANSWER": "ON/OFF Auto Answering",
     "GET_STATUS": "Get Device Status",
     "GET_VERSION": "Get Platform Version",
-    "GET_CURRENT_SETTINGS": "Get Current Settings"
+    "GET_CURRENT_SETTINGS": "Get Current Settings",
+    "----------------------------": "----------------------- COMMAND NAMES ----------------------------",
+    "------------------------------": "----------------------- COMMAND NAMES ----------------------------",
+    "-----------------------------": "----------------------- COMMAND NAMES ----------------------------"
 }

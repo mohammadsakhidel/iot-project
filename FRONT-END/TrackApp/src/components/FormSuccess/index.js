@@ -1,23 +1,23 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
-import Text from '../Text';
-import Icon from '../Icon';
 import * as globalStyles from '../../styles/global-styles';
 import * as vars from '../../styles/vars';
+import Text from '../Text';
+import Icon from '../Icon';
 
-export default function FormError(props) {
+export default function FormSuccess(props) {
 
-    const { error, ...rest } = props;
+    const { message, ...rest } = props;
 
     return (
         <View style={styles.container} {...rest}>
-            <Icon name="minus-circle"
-                style={globalStyles.error}
-                color={vars.COLOR_ERROR}
+            <Icon name="check-circle"
+                style={globalStyles.success}
+                color={vars.COLOR_SUCCESS}
                 size={vars.ICO_SMALL}
             />
-            <Text style={[globalStyles.error, styles.text]}>
-                {error}
+            <Text style={[globalStyles.success, styles.text]}>
+                {message}
             </Text>
         </View>
     );

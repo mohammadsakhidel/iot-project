@@ -14,6 +14,7 @@ import * as RouteNames from '../../constants/route-names';
 import { connect } from 'react-redux';
 import * as Actions from '../../redux/actions';
 import TrackerStatus from '../TrackerStatus';
+import * as Validators from '../../utils/command-validators';
 
 class TrackerConfigScreen extends Component {
 
@@ -77,7 +78,21 @@ class TrackerConfigScreen extends Component {
                                 }}>
                                     {Strings.AllowedUsers}
                                 </SettingsItem>
-                                <SettingsItem icon="key" onPress={() => { }}>
+                                <SettingsItem icon="key" onPress={() => {
+                                    navigation.navigate(RouteNames.COMMAND_SCREEN, {
+                                        tracker: tracker,
+                                        pageTitle: Strings.DevicePassword,
+                                        desc: Strings.DevicePasswordDesc,
+                                        command: {
+                                            name: "PASSWORD",
+                                            type: "single",
+                                            label: `${Strings.DevicePassword}:`,
+                                            inputType: "string",
+                                            validator: Validators.devicePasswordValidator,
+                                            validationError: Strings.DevicePasswordValidationError
+                                        }
+                                    });
+                                }}>
                                     {Strings.DevicePassword}
                                 </SettingsItem>
                             </SettingsSection>
