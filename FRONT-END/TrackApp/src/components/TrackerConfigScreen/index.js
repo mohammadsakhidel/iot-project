@@ -130,7 +130,21 @@ class TrackerConfigScreen extends Component {
                                 <SettingsItem icon="globe" onPress={() => { }}>
                                     {Strings.ServerAndPortNumber}
                                 </SettingsItem>
-                                <SettingsItem icon="history" onPress={() => { }}>
+                                <SettingsItem icon="history" onPress={() => {
+                                    navigation.navigate(RouteNames.COMMAND_SCREEN, {
+                                        tracker: tracker,
+                                        pageTitle: Strings.UploadInterval,
+                                        desc: Strings.UploadIntervalDesc,
+                                        command: {
+                                            name: Commands.UPLOAD_INTERVAL,
+                                            type: "single",
+                                            label: `${Strings.UploadIntervalLabel}:`,
+                                            inputType: "string",
+                                            validator: "numberValidator",
+                                            validationError: Strings.UploadIntervalValidationError
+                                        }
+                                    });
+                                }}>
                                     {Strings.UploadInterval}
                                 </SettingsItem>
                                 <SettingsItem icon="language" onPress={() => { }}>
@@ -142,7 +156,21 @@ class TrackerConfigScreen extends Component {
                                 <SettingsItem icon="info-circle" onPress={() => { }}>
                                     {Strings.CheckVersion}
                                 </SettingsItem>
-                                <SettingsItem icon="phone" onPress={() => { }}>
+                                <SettingsItem icon="phone" onPress={() => {
+                                    navigation.navigate(RouteNames.COMMAND_SCREEN, {
+                                        tracker: tracker,
+                                        pageTitle: Strings.MakeCall,
+                                        desc: Strings.MakeCallDesc,
+                                        command: {
+                                            name: Commands.MAKE_CALL,
+                                            type: "single",
+                                            label: `${Strings.PhoneNumber}:`,
+                                            inputType: "string",
+                                            validator: "phoneNumberValidator",
+                                            validationError: Strings.MakeCallValidationError
+                                        }
+                                    });
+                                }}>
                                     {Strings.MakeCall}
                                 </SettingsItem>
                                 <SettingsItem icon="phone-square" onPress={() => { }}>
