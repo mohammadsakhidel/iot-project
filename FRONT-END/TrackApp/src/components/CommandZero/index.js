@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, ScrollView, Keyboard } from 'react-native';
+import { StyleSheet, View, ScrollView, Keyboard, Alert } from 'react-native';
 import Text from '../Text';
-import { Input } from 'react-native-elements';
 import * as vars from '../../styles/vars';
 import PrimaryButton from '../PrimaryButton';
 import { Strings } from '../../i18n/strings';
@@ -11,9 +10,8 @@ import FormSuccess from '../FormSuccess';
 import CommandService from '../../api/services/command-service';
 import AppContext from '../../helpers/app-context';
 import * as ErrorCodes from '../../constants/error-codes';
-import * as Validators from '../../utils/command-validators';
 
-export default class CommandSindle extends Component {
+export default class CommandZero extends Component {
 
     static contextType = AppContext;
 
@@ -24,39 +22,42 @@ export default class CommandSindle extends Component {
         this.state = {
             isLoading: false,
             error: null,
-            done: false,
-            payload: ''
+            done: false
         };
 
         // Bindings:
         this.onSendCommandPress = this.onSendCommandPress.bind(this);
+        this.executeCommandFunc = this.executeCommandFunc.bind(this);
 
     }
 
     onSendCommandPress() {
+        const { tracker, command, showAlert, alertTitle, alertMessage } = this.props;
 
+        if (showAlert === true) {
+            Alert.alert(
+                alertTitle,
+                alertMessage,
+                [
+                    { text: Strings.Yes, onPress: this.executeCommandFunc },
+                    { text: Strings.Cancel, onPress: () => { } }
+                ]
+            );
+        } else {
+            this.executeCommandFunc();
+        }
+    }
+
+    executeCommandFunc() {
         const { tracker, command } = this.props;
 
         this.setState({ error: null, done: false, isLoading: true }, async () => {
             try {
-
-                Keyboard.dismiss();
-
-                // Validate Input:
-                const { validator, validationError } = this.props.command;
-                if (validator) {
-                    const validatorFunc = Validators[validator];
-                    const valResult = validatorFunc(this.state.payload);
-                    if (!valResult) {
-                        throw new Error(validationError);
-                    }
-                }
-
                 // Call API:
                 const dto = {
                     trackerId: tracker.id,
                     commandType: command.name,
-                    payload: this.state.payload
+                    payload: ""
                 };
                 const result = await CommandService.execute(dto, this.context.user.token);
 
@@ -84,11 +85,10 @@ export default class CommandSindle extends Component {
                 });
             }
         });
-
     }
 
     render() {
-        const { label, inputType } = this.props.command;
+
         const { desc } = this.props;
 
         return (
@@ -98,22 +98,15 @@ export default class CommandSindle extends Component {
 
                     <Text style={styles.desc}>{desc}</Text>
 
-                    <View style={styles.inputContainer}>
-                        {inputType === "string" && (
-                            <Input
-                                label={label}
-                                onChangeText={(text) => this.setState({ payload: text })}
-                            />
+                    <View style={styles.messageContainer}>
+                        {this.state.error && (
+                            <FormError error={this.state.error} />
+                        )}
+
+                        {this.state.done && (
+                            <FormSuccess message={Strings.CommandSentMessage} />
                         )}
                     </View>
-
-                    {this.state.error && (
-                        <FormError error={this.state.error} />
-                    )}
-
-                    {this.state.done && (
-                        <FormSuccess message={Strings.CommandSentMessage} />
-                    )}
 
                 </ScrollView>
 
@@ -130,9 +123,6 @@ export default class CommandSindle extends Component {
             </View>
         );
     }
-
-
-
 }
 
 const styles = StyleSheet.create({
@@ -158,7 +148,7 @@ const styles = StyleSheet.create({
         color: vars.COLOR_PRIMARY_D1,
         textAlign: 'justify'
     },
-    inputContainer: {
+    messageContainer: {
         marginTop: vars.PAD_DOUBLE
     }
 });

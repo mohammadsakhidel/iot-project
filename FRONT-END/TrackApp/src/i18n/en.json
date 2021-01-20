@@ -74,6 +74,8 @@
     "AlarmSettings": "Alarms Settings",
     "Commands": "Commands",
     "ResetFactory": "Reset Factory Device",
+    "ResetFactoryDesc": "This command resets the device to its initial factory settings.",
+    "ResetFactoryAlert": "This will clear all existing settings on the device. Are you sure?",
     "PowerOff": "Power Off",
     "Restart": "Restart",
     "MakeCall": "Make Call",

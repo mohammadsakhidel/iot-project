@@ -2,3 +2,4 @@ export const PASSWORD = "PASSWORD";
 export const CENTER_NUMBER = "CENTER_NUMBER";
 export const UPLOAD_INTERVAL = "UPLOAD_INTERVAL";
 export const MAKE_CALL = "MAKE_CALL";
+export const RESET_FACTORY = "RESET_FACTORY";

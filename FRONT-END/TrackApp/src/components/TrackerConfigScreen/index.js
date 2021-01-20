@@ -185,7 +185,20 @@ class TrackerConfigScreen extends Component {
                                 <SettingsItem icon="power-off" onPress={() => { }}>
                                     {Strings.PowerOff}
                                 </SettingsItem>
-                                <SettingsItem icon="minus-circle" onPress={() => { }}>
+                                <SettingsItem icon="minus-circle" onPress={() => {
+                                    navigation.navigate(RouteNames.COMMAND_SCREEN, {
+                                        tracker: tracker,
+                                        pageTitle: Strings.ResetFactory,
+                                        desc: Strings.ResetFactoryDesc,
+                                        showAlert: true,
+                                        alertTitle: Strings.AreYouSure,
+                                        alertMessage: Strings.ResetFactoryAlert,
+                                        command: {
+                                            name: Commands.RESET_FACTORY,
+                                            type: "zero"
+                                        }
+                                    });
+                                }}>
                                     {Strings.ResetFactory}
                                 </SettingsItem>
                             </SettingsSection>

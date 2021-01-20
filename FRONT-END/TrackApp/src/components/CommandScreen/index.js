@@ -1,6 +1,7 @@
 import React, { useLayoutEffect } from 'react';
 import { View, StyleSheet, ScrollView } from 'react-native';
 import CommandSingle from '../CommandSingle';
+import CommandZero from '../CommandZero';
 
 
 export default function (props) {
@@ -23,6 +24,10 @@ export default function (props) {
 
             {command.type === "single" && (
                 <CommandSingle command={command} {...rest} />
+            )}
+
+            {command.type === "zero" && (
+                <CommandZero command={command} {...rest} />
             )}
 
         </View>
