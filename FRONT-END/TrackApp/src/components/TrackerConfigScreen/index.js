@@ -173,16 +173,64 @@ class TrackerConfigScreen extends Component {
                                 }}>
                                     {Strings.MakeCall}
                                 </SettingsItem>
-                                <SettingsItem icon="phone-square" onPress={() => { }}>
+                                <SettingsItem icon="phone-square" onPress={() => {
+                                    navigation.navigate(RouteNames.COMMAND_SCREEN, {
+                                        tracker: tracker,
+                                        pageTitle: Strings.FindDevice,
+                                        desc: Strings.FindDeviceDesc,
+                                        showAlert: false,
+                                        command: {
+                                            name: Commands.FIND,
+                                            type: "zero"
+                                        }
+                                    });
+                                }}>
                                     {Strings.FindDevice}
                                 </SettingsItem>
-                                <SettingsItem icon="bullhorn" onPress={() => { }}>
+                                <SettingsItem icon="bullhorn" onPress={() => {
+                                    navigation.navigate(RouteNames.COMMAND_SCREEN, {
+                                        tracker: tracker,
+                                        pageTitle: Strings.Wakeup,
+                                        desc: Strings.WakeupDesc,
+                                        showAlert: false,
+                                        command: {
+                                            name: Commands.WAKEUP,
+                                            type: "zero"
+                                        }
+                                    });
+                                }}>
                                     {Strings.Wakeup}
                                 </SettingsItem>
-                                <SettingsItem icon="repeat" onPress={() => { }}>
+                                <SettingsItem icon="repeat" onPress={() => {
+                                    navigation.navigate(RouteNames.COMMAND_SCREEN, {
+                                        tracker: tracker,
+                                        pageTitle: Strings.Restart,
+                                        desc: Strings.RestartDesc,
+                                        showAlert: true,
+                                        alertTitle: Strings.AreYouSure,
+                                        alertMessage: Strings.RestartAlert,
+                                        command: {
+                                            name: Commands.RESTART,
+                                            type: "zero"
+                                        }
+                                    });
+                                }}>
                                     {Strings.Restart}
                                 </SettingsItem>
-                                <SettingsItem icon="power-off" onPress={() => { }}>
+                                <SettingsItem icon="power-off" onPress={() => {
+                                    navigation.navigate(RouteNames.COMMAND_SCREEN, {
+                                        tracker: tracker,
+                                        pageTitle: Strings.PowerOff,
+                                        desc: Strings.PowerOffDesc,
+                                        showAlert: true,
+                                        alertTitle: Strings.AreYouSure,
+                                        alertMessage: Strings.PowerOffAlert,
+                                        command: {
+                                            name: Commands.POWEROFF,
+                                            type: "zero"
+                                        }
+                                    });
+                                }}>
                                     {Strings.PowerOff}
                                 </SettingsItem>
                                 <SettingsItem icon="minus-circle" onPress={() => {
