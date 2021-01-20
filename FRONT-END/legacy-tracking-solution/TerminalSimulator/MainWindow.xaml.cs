@@ -180,6 +180,8 @@ namespace TerminalSimulator
 
                                 if (srvCmd is PlatformGetTerminalVersionCommand)
                                     srvCmd.CommandData = "G29_BASE_V1.00_2014.04.23_17.46.49";
+                                else if (srvCmd is PlatformGetTerminalSettingsCommand)
+                                    srvCmd.CommandData = "ver:G29_BASE_V1.00_2014.04.24_09.47.23;ID:5678901234;imei:1234SG-56789012345;url:113.81.229.9;port:5900;11center:;slave:;sos1:;sos2:;sos3:;upload:30S;workmode:1;bat level:3;language:1;zone:8.00;GPS:NO(0);GPRS:OK(89);LED:OFF;pw:123456;";
 
                                 srvCmd.ContentLength = srvCmd.CommandID.Length + srvCmd.CommandData.Length + (string.IsNullOrEmpty(srvCmd.CommandData) ? 0 : 1);
                                 var res = srvCmd.ToString();

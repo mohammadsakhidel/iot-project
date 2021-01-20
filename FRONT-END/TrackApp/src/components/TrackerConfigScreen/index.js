@@ -153,8 +153,31 @@ class TrackerConfigScreen extends Component {
                             </SettingsSection>
 
                             <SettingsSection title={Strings.Commands}>
-                                <SettingsItem icon="info-circle" onPress={() => { }}>
+                                <SettingsItem icon="info-circle" onPress={() => {
+                                    navigation.navigate(RouteNames.COMMAND_SCREEN, {
+                                        tracker: tracker,
+                                        pageTitle: Strings.CheckVersion,
+                                        desc: Strings.CheckVersionDesc,
+                                        command: {
+                                            name: Commands.GET_VERSION,
+                                            type: "get"
+                                        }
+                                    });
+                                }}>
                                     {Strings.CheckVersion}
+                                </SettingsItem>
+                                <SettingsItem icon="cogs" onPress={() => {
+                                    navigation.navigate(RouteNames.COMMAND_SCREEN, {
+                                        tracker: tracker,
+                                        pageTitle: Strings.CurrentSettings,
+                                        desc: Strings.CurrentSettingsDesc,
+                                        command: {
+                                            name: Commands.GET_CURRENT_SETTINGS,
+                                            type: "get"
+                                        }
+                                    });
+                                }}>
+                                    {Strings.CurrentSettings}
                                 </SettingsItem>
                                 <SettingsItem icon="phone" onPress={() => {
                                     navigation.navigate(RouteNames.COMMAND_SCREEN, {

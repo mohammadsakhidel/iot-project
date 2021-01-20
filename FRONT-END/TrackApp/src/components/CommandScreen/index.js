@@ -2,7 +2,7 @@ import React, { useLayoutEffect } from 'react';
 import { View, StyleSheet, ScrollView } from 'react-native';
 import CommandSingle from '../CommandSingle';
 import CommandZero from '../CommandZero';
-
+import CommandGet from '../CommandGet';
 
 export default function (props) {
 
@@ -28,6 +28,10 @@ export default function (props) {
 
             {command.type === "zero" && (
                 <CommandZero command={command} {...rest} />
+            )}
+
+            {command.type === "get" && (
+                <CommandGet command={command} {...rest} />
             )}
 
         </View>

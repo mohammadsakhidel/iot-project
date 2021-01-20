@@ -51,6 +51,7 @@
     <Compile Include="Constants\StringFormats.cs" />
     <Compile Include="Enums\ApiErrorCode.cs" />
     <Compile Include="Enums\InitialValidity.cs" />
+    <Compile Include="Objects\Commands\PlatformGetTerminalSettingsCommand.cs" />
     <Compile Include="Objects\Exceptions\CommandFailedException.cs" />
     <Compile Include="Objects\Exceptions\HttpException.cs" />
     <Compile Include="Objects\Exceptions\InvalidCommandFormatException.cs" />

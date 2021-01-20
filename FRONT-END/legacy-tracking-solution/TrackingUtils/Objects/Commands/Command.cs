@@ -129,6 +129,8 @@ namespace TrackingUtils.Objects.Commands
                     return new PlatformLowMessageSetCommand(manufacturer, deviceID, contentLength, commandID, commandData);
                 case CommandTypes.VERNO:
                     return new PlatformGetTerminalVersionCommand(manufacturer, deviceID, contentLength, commandID, commandData);
+                case CommandTypes.TS:
+                    return new PlatformGetTerminalSettingsCommand(manufacturer, deviceID, contentLength, commandID, commandData);
                 case CommandTypes.RESET:
                     return new PlatformResetCommand(manufacturer, deviceID, contentLength, commandID, commandData);
                 case CommandTypes.CR:

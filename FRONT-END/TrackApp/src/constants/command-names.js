@@ -7,3 +7,5 @@ export const POWEROFF = "POWEROFF";
 export const RESTART = "RESTART";
 export const WAKEUP = "WAKEUP";
 export const FIND = "FIND";
+export const GET_VERSION = "GET_VERSION";
+export const GET_CURRENT_SETTINGS = "GET_CURRENT_SETTINGS";

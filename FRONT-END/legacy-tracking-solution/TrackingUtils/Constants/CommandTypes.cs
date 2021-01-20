@@ -27,6 +27,7 @@ namespace TrackingUtils.Constants
         public const string SOSSMS = "SOSSMS";
         public const string LOWBAT = "LOWBAT";
         public const string VERNO = "VERNO";
+        public const string TS = "TS";
         public const string RESET = "RESET";
         public const string CR = "CR";
         public const string POWEROFF = "POWEROFF";
