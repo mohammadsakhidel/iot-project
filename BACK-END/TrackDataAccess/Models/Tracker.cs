@@ -80,6 +80,10 @@ namespace TrackDataAccess.Models {
         [Column("serial_number")]
         public string SerialNumber { get; set; }
 
+        [MaxLength(1024)]
+        [Column("configs")]
+        public string Configs { get; set; }
+
         #region Navigation Props:
         public List<TrackerUser> Users { get; set; }
         public List<TrackerPermittedUser> PermittedUsers { get; set; }

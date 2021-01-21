@@ -232,5 +232,18 @@ namespace TrackAPI.Services {
                 })
                 .ToList();
         }
+
+        public async Task<(bool, string)> SaveConfigsAsync(string trackerId, string configsJson) {
+
+            var tracker = await _trackerRepository.GetAsync(trackerId);
+            if (tracker == null)
+                return (false, "Tracker not found.");
+
+            tracker.Configs = configsJson;
+            await _trackerRepository.SaveAsync();
+
+            return (true, string.Empty);
+
+        }
     }
 }

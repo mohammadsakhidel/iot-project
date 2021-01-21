@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace TrackAPI.Models {
@@ -40,8 +41,13 @@ namespace TrackAPI.Models {
         public string Status { get; set; }
         public DateTime? LastConnection { get; set; }
         public string LastConnectedServer { get; set; }
+        public string Configs { get; set; }
+
 
         // Additional Properties:
         public string[] Commands { get; set; }
+        public TrackerConfigsModel ConfigsObj => (!string.IsNullOrEmpty(Configs) 
+            ? JsonSerializer.Deserialize<TrackerConfigsModel>(Configs)
+            : new TrackerConfigsModel());
     }
 }

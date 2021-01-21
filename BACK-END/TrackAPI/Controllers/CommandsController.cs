@@ -43,64 +43,36 @@ namespace TrackAPI.Controllers {
         public async Task<IActionResult> PostAsync(ExecuteCommandModel model) {
             try {
 
-                #region Validate:
-                // Tracker
-                var tracker = await _trackerService.GetAsync(model.TrackerId);
-                if (tracker == null)
-                    return BadRequest("Tracker ID is not valid.");
+                return await ValidateAndExecuteCommandAsync(model);
 
-                // Command Type:
-                var commandSet = CommandSet.Get(tracker.CommandSet, HttpContext.RequestServices);
-                if (!commandSet.IsCommandSupported(model.CommandType))
-                    return BadRequest("Invalid Command.");
-
-                // User:
-                var userId = HttpContext.User.Claims.SingleOrDefault(c => c.Type == ClaimNames.USER_ID)?.Value;
-                var isAdming = HttpContext.User.Claims.Any(c => c.Type == ClaimNames.ISADMIN);
-                if (!isAdming && (string.IsNullOrEmpty(userId) || tracker.UserId != userId))
-                    return BadRequest("User not able to execute commands on this tracker.");
-                #endregion
-
-                #region Arrange:
-                // Command
-                var command = new CommandRequest(
-                    model.TrackerId,
-                    model.CommandType,
-                    model.Payload ?? ""
-                );
-
-                // Host
-                var host = _appSettings.Worker.GetHost(tracker.LastConnectedServer);
-                #endregion
-
-                #region Execute & Log Command:
-                // Send command:
-                var response = await _commandExecutor.ExecuteAsync(command, host);
-
-                // Add Log:
-                var log = new CommandLogModel {
-                    TrackerId = tracker.Id,
-                    Type = command.Type,
-                    Payload = command.Payload,
-                    UserId = userId,
-                    Response = response != null ? JsonSerializer.Serialize(response) : "",
-                    CreationTime = DateTime.UtcNow.ToString(SharedValues.DATETIME_FORMAT)
-                };
-                await _commandService.AddLogAsync(log);
-
-                if (response == null)
-                    throw new ApplicationException("Command execution failed.");
-                #endregion
-
-                return Ok(new ApiResult {
-                    Done = response.Done,
-                    Data = response.Payload ?? string.Empty,
-                    Error = response.Error ?? string.Empty
-                });
             } catch (Exception ex) {
                 return ex.GetActionResult();
             }
         }
+
+        #region Commands Actions:
+        [HttpPost("password")]
+        [Authorize]
+        public async Task<IActionResult> PasswordCommand(ExecuteCommandModel model) {
+            try {
+
+                Func<Task> saveToConfigsFunc = async () => {
+
+                    var tracker = await _trackerService.GetAsync(model.TrackerId);
+                    var configs = tracker.ConfigsObj;
+                    configs.Password = model.Payload;
+
+                    await _trackerService.SaveConfigsAsync(model.TrackerId, JsonSerializer.Serialize(configs));
+
+                };
+
+                return await ValidateAndExecuteCommandAsync(model, saveToConfigsFunc);
+
+            } catch (Exception ex) {
+                return ex.GetActionResult();
+            }
+        }
+        #endregion
 
         [HttpPost("connect/{id}")]
         [Authorize]
@@ -183,6 +155,96 @@ namespace TrackAPI.Controllers {
                 return ex.GetActionResult();
             }
         }
+
+        #region Private Methods:
+        private async Task<IActionResult> ValidateAndExecuteCommandAsync(ExecuteCommandModel model, params Func<Task>[] functions) {
+
+            //Validate:
+            var validationResult = await ValidateAsync(model);
+            if (!validationResult.IsValid)
+                return BadRequest(validationResult.Message);
+
+            // Execute & Log:
+            var response = await SendCommandToDeviceAsync(model);
+
+            // Run Actions:
+            if (functions != null && functions.Any()) {
+                foreach (var func in functions) {
+                    await func();
+                }
+            }
+
+            // Return:
+            return Ok(new ApiResult {
+                Done = response.Done,
+                Data = response.Payload ?? string.Empty,
+                Error = response.Error ?? string.Empty
+            });
+
+        }
+
+        private async Task<(bool IsValid, string Message)> ValidateAsync(ExecuteCommandModel model) {
+
+            // Tracker
+            var tracker = await _trackerService.GetAsync(model.TrackerId);
+            if (tracker == null)
+                return (false, "Tracker ID is not valid.");
+
+            // Command Type:
+            var commandSet = CommandSet.Get(tracker.CommandSet, HttpContext.RequestServices);
+            if (commandSet == null || !commandSet.IsCommandSupported(model.CommandType))
+                return (false, "Invalid Command.");
+
+            // User:
+            var userId = HttpContext.User.Claims.SingleOrDefault(c => c.Type == ClaimNames.USER_ID)?.Value;
+            var isAdming = HttpContext.User.Claims.Any(c => c.Type == ClaimNames.ISADMIN);
+            if (!isAdming && (string.IsNullOrEmpty(userId) || tracker.UserId != userId))
+                return (false, "User not able to execute commands on this tracker.");
+
+            return (true, null);
+        }
+
+        private async Task<CommandResponse> SendCommandToDeviceAsync(ExecuteCommandModel model) {
+
+            #region Arrange:
+            // Tracker & User:
+            var tracker = await _trackerService.GetAsync(model.TrackerId);
+            var userId = HttpContext.User.Claims.SingleOrDefault(c => c.Type == ClaimNames.USER_ID)?.Value;
+
+            // Command
+            var command = new CommandRequest(
+                model.TrackerId,
+                model.CommandType,
+                model.Payload ?? ""
+            );
+
+            // Host
+            var host = _appSettings.Worker.GetHost(tracker.LastConnectedServer);
+            #endregion
+
+            #region Execute & Log Command:
+            // Send command:
+            var response = await _commandExecutor.ExecuteAsync(command, host);
+
+            // Add Log:
+            var log = new CommandLogModel {
+                TrackerId = tracker.Id,
+                Type = command.Type,
+                Payload = command.Payload,
+                UserId = userId,
+                Response = response != null ? JsonSerializer.Serialize(response) : "",
+                CreationTime = DateTime.UtcNow.ToString(SharedValues.DATETIME_FORMAT)
+            };
+            await _commandService.AddLogAsync(log);
+
+            if (response == null)
+                throw new ApplicationException("Command execution failed.");
+            #endregion
+
+            return response;
+
+        }
+        #endregion
 
     }
 }

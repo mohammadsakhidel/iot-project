@@ -20,6 +20,6 @@ namespace TrackAPI.Services {
         Task AddPermittedUser(TrackerPermittedUserModel model);
         Task RemovePermittedUser(string trackerId, string userId);
         Task<List<TrackerPermittedUserModel>> GetPermittedUsersAsync(string trackerId);
-
+        Task<(bool, string)> SaveConfigsAsync(string trackerId, string configsJson);
     }
 }
