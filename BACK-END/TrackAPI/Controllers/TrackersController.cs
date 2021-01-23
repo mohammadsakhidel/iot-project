@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using TrackAPI.Constants;
 using TrackAPI.Extensions;
@@ -146,6 +147,23 @@ namespace TrackAPI.Controllers {
                 
                 return Ok(permittedUsers.ToArray());
 
+
+            } catch (Exception ex) {
+                return ex.GetActionResult();
+            }
+        }
+
+        [HttpGet("{trackerId}/configs")]
+        [Authorize]
+        public async Task<IActionResult> GetConfigs(string trackerId) {
+            try {
+
+                var tracker = await _trackerService.GetAsync(trackerId);
+                if (tracker == null)
+                    return NotFound("Invalid tracker ID");
+
+                return Ok(tracker.GetConfigsDic());
+                
 
             } catch (Exception ex) {
                 return ex.GetActionResult();

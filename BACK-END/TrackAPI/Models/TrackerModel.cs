@@ -46,8 +46,13 @@ namespace TrackAPI.Models {
 
         // Additional Properties:
         public string[] Commands { get; set; }
-        public TrackerConfigsModel ConfigsObj => (!string.IsNullOrEmpty(Configs) 
-            ? JsonSerializer.Deserialize<TrackerConfigsModel>(Configs)
-            : new TrackerConfigsModel());
+
+        // Instance Methods:
+        public Dictionary<string, object> GetConfigsDic() {
+            return (!string.IsNullOrEmpty(Configs)
+                ? JsonSerializer.Deserialize<Dictionary<string, object>>(Configs)
+                : new Dictionary<string, object>()
+            );
+        }
     }
 }

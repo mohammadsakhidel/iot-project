@@ -59,8 +59,74 @@ namespace TrackAPI.Controllers {
                 Func<Task> saveToConfigsFunc = async () => {
 
                     var tracker = await _trackerService.GetAsync(model.TrackerId);
-                    var configs = tracker.ConfigsObj;
-                    configs.Password = model.Payload;
+                    var configs = tracker.GetConfigsDic();
+                    configs[TrackerConfigFields.PASSWORD] = model.Payload;
+
+                    await _trackerService.SaveConfigsAsync(model.TrackerId, JsonSerializer.Serialize(configs));
+
+                };
+
+                return await ValidateAndExecuteCommandAsync(model, saveToConfigsFunc);
+
+            } catch (Exception ex) {
+                return ex.GetActionResult();
+            }
+        }
+
+        [HttpPost("center")]
+        [Authorize]
+        public async Task<IActionResult> CenterNumberCommand(ExecuteCommandModel model) {
+            try {
+
+                Func<Task> saveToConfigsFunc = async () => {
+
+                    var tracker = await _trackerService.GetAsync(model.TrackerId);
+                    var configs = tracker.GetConfigsDic();
+                    configs[TrackerConfigFields.CENTER] = model.Payload;
+
+                    await _trackerService.SaveConfigsAsync(model.TrackerId, JsonSerializer.Serialize(configs));
+
+                };
+
+                return await ValidateAndExecuteCommandAsync(model, saveToConfigsFunc);
+
+            } catch (Exception ex) {
+                return ex.GetActionResult();
+            }
+        }
+
+        [HttpPost("call")]
+        [Authorize]
+        public async Task<IActionResult> MakeCallCommand(ExecuteCommandModel model) {
+            try {
+
+                Func<Task> saveToConfigsFunc = async () => {
+
+                    var tracker = await _trackerService.GetAsync(model.TrackerId);
+                    var configs = tracker.GetConfigsDic();
+                    configs[TrackerConfigFields.CALL] = model.Payload;
+
+                    await _trackerService.SaveConfigsAsync(model.TrackerId, JsonSerializer.Serialize(configs));
+
+                };
+
+                return await ValidateAndExecuteCommandAsync(model, saveToConfigsFunc);
+
+            } catch (Exception ex) {
+                return ex.GetActionResult();
+            }
+        }
+
+        [HttpPost("upload")]
+        [Authorize]
+        public async Task<IActionResult> UploadIntervalCommand(ExecuteCommandModel model) {
+            try {
+
+                Func<Task> saveToConfigsFunc = async () => {
+
+                    var tracker = await _trackerService.GetAsync(model.TrackerId);
+                    var configs = tracker.GetConfigsDic();
+                    configs[TrackerConfigFields.UPLOAD] = model.Payload;
 
                     await _trackerService.SaveConfigsAsync(model.TrackerId, JsonSerializer.Serialize(configs));
 
@@ -168,7 +234,7 @@ namespace TrackAPI.Controllers {
             var response = await SendCommandToDeviceAsync(model);
 
             // Run Actions:
-            if (functions != null && functions.Any()) {
+            if (response.Done && functions != null && functions.Any()) {
                 foreach (var func in functions) {
                     await func();
                 }
