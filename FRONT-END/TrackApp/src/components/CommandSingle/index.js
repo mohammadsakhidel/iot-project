@@ -22,6 +22,7 @@ export default class CommandSindle extends Component {
 
         // State:
         this.state = {
+            isSending: false,
             isLoading: false,
             error: null,
             done: false,
@@ -33,11 +34,30 @@ export default class CommandSindle extends Component {
 
     }
 
+    componentDidMount() {
+
+        const { tracker, command } = this.props;
+
+        this.setState({ isLoading: true }, async () => {
+            try {
+
+                // Call API:
+                const result = await CommandService.getConfigs(tracker.id, this.context.user.token);
+                const configs = result.data;
+                this.setState({ isLoading: false, payload: configs ? configs[command.configField] : '' });
+
+            } catch (e) {
+                this.setState({ isLoading: false });
+                showError(e);
+            }
+        });
+    }
+
     onSendCommandPress() {
 
         const { tracker, command } = this.props;
 
-        this.setState({ error: null, done: false, isLoading: true }, async () => {
+        this.setState({ error: null, done: false, isSending: true }, async () => {
             try {
 
                 Keyboard.dismiss();
@@ -58,11 +78,11 @@ export default class CommandSindle extends Component {
                     commandType: command.name,
                     payload: this.state.payload
                 };
-                const result = await CommandService.execute(dto, this.context.user.token);
+                const result = await CommandService.execute(dto, this.context.user.token, command.url);
 
                 // Show Result:
                 if (result.done) {
-                    this.setState({ isLoading: false, done: true });
+                    this.setState({ isSending: false, done: true });
                 } else {
                     let errorMessage = "";
                     switch (result.data) {
@@ -73,12 +93,12 @@ export default class CommandSindle extends Component {
                             errorMessage = result.data;
                             break;
                     }
-                    this.setState({ isLoading: false, done: false, error: errorMessage });
+                    this.setState({ isSending: false, done: false, error: errorMessage });
                 }
 
             } catch (e) {
                 this.setState({
-                    isLoading: false,
+                    isSending: false,
                     done: false,
                     error: getErrorMessage(e)
                 });
@@ -103,6 +123,8 @@ export default class CommandSindle extends Component {
                             <Input
                                 label={label}
                                 onChangeText={(text) => this.setState({ payload: text })}
+                                value={(this.state.isLoading ? Strings.Loading : this.state.payload)}
+                                disabled={this.state.isLoading}
                             />
                         )}
                     </View>
@@ -122,8 +144,8 @@ export default class CommandSindle extends Component {
                         icon="check"
                         title={Strings.SendCommand}
                         onPress={this.onSendCommandPress}
-                        isLoading={this.state.isLoading}
-                        disabled={this.state.isLoading}
+                        isLoading={this.state.isSending}
+                        disabled={this.state.isSending}
                     />
                 </View>
 

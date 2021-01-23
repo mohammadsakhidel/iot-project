@@ -110,6 +110,7 @@
     "ErrorCodeTrackerOffline": "Device is not online.",
     "ErrorCodeTrackerNoReply": "Device didn't respond. Please try again.",
     "PhoneNumber": "Phone Number",
+    "Loading": "Loading...",
     "----------------------------------": "----------------------- COMMAND NAMES ----------------------------",
     "---------------------------------": "----------------------- COMMAND NAMES ----------------------------",
     "--------------------------------": "----------------------- COMMAND NAMES ----------------------------",

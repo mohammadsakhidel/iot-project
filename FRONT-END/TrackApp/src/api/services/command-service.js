@@ -12,13 +12,25 @@ export default class CommandService {
      * @param {String} token
      * @returns {{done: boolean, data: string}}
      */
-    static async execute(dto, token) {
+    static async execute(dto, token, endpoint) {
 
-        const url = `${ApiSettings.BaseUrl}/commands`;
+        const url = `${ApiSettings.BaseUrl}/commands${(endpoint ? `/${endpoint}` : '')}`;
+
         const response = await http(token).post(url, dto);
         const apiResult = response.data;
 
         return { done: apiResult.done, data: apiResult.done ? apiResult.data : apiResult.error };
 
     }
+
+    static async getConfigs(trackerId, token) {
+
+        const url = `${ApiSettings.BaseUrl}/trackers/${trackerId}/configs`;
+
+        const response = await http(token).get(url);
+
+        return { done: true, data: response.data };
+
+    }
+
 }

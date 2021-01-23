@@ -89,7 +89,9 @@ class TrackerConfigScreen extends Component {
                                             label: `${Strings.DevicePassword}:`,
                                             inputType: "string",
                                             validator: "devicePasswordValidator",
-                                            validationError: Strings.DevicePasswordValidationError
+                                            validationError: Strings.DevicePasswordValidationError,
+                                            url: "password",
+                                            configField: "password"
                                         }
                                     });
                                 }}>
@@ -109,7 +111,9 @@ class TrackerConfigScreen extends Component {
                                             label: `${Strings.CenterNumber}:`,
                                             inputType: "string",
                                             validator: "phoneNumberValidator",
-                                            validationError: Strings.CenterNumberValidationError
+                                            validationError: Strings.CenterNumberValidationError,
+                                            url: "center",
+                                            configField: "center"
                                         }
                                     });
                                 }}>
@@ -141,7 +145,9 @@ class TrackerConfigScreen extends Component {
                                             label: `${Strings.UploadIntervalLabel}:`,
                                             inputType: "string",
                                             validator: "numberValidator",
-                                            validationError: Strings.UploadIntervalValidationError
+                                            validationError: Strings.UploadIntervalValidationError,
+                                            url: "upload",
+                                            configField: "upload"
                                         }
                                     });
                                 }}>
@@ -190,7 +196,9 @@ class TrackerConfigScreen extends Component {
                                             label: `${Strings.PhoneNumber}:`,
                                             inputType: "string",
                                             validator: "phoneNumberValidator",
-                                            validationError: Strings.MakeCallValidationError
+                                            validationError: Strings.MakeCallValidationError,
+                                            url: "call",
+                                            configField: "call"
                                         }
                                     });
                                 }}>
