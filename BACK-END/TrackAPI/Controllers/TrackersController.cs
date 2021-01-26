@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using TrackAPI.Constants;
@@ -11,6 +12,7 @@ using TrackAPI.Extensions;
 using TrackAPI.Models;
 using TrackAPI.Services;
 using TrackLib.Commands;
+using TrackLib.Constants;
 
 namespace TrackAPI.Controllers {
 
@@ -169,6 +171,27 @@ namespace TrackAPI.Controllers {
                 return ex.GetActionResult();
             }
         }
+
+        [HttpGet("{trackerId}/configs/contacts")]
+        [Authorize]
+        public async Task<IActionResult> GetContacts(string trackerId) {
+            try {
+
+                var tracker = await _trackerService.GetAsync(trackerId);
+                if (tracker == null)
+                    return NotFound("Invalid tracker ID");
+
+                var configs = tracker.GetConfigsDic();
+                if (!configs.ContainsKey("contacts"))
+                    return Ok(Array.Empty<object>());
+
+                return Ok(configs["contacts"]);
+
+
+            } catch (Exception ex) {
+                return ex.GetActionResult();
+            }
+        }
         #endregion
 
         #region -------------- POST ACTIONS ---------------
@@ -221,6 +244,41 @@ namespace TrackAPI.Controllers {
                     return BadRequest("Caller is not the owner.");
 
                 await _trackerService.AddPermittedUser(model);
+
+                return Ok();
+
+            } catch (Exception ex) {
+                return ex.GetActionResult();
+            }
+        }
+
+        [HttpPost("{trackerId}/configs/contacts")]
+        [Authorize]
+        public async Task<IActionResult> AddContact(string trackerId, ContactModel model) {
+            try {
+
+                // Validate Tracker ID:
+                var tracker = await _trackerService.GetAsync(trackerId);
+                if (tracker == null)
+                    return BadRequest("Invalid tracker Id.");
+
+                // Remove Contact:
+                var configs = tracker.GetConfigsDic();
+
+                var contactsObj = configs["contacts"];
+                var contactsJson = JsonSerializer.Serialize(contactsObj);
+                var contacts = JsonSerializer.Deserialize<List<Dictionary<string, string>>>(contactsJson);
+                if (contacts.Any(c => c["number"] == model.Number))
+                    return BadRequest(ErrorCodes.ALREADY_ADDED);
+
+                contacts.Add(new Dictionary<string, string> {
+                    { "name", model.Name },
+                    { "number", model.Number }
+                });
+                configs["contacts"] = contacts;
+
+                // Save:
+                await _trackerService.SaveConfigsAsync(trackerId, JsonSerializer.Serialize(configs));
 
                 return Ok();
 
@@ -331,6 +389,37 @@ namespace TrackAPI.Controllers {
                     return BadRequest("Caller is not the owner.");
 
                 await _trackerService.RemovePermittedUser(trackerId, userId);
+
+                return Ok();
+
+            } catch (Exception ex) {
+                return ex.GetActionResult();
+            }
+        }
+
+        [HttpDelete("{trackerId}/configs/contacts/{number}")]
+        [Authorize]
+        public async Task<IActionResult> RemoveContact(string trackerId, string number) {
+            try {
+
+                // Validate Tracker ID:
+                var tracker = await _trackerService.GetAsync(trackerId);
+                if (tracker == null)
+                    return BadRequest("Invalid tracker Id.");
+
+                // Remove Contact:
+                var configs = tracker.GetConfigsDic();
+
+                var contactsObj = configs["contacts"];
+                var contactsJson = JsonSerializer.Serialize(contactsObj);
+                var contacts = JsonSerializer.Deserialize<List<Dictionary<string, string>>>(contactsJson);
+                var toBeRemoved = contacts.Where(c => c["number"] == number).ToList();
+                toBeRemoved.ForEach(c => contacts.Remove(c));
+
+                configs["contacts"] = contacts;
+
+                // Save:
+                await _trackerService.SaveConfigsAsync(trackerId, JsonSerializer.Serialize(configs));
 
                 return Ok();
 
