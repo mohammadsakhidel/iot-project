@@ -5,7 +5,7 @@ import { Ionicons } from '@expo/vector-icons';
 import * as Font from 'expo-font';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import AppLoading from 'expo-app-loading';
-import { View } from 'react-native';
+import { View, LogBox } from 'react-native';
 import { Provider } from 'react-redux';
 import AppContext from './src/helpers/app-context';
 import Store from './src/redux/store';
@@ -51,6 +51,11 @@ export default class App extends Component {
       });
 
       await this.loadLoggedInUserAsync();
+
+      // Disable some crappy warnings:
+      LogBox.ignoreLogs([
+        'Non-serializable values were found in the navigation state',
+      ]);
 
       setTimeout(() => {
         this.setState({ isReady: true });

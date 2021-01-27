@@ -3,6 +3,7 @@ import { View, StyleSheet, ScrollView } from 'react-native';
 import CommandSingle from '../CommandSingle';
 import CommandZero from '../CommandZero';
 import CommandGet from '../CommandGet';
+import CommandContacts from '../CommandContacts';
 
 export default function (props) {
 
@@ -32,6 +33,10 @@ export default function (props) {
 
             {command.type === "get" && (
                 <CommandGet command={command} {...rest} />
+            )}
+
+            {command.type === "contacts" && (
+                <CommandContacts command={command} {...{ ...rest, navigation }} />
             )}
 
         </View>

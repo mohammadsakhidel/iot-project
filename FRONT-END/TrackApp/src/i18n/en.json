@@ -111,6 +111,7 @@
     "ErrorCodeTrackerNoReply": "Device didn't respond. Please try again.",
     "PhoneNumber": "Phone Number",
     "Loading": "Loading...",
+    "AddContact": "Add Contact",
     "----------------------------------": "----------------------- COMMAND NAMES ----------------------------",
     "---------------------------------": "----------------------- COMMAND NAMES ----------------------------",
     "--------------------------------": "----------------------- COMMAND NAMES ----------------------------",

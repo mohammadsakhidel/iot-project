@@ -9,6 +9,10 @@ export default class UserService {
         return `https://www.gravatar.com/avatar/${user.emailHash.toLowerCase()}?s=200&d=identicon`;
     }
 
+    static getDefaultUserAvatarUrl() {
+        return `https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp`;
+    }
+
     static async find(token, userNameOrEmail) {
         try {
 
@@ -22,5 +26,7 @@ export default class UserService {
             throw e;
         }
     }
+
+
 
 }

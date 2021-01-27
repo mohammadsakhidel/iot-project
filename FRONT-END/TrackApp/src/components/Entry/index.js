@@ -16,6 +16,7 @@ import QRCodeScreen from '../QRCodeScreen';
 import AllowUserScreen from '../AllowUserScreen';
 import PermittedUsersScreen from '../PermittedUsersScreen';
 import CommandScreen from '../CommandScreen';
+import AddContactScreen from '../AddContactScreen';
 
 const Stack = createStackNavigator();
 
@@ -95,6 +96,12 @@ export default class Entry extends Component {
                         <Stack.Screen
                             name={RouteNames.COMMAND_SCREEN}
                             component={CommandScreen}
+                        />
+
+                        <Stack.Screen
+                            name={RouteNames.ADD_CONTACT}
+                            component={AddContactScreen}
+                            options={{ headerTitle: Strings.AddContact }}
                         />
 
                     </Stack.Navigator>

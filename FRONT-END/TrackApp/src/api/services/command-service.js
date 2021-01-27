@@ -23,6 +23,28 @@ export default class CommandService {
 
     }
 
+    static async getContacts(trackerId, token) {
+
+        const url = `${ApiSettings.BaseUrl}/trackers/${trackerId}/configs/contacts`;
+
+        const response = await http(token).get(url);
+
+        return { done: true, data: response.data };
+
+    }
+
+    static async removeContact(trackerId, number, token) {
+
+        const url = `${ApiSettings.BaseUrl}/trackers/${trackerId}/configs/contacts/${number}`;
+        console.log(url);
+
+        const response = await http(token).delete(url);
+
+        return { done: true, data: response.data };
+
+    }
+
+
     static async getConfigs(trackerId, token) {
 
         const url = `${ApiSettings.BaseUrl}/trackers/${trackerId}/configs`;

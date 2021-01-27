@@ -119,7 +119,15 @@ class TrackerConfigScreen extends Component {
                                 }}>
                                     {Strings.CenterNumber}
                                 </SettingsItem>
-                                <SettingsItem icon="address-book" onPress={() => { }}>
+                                <SettingsItem icon="address-book" onPress={() => {
+                                    navigation.navigate(RouteNames.COMMAND_SCREEN, {
+                                        tracker: tracker,
+                                        pageTitle: Strings.Contacts,
+                                        command: {
+                                            type: "contacts"
+                                        }
+                                    });
+                                }}>
                                     {Strings.Contacts}
                                 </SettingsItem>
                                 <SettingsItem icon="exclamation-circle" onPress={() => { }}>
