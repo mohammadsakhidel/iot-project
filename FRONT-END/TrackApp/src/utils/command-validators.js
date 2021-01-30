@@ -1,14 +1,16 @@
+import * as Patterns from '../constants/patterns';
+
 export const devicePasswordValidator = (value) => {
-    const regex = /^[a-zA-Z0-9]{6,}$/;
+    const regex = Patterns.DEVICE_PASSWORD;
     return regex.test(value);
 };
 
 export const phoneNumberValidator = (value) => {
-    const regex = /^\+?\d{10,14}$/;
+    const regex = Patterns.PHONE_NUMBER;
     return regex.test(value);
 };
 
 export const numberValidator = (value) => {
-    const regex = /^\d+$/;
+    const regex = Patterns.NUMBER;
     return regex.test(value);
 };

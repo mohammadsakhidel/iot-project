@@ -18,6 +18,7 @@ namespace TrackLib.Constants {
         public const string ALREADY_ADDED = "ALREADY_ADDED";
         public const string NOT_ALLOWED = "NOT_ALLOWED";
         public const string POLLING_TIMEOUT = "POLLING_TIMEOUT";
+        public const string NOT_FOUND = "NOT_FOUND";
 
     }
 }

@@ -35,13 +35,33 @@ export default class CommandService {
 
     static async removeContact(trackerId, number, token) {
 
-        const url = `${ApiSettings.BaseUrl}/trackers/${trackerId}/configs/contacts/${number}`;
-        console.log(url);
+        const url = `${ApiSettings.BaseUrl}/trackers/${trackerId}/configs/contacts?number=${encodeURIComponent(number)}`;
 
         const response = await http(token).delete(url);
 
         return { done: true, data: response.data };
 
+    }
+
+    static async addContact(dto, token) {
+        try {
+
+            const url = `${ApiSettings.BaseUrl}/trackers/${dto.trackerId}/configs/contacts`;
+
+            const response = await http(token).post(url, dto);
+
+            return { done: true, data: response.data };
+
+        } catch (e) {
+            if (e.response && e.response.status == StatusCodes.BAD_REQUEST
+                && e.response.data == ErrorCodes.ALREADY_ADDED)
+                return { done: false, data: Strings.ContactAlreadyAdded };
+            else if (e.response && e.response.status == StatusCodes.BAD_REQUEST
+                && e.response.data == ErrorCodes.NOT_ALLOWED)
+                return { done: false, data: Strings.AccessDeniedError };
+            else
+                throw e;
+        }
     }
 
 

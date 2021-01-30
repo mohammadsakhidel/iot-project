@@ -265,7 +265,7 @@ namespace TrackAPI.Controllers {
                 // Remove Contact:
                 var configs = tracker.GetConfigsDic();
 
-                var contactsObj = configs["contacts"];
+                var contactsObj = configs.ContainsKey("contacts") ? configs["contacts"] : new List<Dictionary<string, string>>();
                 var contactsJson = JsonSerializer.Serialize(contactsObj);
                 var contacts = JsonSerializer.Deserialize<List<Dictionary<string, string>>>(contactsJson);
                 if (contacts.Any(c => c["number"] == model.Number))
@@ -397,7 +397,7 @@ namespace TrackAPI.Controllers {
             }
         }
 
-        [HttpDelete("{trackerId}/configs/contacts/{number}")]
+        [HttpDelete("{trackerId}/configs/contacts")]
         [Authorize]
         public async Task<IActionResult> RemoveContact(string trackerId, string number) {
             try {
@@ -410,10 +410,13 @@ namespace TrackAPI.Controllers {
                 // Remove Contact:
                 var configs = tracker.GetConfigsDic();
 
-                var contactsObj = configs["contacts"];
+                var contactsObj = configs.ContainsKey("contacts") ? configs["contacts"] : new List<Dictionary<string, string>>();
                 var contactsJson = JsonSerializer.Serialize(contactsObj);
                 var contacts = JsonSerializer.Deserialize<List<Dictionary<string, string>>>(contactsJson);
                 var toBeRemoved = contacts.Where(c => c["number"] == number).ToList();
+                if (!toBeRemoved.Any())
+                    return BadRequest(ErrorCodes.NOT_FOUND);
+
                 toBeRemoved.ForEach(c => contacts.Remove(c));
 
                 configs["contacts"] = contacts;
