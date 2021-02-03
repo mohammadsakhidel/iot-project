@@ -51,8 +51,11 @@ namespace TrackAPI.Models {
         public Dictionary<string, object> GetConfigsDic() {
             return (!string.IsNullOrEmpty(Configs)
                 ? JsonSerializer.Deserialize<Dictionary<string, object>>(Configs)
-                : new Dictionary<string, object>()
-            );
+                : GetDefaultConfigsDic());
+        }
+
+        private Dictionary<string, object> GetDefaultConfigsDic() {
+            return new Dictionary<string, object>();
         }
     }
 }

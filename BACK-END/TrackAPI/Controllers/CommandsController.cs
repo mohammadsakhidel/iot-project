@@ -38,6 +38,7 @@ namespace TrackAPI.Controllers {
 
         }
 
+        #region ---------------- COMMANDS -----------------
         [HttpPost]
         [Authorize]
         public async Task<IActionResult> PostAsync(ExecuteCommandModel model) {
@@ -50,7 +51,6 @@ namespace TrackAPI.Controllers {
             }
         }
 
-        #region Commands Actions:
         [HttpPost("password")]
         [Authorize]
         public async Task<IActionResult> PasswordCommand(ExecuteCommandModel model) {
@@ -138,7 +138,6 @@ namespace TrackAPI.Controllers {
                 return ex.GetActionResult();
             }
         }
-        #endregion
 
         [HttpPost("connect/{id}")]
         [Authorize]
@@ -221,8 +220,112 @@ namespace TrackAPI.Controllers {
                 return ex.GetActionResult();
             }
         }
+        #endregion
 
-        #region Private Methods:
+        #region ----------------- CONTACTS ----------------
+        [HttpGet("{trackerId}/contacts")]
+        [Authorize]
+        public async Task<IActionResult> GetContacts(string trackerId) {
+            try {
+
+                var tracker = await _trackerService.GetAsync(trackerId);
+                if (tracker == null)
+                    return NotFound("Invalid tracker ID");
+
+                var configs = tracker.GetConfigsDic();
+                if (!configs.ContainsKey("contacts"))
+                    return Ok(Array.Empty<object>());
+
+                var contacts = ExtractContacts(configs);
+                var contactsDic = TupleColToDicCol(contacts);
+                //.Where(c => !string.IsNullOrEmpty(c.Name) && !string.IsNullOrEmpty(c.Number)).ToList()
+
+                return Ok(contactsDic);
+
+
+            } catch (Exception ex) {
+                return ex.GetActionResult();
+            }
+        }
+
+        [HttpPost("{trackerId}/contacts")]
+        [Authorize]
+        public async Task<IActionResult> AddContact(string trackerId, ContactModel model) {
+            try {
+
+                // Validation:
+                var tracker = await _trackerService.GetAsync(trackerId);
+                if (tracker == null)
+                    return BadRequest("Invalid tracker Id.");
+
+                var configs = tracker.GetConfigsDic();
+                var contacts = ExtractContacts(configs);
+                if (contacts.Any(c => c.Number == model.Number))
+                    return BadRequest(ErrorCodes.ALREADY_ADDED);
+
+                // Add To Contacts:
+                const int CONTACT_GROUP_SIZE = 5;
+                var firstEmptyIndex = contacts.FindIndex(c => string.IsNullOrEmpty(c.Name) && string.IsNullOrEmpty(c.Number));
+                if (firstEmptyIndex < 0)
+                    return BadRequest(ErrorCodes.CONTACTS_FULL);
+
+                contacts[firstEmptyIndex] = (model.Name, model.Number);
+                var commandType = (firstEmptyIndex < CONTACT_GROUP_SIZE ? CommandSet.COMMAND_CONTACTS1 : CommandSet.COMMAND_CONTACTS2);
+                var payload = string.Join(",",
+                    contacts.Skip(CONTACT_GROUP_SIZE * (firstEmptyIndex < CONTACT_GROUP_SIZE ? 0 : 1))
+                        .Take(CONTACT_GROUP_SIZE)
+                        .Where(c => !string.IsNullOrEmpty(c.Name) && !string.IsNullOrEmpty(c.Number))
+                        .Select(c => $"{c.Number},{c.Name}")
+                );
+                var executeCommandModel = new ExecuteCommandModel {
+                    TrackerId = trackerId,
+                    CommandType = commandType,
+                    Payload = payload
+                };
+                return await ValidateAndExecuteCommandAsync(executeCommandModel, async () => {
+                    configs["contacts"] = TupleColToDicCol(contacts);
+                    var configsJson = JsonSerializer.Serialize(configs);
+                    await _trackerService.SaveConfigsAsync(trackerId, configsJson);
+                });
+
+            } catch (Exception ex) {
+                return ex.GetActionResult();
+            }
+        }
+
+        [HttpDelete("{trackerId}/contacts")]
+        [Authorize]
+        public async Task<IActionResult> RemoveContact(string trackerId, string number) {
+            try {
+
+                // Validate Tracker ID:
+                var tracker = await _trackerService.GetAsync(trackerId);
+                if (tracker == null)
+                    return BadRequest("Invalid tracker Id.");
+
+                // Remove Contact:
+                var configs = tracker.GetConfigsDic();
+                var contacts = ExtractContacts(configs);
+                var toBeRemoved = contacts.Where(c => c.Number == number).ToList();
+                if (!toBeRemoved.Any())
+                    return BadRequest(ErrorCodes.NOT_FOUND);
+
+                toBeRemoved.ForEach(c => contacts.Remove(c));
+
+                configs["contacts"] = TupleColToDicCol(contacts);
+
+                // Save:
+                await _trackerService.SaveConfigsAsync(trackerId, JsonSerializer.Serialize(configs));
+
+                return Ok();
+
+            } catch (Exception ex) {
+                return ex.GetActionResult();
+            }
+        }
+        #endregion
+
+        #region ------------- PRIVATE METHODS -------------
         private async Task<IActionResult> ValidateAndExecuteCommandAsync(ExecuteCommandModel model, params Func<Task>[] functions) {
 
             //Validate:
@@ -309,6 +412,34 @@ namespace TrackAPI.Controllers {
 
             return response;
 
+        }
+
+        private static List<(string Name, string Number)> GetEmptyContactList() {
+            var list = new List<(string Name, string Number)>();
+            for (int i = 0; i < 10; i++) {
+                list.Add((string.Empty, string.Empty));
+            }
+            return list;
+        }
+
+        private static List<(string Name, string Number)> ExtractContacts(Dictionary<string, object> configs) {
+
+            var cObject = configs.ContainsKey("contacts") ? configs["contacts"] : null;
+            if (cObject == null)
+                return GetEmptyContactList();
+
+            var cJson = JsonSerializer.Serialize(cObject);
+            var cDic = JsonSerializer.Deserialize<Dictionary<string, string>[]>(cJson);
+
+            return cDic.Select(d => (d["name"], d["number"])).ToList();
+
+        }
+
+        private static Dictionary<string, string>[] TupleColToDicCol(List<(string Name, string Number)> contacts) {
+            return contacts.Select(c => new Dictionary<string, string> {
+                { "number", c.Number },
+                { "name", c.Name }
+            }).ToArray();
         }
         #endregion
 
