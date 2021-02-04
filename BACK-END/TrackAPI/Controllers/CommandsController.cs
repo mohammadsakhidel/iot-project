@@ -298,26 +298,38 @@ namespace TrackAPI.Controllers {
         public async Task<IActionResult> RemoveContact(string trackerId, string number) {
             try {
 
-                // Validate Tracker ID:
+                // Validation:
                 var tracker = await _trackerService.GetAsync(trackerId);
                 if (tracker == null)
                     return BadRequest("Invalid tracker Id.");
 
-                // Remove Contact:
                 var configs = tracker.GetConfigsDic();
                 var contacts = ExtractContacts(configs);
-                var toBeRemoved = contacts.Where(c => c.Number == number).ToList();
-                if (!toBeRemoved.Any())
+                if (!contacts.Any(c => c.Number == number))
                     return BadRequest(ErrorCodes.NOT_FOUND);
 
-                toBeRemoved.ForEach(c => contacts.Remove(c));
+                // Add To Contacts:
+                const int CONTACT_GROUP_SIZE = 5;
+                var index = contacts.FindIndex(c => c.Number == number);
 
-                configs["contacts"] = TupleColToDicCol(contacts);
-
-                // Save:
-                await _trackerService.SaveConfigsAsync(trackerId, JsonSerializer.Serialize(configs));
-
-                return Ok();
+                contacts[index] = (string.Empty, string.Empty);
+                var commandType = (index < CONTACT_GROUP_SIZE ? CommandSet.COMMAND_CONTACTS1 : CommandSet.COMMAND_CONTACTS2);
+                var payload = string.Join(",",
+                    contacts.Skip(CONTACT_GROUP_SIZE * (index < CONTACT_GROUP_SIZE ? 0 : 1))
+                        .Take(CONTACT_GROUP_SIZE)
+                        .Where(c => !string.IsNullOrEmpty(c.Name) && !string.IsNullOrEmpty(c.Number))
+                        .Select(c => $"{c.Number},{c.Name}")
+                );
+                var executeCommandModel = new ExecuteCommandModel {
+                    TrackerId = trackerId,
+                    CommandType = commandType,
+                    Payload = payload
+                };
+                return await ValidateAndExecuteCommandAsync(executeCommandModel, async () => {
+                    configs["contacts"] = TupleColToDicCol(contacts);
+                    var configsJson = JsonSerializer.Serialize(configs);
+                    await _trackerService.SaveConfigsAsync(trackerId, configsJson);
+                });
 
             } catch (Exception ex) {
                 return ex.GetActionResult();
