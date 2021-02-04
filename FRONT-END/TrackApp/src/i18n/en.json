@@ -118,6 +118,7 @@
     "InvalidContactNameError": "Contact name is not valid. It can only contain a-z, A-Z, 0-9 and space characters.",
     "ContactAlreadyAdded": "This number is added before.",
     "AccessDeniedError": "Access is denied.",
+    "ContactsFullError": "No more contacts are suppored by this device. If you want to add a new contact you need to remove an existing one first.",
     "----------------------------------": "----------------------- COMMAND NAMES ----------------------------",
     "---------------------------------": "----------------------- COMMAND NAMES ----------------------------",
     "--------------------------------": "----------------------- COMMAND NAMES ----------------------------",

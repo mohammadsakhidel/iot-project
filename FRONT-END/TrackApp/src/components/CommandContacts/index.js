@@ -13,6 +13,7 @@ import UserService from '../../api/services/user-service';
 import RefreshControl from '../RefreshControl';
 import FloatingButton from '../FloatingButton';
 import LoadingOver from '../LoadingOver';
+import * as ErrorCodes from '../../constants/error-codes';
 
 export default class CommandContacts extends Component {
 
@@ -55,7 +56,7 @@ export default class CommandContacts extends Component {
                 this.setState({
                     isLoading: false,
                     isRefreshing: false,
-                    items: contacts ?? []
+                    items: contacts != null ? contacts.sort((a, b) => a.name.localeCompare(b.name)) : []
                 });
 
             } catch (e) {
@@ -101,9 +102,17 @@ export default class CommandContacts extends Component {
                 const { tracker } = this.props;
                 const { number } = item;
 
-                const result = await CommandService.removeContact(tracker.id, number, this.context.user.token);
+                const apiResult = await CommandService.removeContact(tracker.id, number, this.context.user.token);
+                const result = apiResult.data;
                 if (result.done) {
                     this.loadItems();
+                } else {
+                    switch (result.error) {
+                        case ErrorCodes.TRACKER_OFFLINE:
+                            throw new Error(Strings.ErrorCodeTrackerOffline);
+                        default:
+                            throw new Error(Strings.ErrorMessage);
+                    }
                 }
 
             } catch (e) {
