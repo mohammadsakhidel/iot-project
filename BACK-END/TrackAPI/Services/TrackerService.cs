@@ -50,9 +50,10 @@ namespace TrackAPI.Services {
         }
 
         public async Task<TrackerModel> GetAsync(string id, bool reload = false) {
-            var tracker = await _trackerRepository.GetAsync(id);
+            var tracker = await _trackerRepository.GetWithIncludeAsync(id);
             if (tracker == null)
                 return null;
+
             if (reload)
                 _trackerRepository.Reload(tracker);
 
