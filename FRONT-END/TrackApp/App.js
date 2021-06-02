@@ -46,17 +46,15 @@ export default class App extends Component {
   async componentDidMount() {
     try {
 
+      // Disable some crappy warnings:
+      this.disableWarnings();
+
       await Font.loadAsync({
         ...customFonts,
         ...Ionicons.font,
       });
 
       await this.loadLoggedInUserAsync();
-
-      // Disable some crappy warnings:
-      LogBox.ignoreLogs([
-        'Non-serializable values were found in the navigation state',
-      ]);
 
       setTimeout(() => {
         this.setState({ isReady: true });
@@ -65,6 +63,14 @@ export default class App extends Component {
     } catch (e) {
       this.setState({ error: getErrorMessage(e) });
     }
+  }
+
+  disableWarnings() {
+    try {
+      LogBox.ignoreLogs([
+        'Non-serializable values were found in the navigation state',
+      ]);
+    } catch { }
   }
 
   render() {

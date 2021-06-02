@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, Alert, View, LogBox } from 'react-native';
+import { StyleSheet, Alert, View } from 'react-native';
 import * as vars from '../../styles/vars';
 import CommandService from '../../api/services/command-service';
 import AppContext from '../../helpers/app-context';
