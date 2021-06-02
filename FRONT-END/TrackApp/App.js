@@ -12,6 +12,7 @@ import Store from './src/redux/store';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Entry from './src/components/Entry';
 import RenderError from './src/components/RenderError';
+import { showError } from './src/components/FlashMessageWrapper';
 
 const customFonts = {
   ContentFont: require('@expo-google-fonts/roboto/Roboto_400Regular.ttf'),
