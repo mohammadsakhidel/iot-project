@@ -130,7 +130,15 @@ class TrackerConfigScreen extends Component {
                                 }}>
                                     {Strings.Contacts}
                                 </SettingsItem>
-                                <SettingsItem icon="exclamation-circle" onPress={() => { }}>
+                                <SettingsItem icon="exclamation-circle" onPress={() => {
+                                    navigation.navigate(RouteNames.COMMAND_SCREEN, {
+                                        tracker: tracker,
+                                        pageTitle: Strings.SOSNumbers,
+                                        command: {
+                                            type: "sosNumbers"
+                                        }
+                                    });
+                                }}>
                                     {Strings.SOSNumbers}
                                 </SettingsItem>
                                 <SettingsItem icon="bell" onPress={() => { }}>

@@ -4,6 +4,7 @@ import CommandSingle from '../CommandSingle';
 import CommandZero from '../CommandZero';
 import CommandGet from '../CommandGet';
 import CommandContacts from '../CommandContacts';
+import CommandSOS from '../CommandSOS';
 
 export default function (props) {
 
@@ -37,6 +38,10 @@ export default function (props) {
 
             {command.type === "contacts" && (
                 <CommandContacts command={command} {...{ ...rest, navigation }} />
+            )}
+
+            {command.type === "sosNumbers" && (
+                <CommandSOS command={command} {...rest} />
             )}
 
         </View>

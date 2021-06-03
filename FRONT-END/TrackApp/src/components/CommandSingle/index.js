@@ -12,6 +12,7 @@ import CommandService from '../../api/services/command-service';
 import AppContext from '../../helpers/app-context';
 import * as ErrorCodes from '../../constants/error-codes';
 import * as Validators from '../../utils/command-validators';
+import * as globalStyles from '../../styles/global-styles';
 
 export default class CommandSindle extends Component {
 
@@ -116,7 +117,7 @@ export default class CommandSindle extends Component {
 
                 <ScrollView style={styles.scrollView}>
 
-                    <Text style={styles.desc}>{desc}</Text>
+                    <Text style={globalStyles.commandDesc}>{desc}</Text>
 
                     <View style={styles.inputContainer}>
                         {inputType === "string" && (
@@ -168,17 +169,6 @@ const styles = StyleSheet.create({
     buttonContainer: {
         backgroundColor: vars.COLOR_GRAY_L3,
         padding: vars.PAD_DOUBLE
-    },
-    desc: {
-        borderWidth: 1,
-        borderStyle: 'dotted',
-        borderColor: vars.COLOR_PRIMARY,
-        backgroundColor: vars.COLOR_PRIMARY_L3,
-        borderRadius: 10,
-
-        padding: vars.PAD_NORMAL,
-        color: vars.COLOR_PRIMARY_D1,
-        textAlign: 'justify'
     },
     inputContainer: {
         marginTop: vars.PAD_DOUBLE

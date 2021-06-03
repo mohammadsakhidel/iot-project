@@ -66,3 +66,15 @@ export const marginStartSmall = {
 export const marginEndSmall = {
     marginRight: vars.PAD_SMALL
 };
+
+export const commandDesc = {
+    borderWidth: 1,
+    borderStyle: 'dotted',
+    borderColor: vars.COLOR_PRIMARY,
+    backgroundColor: vars.COLOR_PRIMARY_L3,
+    borderRadius: 10,
+
+    padding: vars.PAD_NORMAL,
+    color: vars.COLOR_PRIMARY_D1,
+    textAlign: 'justify'
+}
