@@ -36,8 +36,34 @@ export default class CommandSOS extends Component {
         };
     }
 
+    componentDidMount() {
+
+        const { tracker } = this.props;
+
+        this.setState({ isLoading: true }, async () => {
+            try {
+
+                // Call API:
+                const result = await CommandService.getConfigs(tracker.id, this.context.user.token);
+                const configs = result.data;
+                const sosNumbers = (configs["sos"] ?? '').split(',');
+                this.setState({ 
+                    isLoading: false, 
+                    sos1: sosNumbers[0] ?? '',
+                    sos2: sosNumbers[1] ?? '',
+                    sos3: sosNumbers[2] ?? ''
+                });
+
+            } catch (e) {
+                this.setState({ isLoading: false });
+                showError(e);
+            }
+        });
+
+    }
+
     onSendCommandPress() {
-        const { tracker, command } = this.props;
+        const { tracker } = this.props;
         this.setState({ error: null, done: false, isSending: true }, async () => {
             try {
 
@@ -98,7 +124,8 @@ export default class CommandSOS extends Component {
                         placeholder={Strings.PhoneNumber}
                         leftIcon={{ name: 'phone', color: vars.COLOR_PRIMARY, size: vars.ICO_BIT_SMALLER }}
                         leftIconContainerStyle={styles.leftIconContainer}
-                        value={this.state.sos1}
+                        value={(this.state.isLoading ? Strings.Loading : this.state.sos1)}
+                        disabled={this.state.isLoading}
                         onChangeText={(text) => this.setState({ sos1: text })}
                     />
 
@@ -108,7 +135,8 @@ export default class CommandSOS extends Component {
                         placeholder={Strings.PhoneNumber}
                         leftIcon={{ name: 'phone', color: vars.COLOR_PRIMARY, size: vars.ICO_BIT_SMALLER }}
                         leftIconContainerStyle={styles.leftIconContainer}
-                        value={this.state.sos2}
+                        value={(this.state.isLoading ? Strings.Loading : this.state.sos2)}
+                        disabled={this.state.isLoading}
                         onChangeText={(text) => this.setState({ sos2: text })}
                     />
 
@@ -118,7 +146,8 @@ export default class CommandSOS extends Component {
                         placeholder={Strings.PhoneNumber}
                         leftIcon={{ name: 'phone', color: vars.COLOR_PRIMARY, size: vars.ICO_BIT_SMALLER }}
                         leftIconContainerStyle={styles.leftIconContainer}
-                        value={this.state.sos3}
+                        value={(this.state.isLoading ? Strings.Loading : this.state.sos3)}
+                        disabled={this.state.isLoading}
                         onChangeText={(text) => this.setState({ sos3: text })}
                     />
 
