@@ -6,6 +6,12 @@ using System.Threading.Tasks;
 
 namespace TrackAdmin.Constants {
     public class CommandSetNames {
-        public const string DEFAULT = "default";
+        public const string GPSWATCH = "gpswatch";
+
+        public static List<string> All() {
+            return new List<string> {
+                GPSWATCH
+            };
+        }
     }
 }

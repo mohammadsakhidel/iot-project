@@ -233,9 +233,7 @@ namespace TrackAdmin.ViewModels {
         #region Properties:
         public Dictionary<string, string> CommandSetItems {
             get {
-                return new Dictionary<string, string> {
-                    { CommandSetNames.DEFAULT, "Default" }
-                };
+                return CommandSetNames.All().ToDictionary(cs => cs, cs => cs);
             }
         }
 
