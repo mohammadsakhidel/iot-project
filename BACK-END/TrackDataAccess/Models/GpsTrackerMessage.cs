@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace TrackDataAccess.Models {
-    [Table("gps_tracker_messages")]
+    [Table("messages")]
     public class GpsTrackerMessage : Message {
 
         [Required]
