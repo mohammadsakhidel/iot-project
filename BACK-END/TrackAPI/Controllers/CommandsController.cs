@@ -139,6 +139,28 @@ namespace TrackAPI.Controllers {
             }
         }
 
+        [HttpPost("sos")]
+        [Authorize]
+        public async Task<IActionResult> SetSOSNumbersCommand(ExecuteCommandModel model) {
+            try {
+
+                Func<Task> saveToConfigsFunc = async () => {
+
+                    var tracker = await _trackerService.GetAsync(model.TrackerId);
+                    var configs = tracker.GetConfigsDic();
+                    configs[TrackerConfigFields.SOS_NUMBERS] = model.Payload;
+
+                    await _trackerService.SaveConfigsAsync(model.TrackerId, JsonSerializer.Serialize(configs));
+
+                };
+
+                return await ValidateAndExecuteCommandAsync(model, saveToConfigsFunc);
+
+            } catch (Exception ex) {
+                return ex.GetActionResult();
+            }
+        }
+
         [HttpPost("connect/{id}")]
         [Authorize]
         public async Task<IActionResult> Connection(string id) {
@@ -436,7 +458,7 @@ namespace TrackAPI.Controllers {
 
         private static List<(string Name, string Number)> ExtractContacts(Dictionary<string, object> configs) {
 
-            var cObject = configs.ContainsKey("contacts") ? configs["contacts"] : null;
+            var cObject = configs.ContainsKey(TrackerConfigFields.CONTACTS) ? configs[TrackerConfigFields.CONTACTS] : null;
             if (cObject == null)
                 return GetEmptyContactList();
 

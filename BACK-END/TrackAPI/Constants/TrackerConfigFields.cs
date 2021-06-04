@@ -9,5 +9,7 @@ namespace TrackAPI.Constants {
         public const string CENTER = "center";
         public const string CALL = "call";
         public const string UPLOAD = "upload";
+        public const string CONTACTS = "contacts";
+        public const string SOS_NUMBERS = "sos";
     }
 }
