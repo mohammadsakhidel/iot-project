@@ -161,6 +161,28 @@ namespace TrackAPI.Controllers {
             }
         }
 
+        [HttpPost("server")]
+        [Authorize]
+        public async Task<IActionResult> SetServerCommand(ExecuteCommandModel model) {
+            try {
+
+                Func<Task> saveToConfigsFunc = async () => {
+
+                    var tracker = await _trackerService.GetAsync(model.TrackerId);
+                    var configs = tracker.GetConfigsDic();
+                    configs[TrackerConfigFields.SERVER] = model.Payload;
+
+                    await _trackerService.SaveConfigsAsync(model.TrackerId, JsonSerializer.Serialize(configs));
+
+                };
+
+                return await ValidateAndExecuteCommandAsync(model, saveToConfigsFunc);
+
+            } catch (Exception ex) {
+                return ex.GetActionResult();
+            }
+        }
+
         [HttpPost("connect/{id}")]
         [Authorize]
         public async Task<IActionResult> Connection(string id) {

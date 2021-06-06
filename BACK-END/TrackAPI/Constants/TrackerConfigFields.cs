@@ -11,5 +11,6 @@ namespace TrackAPI.Constants {
         public const string UPLOAD = "upload";
         public const string CONTACTS = "contacts";
         public const string SOS_NUMBERS = "sos";
+        public const string SERVER = "server";
     }
 }
