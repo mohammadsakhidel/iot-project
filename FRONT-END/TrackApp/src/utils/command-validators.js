@@ -14,3 +14,11 @@ export const numberValidator = (value) => {
     const regex = Patterns.NUMBER;
     return regex.test(value);
 };
+
+export const serverAddressValidator = (value) => {
+    
+    const ipRgx = Patterns.IP;
+    const hostNameRgx = Patterns.HOST_NAME;
+    
+    return ipRgx.test(value) || hostNameRgx.test(value);
+};

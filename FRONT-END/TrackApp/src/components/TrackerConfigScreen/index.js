@@ -147,7 +147,15 @@ class TrackerConfigScreen extends Component {
                                 <SettingsItem icon="bell-slash" onPress={() => { }}>
                                     {Strings.NoDisturbanceTime}
                                 </SettingsItem>
-                                <SettingsItem icon="globe" onPress={() => { }}>
+                                <SettingsItem icon="globe" onPress={() => { 
+                                    navigation.navigate(RouteNames.COMMAND_SCREEN, {
+                                        tracker: tracker,
+                                        pageTitle: Strings.ServerAndPortNumber,
+                                        command: {
+                                            type: "server"
+                                        }
+                                    });
+                                }}>
                                     {Strings.ServerAndPortNumber}
                                 </SettingsItem>
                                 <SettingsItem icon="history" onPress={() => {
