@@ -78,3 +78,9 @@ export const commandDesc = {
     color: vars.COLOR_PRIMARY_D1,
     textAlign: 'justify'
 }
+
+export const formLabel = {
+    color: vars.COLOR_GRAY_L2,
+    fontWeight: 'bold',
+    marginBottom: vars.PAD_SMALL
+}

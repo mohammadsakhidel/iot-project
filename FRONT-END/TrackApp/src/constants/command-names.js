@@ -11,3 +11,4 @@ export const GET_VERSION = "GET_VERSION";
 export const GET_CURRENT_SETTINGS = "GET_CURRENT_SETTINGS";
 export const SOS_NUMBERS = "SOS_NUMBERS";
 export const IP_PORT = "IP_PORT";
+export const LANG_ZONE = "LANG_ZONE";

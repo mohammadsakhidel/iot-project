@@ -177,7 +177,15 @@ class TrackerConfigScreen extends Component {
                                 }}>
                                     {Strings.UploadInterval}
                                 </SettingsItem>
-                                <SettingsItem icon="language" onPress={() => { }}>
+                                <SettingsItem icon="language" onPress={() => { 
+                                    navigation.navigate(RouteNames.COMMAND_SCREEN, {
+                                        tracker: tracker,
+                                        pageTitle: Strings.LanguageAndTimezone,
+                                        command: {
+                                            type: "lz"
+                                        }
+                                    });
+                                }}>
                                     {Strings.LanguageAndTimezone}
                                 </SettingsItem>
                             </SettingsSection>
