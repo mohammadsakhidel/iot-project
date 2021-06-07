@@ -47,10 +47,13 @@ export default class CommandLZ extends Component {
                 const result = await CommandService.getConfigs(tracker.id, this.context.user.token);
                 const configs = result.data;
                 const lz = (configs["lz"] ?? '').split(',');
-                this.setState({ 
-                    isLoading: false, 
-                    language: lz[0],
-                    timezone: lz[1]
+
+                console.log(lz);
+
+                this.setState({
+                    isLoading: false,
+                    language: Number(lz[0]),
+                    timezone: Number(lz[1]) * 60
                 });
 
             } catch (e) {
@@ -67,7 +70,8 @@ export default class CommandLZ extends Component {
 
                 Keyboard.dismiss();
 
-                const areValid = this.state.language && this.state.timezone;
+                const areValid = this.state.language != undefined
+                    && this.state.timezone != undefined;
                 if (!areValid) {
                     throw new Error(Strings.InvalidLanguageAndTZ);
                 }
