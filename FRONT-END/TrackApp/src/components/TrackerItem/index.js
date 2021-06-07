@@ -142,7 +142,8 @@ const styles = StyleSheet.create({
         marginHorizontal: vars.PAD_NORMAL
     },
     actionsContainer: {
-        justifyContent: 'center'
+        justifyContent: 'center',
+        paddingRight: vars.PAD_NORMAL
     },
     action: {
         fontSize: vars.FS_BIT_SMALLER

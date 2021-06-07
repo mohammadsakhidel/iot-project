@@ -75,7 +75,7 @@ export default function DrawerContent(props) {
                 />
 
                 <DrawerMenuItem
-                    iconName="sign-out"
+                    iconName="sign-out-alt"
                     title={Strings.Logout}
                     onPress={() => {
                         Alert.alert(

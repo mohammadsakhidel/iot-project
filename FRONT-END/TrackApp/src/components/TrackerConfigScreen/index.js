@@ -141,13 +141,21 @@ class TrackerConfigScreen extends Component {
                                 }}>
                                     {Strings.SOSNumbers}
                                 </SettingsItem>
-                                <SettingsItem icon="bell" onPress={() => { }}>
-                                    {Strings.AlarmSettings}
+                                <SettingsItem icon="clock" onPress={() => {
+                                    navigation.navigate(RouteNames.COMMAND_SCREEN, {
+                                        tracker: tracker,
+                                        pageTitle: Strings.AlarmClock,
+                                        command: {
+                                            type: "alarmclock"
+                                        }
+                                    });
+                                }}>
+                                    {Strings.AlarmClock}
                                 </SettingsItem>
                                 <SettingsItem icon="bell-slash" onPress={() => { }}>
                                     {Strings.NoDisturbanceTime}
                                 </SettingsItem>
-                                <SettingsItem icon="globe" onPress={() => { 
+                                <SettingsItem icon="globe" onPress={() => {
                                     navigation.navigate(RouteNames.COMMAND_SCREEN, {
                                         tracker: tracker,
                                         pageTitle: Strings.ServerAndPortNumber,
@@ -177,7 +185,7 @@ class TrackerConfigScreen extends Component {
                                 }}>
                                     {Strings.UploadInterval}
                                 </SettingsItem>
-                                <SettingsItem icon="language" onPress={() => { 
+                                <SettingsItem icon="language" onPress={() => {
                                     navigation.navigate(RouteNames.COMMAND_SCREEN, {
                                         tracker: tracker,
                                         pageTitle: Strings.LanguageAndTimezone,
@@ -264,7 +272,7 @@ class TrackerConfigScreen extends Component {
                                 }}>
                                     {Strings.Wakeup}
                                 </SettingsItem>
-                                <SettingsItem icon="repeat" onPress={() => {
+                                <SettingsItem icon="redo" onPress={() => {
                                     navigation.navigate(RouteNames.COMMAND_SCREEN, {
                                         tracker: tracker,
                                         pageTitle: Strings.Restart,

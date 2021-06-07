@@ -11,7 +11,7 @@ export default function Icon(props) {
 
     return (
         <ElementsIcon
-            type={(type ?? 'font-awesome')}
+            type={(type ?? 'font-awesome-5')}
             style={style}
             color={style?.color}
             size={style?.fontSize}

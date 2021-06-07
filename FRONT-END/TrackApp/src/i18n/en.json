@@ -71,7 +71,7 @@
     "UploadIntervalLabel": "Upload Interval (Seconds)",
     "UploadIntervalValidationError": "Please enter the number of seconds.",
     "LanguageAndTimezone": "Language & Time Zone",
-    "AlarmSettings": "Alarms Settings",
+    "AlarmClock": "Alarm Clock",
     "Commands": "Commands",
     "ResetFactory": "Reset Factory Device",
     "ResetFactoryDesc": "This command resets the device to its initial factory settings.",

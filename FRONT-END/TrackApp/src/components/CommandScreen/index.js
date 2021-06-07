@@ -7,6 +7,7 @@ import CommandContacts from '../CommandContacts';
 import CommandSOS from '../CommandSOS';
 import CommandSetServer from '../CommandSetServer';
 import CommandLZ from '../CommandLZ';
+import CommandAlarmClock from '../CommandAlarmClock';
 
 export default function (props) {
 
@@ -52,6 +53,10 @@ export default function (props) {
 
             {command.type === "lz" && (
                 <CommandLZ command={command} {...rest} />
+            )}
+
+            {command.type === "alarmclock" && (
+                <CommandAlarmClock command={command} {...rest} />
             )}
 
         </View>

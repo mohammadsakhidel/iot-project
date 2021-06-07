@@ -25,7 +25,7 @@ export default function TrackerStatus(props) {
         case 'online':
             return (
                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                    <Icon name="circle" style={styles.onlineIcon} />
+                    <Icon name="dot-circle" style={styles.onlineIcon} />
                     <Text style={styles.online}>
                         {Strings.Online}
                     </Text>
@@ -34,7 +34,7 @@ export default function TrackerStatus(props) {
         case 'offline':
             return (
                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                    <Icon name="circle" style={styles.offlineIcon} />
+                    <Icon name="dot-circle" style={styles.offlineIcon} />
                     <Text style={styles.offline}>
                         {
                             Strings.Offline +
