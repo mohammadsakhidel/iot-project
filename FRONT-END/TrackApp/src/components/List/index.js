@@ -30,7 +30,7 @@ export default function List(props) {
             <View style={styles.container}>
                 <Icon name="dropbox" style={styles.icon} size={vars.ICO_LARGE} />
                 <Text style={styles.text}>{emptyListMessage}</Text>
-                {reloadFunc && <LinkButton title={Strings.Reload} icon="refresh" onPress={reloadFunc} />}
+                {reloadFunc && <LinkButton title={Strings.Reload} icon="redo" onPress={reloadFunc} />}
             </View>
         );
 }

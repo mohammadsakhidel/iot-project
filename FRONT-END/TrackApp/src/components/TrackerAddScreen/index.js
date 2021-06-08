@@ -95,7 +95,7 @@ class TrackerAddScreen extends Component {
                                                 <Text style={{ ...GlobalStyles.error, textAlign: 'center' }}>{this.state.error}</Text>
                                                 <LinkButton
                                                     title={(this.state.method === 'barcode' ? Strings.Rescan : Strings.Retry)}
-                                                    icon="refresh"
+                                                    icon="redo"
                                                     onPress={this.onRescanPress}
                                                 />
                                             </View>

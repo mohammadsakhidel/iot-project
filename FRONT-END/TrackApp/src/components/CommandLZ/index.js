@@ -48,8 +48,6 @@ export default class CommandLZ extends Component {
                 const configs = result.data;
                 const lz = (configs["lz"] ?? '').split(',');
 
-                console.log(lz);
-
                 this.setState({
                     isLoading: false,
                     language: Number(lz[0]),
