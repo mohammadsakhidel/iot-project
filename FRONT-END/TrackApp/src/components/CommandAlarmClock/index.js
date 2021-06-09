@@ -1,13 +1,12 @@
 import React, { Component } from "react";
-import { View, ScrollView, StyleSheet, Text } from "react-native";
+import { View, ScrollView, StyleSheet, Alarm } from "react-native";
 import * as vars from '../../styles/vars';
 import AlarmClock from "../AlarmClock";
 import { showError } from '../FlashMessageWrapper';
 import PrimaryButton from '../PrimaryButton';
 import { Strings } from '../../i18n/strings';
 import BottomSheet from '../BottomSheet';
-import * as globalStyles from '../../styles/global-styles';
-import { Button } from "react-native";
+import AlarmEditor from '../AlarmEditor';
 
 export default class CommandAlarmClock extends Component {
     constructor(props) {
@@ -16,6 +15,8 @@ export default class CommandAlarmClock extends Component {
         // Bindings: 
         this.onSelectedChange = this.onSelectedChange.bind(this);
         this.onSendCommandPress = this.onSendCommandPress.bind(this);
+        this.onAlarmPress = this.onAlarmPress.bind(this);
+        this.onAlarmEditorConfirmPress = this.onAlarmEditorConfirmPress.bind(this);
 
         // State:
         this.state = {
@@ -24,7 +25,7 @@ export default class CommandAlarmClock extends Component {
             error: null,
             done: false,
             alarms: [{}, {}, {}],
-            editorVisible: false
+            editingAlarmIndex: -1
         };
 
     }
@@ -38,25 +39,45 @@ export default class CommandAlarmClock extends Component {
                 alarms: alarmsList
             });
 
-            console.log(this.state);
-
         } catch (e) {
             showError(e);
         }
     }
 
     onSendCommandPress() {
+
+    }
+
+    onAlarmPress(index) {
         this.setState({
-            editorVisible: !this.state.editorVisible
+            editingAlarmIndex: index
         });
+    }
+
+    onAlarmEditorConfirmPress(alarm) {
+        try {
+
+            const index = this.state.editingAlarmIndex;
+            const alarmsList = this.state.alarms;
+            alarmsList[index] = {...alarmsList[index], ...alarm};
+
+            this.setState({
+                alarms: alarmsList,
+                editingAlarmIndex: -1
+            });
+
+        } catch (e) {
+            showError(e);
+        }
     }
 
     render() {
         return (
             <View style={styles.container}>
-                <BottomSheet isVisible={this.state.editorVisible}
-                    onClosePress={() => this.setState({ editorVisible: false })}>
-                    <Text>Hello bottom sheet</Text>
+                <BottomSheet isVisible={this.state.editingAlarmIndex >= 0}
+                    onClosePress={() => this.setState({ editingAlarmIndex: -1 })}
+                    >
+                    <AlarmEditor onConfirmPress={this.onAlarmEditorConfirmPress} />
                 </BottomSheet>
 
                 <ScrollView style={styles.scrollViewer}>
@@ -68,7 +89,7 @@ export default class CommandAlarmClock extends Component {
                         onSelectedChange={(v) => {
                             this.onSelectedChange(0, v);
                         }}
-                        onPress={() => { }}
+                        onPress={() => this.onAlarmPress(0)}
                     />
                     <AlarmClock
                         style={styles.alarmClock}
@@ -79,7 +100,7 @@ export default class CommandAlarmClock extends Component {
                         onSelectedChange={(v) => {
                             this.onSelectedChange(1, v);
                         }}
-                        onPress={() => { }}
+                        onPress={() => this.onAlarmPress(1)}
                     />
                     <AlarmClock
                         style={styles.alarmClock}
@@ -90,7 +111,7 @@ export default class CommandAlarmClock extends Component {
                         onSelectedChange={(v) => {
                             this.onSelectedChange(2, v);
                         }}
-                        onPress={() => { }}
+                        onPress={() => this.onAlarmPress(2)}
                     />
 
                 </ScrollView>

@@ -1,8 +1,9 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
-import { BottomSheet as BottomSheetElement, Button } from 'react-native-elements';
+import { BottomSheet as BottomSheetElement } from 'react-native-elements';
 import * as vars from '../../styles/vars';
 import Icon from '../Icon';
+import Button from '../Button';
 
 export default function BottomSheet(props) {
 
@@ -15,15 +16,20 @@ export default function BottomSheet(props) {
     return (
         <BottomSheetElement {...rest}>
             <View style={styles.container}>
-                <Button
-                    icon={<Icon name="times" color={vars.COLOR_GRAY_L2} />}
-                    type="clear"
-                    style={styles.close}
-                    onPress={onClosePress}
-                />
                 <View>
                     {children}
                 </View>
+
+                <Button
+                    icon={
+                        <Icon name="times"
+                            color={vars.COLOR_GRAY_L2}
+                            size={vars.ICO_BIT_SMALLER} />
+                    }
+                    type="clear"
+                    containerStyle={styles.closeButton}
+                    onPress={onClosePress}
+                />
             </View>
         </BottomSheetElement>
     );
@@ -34,11 +40,15 @@ const styles = StyleSheet.create({
         borderTopLeftRadius: 20,
         borderTopRightRadius: 20,
         backgroundColor: vars.COLOR_GRAY_LIGHTEST,
-        padding: vars.PAD_NORMAL
+        padding: vars.PAD_NORMAL,
+        minHeight: 200
     },
     content: {
         padding: vars.PAD_DOUBLE
     },
-    close: {
+    closeButton: {
+        position: 'absolute',
+        end: vars.PAD_NORMAL,
+        top: vars.PAD_NORMAL
     }
 });
