@@ -5,8 +5,9 @@ import AlarmClock from "../AlarmClock";
 import { showError } from '../FlashMessageWrapper';
 import PrimaryButton from '../PrimaryButton';
 import { Strings } from '../../i18n/strings';
-import { Overlay } from 'react-native-elements';
-import { Modal } from "react-native";
+import BottomSheet from '../BottomSheet';
+import * as globalStyles from '../../styles/global-styles';
+import { Button } from "react-native";
 
 export default class CommandAlarmClock extends Component {
     constructor(props) {
@@ -53,11 +54,10 @@ export default class CommandAlarmClock extends Component {
     render() {
         return (
             <View style={styles.container}>
-                <Overlay
-                    isVisible={this.state.editorVisible}
-                    onBackdropPress={() => this.setState({ editorVisible: false })}>
-                    <Text>Alarm settings...</Text>
-                </Overlay>
+                <BottomSheet isVisible={this.state.editorVisible}
+                    onClosePress={() => this.setState({ editorVisible: false })}>
+                    <Text>Hello bottom sheet</Text>
+                </BottomSheet>
 
                 <ScrollView style={styles.scrollViewer}>
                     <AlarmClock
