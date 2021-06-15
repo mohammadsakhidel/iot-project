@@ -13,5 +13,6 @@ namespace TrackAPI.Constants {
         public const string SOS_NUMBERS = "sos";
         public const string SERVER = "server";
         public const string LZ = "lz";
+        public const string REMINDER = "reminder";
     }
 }

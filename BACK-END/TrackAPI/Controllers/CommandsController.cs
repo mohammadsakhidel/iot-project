@@ -183,6 +183,28 @@ namespace TrackAPI.Controllers {
             }
         }
 
+        [HttpPost("reminder")]
+        [Authorize]
+        public async Task<IActionResult> SetRemindersCommand(ExecuteCommandModel model) {
+            try {
+
+                Func<Task> saveToConfigsFunc = async () => {
+
+                    var tracker = await _trackerService.GetAsync(model.TrackerId);
+                    var configs = tracker.GetConfigsDic();
+                    configs[TrackerConfigFields.REMINDER] = model.Payload;
+
+                    await _trackerService.SaveConfigsAsync(model.TrackerId, JsonSerializer.Serialize(configs));
+
+                };
+
+                return await ValidateAndExecuteCommandAsync(model, saveToConfigsFunc);
+
+            } catch (Exception ex) {
+                return ex.GetActionResult();
+            }
+        }
+
         [HttpPost("lz")]
         [Authorize]
         public async Task<IActionResult> SetLanguageAndTimezone(ExecuteCommandModel model) {
