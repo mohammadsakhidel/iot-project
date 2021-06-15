@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, ScrollView, StyleSheet, Alarm } from "react-native";
+import { View, ScrollView, StyleSheet, Keyboard } from "react-native";
 import * as vars from '../../styles/vars';
 import AlarmClock from "../AlarmClock";
 import { showError } from '../FlashMessageWrapper';
@@ -7,8 +7,18 @@ import PrimaryButton from '../PrimaryButton';
 import { Strings } from '../../i18n/strings';
 import BottomSheet from '../BottomSheet';
 import AlarmEditor from '../AlarmEditor';
+import { getErrorMessage } from '../FlashMessageWrapper';
+import * as Commands from '../../constants/command-names';
+import * as ErrorCodes from '../../constants/error-codes';
+import CommandService from '../../api/services/command-service';
+import FormError from '../FormError';
+import FormSuccess from '../FormSuccess';
+import appContext from "../../helpers/app-context";
 
 export default class CommandAlarmClock extends Component {
+
+    static contextType = appContext;
+
     constructor(props) {
         super(props);
 
@@ -30,6 +40,34 @@ export default class CommandAlarmClock extends Component {
 
     }
 
+    componentDidMount() {
+
+        const { tracker } = this.props;
+
+        this.setState({ isLoading: true }, async () => {
+            try {
+
+                // Call API:
+                const result = await CommandService.getConfigs(tracker.id, this.context.user.token);
+                const configs = result.data;
+                const reminders = (configs["reminder"] ?? '').split(',');
+                this.setState({
+                    isLoading: false,
+                    alarms: [
+                        this.fromAlarmString(reminders[0]),
+                        this.fromAlarmString(reminders[1]),
+                        this.fromAlarmString(reminders[2])
+                    ]
+                });
+
+            } catch (e) {
+                this.setState({ isLoading: false });
+                showError(e);
+            }
+        });
+
+    }
+
     onSelectedChange(index, value) {
         try {
 
@@ -44,8 +82,68 @@ export default class CommandAlarmClock extends Component {
         }
     }
 
-    onSendCommandPress() {
+    getAlarmString(alarm) {
 
+        const repeatCode = (!alarm.repeat || alarm.repeat == '0000000') ? 1 : (alarm.repeat == '1111111' ? 2 : 3);
+        return `${((alarm.hour ?? 0) + '').padStart(2, '0')}:${((alarm.min ?? 0) + '').padStart(2, '0')}-` +
+            `${((alarm.selected ?? false) ? '1' : '0')}-` +
+            `${repeatCode}` +
+            `${(repeatCode === 3 ? `-${alarm.repeat}` : '')}`;
+    }
+
+    fromAlarmString(str) {
+        return {
+            hour: 10,
+            min: 25,
+            repeat: '1001001'
+        };
+    }
+
+    onSendCommandPress() {
+        const { tracker } = this.props;
+        this.setState({ error: null, done: false, isSending: true }, async () => {
+            try {
+
+                Keyboard.dismiss();
+
+                // Call API:
+                const alarmsStr = `${this.getAlarmString(this.state.alarms[0])},` +
+                    `${this.getAlarmString(this.state.alarms[1])},` +
+                    `${this.getAlarmString(this.state.alarms[2])}`;
+                console.log(alarmsStr);
+
+
+                const dto = {
+                    trackerId: tracker.id,
+                    commandType: Commands.REMINDER,
+                    payload: alarmsStr
+                };
+                const result = await CommandService.execute(dto, this.context.user.token, "reminder");
+
+                // Show Result:
+                if (result.done) {
+                    this.setState({ isSending: false, done: true });
+                } else {
+                    let errorMessage = "";
+                    switch (result.data) {
+                        case ErrorCodes.TRACKER_OFFLINE:
+                            errorMessage = Strings.ErrorCodeTrackerOffline
+                            break;
+                        default:
+                            errorMessage = result.data;
+                            break;
+                    }
+                    this.setState({ isSending: false, done: false, error: errorMessage });
+                }
+
+            } catch (e) {
+                this.setState({
+                    isSending: false,
+                    done: false,
+                    error: getErrorMessage(e)
+                });
+            }
+        });
     }
 
     onAlarmPress(index) {
@@ -59,7 +157,7 @@ export default class CommandAlarmClock extends Component {
 
             const index = this.state.editingAlarmIndex;
             const alarmsList = this.state.alarms;
-            alarmsList[index] = {...alarmsList[index], ...alarm};
+            alarmsList[index] = { ...alarmsList[index], ...alarm };
 
             this.setState({
                 alarms: alarmsList,
@@ -76,7 +174,7 @@ export default class CommandAlarmClock extends Component {
             <View style={styles.container}>
                 <BottomSheet isVisible={this.state.editingAlarmIndex >= 0}
                     onClosePress={() => this.setState({ editingAlarmIndex: -1 })}
-                    >
+                >
                     <AlarmEditor onConfirmPress={this.onAlarmEditorConfirmPress} />
                 </BottomSheet>
 
@@ -113,6 +211,16 @@ export default class CommandAlarmClock extends Component {
                         }}
                         onPress={() => this.onAlarmPress(2)}
                     />
+
+                    <View style={{ marginTop: vars.PAD_NORMAL }}>
+                        {this.state.error && (
+                            <FormError error={this.state.error} />
+                        )}
+
+                        {this.state.done && (
+                            <FormSuccess message={Strings.CommandSentMessage} />
+                        )}
+                    </View>
 
                 </ScrollView>
 
