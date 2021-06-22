@@ -51,7 +51,7 @@ export default class CommandAlarmClock extends Component {
                 const result = await CommandService.getConfigs(tracker.id, this.context.user.token);
                 const configs = result.data;
                 const reminders = (configs["reminder"] ?? '').split(',');
-                
+
                 //console.log(reminders);
                 this.setState({
                     isLoading: false,
@@ -95,11 +95,13 @@ export default class CommandAlarmClock extends Component {
 
     fromAlarmString(str) {
 
+        if (!str)
+            return {};
+
         const parts = str.split('-');
         const timeParts = parts[0].split(':');
         const repeatType = Number(parts[2]);
         const repeat = repeatType == 1 ? '0000000' : (repeatType == 2 ? '1111111' : parts[3]);
-
 
         return {
             hour: Number(timeParts[0]),
