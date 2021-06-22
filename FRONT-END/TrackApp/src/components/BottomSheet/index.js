@@ -40,8 +40,7 @@ const styles = StyleSheet.create({
         borderTopLeftRadius: 20,
         borderTopRightRadius: 20,
         backgroundColor: vars.COLOR_GRAY_LIGHTEST,
-        padding: vars.PAD_NORMAL,
-        minHeight: 200
+        padding: vars.PAD_NORMAL
     },
     content: {
         padding: vars.PAD_DOUBLE

@@ -1866,13 +1866,6 @@
     sudo-prompt "^9.0.0"
     wcwidth "^1.0.1"
 
-"@react-native-community/datetimepicker@3.2.0":
-  version "3.2.0"
-  resolved "https://registry.yarnpkg.com/@react-native-community/datetimepicker/-/datetimepicker-3.2.0.tgz#757ae731bab4442842a4a884941239efa75f371f"
-  integrity sha512-RX4/mi2beCiJXakJJr9bJrqNSfu7wc69Q0gPw21m/PdpYM14bJplVgjmL0hm3VSedj3Eg/dErWy5DdLM8upS/A==
-  dependencies:
-    invariant "^2.2.4"
-
 "@react-native-community/masked-view@0.1.10":
   version "0.1.10"
   resolved "https://registry.yarnpkg.com/@react-native-community/masked-view/-/masked-view-0.1.10.tgz#5dda643e19e587793bc2034dd9bf7398ad43d401"
@@ -5748,6 +5741,11 @@ react-native-web@~0.13.12:
     normalize-css-color "^1.0.2"
     prop-types "^15.6.0"
     react-timer-mixin "^0.13.4"
+
+react-native-wheel-time-picker@^0.4.2:
+  version "0.4.2"
+  resolved "https://registry.yarnpkg.com/react-native-wheel-time-picker/-/react-native-wheel-time-picker-0.4.2.tgz#f50d89a3a77d646c9784f1e932c9d12ff6700db1"
+  integrity sha512-Uf00QEsQvMtpnSsRKJ9ZhsS8I/UgLvDlOmcqjpJVuNbsJ5eCBjA8KJirj+2ijJTEWk/JL1DxyCqn5Ku+/l30Bw==
 
 "react-native@https://github.com/expo/react-native/archive/sdk-41.0.0.tar.gz":
   version "0.63.2"

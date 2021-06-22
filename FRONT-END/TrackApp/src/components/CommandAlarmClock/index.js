@@ -1,12 +1,12 @@
 import React, { Component } from "react";
 import { View, ScrollView, StyleSheet, Keyboard } from "react-native";
 import * as vars from '../../styles/vars';
-import AlarmClock from "../AlarmClock";
+import ReminderItem from "../ReminderItem";
 import { showError } from '../FlashMessageWrapper';
 import PrimaryButton from '../PrimaryButton';
 import { Strings } from '../../i18n/strings';
 import BottomSheet from '../BottomSheet';
-import AlarmEditor from '../AlarmEditor';
+import ReminderEditor from '../ReminderEditor';
 import { getErrorMessage } from '../FlashMessageWrapper';
 import * as Commands from '../../constants/command-names';
 import * as ErrorCodes from '../../constants/error-codes';
@@ -51,6 +51,8 @@ export default class CommandAlarmClock extends Component {
                 const result = await CommandService.getConfigs(tracker.id, this.context.user.token);
                 const configs = result.data;
                 const reminders = (configs["reminder"] ?? '').split(',');
+                
+                //console.log(reminders);
                 this.setState({
                     isLoading: false,
                     alarms: [
@@ -92,10 +94,18 @@ export default class CommandAlarmClock extends Component {
     }
 
     fromAlarmString(str) {
+
+        const parts = str.split('-');
+        const timeParts = parts[0].split(':');
+        const repeatType = Number(parts[2]);
+        const repeat = repeatType == 1 ? '0000000' : (repeatType == 2 ? '1111111' : parts[3]);
+
+
         return {
-            hour: 10,
-            min: 25,
-            repeat: '1001001'
+            hour: Number(timeParts[0]),
+            min: Number(timeParts[1]),
+            repeat: repeat,
+            selected: parts[1] == '1'
         };
     }
 
@@ -110,7 +120,7 @@ export default class CommandAlarmClock extends Component {
                 const alarmsStr = `${this.getAlarmString(this.state.alarms[0])},` +
                     `${this.getAlarmString(this.state.alarms[1])},` +
                     `${this.getAlarmString(this.state.alarms[2])}`;
-                console.log(alarmsStr);
+                //console.log(alarmsStr);
 
 
                 const dto = {
@@ -175,11 +185,14 @@ export default class CommandAlarmClock extends Component {
                 <BottomSheet isVisible={this.state.editingAlarmIndex >= 0}
                     onClosePress={() => this.setState({ editingAlarmIndex: -1 })}
                 >
-                    <AlarmEditor onConfirmPress={this.onAlarmEditorConfirmPress} />
+                    <ReminderEditor
+                        alarm={this.state.alarms[this.state.editingAlarmIndex]}
+                        onConfirmPress={this.onAlarmEditorConfirmPress}
+                    />
                 </BottomSheet>
 
                 <ScrollView style={styles.scrollViewer}>
-                    <AlarmClock
+                    <ReminderItem
                         hour={this.state.alarms[0].hour ?? 0}
                         min={this.state.alarms[0].min ?? 0}
                         repeat={this.state.alarms[0].repeat ?? '0000000'}
@@ -189,7 +202,7 @@ export default class CommandAlarmClock extends Component {
                         }}
                         onPress={() => this.onAlarmPress(0)}
                     />
-                    <AlarmClock
+                    <ReminderItem
                         style={styles.alarmClock}
                         hour={this.state.alarms[1].hour ?? 0}
                         min={this.state.alarms[1].min ?? 0}
@@ -200,7 +213,7 @@ export default class CommandAlarmClock extends Component {
                         }}
                         onPress={() => this.onAlarmPress(1)}
                     />
-                    <AlarmClock
+                    <ReminderItem
                         style={styles.alarmClock}
                         hour={this.state.alarms[2].hour ?? 0}
                         min={this.state.alarms[2].min ?? 0}
