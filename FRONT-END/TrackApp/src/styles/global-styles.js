@@ -51,6 +51,10 @@ export const marginEndNormal = {
     marginRight: vars.PAD_NORMAL
 };
 
+export const marginTopNormal = {
+    marginTop: vars.PAD_NORMAL
+};
+
 export const marginStartHalf = {
     marginLeft: vars.PAD_HALF
 };

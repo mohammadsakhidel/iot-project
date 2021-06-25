@@ -152,7 +152,15 @@ class TrackerConfigScreen extends Component {
                                 }}>
                                     {Strings.AlarmClock}
                                 </SettingsItem>
-                                <SettingsItem icon="bell-slash" onPress={() => { }}>
+                                <SettingsItem icon="bell-slash" onPress={() => {
+                                    navigation.navigate(RouteNames.COMMAND_SCREEN, {
+                                        tracker: tracker,
+                                        pageTitle: Strings.NoDisturbanceTime,
+                                        command: {
+                                            type: "silence"
+                                        }
+                                    });
+                                }}>
                                     {Strings.NoDisturbanceTime}
                                 </SettingsItem>
                                 <SettingsItem icon="globe" onPress={() => {
