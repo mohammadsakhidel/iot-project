@@ -9,7 +9,7 @@ export default function TimePicker(props) {
     
     // Calc default hour min value:
     let defValue = 0;
-    if (hour && min) {
+    if (hour => 0 && min >= 0) {
         defValue = hour * 60 * 60 * 1000 + min * 60 * 1000;
     }
 

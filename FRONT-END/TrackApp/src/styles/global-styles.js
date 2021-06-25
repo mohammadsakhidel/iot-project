@@ -77,10 +77,16 @@ export const commandDesc = {
     padding: vars.PAD_NORMAL,
     color: vars.COLOR_PRIMARY_D1,
     textAlign: 'justify'
-}
+};
 
 export const formLabel = {
     color: vars.COLOR_GRAY_L2,
     fontWeight: 'bold',
     marginBottom: vars.PAD_SMALL
-}
+};
+
+export const modalTitle = {
+    fontWeight: 'bold',
+    fontSize: vars.FS_BIT_LARGER,
+    textAlign: 'center'
+};
