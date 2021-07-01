@@ -9,6 +9,17 @@ import GuardedRoute from '../../hocs/GuardedRoute';
 import Home from '../Home';
 import Login from '../Login';
 import Panel from '../Panel';
+import { ThemeProvider } from '@material-ui/core';
+import { createMuiTheme } from '@material-ui/core/styles';
+import green from '@material-ui/core/colors/green';
+
+const theme = createMuiTheme({
+    palette: {
+        primary: green,
+        
+    }
+});
+
 
 function App(props) {
 
@@ -32,19 +43,21 @@ function App(props) {
         <Router>
             <AppContext.Provider value={state}>
                 <Provider store={Store}>
-                    <Switch>
-                        <Route exact path={Routes.HOME}>
-                            <Home></Home>
-                        </Route>
-                        <Route path={Routes.LOGIN}>
-                            <Login></Login>
-                        </Route>
-                        <GuardedRoute
-                            path={Routes.PANEL}
-                            component={Panel}
-                            auth={false}
-                        />
-                    </Switch>
+                    <ThemeProvider theme={theme}>
+                        <Switch>
+                            <Route exact path={Routes.HOME}>
+                                <Home></Home>
+                            </Route>
+                            <Route path={Routes.LOGIN}>
+                                <Login></Login>
+                            </Route>
+                            <GuardedRoute
+                                path={Routes.PANEL}
+                                component={Panel}
+                                auth={false}
+                            />
+                        </Switch>
+                    </ThemeProvider>
                 </Provider>
             </AppContext.Provider>
         </Router>
