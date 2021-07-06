@@ -1,9 +1,12 @@
-import React from 'react'
+import React from 'react';
+import { useTranslation, withTranslation } from 'react-i18next';
 
-export default function Home() {
+function Home({ t }: any) {
     return (
         <div>
-            Home...
+            {t('welcome')}
         </div>
     )
 }
+
+export default withTranslation()(Home);
