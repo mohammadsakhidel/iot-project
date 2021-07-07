@@ -1,0 +1,29 @@
+$colorBackground: #f3f3f3;
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing : antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background             : $colorBackground;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+.header-brand {
+  background-image : url("./styles/images/header.png");
+  background-repeat: no-repeat;
+  /*or your image's width*/
+  height           : 75px;
+  /*or your image's height*/
+  margin           : 0;
+  padding          : 0;
+  background-position: left center;
+  background-size: contain;
+  flex-grow: 1;
+}

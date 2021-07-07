@@ -9,11 +9,14 @@ import Header from '../../components/Header';
 
 const useStyles = makeStyles((theme) => ({
     content: {
-        marginTop: theme.spacing(2)
+        paddingTop: theme.spacing(3),
+        paddingBottom: theme.spacing(3),
+        borderRadius: 20,
+        background: Vars.COLOR_GRAY_LIGHTEST,
+        minHeight: 200
     },
     footer: {
         marginTop: theme.spacing(2),
-        borderTop: `solid 1px ${Vars.COLOR_GRAY_L3}`,
         padding: theme.spacing(1),
         color: Vars.COLOR_GRAY_L1,
         textAlign: "center"
@@ -34,9 +37,9 @@ function MainLayout(props: any) {
         <>
             <Header />
             <Container className={classes.content}>
-                <div>
-                    {children}
-                </div>
+                {children}
+            </Container>
+            <Container>
                 <div className={classes.footer}>
                     <Typography variant="body2">
                         {t('footer')}
