@@ -4,6 +4,8 @@ import * as vars from '../../styles/vars';
 import * as globalStyles from '../../styles/global-styles';
 import TimePeriodItem from '../TimePeriodItem';
 import { showError } from '../FlashMessageWrapper';
+import BottomSheet from '../BottomSheet';
+import { Text } from 'react-native';
 
 export default class CommandSilence extends Component {
 
@@ -18,7 +20,8 @@ export default class CommandSilence extends Component {
                     selected: true,
                     timePeriod: { fromHour: 7, fromMin: 45, toHour: 14, toMin: 45 }
                 }
-            ]
+            ],
+            editingItemIndex: -1
         };
 
         // Bindings: 
@@ -47,7 +50,9 @@ export default class CommandSilence extends Component {
     onItemPress(index) {
         try {
 
-            console.log(`Item ${index} pressed.`);
+            this.setState({
+                editingItemIndex: index
+            });
 
         } catch (e) {
             showError(e);
@@ -61,37 +66,47 @@ export default class CommandSilence extends Component {
         } = this.state;
 
         return (
-            <ScrollView style={styles.container} >
-                <TimePeriodItem
-                    {...items[0]}
-                    onSelectedChange={(value) => this.onItemSelectionChanged(0, value)}
-                    onPress={() => this.onItemPress(0)}
-                />
-                <TimePeriodItem
-                    style={globalStyles.marginTopNormal}
-                    {...items[1]}
-                    onSelectedChange={(value) => this.onItemSelectionChanged(1, value)}
-                    onPress={() => this.onItemPress(1)}
-                />
-                <TimePeriodItem
-                    style={globalStyles.marginTopNormal}
-                    {...items[2]}
-                    onSelectedChange={(value) => this.onItemSelectionChanged(2, value)}
-                    onPress={() => this.onItemPress(2)}
-                />
-                <TimePeriodItem
-                    style={globalStyles.marginTopNormal}
-                    {...items[3]}
-                    onSelectedChange={(value) => this.onItemSelectionChanged(3, value)}
-                    onPress={() => this.onItemPress(3)}
-                />
-            </ScrollView>
+            <View style={styles.container}>
+                <BottomSheet
+                    isVisible={this.state.editingItemIndex >= 0}
+                    onClosePress={() => this.setState({ editingItemIndex: -1 })}>
+                        <Text>
+                            Edit Item: {this.state.editingItemIndex}
+                        </Text>
+                </BottomSheet>
+                <ScrollView style={styles.container} >
+                    <TimePeriodItem
+                        {...items[0]}
+                        onSelectedChange={(value) => this.onItemSelectionChanged(0, value)}
+                        onPress={() => this.onItemPress(0)}
+                    />
+                    <TimePeriodItem
+                        style={globalStyles.marginTopNormal}
+                        {...items[1]}
+                        onSelectedChange={(value) => this.onItemSelectionChanged(1, value)}
+                        onPress={() => this.onItemPress(1)}
+                    />
+                    <TimePeriodItem
+                        style={globalStyles.marginTopNormal}
+                        {...items[2]}
+                        onSelectedChange={(value) => this.onItemSelectionChanged(2, value)}
+                        onPress={() => this.onItemPress(2)}
+                    />
+                    <TimePeriodItem
+                        style={globalStyles.marginTopNormal}
+                        {...items[3]}
+                        onSelectedChange={(value) => this.onItemSelectionChanged(3, value)}
+                        onPress={() => this.onItemPress(3)}
+                    />
+                </ScrollView>
+            </View>
         );
     }
 }
 
 const styles = StyleSheet.create({
     container: {
+        flex: 1,
         padding: vars.PAD_NORMAL
     }
 });
