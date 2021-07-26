@@ -1,39 +1,50 @@
-import React, { useState } from 'react';
+import React, { Component } from 'react';
 import { View, ScrollView, StyleSheet } from 'react-native';
 import * as vars from '../../styles/vars';
 import * as globalStyles from '../../styles/global-styles';
 import TimePeriodItem from '../TimePeriodItem';
 import { showError } from '../FlashMessageWrapper';
 
-export default function CommandSilence(props) {
+export default class CommandSilence extends Component {
 
-    // State:
-    const [items, setItems] = useState([
-        // Item 0:
-        {
-            selected: true,
-            timePeriod: { fromHour: 7, fromMin: 45, toHour: 14, toMin: 45 }
-        }
-    ]);
+    constructor(props) {
 
-    // Functions:
-    const onItemSelectionChanged = (index, value) => {
+        super(props);
+
+        // State:
+        this.state = {
+            items: [
+                {
+                    selected: true,
+                    timePeriod: { fromHour: 7, fromMin: 45, toHour: 14, toMin: 45 }
+                }
+            ]
+        };
+
+        // Bindings: 
+        this.onItemSelectionChanged = this.onItemSelectionChanged.bind(this);
+        this.onItemPress = this.onItemPress.bind(this);
+
+    }
+
+    onItemSelectionChanged(index, value) {
         try {
 
             // Change item's selected value:
-            if (!items[index])
+            if (!this.state.items[index])
                 return;
-            items[index].selected = value;
+            this.state.items[index].selected = value;
 
             // Update state:
-            setItems({ ...items });
+            const newItems = [...this.state.items];
+            this.setState({ items: newItems });
 
         } catch (e) {
             showError(e);
         }
-    };
+    }
 
-    const onItemPress = (index) => {
+    onItemPress(index) {
         try {
 
             console.log(`Item ${index} pressed.`);
@@ -43,34 +54,40 @@ export default function CommandSilence(props) {
         }
     };
 
-    // Render:
-    return (
-        <ScrollView style={styles.container}>
-            <TimePeriodItem
-                {...items[0]}
-                onSelectedChange={(value) => onItemSelectionChanged(0, value)}
-                onPress={() => onItemPress(0)}
-            />
-            <TimePeriodItem
-                style={globalStyles.marginTopNormal}
-                {...items[1]}
-                onSelectedChange={(value) => onItemSelectionChanged(1, value)}
-                onPress={() => onItemPress(1)}
-            />
-            <TimePeriodItem
-                style={globalStyles.marginTopNormal}
-                {...items[2]}
-                onSelectedChange={(value) => onItemSelectionChanged(2, value)}
-                onPress={() => onItemPress(2)}
-            />
-            <TimePeriodItem
-                style={globalStyles.marginTopNormal}
-                {...items[3]}
-                onSelectedChange={(value) => onItemSelectionChanged(3, value)}
-                onPress={() => onItemPress(3)}
-            />
-        </ScrollView>
-    );
+    render() {
+
+        const {
+            items
+        } = this.state;
+
+        return (
+            <ScrollView style={styles.container} >
+                <TimePeriodItem
+                    {...items[0]}
+                    onSelectedChange={(value) => this.onItemSelectionChanged(0, value)}
+                    onPress={() => this.onItemPress(0)}
+                />
+                <TimePeriodItem
+                    style={globalStyles.marginTopNormal}
+                    {...items[1]}
+                    onSelectedChange={(value) => this.onItemSelectionChanged(1, value)}
+                    onPress={() => this.onItemPress(1)}
+                />
+                <TimePeriodItem
+                    style={globalStyles.marginTopNormal}
+                    {...items[2]}
+                    onSelectedChange={(value) => this.onItemSelectionChanged(2, value)}
+                    onPress={() => this.onItemPress(2)}
+                />
+                <TimePeriodItem
+                    style={globalStyles.marginTopNormal}
+                    {...items[3]}
+                    onSelectedChange={(value) => this.onItemSelectionChanged(3, value)}
+                    onPress={() => this.onItemPress(3)}
+                />
+            </ScrollView>
+        );
+    }
 }
 
 const styles = StyleSheet.create({
