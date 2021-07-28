@@ -16,9 +16,9 @@ export default class CommandService {
 
         const url = `${ApiSettings.BaseUrl}/commands${(endpoint ? `/${endpoint}` : '')}`;
 
-        //console.log(url);
-        //console.log(dto);
-        //console.log(token);
+        console.log(url);
+        console.log(dto);
+        console.log(token);
 
         const response = await http(token).post(url, dto);
         const apiResult = response.data;

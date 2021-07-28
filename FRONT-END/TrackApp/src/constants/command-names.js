@@ -13,3 +13,4 @@ export const SOS_NUMBERS = "SOS_NUMBERS";
 export const IP_PORT = "IP_PORT";
 export const LANG_ZONE = "LANG_ZONE";
 export const REMINDER = "REMINDER";
+export const NO_DISTURBANCE = "NO_DISTURBANCE";
