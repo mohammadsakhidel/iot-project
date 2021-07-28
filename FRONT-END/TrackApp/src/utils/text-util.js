@@ -48,3 +48,12 @@ export function getRepeatString(repeat) {
 
     return (!repeat || repeat == '0000000') ? Strings.Once : (repeat == '1111111' ? Strings.EveryDay : repetitionStringToDayNames(repeat))
 }
+
+export function format(inputText, ...args) {
+    return inputText.replace(/{(\d+)}/g, function (match, number) {
+        return typeof args[number] != 'undefined'
+            ? args[number]
+            : match
+            ;
+    });
+}

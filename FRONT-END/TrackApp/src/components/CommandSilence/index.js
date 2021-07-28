@@ -52,9 +52,9 @@ export default class CommandSilence extends Component {
                 // Call API:
                 const result = await CommandService.getConfigs(tracker.id, this.context.user.token);
                 const configs = result.data;
-                const timePeriodsStr = (configs["silence"] ?? '').split(',');
+                const timePeriodsStr = configs["silence"] ? configs["silence"].split(',') : [];
                 const timePeriods = timePeriodsStr.map(str => this.fromTimePeriodString(str));
-                const items = timePeriods.map(tp => ({ timePeriod: tp, selected: tp }));
+                const items = timePeriods.map(tp => ({ timePeriod: tp, selected: tp != null }));
 
                 this.setState({
                     isLoading: false,

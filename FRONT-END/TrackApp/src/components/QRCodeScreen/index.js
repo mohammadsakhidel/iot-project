@@ -7,6 +7,7 @@ import TrackerService from '../../api/services/tracker-service';
 import { Avatar } from 'react-native-elements';
 import AppContext from '../../helpers/app-context';
 import { Strings } from '../../i18n/strings';
+import { format } from '../../utils/text-util';
 
 export default function QRCodeScreen(props) {
 
@@ -43,7 +44,7 @@ export default function QRCodeScreen(props) {
             </View>
 
             <Text style={styles.desc}>
-                {Strings.TrackerQRCodePageDesc}
+                {format(Strings.TrackerQRCodePageDesc, tracker.displayName)}
             </Text>
 
         </View>
