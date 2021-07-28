@@ -263,7 +263,7 @@ const styles = StyleSheet.create({
     },
     scrollViewer: {
         flex: 1,
-        padding: vars.PAD_DOUBLE
+        padding: vars.PAD_NORMAL
     },
     buttonContainer: {
         backgroundColor: vars.COLOR_GRAY_L3,
