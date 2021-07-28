@@ -43,6 +43,31 @@ export default class CommandSilence extends Component {
 
     }
 
+    componentDidMount() {
+        const { tracker } = this.props;
+
+        this.setState({ isLoading: true }, async () => {
+            try {
+
+                // Call API:
+                const result = await CommandService.getConfigs(tracker.id, this.context.user.token);
+                const configs = result.data;
+                const timePeriodsStr = (configs["silence"] ?? '').split(',');
+                const timePeriods = timePeriodsStr.map(str => this.fromTimePeriodString(str));
+                const items = timePeriods.map(tp => ({ timePeriod: tp, selected: tp }));
+
+                this.setState({
+                    isLoading: false,
+                    items: items
+                });
+
+            } catch (e) {
+                this.setState({ isLoading: false });
+                showError(e);
+            }
+        });
+    }
+
     onItemSelectionChanged(index, value) {
         try {
 
@@ -146,6 +171,27 @@ export default class CommandSilence extends Component {
             `:${((timePeriod?.fromMin ?? 0) + '').padStart(2, '0')}` +
             `-${((timePeriod?.toHour ?? 0) + '').padStart(2, '0')}` +
             `:${((timePeriod?.toMin ?? 0) + '').padStart(2, '0')}`;
+    }
+
+    fromTimePeriodString(str) {
+        if (!str)
+            return {};
+
+        const parts = str.split('-');
+        const fromParts = parts[0].split(':');
+        const toParts = parts[1].split(':');
+
+        const timePeriod = {
+            fromHour: Number(fromParts[0]),
+            fromMin: Number(fromParts[1]),
+            toHour: Number(toParts[0]),
+            toMin: Number(toParts[1])
+        };
+
+        if (timePeriod.fromHour === 0 && timePeriod.fromMin === 0 && timePeriod.toHour === 0 && timePeriod.toMin === 0)
+            return null;
+
+        return timePeriod;
     }
 
     render() {
