@@ -17,12 +17,7 @@ export default class CommandSilence extends Component {
 
         // State:
         this.state = {
-            items: [
-                {
-                    selected: true,
-                    timePeriod: { fromHour: 7, fromMin: 45, toHour: 14, toMin: 45 }
-                }
-            ],
+            items: [],
             editingItemIndex: -1,
             isSending: false
         };
@@ -78,7 +73,13 @@ export default class CommandSilence extends Component {
     onTimePeriodEditorConfirm(timePeriod) {
         try {
 
-            console.log('confirmed.... ' + JSON.stringify(timePeriod));
+            let item = {...(this.state.items[this.state.editingItemIndex] ?? { selected: true })};
+            item.timePeriod = timePeriod;
+
+            this.setItem(item, this.state.editingItemIndex);
+            this.setState({
+                editingItemIndex: -1
+            });
 
         } catch (e) {
             showError(e);

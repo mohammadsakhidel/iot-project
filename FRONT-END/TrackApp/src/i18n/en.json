@@ -149,6 +149,7 @@
     "AddSilenceTime": "Set Silence Time Period",
     "From": "From",
     "To": "To",
+    "InvalidTimePerdiodMessage": "The specified time period is invalid.",
     "----------------------------------": "----------------------- COMMAND NAMES ----------------------------",
     "---------------------------------": "----------------------- COMMAND NAMES ----------------------------",
     "--------------------------------": "----------------------- COMMAND NAMES ----------------------------",

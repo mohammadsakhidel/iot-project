@@ -6,6 +6,7 @@ import * as vars from '../../styles/vars';
 import * as globalStyles from '../../styles/global-styles';
 import { Strings } from '../../i18n/strings';
 import PrimaryButton from '../PrimaryButton';
+import { showError } from '../FlashMessageWrapper';
 
 export default function TimePeriodEditor(props) {
 
@@ -34,7 +35,7 @@ export default function TimePeriodEditor(props) {
                         hour={fromHour}
                         min={fromMin}
                         wheelProps={wheelProps}
-                        onChange={(hour, min) => { 
+                        onChange={(hour, min) => {
                             setFromHour(hour);
                             setFromMin(min);
                         }}
@@ -50,7 +51,7 @@ export default function TimePeriodEditor(props) {
                         hour={toHour}
                         min={toMin}
                         wheelProps={wheelProps}
-                        onChange={(hour, min) => { 
+                        onChange={(hour, min) => {
                             setToHour(hour);
                             setToMin(min);
                         }}
@@ -63,6 +64,14 @@ export default function TimePeriodEditor(props) {
                 icon="check"
                 title={Strings.Confirm}
                 onPress={() => {
+                    // Validate Time Period:
+                    const fromValue = fromHour * 60 + fromMin;
+                    const toValue = toHour * 60 + toMin;
+                    if (toValue <= fromValue) {
+                        showError(Strings.InvalidTimePerdiodMessage);
+                        return;
+                    }
+
                     if (onConfirmPress)
                         onConfirmPress({
                             fromHour,
