@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { Button, View } from 'react-native';
-import Text from '../Text';
+import { View, Dimensions, StyleSheet } from 'react-native';
+import MapView, { Marker } from 'react-native-maps';
 
 export default class MapScreen extends Component {
 
@@ -13,67 +13,45 @@ export default class MapScreen extends Component {
         };
 
         // Bindings:
-        this.wsConnect = this.wsConnect.bind(this);
-        this.wsOnOpen = this.wsOnOpen.bind(this);
-        this.wsOnMessage = this.wsOnMessage.bind(this);
-        this.wsOnClose = this.wsOnClose.bind(this);
-        this.wsOnError = this.wsOnError.bind(this);
         this.onPress = this.onPress.bind(this);
 
     }
 
     componentDidMount() {
-        //this.wsConnect();
     }
 
     onPress() {
-        if (this.ws)
-            this.ws.send("2786b3c0-2182-4c1f-bf78-8e6c23e1ea7a");
-    }
-
-    wsConnect() {
-        this.setState({ message: "CONNECTING..." });
-        this.ws = new WebSocket("ws://192.168.43.95:8125");
-
-        this.ws.onopen = this.wsOnOpen;
-        this.ws.onmessage = this.wsOnMessage;
-        this.ws.onclose = this.wsOnClose;
-        this.ws.onerror = this.wsOnError;
-    }
-
-    wsOnOpen(event) {
-        this.setState({
-            message: "CONNECTION OPENED"
-        });
-    }
-
-    wsOnMessage(event) {
-        this.setState({
-            message: event.data
-        });
-    }
-
-    wsOnClose(event) {
-        this.setState({
-            message: "CONNECTION CLOSED"
-        });
-
-        setTimeout(() => this.wsConnect(), 1000);
-    }
-
-    wsOnError(event) {
-        this.setState({
-            message: "ERROR"
-        });
     }
 
     render() {
+        const initialRegion = {
+            latitude: -34.929697,
+            longitude: 138.600321,
+            latitudeDelta: 0.4,
+            longitudeDelta: 0.4
+        };
+
         return (
-            <View>
-                <Button title="Click To Send" onPress={this.onPress}></Button>
-                <Text>Message:</Text>
-                <Text>{this.state.message}</Text>
+            <View style={styles.container}>
+                <MapView
+                    style={styles.map}
+                >
+                    <Marker coordinate={initialRegion} />
+                </MapView>
+                <View style={{ backgroundColor: '#f00', height: 100 }}>
+
+                </View>
             </View>
         );
     }
 };
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1
+    },
+    map: {
+        flex: 1,
+        width: Dimensions.get('window').width,
+    }
+});

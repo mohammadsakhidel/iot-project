@@ -58,7 +58,7 @@ export default function AppHeader(props) {
 
 const styles = StyleSheet.create({
     titleImage: {
-        width: 100,
-        height: 19
+        width: 80,
+        height: 30
     }
 });
