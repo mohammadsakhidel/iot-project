@@ -6,7 +6,9 @@ using TrackLib.Utils;
 using TrackWorker.Helpers;
 using TrackWorker.Models;
 using TrackWorker.Processors.Pipelines;
+using TrackWorker.ServerEvents;
 using TrackWorker.Services;
+using TrackWorker.Shared;
 
 namespace TrackWorker.Processors.Middlewares.Messages {
     public class GpsWatchLocationMiddleware : Middleware, IGpsWatchLocationMiddleware {
@@ -47,6 +49,23 @@ namespace TrackWorker.Processors.Middlewares.Messages {
                 CreationTime = DateTime.UtcNow
             };
             reportService.AddAsync(report).Wait();
+
+            // Send location updated server event to all listening users:
+            tracker.Users.ForEach(user => {
+                if (UserConnections.Contains(user.UserId)) {
+                    var client = UserConnections.Get(user.UserId).Client;
+                    var @event = new LocationUpdatedServerEvent(tracker.Id) {
+                        Latitude = reportData.Latitude,
+                        Longitude = reportData.Longitude,
+                        Altitude = reportData.Altitude,
+                        Speed = reportData.Speed,
+                        Direction = reportData.Direction,
+                        Battery = reportData.Power
+                    };
+
+                    client.Socket.Send(@event.Serialize()).Wait();
+                }
+            });
             #endregion
 
             return true;
