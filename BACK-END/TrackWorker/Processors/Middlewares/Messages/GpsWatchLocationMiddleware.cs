@@ -28,7 +28,7 @@ namespace TrackWorker.Processors.Middlewares.Messages {
 
             #region PROCESSING:
             _ = GpsWatchMessage.TryParse(context.Message.Base64Text, out var message);
-            var tracker = trackerService.Get(message.UniqueID);
+            var tracker = trackerService.GetWithIncludeAsync(message.UniqueID).Result;
             var reportData = GpsWatchReportData.FromArray(message.ContentItems.ToArray());
 
             var report = new GpsTrackerMessageModel {
