@@ -8,6 +8,9 @@ class MapScreen extends Component {
     constructor(props) {
         super(props);
 
+        // Refs:
+        this.mapRef = React.createRef();
+
         // State:
         this.state = {
             message: ''
@@ -18,7 +21,12 @@ class MapScreen extends Component {
 
     }
 
-    componentDidMount() {
+    componentDidUpdate() {
+        setTimeout(() => {
+            const { locationUpdates } = this.props;
+            const markers = Object.keys(locationUpdates);
+            this.mapRef.current.fitToSuppliedMarkers(markers);
+        }, 500);
     }
 
     onPress() {
@@ -39,12 +47,29 @@ class MapScreen extends Component {
             <View style={styles.container}>
                 <MapView
                     style={styles.map}
+                    ref={this.mapRef}
+                    maxZoomLevel={16}
                 >
-                    <Marker coordinate={initialRegion} />
+                    {
+                        Object.keys(locationUpdates).map(key => {
+
+                            let data = locationUpdates[key];
+
+                            return (
+                                <Marker
+                                    key={key}
+                                    identifier={key}
+                                    coordinate={{ latitude: data.latitude, longitude: data.longitude }}
+                                >
+                                    <View style={{ width: 10, height: 10, backgroundColor: 'red', borderRadius: 5 }}></View>
+                                </Marker>
+                            );
+                        })
+                    }
                 </MapView>
                 <View style={{ padding: 20, backgroundColor: '#f5f5f5', height: 300 }}>
                     <Text>
-                        {locationUpdates ? JSON.stringify(locationUpdates): "NULL"}
+                        {locationUpdates ? JSON.stringify(locationUpdates) : "NULL"}
                     </Text>
                 </View>
             </View>
