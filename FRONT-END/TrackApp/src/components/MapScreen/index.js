@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import { View, Dimensions, StyleSheet } from 'react-native';
+import { View, Dimensions, StyleSheet, Text } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
+import { connect } from 'react-redux';
 
-export default class MapScreen extends Component {
+class MapScreen extends Component {
 
     constructor(props) {
         super(props);
@@ -24,6 +25,9 @@ export default class MapScreen extends Component {
     }
 
     render() {
+
+        const { locationUpdates } = this.props;
+
         const initialRegion = {
             latitude: -34.929697,
             longitude: 138.600321,
@@ -38,8 +42,10 @@ export default class MapScreen extends Component {
                 >
                     <Marker coordinate={initialRegion} />
                 </MapView>
-                <View style={{ backgroundColor: '#f00', height: 100 }}>
-
+                <View style={{ padding: 20, backgroundColor: '#f5f5f5', height: 300 }}>
+                    <Text>
+                        {locationUpdates ? JSON.stringify(locationUpdates): "NULL"}
+                    </Text>
                 </View>
             </View>
         );
@@ -55,3 +61,9 @@ const styles = StyleSheet.create({
         width: Dimensions.get('window').width,
     }
 });
+
+const mapStateToProps = (state) => ({
+    locationUpdates: state.locationUpdates
+});
+
+export default connect(mapStateToProps)(MapScreen);

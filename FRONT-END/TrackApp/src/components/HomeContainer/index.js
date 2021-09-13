@@ -104,17 +104,22 @@ class HomeContainer extends Component {
 
   wsOnMessage(e) {
     try {
-      //console.log(e.data);
       const event = JSON.parse(e.data);
 
       const {
-        changeTrackerStatus
+        changeTrackerStatus,
+        updateTrackerLocation
       } = this.props;
 
       switch (event.name) {
         case EventNames.STATUS_CHANGED:
           changeTrackerStatus(event);
           break;
+
+        case EventNames.LOCATION_UPDATED:
+          updateTrackerLocation(event);
+          break;
+
         default:
           break;
       }
@@ -150,7 +155,10 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   changeTrackerStatus: (event) => {
-    dispatch(Actions.changeTrackerStatus(event))
+    dispatch(Actions.changeTrackerStatus(event));
+  },
+  updateTrackerLocation: (event) => {
+    dispatch(Actions.updateLocation(event));
   }
 });
 

@@ -2,6 +2,7 @@
 export const ACTION_SET_TRACKERS = "SET_TRACKERS";
 export const ACTION_REMOVE_TRACKER = "REMOVE_TRACKER";
 export const ACTION_CHANGE_STATUS = "CHANGE_STATUS";
+export const ACTION_UPDATE_LOCATION = "UPDATE_LOCATION";
 
 // Functions Returning Action Objects:
 export const setTrackers = (trackers) => ({
@@ -21,4 +22,9 @@ export const changeTrackerStatus = (event) => ({
 export const removeTracker = (trackerId) => ({
     type: ACTION_REMOVE_TRACKER,
     payload: trackerId
+});
+
+export const updateLocation = (event) => ({
+    type: ACTION_UPDATE_LOCATION,
+    payload: event
 });

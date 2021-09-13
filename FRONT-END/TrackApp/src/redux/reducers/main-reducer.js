@@ -2,10 +2,13 @@ import * as Actions from '../actions';
 
 const initialState = {
     trackers: [],
-    connections: {}
+    connections: {},
+    locationUpdates: {}
 };
 
 const mainReducer = (state = initialState, action) => {
+
+    const event = action.payload;
 
     switch (action.type) {
         case Actions.ACTION_SET_TRACKERS:
@@ -30,7 +33,6 @@ const mainReducer = (state = initialState, action) => {
 
         case Actions.ACTION_CHANGE_STATUS:
 
-            const event = action.payload;
             const cons = state.connections;
             const conEntry = {
                 status: event.data[0],
@@ -42,6 +44,25 @@ const mainReducer = (state = initialState, action) => {
             return {
                 ...state,
                 connections: { ...cons }
+            };
+
+        case Actions.ACTION_UPDATE_LOCATION:
+
+            const locUpdates = state.locationUpdates;
+            const loc = {
+                latitude: Number(event.data[0]),
+                longitude: Number(event.data[1]),
+                altitude: Number(event.data[2]),
+                speed: Number(event.data[3]),
+                direction: Number(event.data[4]),
+                battery: Number(event.data[5])
+            };
+            locUpdates[event.source] = loc;
+
+            // Return new state:
+            return {
+                ...state,
+                locationUpdates: {...locUpdates}
             };
             
         default:
