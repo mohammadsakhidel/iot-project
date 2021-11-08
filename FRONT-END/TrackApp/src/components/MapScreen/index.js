@@ -1,80 +1,97 @@
-import React, { Component } from 'react';
+import React, { Component, useEffect, useState } from 'react';
 import { View, Dimensions, StyleSheet, Text } from 'react-native';
+import { Avatar } from 'react-native-elements';
 import MapView, { Marker } from 'react-native-maps';
 import { connect } from 'react-redux';
+import * as vars from '../../styles/vars';
+import TrackerService from '../../api/services/tracker-service';
+import { TouchableHighlight, TouchableOpacity } from 'react-native-gesture-handler';
 
-class MapScreen extends Component {
+const MapScreen = (props) => {
 
-    constructor(props) {
-        super(props);
+    // State:
 
-        // Refs:
-        this.mapRef = React.createRef();
+    const [selectedItem, setSelectedItem] = useState(null);
 
-        // State:
-        this.state = {
-            message: ''
-        };
+    // Props:
 
-        // Bindings:
-        this.onPress = this.onPress.bind(this);
+    const {
+        locationUpdates,
+        trackers
+    } = props;
 
-    }
+    // Refs:
 
-    componentDidUpdate() {
+    const mapRef = React.createRef(null);
+
+    // Effects:
+
+    useEffect(() => {
         setTimeout(() => {
-            const { locationUpdates } = this.props;
-            const markers = Object.keys(locationUpdates);
-            this.mapRef.current.fitToSuppliedMarkers(markers);
+
         }, 500);
-    }
 
-    onPress() {
-    }
 
-    render() {
+        if (mapRef.current) {
+            const markers = Object.keys(locationUpdates);
+            if (!selectedItem) {
+                mapRef.current.fitToSuppliedMarkers(markers);
+            } else {
+                console.log(selectedItem);
+                mapRef.current.fitToSuppliedMarkers([selectedItem.id]);
+            }
+        }
 
-        const { locationUpdates } = this.props;
+    }, [locationUpdates, selectedItem]);
 
-        const initialRegion = {
-            latitude: -34.929697,
-            longitude: 138.600321,
-            latitudeDelta: 0.4,
-            longitudeDelta: 0.4
-        };
+    // Event Handlers:
 
-        return (
-            <View style={styles.container}>
-                <MapView
-                    style={styles.map}
-                    ref={this.mapRef}
-                    maxZoomLevel={16}
-                >
-                    {
-                        Object.keys(locationUpdates).map(key => {
+    const onItemPress = (tracker) => {
+        setSelectedItem({ ...tracker });
+    };
 
-                            let data = locationUpdates[key];
+    // Render:
 
-                            return (
-                                <Marker
-                                    key={key}
-                                    identifier={key}
-                                    coordinate={{ latitude: data.latitude, longitude: data.longitude }}
-                                >
-                                    <View style={{ width: 10, height: 10, backgroundColor: 'red', borderRadius: 5 }}></View>
-                                </Marker>
-                            );
-                        })
-                    }
-                </MapView>
-                <View style={{ padding: 20, backgroundColor: '#f5f5f5', height: 300 }}>
-                    <Text>
-                        {locationUpdates ? JSON.stringify(locationUpdates) : "NULL"}
-                    </Text>
-                </View>
+    return (
+        <View style={styles.container}>
+            <MapView
+                style={styles.map}
+                ref={mapRef}
+                maxZoomLevel={17}
+            >
+                {
+                    Object.keys(locationUpdates).map(key => {
+                        let data = locationUpdates[key];
+                        return (
+                            <Marker
+                                key={key}
+                                identifier={key}
+                                coordinate={{ latitude: data.latitude, longitude: data.longitude }}
+                            >
+                                <View style={{ width: 10, height: 10, backgroundColor: (selectedItem && selectedItem.id === key ? 'red' : 'gray'), borderRadius: 5 }}></View>
+                            </Marker>
+                        );
+                    })
+                }
+            </MapView>
+            <View style={styles.bottomPanel}>
+                {trackers.map(tracker => {
+                    return (
+                        <TouchableOpacity key={tracker.id} onPress={() => onItemPress(tracker)}>
+                            <Avatar
+                                rounded
+                                size="large"
+                                placeholderStyle={{ backgroundColor: vars.COLOR_GRAY_L2 }}
+                                source={{ uri: TrackerService.getIconUrl(tracker) }}
+                                containerStyle={styles.avatar}
+                            />
+                        </TouchableOpacity>
+                    );
+                })}
             </View>
-        );
-    }
+        </View>
+    );
+
 };
 
 const styles = StyleSheet.create({
@@ -84,11 +101,20 @@ const styles = StyleSheet.create({
     map: {
         flex: 1,
         width: Dimensions.get('window').width,
+    },
+    bottomPanel: {
+        backgroundColor: vars.COLOR_GRAY_LIGHTEST,
+        padding: 20
+    },
+    avatar: {
+        padding: vars.PAD_TINY,
+        backgroundColor: vars.COLOR_GRAY_L3
     }
 });
 
 const mapStateToProps = (state) => ({
-    locationUpdates: state.locationUpdates
+    locationUpdates: state.locationUpdates,
+    trackers: state.trackers
 });
 
 export default connect(mapStateToProps)(MapScreen);

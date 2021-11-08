@@ -40,6 +40,7 @@ export const COLOR_SUCCESS = '#00a378';
 export const PAD_NORMAL = 15;
 export const PAD_HALF = 0.5 * PAD_NORMAL;
 export const PAD_SMALL = 0.35 * PAD_NORMAL;
+export const PAD_TINY = 0.15 * PAD_NORMAL;
 export const PAD_BIT_MORE = 1.5 * PAD_NORMAL;
 export const PAD_DOUBLE = 2 * PAD_NORMAL;
 export const PAD_TRIPPLE = 3 * PAD_NORMAL;
