@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import * as vars from '../../styles/vars';
 import TrackerService from '../../api/services/tracker-service';
 import { TouchableHighlight, TouchableOpacity } from 'react-native-gesture-handler';
+import TrackerMarker from '../TrackerMarker';
 
 const MapScreen = (props) => {
 
@@ -57,7 +58,7 @@ const MapScreen = (props) => {
             <MapView
                 style={styles.map}
                 ref={mapRef}
-                maxZoomLevel={17}
+                maxZoomLevel={15}
             >
                 {
                     Object.keys(locationUpdates).map(key => {
@@ -68,26 +69,28 @@ const MapScreen = (props) => {
                                 identifier={key}
                                 coordinate={{ latitude: data.latitude, longitude: data.longitude }}
                             >
-                                <View style={{ width: 10, height: 10, backgroundColor: (selectedItem && selectedItem.id === key ? 'red' : 'gray'), borderRadius: 5 }}></View>
+                                <TrackerMarker tracker={trackers.find((t) => t.id === key)} />
                             </Marker>
                         );
                     })
                 }
             </MapView>
             <View style={styles.bottomPanel}>
-                {trackers.map(tracker => {
-                    return (
-                        <TouchableOpacity key={tracker.id} onPress={() => onItemPress(tracker)}>
-                            <Avatar
-                                rounded
-                                size="large"
-                                placeholderStyle={{ backgroundColor: vars.COLOR_GRAY_L2 }}
-                                source={{ uri: TrackerService.getIconUrl(tracker) }}
-                                containerStyle={styles.avatar}
-                            />
-                        </TouchableOpacity>
-                    );
-                })}
+                <View style={styles.trackersContainer}>
+                    {trackers.map(tracker => {
+                        return (
+                            <TouchableOpacity key={tracker.id} onPress={() => onItemPress(tracker)}>
+                                <Avatar
+                                    rounded
+                                    size="large"
+                                    placeholderStyle={{ backgroundColor: vars.COLOR_GRAY_L2 }}
+                                    source={{ uri: TrackerService.getIconUrl(tracker) }}
+                                    containerStyle={styles.avatar}
+                                />
+                            </TouchableOpacity>
+                        );
+                    })}
+                </View>
             </View>
         </View>
     );
@@ -103,12 +106,24 @@ const styles = StyleSheet.create({
         width: Dimensions.get('window').width,
     },
     bottomPanel: {
-        backgroundColor: vars.COLOR_GRAY_LIGHTEST,
-        padding: 20
+        backgroundColor: 'rgba(255,255,255,0.75)',
+        paddingTop: vars.PAD_NORMAL,
+        paddingStart: vars.PAD_NORMAL,
+        //margin: vars.PAD_NORMAL,
+        position: 'absolute',
+        bottom: 0,
+        left: 0,
+        right: 0
     },
     avatar: {
+        marginEnd: vars.PAD_NORMAL,
+        marginBottom: vars.PAD_NORMAL,
         padding: vars.PAD_TINY,
         backgroundColor: vars.COLOR_GRAY_L3
+    },
+    trackersContainer: {
+        flexDirection: 'row',
+        flexWrap: 'wrap'
     }
 });
 
