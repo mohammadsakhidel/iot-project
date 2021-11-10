@@ -12,8 +12,6 @@ function TrackerMarker(props) {
 
     const { tracker } = props;
 
-    console.log(tracker);
-
     return (
         <View style={styles.markerContainer}>
             <Image

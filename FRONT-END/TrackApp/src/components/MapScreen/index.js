@@ -1,12 +1,14 @@
-import React, { Component, useEffect, useState } from 'react';
-import { View, Dimensions, StyleSheet, Text } from 'react-native';
+import React, { Component, useEffect, useState, useRef } from 'react';
+import { View, Dimensions, StyleSheet, Text, Image } from 'react-native';
 import { Avatar } from 'react-native-elements';
-import MapView, { Marker } from 'react-native-maps';
+import MapView, { Marker, Callout } from 'react-native-maps';
 import { connect } from 'react-redux';
 import * as vars from '../../styles/vars';
 import TrackerService from '../../api/services/tracker-service';
 import { TouchableHighlight, TouchableOpacity } from 'react-native-gesture-handler';
 import TrackerMarker from '../TrackerMarker';
+import Icon from '../Icon';
+import TrackerCallout from '../TrackerCallout';
 
 const MapScreen = (props) => {
 
@@ -23,27 +25,30 @@ const MapScreen = (props) => {
 
     // Refs:
 
-    const mapRef = React.createRef(null);
+    const mapRef = useRef(null);
+    const selectedMarkerRef = useRef(null);
 
     // Effects:
 
+    // New Location Update Came Effect:
     useEffect(() => {
-        setTimeout(() => {
-
-        }, 500);
-
-
         if (mapRef.current) {
             const markers = Object.keys(locationUpdates);
-            if (!selectedItem) {
-                mapRef.current.fitToSuppliedMarkers(markers);
-            } else {
-                console.log(selectedItem);
+            mapRef.current.fitToSuppliedMarkers(markers);
+        }
+    }, [locationUpdates]);
+
+    // Selected Tracker Changed Effect:
+    useEffect(() => {
+        if (mapRef.current) {
+            if (selectedItem) {
                 mapRef.current.fitToSuppliedMarkers([selectedItem.id]);
+                if (selectedMarkerRef.current) {
+                    selectedMarkerRef.current.showCallout();
+                }
             }
         }
-
-    }, [locationUpdates, selectedItem]);
+    }, [selectedItem]);
 
     // Event Handlers:
 
@@ -51,25 +56,43 @@ const MapScreen = (props) => {
         setSelectedItem({ ...tracker });
     };
 
+    const onMarkerPress = (id) => {
+
+    };
+
+
     // Render:
 
     return (
         <View style={styles.container}>
             <MapView
+                showsCompass={true}
+                loadingEnabled={true}
                 style={styles.map}
                 ref={mapRef}
-                maxZoomLevel={15}
+                maxZoomLevel={18}
             >
                 {
                     Object.keys(locationUpdates).map(key => {
                         let data = locationUpdates[key];
+                        let tracker = trackers.find((t) => t.id === key);
+
                         return (
                             <Marker
                                 key={key}
                                 identifier={key}
                                 coordinate={{ latitude: data.latitude, longitude: data.longitude }}
+                                onPress={() => onMarkerPress(key)}
+                                ref={(ref) => {
+                                    if (selectedItem && selectedItem.id == key) {
+                                        selectedMarkerRef.current = ref;
+                                    }
+                                }}
                             >
-                                <TrackerMarker tracker={trackers.find((t) => t.id === key)} />
+                                <TrackerMarker tracker={tracker} />
+                                <Callout style={styles.callout}>
+                                    <TrackerCallout tracker={tracker} locationData={data} />
+                                </Callout>
                             </Marker>
                         );
                     })
@@ -85,7 +108,7 @@ const MapScreen = (props) => {
                                     size="large"
                                     placeholderStyle={{ backgroundColor: vars.COLOR_GRAY_L2 }}
                                     source={{ uri: TrackerService.getIconUrl(tracker) }}
-                                    containerStyle={styles.avatar}
+                                    containerStyle={(selectedItem && selectedItem.id == tracker.id ? styles.avatarSelected : styles.avatar)}
                                 />
                             </TouchableOpacity>
                         );
@@ -121,9 +144,18 @@ const styles = StyleSheet.create({
         padding: vars.PAD_TINY,
         backgroundColor: vars.COLOR_GRAY_L3
     },
+    avatarSelected: {
+        marginEnd: vars.PAD_NORMAL,
+        marginBottom: vars.PAD_NORMAL,
+        padding: vars.PAD_TINY,
+        backgroundColor: vars.COLOR_PRIMARY_L1
+    },
     trackersContainer: {
         flexDirection: 'row',
         flexWrap: 'wrap'
+    },
+    callout: {
+        minWidth: 200
     }
 });
 
