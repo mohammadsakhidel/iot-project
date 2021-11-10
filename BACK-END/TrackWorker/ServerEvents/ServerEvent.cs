@@ -24,7 +24,8 @@ namespace TrackWorker.ServerEvents {
 
             var tasks = new List<Task>();
             clients.ForEach(client => {
-                tasks.Add(client.Socket.Send(@event.Serialize()));
+                if (client.Socket.IsAvailable)
+                    tasks.Add(client.Socket.Send(@event.Serialize()));
             });
             Task.WaitAll(tasks.ToArray());
 

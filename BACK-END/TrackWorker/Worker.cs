@@ -61,6 +61,7 @@ namespace TrackWorker {
                 // Listener for User connections:
                 _userListener.StartListening(_appSettings.SocketOptions.UserListener.PortNumber);
                 _userListener.OnDataReceived += UserListener_OnDataReceivedAsync;
+                _userListener.OnClientDisconnected += UserListener_OnClientDisconnected;
                 #endregion
 
                 #region Start Queue Listeners:
@@ -178,6 +179,16 @@ namespace TrackWorker {
 
             } catch (Exception ex) {
                 _logger.LogError(ex.LogMessage(nameof(UserListener_OnDataReceivedAsync)));
+            }
+        }
+
+        private void UserListener_OnClientDisconnected(object sender, Events.WebSocketClientDisconnectedEventArgs e) {
+            try {
+
+                UserConnections.Remove(e.Client);
+
+            } catch (Exception ex) {
+                _logger.LogError(ex.LogMessage(nameof(UserListener_OnClientDisconnected)));
             }
         }
         #endregion

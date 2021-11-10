@@ -30,5 +30,22 @@ namespace TrackWorker.Shared {
             return _users.GetValueOrDefault(userId);
         }
 
+        public static void Remove(WebSocketClient client) {
+
+            var userId = string.Empty;
+
+            foreach (var user in _users) {
+                foreach (var connection in user.Value) {
+                    if (connection.Client.Socket == client.Socket)
+                        userId = user.Key;
+                }
+            }
+
+            if (!string.IsNullOrEmpty(userId)) {
+                var clientToRemove = _users[userId].SingleOrDefault(c => c.Client.Socket == client.Socket);
+                
+                _users[userId].Remove(clientToRemove);
+            }
+        }
     }
 }
