@@ -5,6 +5,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using TrackWorker.Helpers;
 
 namespace TrackWorker.ServerEvents {
     public abstract class ServerEvent {
@@ -17,6 +18,16 @@ namespace TrackWorker.ServerEvents {
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase
             });
             return jsonString;
+        }
+
+        public static void SendToAll(ServerEvent @event, List<WebSocketClient> clients) {
+
+            var tasks = new List<Task>();
+            clients.ForEach(client => {
+                tasks.Add(client.Socket.Send(@event.Serialize()));
+            });
+            Task.WaitAll(tasks.ToArray());
+
         }
 
     }

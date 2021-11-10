@@ -9,15 +9,15 @@ using TrackWorker.Helpers;
 namespace TrackWorker.Shared {
     public static class UserConnections {
         private static object _lock = new object();
-        private static Dictionary<string, UserConnection> _users = new Dictionary<string, UserConnection>();
+        private static Dictionary<string, List<UserConnection>> _users = new Dictionary<string, List<UserConnection>>();
 
         public static void Add(string userId, UserConnection connection) {
             lock (_lock) {
                 if (!_users.ContainsKey(userId))
-                    _users.Add(userId, connection);
+                    _users.Add(userId, new List<UserConnection> { connection });
                 else {
-                    if (_users[userId].Client.Socket != connection.Client.Socket)
-                        _users[userId] = connection;
+                    if (!_users[userId].Any(c => c.Client.Socket == connection.Client.Socket))
+                        _users[userId].Add(connection);
                 }
             }
         }
@@ -26,7 +26,7 @@ namespace TrackWorker.Shared {
             return _users.ContainsKey(userId);
         }
 
-        public static UserConnection Get(string userId) {
+        public static List<UserConnection> Get(string userId) {
             return _users.GetValueOrDefault(userId);
         }
 

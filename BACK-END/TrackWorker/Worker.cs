@@ -14,6 +14,8 @@ using TrackWorker.Processors.Queues;
 using TrackWorker.Shared;
 using TrackWorker.Services;
 using TrackWorker.ServerEvents;
+using System.Linq;
+using System.Collections.Generic;
 
 namespace TrackWorker {
     public class Worker : BackgroundService {
@@ -109,14 +111,14 @@ namespace TrackWorker {
                         // Notify connected users:
                         foreach (var user in tracker.Users) {
                             if (UserConnections.Contains(user.UserId)) {
-                                var client = UserConnections.Get(user.UserId).Client;
+                                var clients = UserConnections.Get(user.UserId).Select(c => c.Client).ToList();
                                 var @event = new StatusChangedServerEvent(
                                     tracker.Id, 
                                     TrackerStatusValues.OFFLINE, 
                                     tracker.LastConnection.HasValue ? tracker.LastConnection.Value.ToString(SharedValues.DATETIME_FORMAT) : string.Empty
                                 );
 
-                                await client.Socket.Send(@event.Serialize());
+                                ServerEvent.SendToAll(@event, clients);
                             }
                         }
 

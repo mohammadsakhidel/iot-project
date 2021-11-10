@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using TrackLib.Constants;
 using TrackLib.Utils;
 using TrackWorker.Helpers;
@@ -53,7 +56,7 @@ namespace TrackWorker.Processors.Middlewares.Messages {
             // Send location updated server event to all listening users:
             tracker.Users.ForEach(user => {
                 if (UserConnections.Contains(user.UserId)) {
-                    var client = UserConnections.Get(user.UserId).Client;
+                    var clients = UserConnections.Get(user.UserId).Select(c => c.Client).ToList();
                     var @event = new LocationUpdatedServerEvent(tracker.Id) {
                         Latitude = reportData.Latitude,
                         Longitude = reportData.Longitude,
@@ -63,7 +66,7 @@ namespace TrackWorker.Processors.Middlewares.Messages {
                         Battery = reportData.Power
                     };
 
-                    client.Socket.Send(@event.Serialize()).Wait();
+                    ServerEvent.SendToAll(@event, clients);
                 }
             });
             #endregion
