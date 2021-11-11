@@ -1,7 +1,7 @@
 import React, { Component, useEffect, useState, useRef } from 'react';
 import { View, Dimensions, StyleSheet, Text, Image } from 'react-native';
 import { Avatar } from 'react-native-elements';
-import MapView, { Marker, Callout } from 'react-native-maps';
+import MapView, { Marker, Callout, AnimatedRegion } from 'react-native-maps';
 import { connect } from 'react-redux';
 import * as vars from '../../styles/vars';
 import TrackerService from '../../api/services/tracker-service';
@@ -10,11 +10,16 @@ import TrackerMarker from '../TrackerMarker';
 import Icon from '../Icon';
 import TrackerCallout from '../TrackerCallout';
 
+const REGION_DELTA = 0.004;
+const ANIM_DELAY = 300;
+
 const MapScreen = (props) => {
 
     // State:
 
-    const [selectedItem, setSelectedItem] = useState(null);
+    const [selectedTracker, setSelectedTracker] = useState(null);
+    const [mapRegion, setMapRegion] = useState(null);
+    const [mapTouched, setMapTouched] = useState(false);
 
     // Props:
 
@@ -32,34 +37,78 @@ const MapScreen = (props) => {
 
     // New Location Update Came Effect:
     useEffect(() => {
-        if (mapRef.current) {
-            const markers = Object.keys(locationUpdates);
-            mapRef.current.fitToSuppliedMarkers(markers);
-        }
-    }, [locationUpdates]);
+        if (locationUpdates) {
 
-    // Selected Tracker Changed Effect:
-    useEffect(() => {
-        if (mapRef.current) {
-            if (selectedItem) {
-                mapRef.current.fitToSuppliedMarkers([selectedItem.id]);
-                if (selectedMarkerRef.current) {
-                    selectedMarkerRef.current.showCallout();
+            // Fit to all supplied markers if not any selected:
+            if (!selectedTracker) {
+                if (!mapTouched) {
+                    const markers = Object.keys(locationUpdates);
+                    mapRef.current?.fitToSuppliedMarkers(markers, {
+                        edgePadding: {
+                            top: vars.PAD_DOUBLE,
+                            left: vars.PAD_DOUBLE,
+                            right: vars.PAD_DOUBLE,
+                            bottom: vars.PAD_DOUBLE
+                        }
+                    });
+                }
+            }
+            // Zoom on the selected tracker on update:
+            else {
+                const locData = locationUpdates[selectedTracker.id];
+                if (locData) {
+                    setMapRegion({
+                        latitude: locData.latitude,
+                        longitude: locData.longitude,
+                        latitudeDelta: REGION_DELTA,
+                        longitudeDelta: REGION_DELTA,
+                    });
+                    mapRef.current?.animateToRegion(mapRegion, ANIM_DELAY);
                 }
             }
         }
-    }, [selectedItem]);
+    }, [locationUpdates]);
+
+    // Map Region Changed Effect:
+    useEffect(() => {
+        if (mapRef.current) {
+            if (mapRef.current && selectedMarkerRef.current) {
+                mapRef.current.animateToRegion(mapRegion, ANIM_DELAY);
+                setTimeout(() => {
+                    selectedMarkerRef.current?.showCallout();
+                }, ANIM_DELAY);
+            }
+        }
+    }, [mapRegion]);
 
     // Event Handlers:
 
     const onItemPress = (tracker) => {
-        setSelectedItem({ ...tracker });
+
+        if (!selectedTracker || selectedTracker.id != tracker.id) {
+            const locData = locationUpdates[tracker.id];
+            const region = locData ? {
+                latitude: Number(locData.latitude),
+                longitude: Number(locData.longitude),
+                latitudeDelta: REGION_DELTA,
+                longitudeDelta: REGION_DELTA
+            } : null;
+            setMapRegion(region);
+            setSelectedTracker({ ...tracker });
+        } else if (tracker.id == selectedTracker.id) {
+            setSelectedTracker(null);
+        }
+
     };
 
-    const onMarkerPress = (id) => {
-
+    const onMapTouch = () => {
+        setMapTouched(true);
     };
 
+    const onMarkerPress = (tracker) => {
+        if (!selectedTracker || selectedTracker.id != tracker.id)
+            setSelectedTracker(tracker);
+    };
 
     // Render:
 
@@ -71,6 +120,7 @@ const MapScreen = (props) => {
                 style={styles.map}
                 ref={mapRef}
                 maxZoomLevel={18}
+                onTouchStart={onMapTouch}
             >
                 {
                     Object.keys(locationUpdates).map(key => {
@@ -82,9 +132,9 @@ const MapScreen = (props) => {
                                 key={key}
                                 identifier={key}
                                 coordinate={{ latitude: data.latitude, longitude: data.longitude }}
-                                onPress={() => onMarkerPress(key)}
+                                onPress={() => onMarkerPress(tracker)}
                                 ref={(ref) => {
-                                    if (selectedItem && selectedItem.id == key) {
+                                    if (selectedTracker && selectedTracker.id == key) {
                                         selectedMarkerRef.current = ref;
                                     }
                                 }}
@@ -102,15 +152,23 @@ const MapScreen = (props) => {
                 <View style={styles.trackersContainer}>
                     {trackers.map(tracker => {
                         return (
-                            <TouchableOpacity key={tracker.id} onPress={() => onItemPress(tracker)}>
-                                <Avatar
-                                    rounded
-                                    size="large"
-                                    placeholderStyle={{ backgroundColor: vars.COLOR_GRAY_L2 }}
-                                    source={{ uri: TrackerService.getIconUrl(tracker) }}
-                                    containerStyle={(selectedItem && selectedItem.id == tracker.id ? styles.avatarSelected : styles.avatar)}
-                                />
-                            </TouchableOpacity>
+                            <View key={tracker.id}
+                                style={(locationUpdates[tracker.id] ? styles.avatarEnabled : styles.avatarDisabled)}>
+
+                                <TouchableOpacity onPress={() => onItemPress(tracker)}
+                                    disabled={!locationUpdates[tracker.id]}>
+
+                                    <Avatar
+                                        rounded
+                                        size="large"
+                                        placeholderStyle={{ backgroundColor: vars.COLOR_GRAY_L2 }}
+                                        source={{ uri: TrackerService.getIconUrl(tracker) }}
+                                        containerStyle={(selectedTracker && selectedTracker.id == tracker.id ? styles.avatarSelected : styles.avatar)}
+                                    />
+
+                                </TouchableOpacity>
+
+                            </View>
                         );
                     })}
                 </View>
@@ -147,8 +205,14 @@ const styles = StyleSheet.create({
     avatarSelected: {
         marginEnd: vars.PAD_NORMAL,
         marginBottom: vars.PAD_NORMAL,
-        padding: vars.PAD_TINY,
+        padding: vars.PAD_SMALL,
         backgroundColor: vars.COLOR_PRIMARY_L1
+    },
+    avatarEnabled: {
+        opacity: 1
+    },
+    avatarDisabled: {
+        opacity: 0.2
     },
     trackersContainer: {
         flexDirection: 'row',
