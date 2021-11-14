@@ -258,6 +258,9 @@
   <data name="SerialNumber" xml:space="preserve">
     <value>Serial Number</value>
   </data>
+  <data name="ShowOnMap" xml:space="preserve">
+    <value>Show On Map</value>
+  </data>
   <data name="State" xml:space="preserve">
     <value>State</value>
   </data>

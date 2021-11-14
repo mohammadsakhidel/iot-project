@@ -91,6 +91,7 @@ namespace TrackAPI.Services {
             tracker.DisplayName = model.DisplayName;
             tracker.SerialNumber = model.SerialNumber;
             tracker.DefaultIcon = model.DefaultIcon;
+            tracker.ShowOnMap = model.ShowOnMap;
             if (!string.IsNullOrEmpty(model.IconImageId))
                 tracker.IconImageId = model.IconImageId;
 

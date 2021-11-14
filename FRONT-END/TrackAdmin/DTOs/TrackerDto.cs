@@ -21,6 +21,7 @@ namespace TrackAdmin.DTOs {
         public string CreationTime { get; set; }
         public string LastConnection { get; set; }
         public string LastConnectedServer { get; set; }
+        public bool ShowOnMap { get; set; }
 
         // Computed Props:
         public string Desc => $"Tracker ID: {Id}\tCommand Set: {CommandSet}\t" +

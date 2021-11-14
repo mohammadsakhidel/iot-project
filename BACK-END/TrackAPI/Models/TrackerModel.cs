@@ -42,6 +42,7 @@ namespace TrackAPI.Models {
         public DateTime? LastConnection { get; set; }
         public string LastConnectedServer { get; set; }
         public string Configs { get; set; }
+        public bool ShowOnMap { get; set; }
 
 
         // Additional Properties:

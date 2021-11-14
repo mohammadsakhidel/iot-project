@@ -150,7 +150,7 @@ const MapScreen = (props) => {
             </MapView>
             <View style={styles.bottomPanel}>
                 <View style={styles.trackersContainer}>
-                    {trackers.map(tracker => {
+                    {trackers.filter(t => t.showOnMap).map(tracker => {
                         return (
                             <View key={tracker.id}
                                 style={(locationUpdates[tracker.id] ? styles.avatarEnabled : styles.avatarDisabled)}>

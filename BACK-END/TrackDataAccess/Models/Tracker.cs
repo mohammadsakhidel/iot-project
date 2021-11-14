@@ -84,6 +84,9 @@ namespace TrackDataAccess.Models {
         [Column("configs")]
         public string Configs { get; set; }
 
+        [Column("show_on_map")]
+        public bool ShowOnMap { get; set; }
+
         #region Navigation Props:
         public List<TrackerUser> Users { get; set; }
         public List<TrackerPermittedUser> PermittedUsers { get; set; }

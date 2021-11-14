@@ -484,6 +484,15 @@ namespace TrackAdmin.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Show On Map.
+        /// </summary>
+        public static string ShowOnMap {
+            get {
+                return ResourceManager.GetString("ShowOnMap", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to State.
         /// </summary>
         public static string State {

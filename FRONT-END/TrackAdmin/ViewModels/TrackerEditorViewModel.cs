@@ -146,7 +146,8 @@ namespace TrackAdmin.ViewModels {
                     _ = LoadDefaultIconsAsync();
 
                 return defaultIcons;
-            } set {
+            }
+            set {
                 defaultIcons = value;
                 OnPropertyChanged(nameof(DefaultIcons));
             }
@@ -179,6 +180,16 @@ namespace TrackAdmin.ViewModels {
                 OnPropertyChanged(nameof(UserIdInput));
             }
         }
+
+        private bool showOnMap;
+        public bool ShowOnMap {
+            get { return showOnMap; }
+            set {
+                showOnMap = value;
+                OnPropertyChanged(nameof(ShowOnMap));
+            }
+        }
+
         #endregion
 
         #region ----------------------- COMMANDS --------------------
@@ -271,7 +282,8 @@ namespace TrackAdmin.ViewModels {
                     ProductType = ProductType,
                     ProductModel = ProductModel,
                     DefaultIcon = DefaultIcon,
-                    Explanation = Explanation
+                    Explanation = Explanation, 
+                    ShowOnMap = ShowOnMap
                 };
                 (var done, var message) = await _trackerService.CreateAsync(tracker);
                 if (!done)
@@ -305,7 +317,8 @@ namespace TrackAdmin.ViewModels {
                     ProductType = ProductType,
                     ProductModel = ProductModel,
                     DefaultIcon = DefaultIcon,
-                    Explanation = Explanation
+                    Explanation = Explanation,
+                    ShowOnMap = ShowOnMap
                 };
                 (var done, var message) = await _trackerService.UpdateAsync(tracker);
                 if (!done)
@@ -337,6 +350,7 @@ namespace TrackAdmin.ViewModels {
             ProductModel = tracker?.ProductModel;
             DefaultIcon = tracker?.DefaultIcon;
             Explanation = tracker?.Explanation;
+            ShowOnMap = tracker is not null && tracker.ShowOnMap;
         }
 
         private void ValidateRequiredProp(string propName, string propVal) {
