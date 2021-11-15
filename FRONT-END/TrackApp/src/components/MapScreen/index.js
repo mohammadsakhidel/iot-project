@@ -29,7 +29,8 @@ const MapScreen = (props) => {
     const {
         locationUpdates,
         trackers,
-        updateLocation
+        updateLocation,
+        connections
     } = props;
 
     // Refs:
@@ -148,8 +149,9 @@ const MapScreen = (props) => {
             >
                 {
                     Object.keys(locationUpdates).map(key => {
-                        let data = locationUpdates[key];
-                        let tracker = trackers.find((t) => t.id === key);
+                        const data = locationUpdates[key];
+                        const tracker = trackers.find((t) => t.id === key);
+                        const connection = connections[tracker.id];
 
                         return (
                             <Marker
@@ -163,7 +165,7 @@ const MapScreen = (props) => {
                                     }
                                 }}
                             >
-                                <TrackerMarker tracker={tracker} />
+                                <TrackerMarker tracker={tracker} status={(connection ? connection.status : 'offline')} />
                                 <Callout style={styles.callout}>
                                     <TrackerCallout tracker={tracker} locationData={data} />
                                 </Callout>
@@ -249,7 +251,8 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = (state) => ({
     locationUpdates: state.locationUpdates,
-    trackers: state.trackers
+    trackers: state.trackers,
+    connections: state.connections
 });
 
 const mapDispatchToProps = (dispatch) => ({

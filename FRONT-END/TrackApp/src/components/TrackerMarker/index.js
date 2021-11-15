@@ -4,13 +4,19 @@ import { Avatar } from 'react-native-elements';
 import * as vars from '../../styles/vars';
 import TrackerService from '../../api/services/tracker-service';
 
-const marker = require('../../styles/images/marker.png');
+const images = {
+    marker: require('../../styles/images/marker.png'),
+    markerOffline: require('../../styles/images/marker-offline.png')
+}
+
 const markerWidth = 55;
 const markerHeight = 55;
 
 function TrackerMarker(props) {
 
-    const { tracker } = props;
+    const { tracker, status } = props;
+
+    const marker = (status === "online" ? images.marker : images.markerOffline);
 
     return (
         <View style={styles.markerContainer}>
