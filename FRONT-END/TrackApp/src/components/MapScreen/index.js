@@ -40,11 +40,10 @@ const MapScreen = (props) => {
 
     // Effects:
 
-    // Set last location report if no update on component did mount:
+    // Set last location report from storage on component did mount:
     useEffect(() => {
         (async function () {
             trackers.forEach(async tracker => {
-
                 if (!tracker.showOnMap)
                     return;
 
@@ -53,9 +52,10 @@ const MapScreen = (props) => {
                     return;
 
                 if (!locationUpdates || !locationUpdates[tracker.id]) {
-                    updateLocation(tracker.id, trackerInfo.lastLocation);
+                    setTimeout(() => {
+                        updateLocation(tracker.id, trackerInfo.lastLocation);
+                    }, 200);
                 }
-
             });
         })();
     }, []);
@@ -135,6 +135,20 @@ const MapScreen = (props) => {
             setSelectedTracker(tracker);
     };
 
+    // Functions:
+
+    const isTrackerOnline = (trackerId, trackers, connections) => {
+
+        if (!trackers || !connections)
+            return false;
+
+        const con = connections ? connections[trackerId] : null;
+        const tracker = trackers ? trackers.find(t => t.id == trackerId) : null;
+        const isonline = (con && con.status === "online") || (!con && tracker && tracker.status === "online");
+
+        return isonline;
+    };
+
     // Render:
 
     return (
@@ -151,7 +165,7 @@ const MapScreen = (props) => {
                     Object.keys(locationUpdates).map(key => {
                         const data = locationUpdates[key];
                         const tracker = trackers.find((t) => t.id === key);
-                        const connection = connections[tracker.id];
+                        const isOnline = isTrackerOnline(tracker.id, trackers, connections);
 
                         return (
                             <Marker
@@ -165,9 +179,13 @@ const MapScreen = (props) => {
                                     }
                                 }}
                             >
-                                <TrackerMarker tracker={tracker} status={(connection ? connection.status : 'offline')} />
+                                <TrackerMarker tracker={tracker} status={(isOnline ? 'online' : 'offline')} />
                                 <Callout style={styles.callout}>
-                                    <TrackerCallout tracker={tracker} locationData={data} />
+                                    <TrackerCallout
+                                        tracker={tracker}
+                                        locationData={data}
+                                        status={(isOnline ? 'online' : 'offline')}
+                                    />
                                 </Callout>
                             </Marker>
                         );
