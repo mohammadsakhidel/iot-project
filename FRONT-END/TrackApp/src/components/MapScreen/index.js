@@ -9,6 +9,9 @@ import { TouchableHighlight, TouchableOpacity } from 'react-native-gesture-handl
 import TrackerMarker from '../TrackerMarker';
 import Icon from '../Icon';
 import TrackerCallout from '../TrackerCallout';
+import { getTrackerInfoAsync } from '../../utils/storage-util';
+import { updateLocation } from '../../redux/actions';
+import Location from '../../helpers/location';
 
 const REGION_DELTA = 0.004;
 const ANIM_DELAY = 300;
@@ -25,7 +28,8 @@ const MapScreen = (props) => {
 
     const {
         locationUpdates,
-        trackers
+        trackers,
+        updateLocation
     } = props;
 
     // Refs:
@@ -34,6 +38,26 @@ const MapScreen = (props) => {
     const selectedMarkerRef = useRef(null);
 
     // Effects:
+
+    // Set last location report if no update on component did mount:
+    useEffect(() => {
+        (async function () {
+            trackers.forEach(async tracker => {
+
+                if (!tracker.showOnMap)
+                    return;
+
+                const trackerInfo = await getTrackerInfoAsync(tracker.id);
+                if (!trackerInfo || !trackerInfo.lastLocation)
+                    return;
+
+                if (!locationUpdates || !locationUpdates[tracker.id]) {
+                    updateLocation(tracker.id, trackerInfo.lastLocation);
+                }
+
+            });
+        })();
+    }, []);
 
     // New Location Update Came Effect:
     useEffect(() => {
@@ -228,4 +252,17 @@ const mapStateToProps = (state) => ({
     trackers: state.trackers
 });
 
-export default connect(mapStateToProps)(MapScreen);
+const mapDispatchToProps = (dispatch) => ({
+    updateLocation: (trackerId, loc) => {
+
+        const updateLocationEvent = {
+            data: Location.toArray(loc),
+            source: trackerId
+        };
+
+        const action = updateLocation(updateLocationEvent);
+        dispatch(action);
+    }
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(MapScreen);

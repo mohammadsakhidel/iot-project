@@ -3,7 +3,6 @@ import { StyleSheet } from 'react-native';
 import FlashMessage, { getErrorMessage } from './src/components/FlashMessageWrapper';
 import { Ionicons } from '@expo/vector-icons';
 import * as Font from 'expo-font';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import AppLoading from 'expo-app-loading';
 import { View, LogBox } from 'react-native';
 import { Provider } from 'react-redux';
@@ -13,6 +12,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import Entry from './src/components/Entry';
 import RenderError from './src/components/RenderError';
 import { showError } from './src/components/FlashMessageWrapper';
+import { getUserAsync, removeUserAsync, saveUserAsync } from './src/utils/storage-util';
 
 const customFonts = {
   ContentFont: require('@expo-google-fonts/roboto/Roboto_400Regular.ttf'),
@@ -106,7 +106,7 @@ export default class App extends Component {
     try {
 
       // Save in storage:
-      AsyncStorage.setItem('@user', JSON.stringify(appUser)).then(() => {
+      saveUserAsync(appUser).then(() => {
         try {
 
           // Update state:
@@ -127,7 +127,7 @@ export default class App extends Component {
       if (this.state.user != null) {
 
         // Remvoe from memory:
-        AsyncStorage.removeItem('@user').then(() => {
+        removeUserAsync().then(() => {
 
           try {
             // Updaet state:
@@ -145,8 +145,7 @@ export default class App extends Component {
   }
 
   async loadLoggedInUserAsync() {
-    const jsonValue = await AsyncStorage.getItem('@user');
-    const appUser = jsonValue != null ? JSON.parse(jsonValue) : null;
+    const appUser = await getUserAsync();
     this.setState({ user: appUser });
   }
 

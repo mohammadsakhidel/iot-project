@@ -10,6 +10,8 @@ import { showError } from '../FlashMessageWrapper';
 import EventsService from '../../api/services/events-service';
 import { connect } from 'react-redux';
 import * as Actions from '../../redux/actions';
+import { getTrackerInfoAsync, saveTrackerInfoAsync } from '../../utils/storage-util';
+import Location from '../../helpers/location';
 
 const Drawer = createDrawerNavigator();
 
@@ -105,6 +107,7 @@ class HomeContainer extends Component {
   wsOnMessage(e) {
     try {
       const event = JSON.parse(e.data);
+      const trackerId = event.source;
 
       const {
         changeTrackerStatus,
@@ -117,7 +120,25 @@ class HomeContainer extends Component {
           break;
 
         case EventNames.LOCATION_UPDATED:
+
+          // Save last location report in storage:
+          getTrackerInfoAsync(trackerId).then(trackerInfo => {
+            let newTrackerInfo = trackerInfo ?? {};
+            newTrackerInfo['lastLocation'] = new Location(
+              event.data[0],
+              event.data[1],
+              event.data[2],
+              event.data[3],
+              event.data[4],
+              event.data[5]
+            );
+
+            saveTrackerInfoAsync(trackerId, newTrackerInfo);
+          });
+
+          // Update Redux Store:
           updateTrackerLocation(event);
+
           break;
 
         default:

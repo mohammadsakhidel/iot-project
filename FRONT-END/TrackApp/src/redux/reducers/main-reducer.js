@@ -1,4 +1,5 @@
 import * as Actions from '../actions';
+import Location from '../../helpers/location';
 
 const initialState = {
     trackers: [],
@@ -49,14 +50,14 @@ const mainReducer = (state = initialState, action) => {
         case Actions.ACTION_UPDATE_LOCATION:
 
             const locUpdates = state.locationUpdates;
-            const loc = {
-                latitude: Number(event.data[0]),
-                longitude: Number(event.data[1]),
-                altitude: Number(event.data[2]),
-                speed: Number(event.data[3]),
-                direction: Number(event.data[4]),
-                battery: Number(event.data[5])
-            };
+            const loc = new Location(
+                event.data[0],
+                event.data[1],
+                event.data[2],
+                event.data[3],
+                event.data[4],
+                event.data[5]
+            );
             locUpdates[event.source] = loc;
 
             // Return new state:
