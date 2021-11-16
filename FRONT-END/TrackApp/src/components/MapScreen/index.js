@@ -1,5 +1,5 @@
 import React, { Component, useEffect, useState, useRef } from 'react';
-import { View, Dimensions, StyleSheet, Text, Image } from 'react-native';
+import { View, Dimensions, StyleSheet, Text, Image, Alert } from 'react-native';
 import { Avatar } from 'react-native-elements';
 import MapView, { Marker, Callout, AnimatedRegion } from 'react-native-maps';
 import { connect } from 'react-redux';
@@ -12,6 +12,8 @@ import TrackerCallout from '../TrackerCallout';
 import { getTrackerInfoAsync } from '../../utils/storage-util';
 import { updateLocation } from '../../redux/actions';
 import Location from '../../helpers/location';
+import MapBottomPanel from '../MapBottomPanel';
+import MapToolBox from '../MapToolBox';
 
 const REGION_DELTA = 0.004;
 const ANIM_DELAY = 300;
@@ -135,6 +137,28 @@ const MapScreen = (props) => {
             setSelectedTracker(tracker);
     };
 
+    const onRouteButtonPress = () => {
+        Alert.alert('route');
+    };
+
+    const onPolyganButtonPress = () => {
+        Alert.alert('polygan');
+    };
+
+    const onFitAllPress = () => {
+        if (mapRef.current) {
+            const markers = Object.keys(locationUpdates);
+            mapRef.current?.fitToSuppliedMarkers(markers, {
+                edgePadding: {
+                    top: vars.PAD_DOUBLE,
+                    left: vars.PAD_DOUBLE,
+                    right: vars.PAD_DOUBLE,
+                    bottom: vars.PAD_DOUBLE
+                }
+            });
+        }
+    };
+
     // Functions:
 
     const isTrackerOnline = (trackerId, trackers, connections) => {
@@ -192,31 +216,21 @@ const MapScreen = (props) => {
                     })
                 }
             </MapView>
-            <View style={styles.bottomPanel}>
-                <View style={styles.trackersContainer}>
-                    {trackers.filter(t => t.showOnMap).map(tracker => {
-                        return (
-                            <View key={tracker.id}
-                                style={(locationUpdates[tracker.id] ? styles.avatarEnabled : styles.avatarDisabled)}>
 
-                                <TouchableOpacity onPress={() => onItemPress(tracker)}
-                                    disabled={!locationUpdates[tracker.id]}>
+            <MapBottomPanel
+                containerStyle={styles.bottomPanel}
+                locationUpdates={locationUpdates}
+                trackers={trackers}
+                selectedTracker={selectedTracker}
+                onItemPress={onItemPress}
+            />
 
-                                    <Avatar
-                                        rounded
-                                        size="large"
-                                        placeholderStyle={{ backgroundColor: vars.COLOR_GRAY_L2 }}
-                                        source={{ uri: TrackerService.getIconUrl(tracker) }}
-                                        containerStyle={(selectedTracker && selectedTracker.id == tracker.id ? styles.avatarSelected : styles.avatar)}
-                                    />
+            <MapToolBox
+                onRoutePress={onRouteButtonPress}
+                onPolyganPress={onPolyganButtonPress}
+                onFitAllPress={onFitAllPress}
+            />
 
-                                </TouchableOpacity>
-
-                            </View>
-                        );
-                    })}
-                </View>
-            </View>
         </View>
     );
 
@@ -239,28 +253,6 @@ const styles = StyleSheet.create({
         bottom: 0,
         left: 0,
         right: 0
-    },
-    avatar: {
-        marginEnd: vars.PAD_NORMAL,
-        marginBottom: vars.PAD_NORMAL,
-        padding: vars.PAD_TINY,
-        backgroundColor: vars.COLOR_GRAY_L3
-    },
-    avatarSelected: {
-        marginEnd: vars.PAD_NORMAL,
-        marginBottom: vars.PAD_NORMAL,
-        padding: vars.PAD_SMALL,
-        backgroundColor: vars.COLOR_PRIMARY_L1
-    },
-    avatarEnabled: {
-        opacity: 1
-    },
-    avatarDisabled: {
-        opacity: 0.2
-    },
-    trackersContainer: {
-        flexDirection: 'row',
-        flexWrap: 'wrap'
     },
     callout: {
         minWidth: 200

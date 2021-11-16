@@ -1,15 +1,17 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import PropTypes from 'prop-types';
 import * as vars from '../../styles/vars';
 import { Strings } from '../../i18n/strings';
+import Text from '../Text';
 
 function TrackerCallout(props) {
 
     const {
         tracker,
         locationData,
-        status
+        status,
+        battery
     } = props;
 
     const isOnline = status == 'online';
@@ -31,6 +33,20 @@ function TrackerCallout(props) {
                 <View style={styles.rowValueContainer}>
                     <Text style={styles.rowValue}>
                         {(isOnline ? locationData.speed : '-')}
+                    </Text>
+                </View>
+            </View>
+
+            {/* Battery */}
+            <View style={styles.row}>
+                <View style={styles.rowTitleContainer}>
+                    <Text style={styles.rowTitle}>
+                        {Strings.Battery}
+                    </Text>
+                </View>
+                <View style={styles.rowValueContainer}>
+                    <Text style={styles.rowValue}>
+                    {(locationData.battery ? `%${locationData.battery}` : '-')}
                     </Text>
                 </View>
             </View>
