@@ -1,19 +1,16 @@
-import React, { Component, useEffect, useState, useRef } from 'react';
-import { View, Dimensions, StyleSheet, Text, Image, Alert } from 'react-native';
-import { Avatar } from 'react-native-elements';
-import MapView, { Marker, Callout, AnimatedRegion } from 'react-native-maps';
+import React, { useEffect, useState, useRef } from 'react';
+import { View, Dimensions, StyleSheet, Alert } from 'react-native';
+import MapView, { Marker, Callout } from 'react-native-maps';
 import { connect } from 'react-redux';
 import * as vars from '../../styles/vars';
-import TrackerService from '../../api/services/tracker-service';
-import { TouchableHighlight, TouchableOpacity } from 'react-native-gesture-handler';
 import TrackerMarker from '../TrackerMarker';
-import Icon from '../Icon';
 import TrackerCallout from '../TrackerCallout';
 import { getTrackerInfoAsync } from '../../utils/storage-util';
 import { updateLocation } from '../../redux/actions';
 import Location from '../../helpers/location';
 import MapBottomPanel from '../MapBottomPanel';
 import MapToolBox from '../MapToolBox';
+import Modal from '../Modal';
 
 const REGION_DELTA = 0.004;
 const ANIM_DELAY = 300;
@@ -25,6 +22,9 @@ const MapScreen = (props) => {
     const [selectedTracker, setSelectedTracker] = useState(null);
     const [mapRegion, setMapRegion] = useState(null);
     const [mapTouched, setMapTouched] = useState(false);
+    const [routeVisible, setRouteVisible] = useState(false);
+    const [routeConfig, setRouteConfig] = useState({ beginDate: null, endDate: null });
+    const [routeConfigVisible, setRouteConfigVisible] = useState(false);
 
     // Props:
 
@@ -108,6 +108,18 @@ const MapScreen = (props) => {
         }
     }, [mapRegion]);
 
+    // Toggle route visibility effect:
+    useEffect(() => {
+        if (routeVisible) {
+            setRouteConfigVisible(true);
+        } else {
+            setRouteConfig({
+                beginDate: null,
+                endDate: null
+            });
+        }
+    }, [routeVisible]);
+
     // Event Handlers:
 
     const onItemPress = (tracker) => {
@@ -138,7 +150,7 @@ const MapScreen = (props) => {
     };
 
     const onRouteButtonPress = () => {
-        Alert.alert('route');
+        setRouteVisible(!routeVisible);
     };
 
     const onPolyganButtonPress = () => {
@@ -217,6 +229,8 @@ const MapScreen = (props) => {
                 }
             </MapView>
 
+            {/* Bottom Panel */}
+
             <MapBottomPanel
                 containerStyle={styles.bottomPanel}
                 locationUpdates={locationUpdates}
@@ -225,11 +239,26 @@ const MapScreen = (props) => {
                 onItemPress={onItemPress}
             />
 
+            {/* Tool Box */}
+
             <MapToolBox
                 onRoutePress={onRouteButtonPress}
                 onPolyganPress={onPolyganButtonPress}
                 onFitAllPress={onFitAllPress}
+                routeSelected={routeVisible}
             />
+
+            {/* Route Config Modal */}
+
+            <Modal
+                visible={routeConfigVisible}
+                title="Route Config"
+                onConfirmPress={() => { }}
+            >
+
+
+            </Modal>
+
 
         </View>
     );
@@ -248,7 +277,6 @@ const styles = StyleSheet.create({
         backgroundColor: 'rgba(255,255,255,0.75)',
         paddingTop: vars.PAD_NORMAL,
         paddingStart: vars.PAD_NORMAL,
-        //margin: vars.PAD_NORMAL,
         position: 'absolute',
         bottom: 0,
         left: 0,

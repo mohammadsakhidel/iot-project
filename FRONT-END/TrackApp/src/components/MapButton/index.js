@@ -10,7 +10,8 @@ function MapButton(props) {
         first,
         last,
         icon,
-        onPress
+        onPress,
+        selected
     } = props;
 
     return (
@@ -18,7 +19,8 @@ function MapButton(props) {
             style={[
                 styles.container,
                 (first ? styles.first : null),
-                (last ? styles.last : null)
+                (last ? styles.last : null),
+                (selected ? styles.selected : null)
             ]}
             underlayColor={vars.COLOR_GRAY_L3}
             onPress={onPress}>
@@ -44,6 +46,9 @@ const styles = StyleSheet.create({
         borderBottomStartRadius: 10,
         borderBottomEndRadius: 10,
         borderBottomWidth: 0
+    },
+    selected: {
+        backgroundColor: vars.COLOR_PRIMARY
     }
 });
 
@@ -51,7 +56,8 @@ MapButton.propTypes = {
     icon: PropTypes.element.isRequired,
     first: PropTypes.bool,
     last: PropTypes.bool,
-    onPress: PropTypes.func
+    onPress: PropTypes.func,
+    selected: PropTypes.bool
 };
 
 export default MapButton;

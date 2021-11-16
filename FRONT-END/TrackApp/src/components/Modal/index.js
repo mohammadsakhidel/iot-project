@@ -5,7 +5,8 @@ import { Overlay } from 'react-native-elements';
 import * as vars from '../../styles/vars';
 import * as globalStyles from '../../styles/global-styles';
 import PrimaryButton from '../PrimaryButton';
-import {Strings} from '../../i18n/strings';
+import { Strings } from '../../i18n/strings';
+import PropTypes from 'prop-types';
 
 export default function Modal(props) {
 
@@ -57,3 +58,9 @@ const styles = StyleSheet.create({
         marginTop: vars.PAD_NORMAL
     }
 });
+
+Modal.propTypes = {
+    title: PropTypes.string,
+    visible: PropTypes.bool,
+    onConfirmPress: PropTypes.func
+};
