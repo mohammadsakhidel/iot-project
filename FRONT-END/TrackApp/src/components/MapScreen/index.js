@@ -317,7 +317,7 @@ const MapScreen = (props) => {
                 }
 
                 {/* Route Start Marker */}
-                {routeVisible && route && (
+                {routeVisible && route && route.length > 0 && (
                     <Marker
                         coordinate={{ latitude: route[0].latitude, longitude: route[0].longitude }}
                     >
