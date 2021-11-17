@@ -1,6 +1,6 @@
-import React, { useEffect, useState, useRef } from 'react';
-import { View, Dimensions, StyleSheet, Alert } from 'react-native';
-import MapView, { Marker, Callout } from 'react-native-maps';
+import React, { useEffect, useState, useRef, useContext } from 'react';
+import { View, Dimensions, StyleSheet, Alert, Text } from 'react-native';
+import MapView, { Marker, Callout, Polyline } from 'react-native-maps';
 import { connect } from 'react-redux';
 import * as vars from '../../styles/vars';
 import TrackerMarker from '../TrackerMarker';
@@ -13,6 +13,9 @@ import MapToolBox from '../MapToolBox';
 import Modal from '../Modal';
 import { Strings } from '../../i18n/strings';
 import MapRouteConfig from '../MapRouteConfig';
+import { showError, getErrorMessage } from '../FlashMessageWrapper';
+import TrackerService from '../../api/services/tracker-service';
+import AppContext from '../../helpers/app-context';
 
 
 const REGION_DELTA = 0.004;
@@ -20,16 +23,19 @@ const ANIM_DELAY = 300;
 
 const MapScreen = (props) => {
 
-    // State:
+    //#region State:
 
     const [selectedTracker, setSelectedTracker] = useState(null);
     const [mapRegion, setMapRegion] = useState(null);
     const [mapTouched, setMapTouched] = useState(false);
     const [routeVisible, setRouteVisible] = useState(false);
-    const [routeConfig, setRouteConfig] = useState({ begin: null, end: null });
     const [routeConfigVisible, setRouteConfigVisible] = useState(false);
+    const [loadingRoute, setLoadingRoute] = useState(false);
+    const [route, setRoute] = useState(null);
 
-    // Props:
+    //#endregion
+
+    //#region Props:
 
     const {
         locationUpdates,
@@ -38,7 +44,9 @@ const MapScreen = (props) => {
         connections
     } = props;
 
-    // Functions:
+    //#endregion
+
+    //#region Functions:
 
     const isTrackerOnline = (trackerId, trackers, connections) => {
 
@@ -52,12 +60,18 @@ const MapScreen = (props) => {
         return isonline;
     };
 
-    // Refs:
+    //#endregion
 
+    //#region Refs & Contexts:
+
+    const context = useContext(AppContext);
     const mapRef = useRef(null);
     const selectedMarkerRef = useRef(null);
+    const routePeriodRef = useRef(null);
 
-    // Effects:
+    //#endregion
+
+    //#region Effects:
 
     // Set last location report from storage on component did mount:
     useEffect(() => {
@@ -110,6 +124,21 @@ const MapScreen = (props) => {
                     mapRef.current?.animateToRegion(mapRegion, ANIM_DELAY);
                 }
             }
+
+            // Update Route:
+            if (routeVisible && route && selectedTracker) {
+
+                const loc = {
+                    latitude: locationUpdates[selectedTracker.id].latitude,
+                    longitude: locationUpdates[selectedTracker.id].longitude
+                };
+
+                setRoute([
+                    ...route,
+                    loc
+                ]);
+            }
+
         }
     }, [locationUpdates]);
 
@@ -125,43 +154,71 @@ const MapScreen = (props) => {
         }
     }, [mapRegion]);
 
-    // Toggle route visibility effect:
+    // Showing route config dialog effect:
     useEffect(() => {
-        if (routeVisible) {
-            if (selectedTracker) {
-                setRouteConfigVisible(true);
-            } else {
-                Alert.alert(
-                    Strings.SelectADevice,
-                    Strings.NoTrackerSelectedMessage
-                );
-                setRouteVisible(false);
-            }
-        } else {
-            setRouteConfig({
-                begin: null,
-                end: null
-            });
+
+        // Is routeVisible changed to true:
+        if (!routeVisible) {
+            setRoute(null);
+            return;
         }
+
+        // Is a device selected?
+        if (!selectedTracker) {
+            setRouteVisible(false);
+            Alert.alert(
+                Strings.SelectADevice,
+                Strings.NoTrackerSelectedMessage
+            );
+            return;
+        }
+
+        // show route config dialog:
+        setRouteConfigVisible(true);
+
     }, [routeVisible]);
 
-    // Event Handlers:
+    // Loading device route from API effect:
+    useEffect(() => {
+        if (loadingRoute) {
+
+            (async function () {
+                const response = await TrackerService.getRoute(
+                    selectedTracker.id, routePeriodRef.current.value, context.user.token
+                );
+                setRoute(response.data);
+                setRouteConfigVisible(false);
+                setLoadingRoute(false);
+            })();
+
+        }
+    }, [loadingRoute]);
+
+    //#endregion
+
+    //#region Event Handlers:
 
     const onItemPress = (tracker) => {
 
-        if (!selectedTracker || selectedTracker.id != tracker.id) {
-            const locData = locationUpdates[tracker.id];
-            const region = locData ? {
-                latitude: Number(locData.latitude),
-                longitude: Number(locData.longitude),
-                latitudeDelta: REGION_DELTA,
-                longitudeDelta: REGION_DELTA
-            } : null;
-            setMapRegion(region);
-            setSelectedTracker({ ...tracker });
-        } else if (tracker.id == selectedTracker.id) {
+        // Unselect tracker:
+        if (selectedTracker && tracker.id == selectedTracker.id) {
             setSelectedTracker(null);
+            onSelectedTrackerChanged(null);
+            return;
         }
+
+        // Select tracker:
+        const locData = locationUpdates[tracker.id];
+        const region = locData ? {
+            latitude: Number(locData.latitude),
+            longitude: Number(locData.longitude),
+            latitudeDelta: REGION_DELTA,
+            longitudeDelta: REGION_DELTA
+        } : null;
+
+        setMapRegion(region);
+        setSelectedTracker(tracker);
+        onSelectedTrackerChanged(tracker);
 
     };
 
@@ -170,8 +227,10 @@ const MapScreen = (props) => {
     };
 
     const onMarkerPress = (tracker) => {
-        if (!selectedTracker || selectedTracker.id != tracker.id)
+        if (!selectedTracker || selectedTracker.id != tracker.id) {
             setSelectedTracker(tracker);
+            onSelectedTrackerChanged(tracker);
+        }
     };
 
     const onRouteButtonPress = () => {
@@ -197,7 +256,8 @@ const MapScreen = (props) => {
     };
 
     const onRouteConfigConfirm = (timePeriod) => {
-        console.log(timePeriod);
+        routePeriodRef.current = timePeriod;
+        setLoadingRoute(true);
     };
 
     const onRouteConfigCancel = () => {
@@ -205,10 +265,17 @@ const MapScreen = (props) => {
         setRouteConfigVisible(false);
     };
 
-    // Render:
+    const onSelectedTrackerChanged = (tracker) => {
+        setRouteVisible(false);
+    };
+
+    //#endregion
+
+    //#region Render:
 
     return (
         <View style={styles.container}>
+
             <MapView
                 showsCompass={true}
                 loadingEnabled={true}
@@ -217,6 +284,7 @@ const MapScreen = (props) => {
                 maxZoomLevel={18}
                 onTouchStart={onMapTouch}
             >
+                {/* Markers */}
                 {
                     Object.keys(locationUpdates).map(key => {
                         const data = locationUpdates[key];
@@ -247,6 +315,27 @@ const MapScreen = (props) => {
                         );
                     })
                 }
+
+                {/* Route Start Marker */}
+                {routeVisible && route && (
+                    <Marker
+                        coordinate={{ latitude: route[0].latitude, longitude: route[0].longitude }}
+                    >
+                        <View style={styles.routeStart}>
+                            <Text style={styles.routeStartText}>S</Text>
+                        </View>
+                    </Marker>
+                )}
+
+                {/* Route */}
+                {routeVisible && route && (
+                    <Polyline
+                        coordinates={route}
+                        strokeColor={vars.COLOR_MAP_ROUTE}
+                        strokeWidth={4}
+                    />
+                )}
+
             </MapView>
 
             {/* Bottom Panel */}
@@ -274,11 +363,13 @@ const MapScreen = (props) => {
                 visible={routeConfigVisible}
                 onConfirmPress={onRouteConfigConfirm}
                 onBackdropPress={onRouteConfigCancel}
+                loading={loadingRoute}
             />
-
 
         </View>
     );
+
+    //#endregion
 
 };
 
@@ -301,6 +392,20 @@ const styles = StyleSheet.create({
     },
     callout: {
         minWidth: 200
+    },
+    routeStart: {
+        backgroundColor: vars.COLOR_GRAY,
+        width: 16,
+        height: 16,
+        borderRadius: 8,
+        justifyContent: 'center',
+        alignItems: 'center',
+        overflow: 'visible'
+    },
+    routeStartText: {
+        color: 'white',
+        fontSize: 12,
+        fontWeight: 'bold'
     }
 });
 

@@ -96,4 +96,12 @@ export default class TrackerService {
 
     }
 
+    static async getRoute(trackerId, period, token) {
+
+        const url = `${ApiSettings.BaseUrl}/trackers/${trackerId}/route/${period}`;
+        const resp = await http(token).get(url);
+        return { done: true, data: resp.data };
+
+    }
+
 }

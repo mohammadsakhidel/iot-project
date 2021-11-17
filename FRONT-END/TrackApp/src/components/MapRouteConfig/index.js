@@ -21,7 +21,8 @@ function MapRouteConfig(props) {
     const {
         visible,
         onConfirmPress,
-        onBackdropPress
+        onBackdropPress,
+        loading
     } = props;
 
     // Event Handlers:
@@ -53,6 +54,7 @@ function MapRouteConfig(props) {
                     onConfirmPress(selectedItem);
             }}
             onBackdropPress={onBackdropPress}
+            loading={loading}
         >
 
             <View style={styles.itemsContainer}>
@@ -85,7 +87,8 @@ const styles = StyleSheet.create({
 MapRouteConfig.propTypes = {
     visible: PropTypes.bool,
     onConfirmPress: PropTypes.func,
-    onBackdropPress: PropTypes.func
+    onBackdropPress: PropTypes.func,
+    loading: PropTypes.bool
 };
 
 export default MapRouteConfig;

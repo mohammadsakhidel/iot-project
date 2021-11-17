@@ -3,6 +3,7 @@ import React from 'react';
 import { StyleSheet } from 'react-native';
 import Button from '../Button';
 import * as vars from '../../styles/vars';
+import PropTypes, { bool } from 'prop-types';
 
 export default function PrimaryButton(props) {
 
@@ -79,3 +80,13 @@ const styles = StyleSheet.create({
         backgroundColor: vars.COLOR_PRIMARY_D1
     }
 });
+
+PrimaryButton.propTypes = {
+    icon: PropTypes.string,
+    title: PropTypes.string,
+    disabled: PropTypes.bool,
+    isLoading: PropTypes.bool,
+    iconRight: PropTypes.any,
+    style: PropTypes.object,
+    iconStyle: PropTypes.object
+};

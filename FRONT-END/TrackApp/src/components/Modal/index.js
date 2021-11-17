@@ -17,6 +17,7 @@ export default function Modal(props) {
         visible,
         onConfirmPress,
         onBackdropPress,
+        loading,
         ...rest
     } = props;
 
@@ -38,6 +39,8 @@ export default function Modal(props) {
                     <PrimaryButton
                         title={Strings.Confirm}
                         onPress={onConfirmPress}
+                        isLoading={loading}
+                        disabled={loading}
                     />
                 </View>
             </View>
@@ -65,5 +68,6 @@ Modal.propTypes = {
     title: PropTypes.string,
     visible: PropTypes.bool,
     onConfirmPress: PropTypes.func,
-    onBackdropPress: PropTypes.func
+    onBackdropPress: PropTypes.func,
+    loading: PropTypes.bool
 };
