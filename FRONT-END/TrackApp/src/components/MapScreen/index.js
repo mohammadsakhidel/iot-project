@@ -11,6 +11,9 @@ import Location from '../../helpers/location';
 import MapBottomPanel from '../MapBottomPanel';
 import MapToolBox from '../MapToolBox';
 import Modal from '../Modal';
+import { Strings } from '../../i18n/strings';
+import MapRouteConfig from '../MapRouteConfig';
+
 
 const REGION_DELTA = 0.004;
 const ANIM_DELAY = 300;
@@ -23,7 +26,7 @@ const MapScreen = (props) => {
     const [mapRegion, setMapRegion] = useState(null);
     const [mapTouched, setMapTouched] = useState(false);
     const [routeVisible, setRouteVisible] = useState(false);
-    const [routeConfig, setRouteConfig] = useState({ beginDate: null, endDate: null });
+    const [routeConfig, setRouteConfig] = useState({ begin: null, end: null });
     const [routeConfigVisible, setRouteConfigVisible] = useState(false);
 
     // Props:
@@ -34,6 +37,20 @@ const MapScreen = (props) => {
         updateLocation,
         connections
     } = props;
+
+    // Functions:
+
+    const isTrackerOnline = (trackerId, trackers, connections) => {
+
+        if (!trackers || !connections)
+            return false;
+
+        const con = connections ? connections[trackerId] : null;
+        const tracker = trackers ? trackers.find(t => t.id == trackerId) : null;
+        const isonline = (con && con.status === "online") || (!con && tracker && tracker.status === "online");
+
+        return isonline;
+    };
 
     // Refs:
 
@@ -111,11 +128,19 @@ const MapScreen = (props) => {
     // Toggle route visibility effect:
     useEffect(() => {
         if (routeVisible) {
-            setRouteConfigVisible(true);
+            if (selectedTracker) {
+                setRouteConfigVisible(true);
+            } else {
+                Alert.alert(
+                    Strings.SelectADevice,
+                    Strings.NoTrackerSelectedMessage
+                );
+                setRouteVisible(false);
+            }
         } else {
             setRouteConfig({
-                beginDate: null,
-                endDate: null
+                begin: null,
+                end: null
             });
         }
     }, [routeVisible]);
@@ -171,18 +196,13 @@ const MapScreen = (props) => {
         }
     };
 
-    // Functions:
+    const onRouteConfigConfirm = (timePeriod) => {
+        console.log(timePeriod);
+    };
 
-    const isTrackerOnline = (trackerId, trackers, connections) => {
-
-        if (!trackers || !connections)
-            return false;
-
-        const con = connections ? connections[trackerId] : null;
-        const tracker = trackers ? trackers.find(t => t.id == trackerId) : null;
-        const isonline = (con && con.status === "online") || (!con && tracker && tracker.status === "online");
-
-        return isonline;
+    const onRouteConfigCancel = () => {
+        setRouteVisible(false);
+        setRouteConfigVisible(false);
     };
 
     // Render:
@@ -250,14 +270,11 @@ const MapScreen = (props) => {
 
             {/* Route Config Modal */}
 
-            <Modal
+            <MapRouteConfig
                 visible={routeConfigVisible}
-                title="Route Config"
-                onConfirmPress={() => { }}
-            >
-
-
-            </Modal>
+                onConfirmPress={onRouteConfigConfirm}
+                onBackdropPress={onRouteConfigCancel}
+            />
 
 
         </View>

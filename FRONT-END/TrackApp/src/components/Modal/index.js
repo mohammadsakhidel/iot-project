@@ -16,12 +16,14 @@ export default function Modal(props) {
         title,
         visible,
         onConfirmPress,
+        onBackdropPress,
         ...rest
     } = props;
 
     return (
         <Overlay visible={visible}
             overlayStyle={styles.overlay}
+            onBackdropPress={onBackdropPress}
             {...rest}
         >
 
@@ -62,5 +64,6 @@ const styles = StyleSheet.create({
 Modal.propTypes = {
     title: PropTypes.string,
     visible: PropTypes.bool,
-    onConfirmPress: PropTypes.func
+    onConfirmPress: PropTypes.func,
+    onBackdropPress: PropTypes.func
 };
