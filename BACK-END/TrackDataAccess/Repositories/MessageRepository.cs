@@ -12,5 +12,13 @@ namespace TrackDataAccess.Repositories {
     public class MessageRepository : Repository<Message>, IMessageRepository {
         public MessageRepository(TrackDbContext context) : base(context) {
         }
+
+        public List<GpsTrackerMessage> GetLocationMessages(string trackerId, DateTime start) {
+            return Context.Set<Message>()
+                .OfType<GpsTrackerMessage>()
+                .Where(m => m.TrackerId == trackerId && m.CreationTime > start)
+                .OrderBy(m => m.CreationTime)
+                .ToList();
+        }
     }
 }

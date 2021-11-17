@@ -8,5 +8,8 @@ using TrackDataAccess.Repositories.Base;
 
 namespace TrackDataAccess.Repositories {
     public interface IMessageRepository : IRepository<Message> {
+
+        public List<GpsTrackerMessage> GetLocationMessages(string trackerId, DateTime start);
+
     }
 }

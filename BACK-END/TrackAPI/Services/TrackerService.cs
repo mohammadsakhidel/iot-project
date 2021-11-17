@@ -200,7 +200,7 @@ namespace TrackAPI.Services {
         }
 
         public async Task<TrackerModel> FindBySerialAsync(string serialNumber) {
-            var tracker = await Task.Run(() => { 
+            var tracker = await Task.Run(() => {
                 return _trackerRepository.Filter(t => t.SerialNumber == serialNumber).FirstOrDefault();
             });
             if (tracker == null)
@@ -210,7 +210,7 @@ namespace TrackAPI.Services {
         }
 
         public async Task AddPermittedUser(TrackerPermittedUserModel model) {
-            
+
             await _trackerRepository.AddPermittedUser(model.TrackerId, model.UserId, model.Permissions);
 
         }
@@ -224,10 +224,10 @@ namespace TrackAPI.Services {
         public async Task<List<TrackerPermittedUserModel>> GetPermittedUsersAsync(string trackerId) {
             var tracker = await _trackerRepository.GetWithIncludeAsync(trackerId);
             return tracker.PermittedUsers
-                .Select(item => new TrackerPermittedUserModel { 
+                .Select(item => new TrackerPermittedUserModel {
                     Permissions = item.Permissions,
                     User = UserService.MapEntityToModel(
-                        item.User, 
+                        item.User,
                         item.User.Claims.Select(c => new System.Security.Claims.Claim(c.ClaimType, c.ClaimValue)),
                         true
                     )
@@ -245,6 +245,18 @@ namespace TrackAPI.Services {
             await _trackerRepository.SaveAsync();
 
             return (true, string.Empty);
+
+        }
+
+        public async Task<List<GpsTrackerMessageModel>> GetLocationMessagesAsync(string trackerId, DateTime? startDate) {
+
+            var datetime = startDate ?? DateTime.UtcNow.AddHours(-1);
+            var messages = await Task.Run(() => {
+                return _messageRepository.GetLocationMessages(trackerId, datetime);
+            });
+
+            var models = messages.Select(r => _mapper.Map<GpsTrackerMessageModel>(r)).ToList();
+            return models;
 
         }
     }

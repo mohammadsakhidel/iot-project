@@ -146,7 +146,7 @@ namespace TrackAPI.Controllers {
                     return BadRequest("User is not tracker's owner.");
 
                 var permittedUsers = await _trackerService.GetPermittedUsersAsync(trackerId);
-                
+
                 return Ok(permittedUsers.ToArray());
 
 
@@ -165,7 +165,38 @@ namespace TrackAPI.Controllers {
                     return NotFound("Invalid tracker ID");
 
                 return Ok(tracker.GetConfigsDic());
-                
+
+
+            } catch (Exception ex) {
+                return ex.GetActionResult();
+            }
+        }
+
+        [HttpGet("{trackerId}/route/{period}")]
+        [Authorize]
+        public async Task<IActionResult> GetRoute(string trackerId, string period) {
+            try {
+
+                var tracker = await _trackerService.GetAsync(trackerId);
+                if (tracker == null)
+                    return NotFound();
+
+                var now = DateTime.UtcNow;
+                var start = period switch {
+                    "h" => now.AddHours(-1),
+                    "d" => now.AddHours(-24),
+                    "w" => now.AddDays(-7),
+                    "m" => now.AddDays(-30),
+                    _ => now.AddHours(-1)
+                };
+
+                var messages = await _trackerService.GetLocationMessagesAsync(trackerId, start);
+                var select = messages.Select(m => new {
+                    m.Latitude,
+                    m.Longitude
+                });
+
+                return Ok(select);
 
             } catch (Exception ex) {
                 return ex.GetActionResult();

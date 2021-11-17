@@ -21,5 +21,6 @@ namespace TrackAPI.Services {
         Task RemovePermittedUser(string trackerId, string userId);
         Task<List<TrackerPermittedUserModel>> GetPermittedUsersAsync(string trackerId);
         Task<(bool, string)> SaveConfigsAsync(string trackerId, string configsJson);
+        Task<List<GpsTrackerMessageModel>> GetLocationMessagesAsync(string trackerId, DateTime? startDate);
     }
 }
