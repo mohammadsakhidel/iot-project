@@ -44,7 +44,7 @@ export default function TimePicker(props) {
             wheelProps={{
                 containerStyle: {...styles.wheelContainer, ...wheelContainerStyle},
                 textStyle: {...styles.wheelText, ...wheelTextStyle},
-                itemHeight: wheelProps.itemHeight ?? 40,
+                itemHeight: wheelProps?.itemHeight ?? 40,
                 displayCount: 3,
                 disabledColor: vars.COLOR_GRAY_L3
             }}
