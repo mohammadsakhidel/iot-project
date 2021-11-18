@@ -1,6 +1,6 @@
 import Icon from '../Icon';
 import React from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, ViewPropTypes } from 'react-native';
 import Button from '../Button';
 import * as vars from '../../styles/vars';
 import PropTypes, { bool } from 'prop-types';
@@ -15,6 +15,7 @@ export default function PrimaryButton(props) {
         iconRight,
         style,
         iconStyle,
+        disabledStyle,
         ...rest
     } = props;
 
@@ -45,7 +46,7 @@ export default function PrimaryButton(props) {
             loading={isLoading}
             disabled={disabled}
             buttonStyle={{ ...styles.button, ...style }}
-            disabledStyle={styles.disabledButton}
+            disabledStyle={disabledStyle ?? styles.disabledButton}
             iconRight={iconRight}
             {...rest}
         />
@@ -88,5 +89,6 @@ PrimaryButton.propTypes = {
     isLoading: PropTypes.bool,
     iconRight: PropTypes.any,
     style: PropTypes.object,
-    iconStyle: PropTypes.object
+    iconStyle: PropTypes.object,
+    disabledStyle: ViewPropTypes.style
 };

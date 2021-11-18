@@ -23,6 +23,10 @@ export const secondaryButton = {
     backgroundColor: vars.COLOR_GRAY_L1
 };
 
+export const secondaryButtonDisabled = {
+    backgroundColor: vars.COLOR_GRAY_L2
+};
+
 export const linkButton = {
     color: vars.COLOR_LINK,
     textDecorationStyle: 'solid',

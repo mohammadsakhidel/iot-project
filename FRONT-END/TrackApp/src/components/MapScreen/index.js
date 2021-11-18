@@ -354,6 +354,18 @@ const MapScreen = (props) => {
         }, 100);
 
     };
+
+    const onFenceCancelPress = () => {
+        setFence(null);
+    };
+
+    const onFenceSavePress = async () => {
+        await new Promise((resolve, reject) => {
+            setTimeout(() => {
+                resolve(123);
+            }, 5000);
+        });
+    };
     //#endregion
 
     //#region Render:
@@ -449,13 +461,28 @@ const MapScreen = (props) => {
 
             {/* Bottom Panel */}
 
-            <MapBottomPanel
-                containerStyle={styles.bottomPanel}
-                locationUpdates={locationUpdates}
-                trackers={trackers}
-                selectedTracker={selectedTracker}
-                onItemPress={onItemPress}
-            />
+            <View style={styles.bottomPanelContainer}>
+
+                {/* Save & Cancel Panel */}
+                {fencingEnabled && fence && fence.length >= 3 && (
+                    <MapSavingPanel
+                        visible={true}
+                        ready={true}
+                        saveTitle={Strings.SaveFence}
+                        cancelTitle={Strings.Clear}
+                        onSaveFunc={onFenceSavePress}
+                        onCancelFunc={onFenceCancelPress}
+                    />
+                )}
+
+                <MapBottomPanel
+                    containerStyle={styles.bottomPanel}
+                    locationUpdates={locationUpdates}
+                    trackers={trackers}
+                    selectedTracker={selectedTracker}
+                    onItemPress={onItemPress}
+                />
+            </View>
 
             {/* Tool Box */}
 
@@ -466,16 +493,6 @@ const MapScreen = (props) => {
                 routeSelected={routeVisible}
                 polygonSelected={fencingEnabled}
             />
-
-            {/* Save & Cancel Panel
-            {fencingEnabled && fence && fence.length >= 3 && (
-                <MapSavingPanel
-                    visible={true}
-                    ready={true}
-                    onSavePress={() => { }}
-                    onCancelPress={() => { }}
-                />
-            )} */}
 
             {/* Route Config Modal */}
 
@@ -501,14 +518,16 @@ const styles = StyleSheet.create({
         flex: 1,
         width: Dimensions.get('window').width,
     },
-    bottomPanel: {
-        backgroundColor: 'rgba(255,255,255,0.75)',
-        paddingTop: vars.PAD_NORMAL,
-        paddingStart: vars.PAD_NORMAL,
+    bottomPanelContainer: {
         position: 'absolute',
         bottom: 0,
         left: 0,
         right: 0
+    },
+    bottomPanel: {
+        backgroundColor: 'rgba(255,255,255,0.75)',
+        paddingTop: vars.PAD_NORMAL,
+        paddingStart: vars.PAD_NORMAL
     },
     callout: {
         minWidth: 200
