@@ -15,5 +15,6 @@ namespace TrackAPI.Constants {
         public const string LZ = "lz";
         public const string REMINDER = "reminder";
         public const string SILENCE = "silence";
+        public const string FENCE = "fence";
     }
 }

@@ -261,6 +261,28 @@ namespace TrackAPI.Controllers {
                 return ex.GetActionResult();
             }
         }
+
+        [HttpPost("fence")]
+        [Authorize]
+        public async Task<IActionResult> CreateFence(CreateFenceModel model) {
+            try {
+
+                // Validate Tracker & User IDs:
+                var tracker = await _trackerService.GetAsync(model.TrackerId);
+                if (tracker == null)
+                    return BadRequest("Invalid tracker Id.");
+
+                // Save Fence Data to Config field:
+                var configs = tracker.GetConfigsDic();
+                configs[TrackerConfigFields.FENCE] = model.FenceData;
+                await _trackerService.SaveConfigsAsync(model.TrackerId, JsonSerializer.Serialize(configs));
+
+                return Ok();
+
+            } catch (Exception ex) {
+                return ex.GetActionResult();
+            }
+        }
         #endregion
 
         #region -------------- PUT ACTIONS ----------------
