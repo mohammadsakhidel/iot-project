@@ -17,6 +17,7 @@ import { showError, getErrorMessage } from '../FlashMessageWrapper';
 import TrackerService from '../../api/services/tracker-service';
 import AppContext from '../../helpers/app-context';
 import { getRandom } from '../../utils/text-util';
+import MapSavingPanel from '../MapSavingPanel';
 
 
 const REGION_DELTA = 0.004;
@@ -71,6 +72,7 @@ const MapScreen = (props) => {
     const mapRef = useRef(null);
     const selectedMarkerRef = useRef(null);
     const routePeriodRef = useRef(null);
+    const fenceMarkerDragTimeoutRef = useRef(null);
 
     //#endregion
 
@@ -324,6 +326,9 @@ const MapScreen = (props) => {
 
     const onFenceMarkerDrag = (event) => {
 
+        if (fenceMarkerDragTimeoutRef.current)
+            clearTimeout(fenceMarkerDragTimeoutRef.current);
+
         // Get Coordinates:
         const coords = event.nativeEvent.coordinate;
         if (!coords)
@@ -334,17 +339,20 @@ const MapScreen = (props) => {
         if (!id)
             return;
 
-        // Update fence data:
-        const index = fence.findIndex((point) => point.id == id);
-        const newFence = [...fence];
-        const point = newFence[index];
-        newFence[index] = {
-            ...point,
-            latitude: coords.latitude,
-            longitude: coords.longitude
-        };
+        fenceMarkerDragTimeoutRef.current = setTimeout(() => {
+            // Update fence data:
+            const index = fence.findIndex((point) => point.id == id);
+            const newFence = [...fence];
+            const point = newFence[index];
+            newFence[index] = {
+                ...point,
+                latitude: coords.latitude,
+                longitude: coords.longitude
+            };
 
-        setFence(newFence);
+            setFence(newFence);
+        }, 100);
+
     };
     //#endregion
 
@@ -458,6 +466,16 @@ const MapScreen = (props) => {
                 routeSelected={routeVisible}
                 polygonSelected={fencingEnabled}
             />
+
+            {/* Save & Cancel Panel
+            {fencingEnabled && fence && fence.length >= 3 && (
+                <MapSavingPanel
+                    visible={true}
+                    ready={true}
+                    onSavePress={() => { }}
+                    onCancelPress={() => { }}
+                />
+            )} */}
 
             {/* Route Config Modal */}
 
