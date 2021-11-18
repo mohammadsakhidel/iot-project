@@ -9,9 +9,10 @@ function MapToolBox(props) {
 
     const {
         onRoutePress,
-        onPolyganPress,
+        onPolygonPress,
         onFitAllPress,
-        routeSelected
+        routeSelected,
+        polygonSelected
     } = props;
 
     return (
@@ -29,7 +30,8 @@ function MapToolBox(props) {
                 icon={
                     <Icon name="draw-polygon" color={vars.COLOR_SECONDARY_L1} />
                 }
-                onPress={onPolyganPress}
+                onPress={onPolygonPress}
+                selected={polygonSelected}
             />
 
             <MapButton
@@ -53,9 +55,10 @@ const styles = StyleSheet.create({
 
 MapToolBox.propTypes = {
     onRoutePress: PropTypes.func,
-    onPolyganPress: PropTypes.func,
+    onPolygonPress: PropTypes.func,
     onFitAllPress: PropTypes.func,
-    routeSelected: PropTypes.bool
+    routeSelected: PropTypes.bool,
+    polygonSelected: PropTypes.bool
 };
 
 export default MapToolBox;

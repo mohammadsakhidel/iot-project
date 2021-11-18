@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef, useContext } from 'react';
 import { View, Dimensions, StyleSheet, Alert, Text } from 'react-native';
-import MapView, { Marker, Callout, Polyline } from 'react-native-maps';
+import MapView, { Marker, Callout, Polyline, Polygon } from 'react-native-maps';
 import { connect } from 'react-redux';
 import * as vars from '../../styles/vars';
 import TrackerMarker from '../TrackerMarker';
@@ -16,6 +16,7 @@ import MapRouteConfig from '../MapRouteConfig';
 import { showError, getErrorMessage } from '../FlashMessageWrapper';
 import TrackerService from '../../api/services/tracker-service';
 import AppContext from '../../helpers/app-context';
+import { getRandom } from '../../utils/text-util';
 
 
 const REGION_DELTA = 0.004;
@@ -32,6 +33,8 @@ const MapScreen = (props) => {
     const [routeConfigVisible, setRouteConfigVisible] = useState(false);
     const [loadingRoute, setLoadingRoute] = useState(false);
     const [route, setRoute] = useState(null);
+    const [fencingEnabled, setFencingEnabled] = useState(false);
+    const [fence, setFence] = useState(null);
 
     //#endregion
 
@@ -163,16 +166,6 @@ const MapScreen = (props) => {
             return;
         }
 
-        // Is a device selected?
-        if (!selectedTracker) {
-            setRouteVisible(false);
-            Alert.alert(
-                Strings.SelectADevice,
-                Strings.NoTrackerSelectedMessage
-            );
-            return;
-        }
-
         // show route config dialog:
         setRouteConfigVisible(true);
 
@@ -193,6 +186,17 @@ const MapScreen = (props) => {
 
         }
     }, [loadingRoute]);
+
+    // Fencing enabled effect:
+    useEffect(() => {
+
+        // Disable fencing:
+        if (!fencingEnabled) {
+            setFence(null);
+            return;
+        }
+
+    }, [fencingEnabled]);
 
     //#endregion
 
@@ -234,11 +238,42 @@ const MapScreen = (props) => {
     };
 
     const onRouteButtonPress = () => {
+
+        // Is a device selected?
+        if (!selectedTracker) {
+            Alert.alert(
+                Strings.SelectADevice,
+                Strings.NoTrackerSelectedMessage
+            );
+            return;
+        }
+
+        // Disable fencing:
+        if (fencingEnabled)
+            setFencingEnabled(false);
+
+        // Enable route:
         setRouteVisible(!routeVisible);
     };
 
-    const onPolyganButtonPress = () => {
-        Alert.alert('polygan');
+    const onPolygonButtonPress = () => {
+
+        // Is a device selected?
+        if (!selectedTracker) {
+            Alert.alert(
+                Strings.SelectADevice,
+                Strings.NoTrackerSelectedMessage
+            );
+            return;
+        }
+
+        // Disable route if already visible:
+        if (routeVisible)
+            setRouteVisible(false);
+
+        // Enable fencing:
+        setFencingEnabled(!fencingEnabled);
+
     };
 
     const onFitAllPress = () => {
@@ -267,8 +302,50 @@ const MapScreen = (props) => {
 
     const onSelectedTrackerChanged = (tracker) => {
         setRouteVisible(false);
+        setFencingEnabled(false);
     };
 
+    const onMapLongPress = (event) => {
+
+        if (fencingEnabled) {
+            const { coordinate } = event.nativeEvent;
+            const newFence = fence ? [...fence] : [];
+
+            newFence.push({
+                id: getRandom(10),
+                latitude: coordinate.latitude,
+                longitude: coordinate.longitude
+            });
+
+            setFence(newFence);
+        }
+
+    };
+
+    const onFenceMarkerDrag = (event) => {
+
+        // Get Coordinates:
+        const coords = event.nativeEvent.coordinate;
+        if (!coords)
+            return;
+
+        // Find Marker Id:
+        const id = event._targetInst.return.key;
+        if (!id)
+            return;
+
+        // Update fence data:
+        const index = fence.findIndex((point) => point.id == id);
+        const newFence = [...fence];
+        const point = newFence[index];
+        newFence[index] = {
+            ...point,
+            latitude: coords.latitude,
+            longitude: coords.longitude
+        };
+
+        setFence(newFence);
+    };
     //#endregion
 
     //#region Render:
@@ -283,6 +360,7 @@ const MapScreen = (props) => {
                 ref={mapRef}
                 maxZoomLevel={18}
                 onTouchStart={onMapTouch}
+                onLongPress={onMapLongPress}
             >
                 {/* Markers */}
                 {
@@ -336,6 +414,29 @@ const MapScreen = (props) => {
                     />
                 )}
 
+                {/* Fence Markers */}
+                {fencingEnabled && fence && fence.length > 0 && (
+                    fence.map((point) => (
+                        <Marker
+                            key={point.id}
+                            identifier={point.id}
+                            coordinate={{
+                                latitude: point.latitude,
+                                longitude: point.longitude
+                            }}
+                            draggable
+                            onDrag={onFenceMarkerDrag}
+                        />
+                    ))
+                )}
+
+                {/* Fence Polygon */}
+                {fencingEnabled && fence && fence.length > 0 && (
+                    <Polygon
+                        coordinates={fence}
+                    />
+                )}
+
             </MapView>
 
             {/* Bottom Panel */}
@@ -352,9 +453,10 @@ const MapScreen = (props) => {
 
             <MapToolBox
                 onRoutePress={onRouteButtonPress}
-                onPolyganPress={onPolyganButtonPress}
+                onPolygonPress={onPolygonButtonPress}
                 onFitAllPress={onFitAllPress}
                 routeSelected={routeVisible}
+                polygonSelected={fencingEnabled}
             />
 
             {/* Route Config Modal */}
