@@ -36,6 +36,7 @@ const MapScreen = (props) => {
     const [route, setRoute] = useState(null);
     const [fencingEnabled, setFencingEnabled] = useState(false);
     const [fence, setFence] = useState(null);
+    const [fenceHasUnsavedChanges, setFenceHasUnsavedChanges] = useState(false);
 
     //#endregion
 
@@ -320,6 +321,7 @@ const MapScreen = (props) => {
             });
 
             setFence(newFence);
+            setFenceHasUnsavedChanges(true);
         }
 
     };
@@ -351,20 +353,50 @@ const MapScreen = (props) => {
             };
 
             setFence(newFence);
+            setFenceHasUnsavedChanges(true);
         }, 100);
 
     };
 
-    const onFenceCancelPress = () => {
-        setFence(null);
+    const onFenceCancelPress = async () => {
+        try {
+
+            const dto = {
+                trackerId: selectedTracker.id,
+                fenceData: ''
+            };
+            const response = await TrackerService.createFence(dto, context.user.token);
+
+            if (response && response.done) {
+                setFence(null);
+                setFenceHasUnsavedChanges(false);
+            }
+
+        } catch (e) {
+            showError(getErrorMessage(e));
+        }
     };
 
     const onFenceSavePress = async () => {
-        await new Promise((resolve, reject) => {
-            setTimeout(() => {
-                resolve(123);
-            }, 5000);
-        });
+        try {
+
+            const fenceData = fence
+                .map(point => `${point.latitude},${point.longitude}`)
+                .join(';');
+
+            const dto = {
+                trackerId: selectedTracker.id,
+                fenceData: fenceData
+            };
+            const response = await TrackerService.createFence(dto, context.user.token);
+
+            if (response && response.done) {
+                setFenceHasUnsavedChanges(false);
+            }
+
+        } catch (e) {
+            showError(getErrorMessage(e));
+        }
     };
     //#endregion
 
@@ -464,14 +496,15 @@ const MapScreen = (props) => {
             <View style={styles.bottomPanelContainer}>
 
                 {/* Save & Cancel Panel */}
-                {fencingEnabled && fence && fence.length >= 3 && (
+                {fencingEnabled && fenceHasUnsavedChanges && fence && fence.length > 2 && (
                     <MapSavingPanel
                         visible={true}
                         ready={true}
                         saveTitle={Strings.SaveFence}
-                        cancelTitle={Strings.Clear}
                         onSaveFunc={onFenceSavePress}
+                        cancelTitle={Strings.RemoveFence}
                         onCancelFunc={onFenceCancelPress}
+                        cancelIcon="trash"
                     />
                 )}
 

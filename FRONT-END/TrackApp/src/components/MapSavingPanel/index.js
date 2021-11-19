@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { StyleSheet, View } from 'react-native';
 import PrimaryButton from '../PrimaryButton';
@@ -11,6 +11,7 @@ function MapSavingPanel(props) {
     // State:
 
     const [saving, setSaving] = useState(false);
+    const [cancelling, setCancelling] = useState(false);
 
     // Props:
 
@@ -19,9 +20,20 @@ function MapSavingPanel(props) {
         cancelTitle,
         onCancelFunc,
         onSaveFunc,
+        cancelIcon
     } = props;
 
+    // Refs:
+
+    const mountedRef = useRef(true);
+
     // Effects:
+
+    useEffect(() => {
+        return () => {
+            mountedRef.current = false;
+        };
+    }, []);
 
     useEffect(() => {
 
@@ -32,17 +44,41 @@ function MapSavingPanel(props) {
             (async function () {
 
                 await onSaveFunc();
-                setSaving(false);
+
+                if (mountedRef.current)
+                    setSaving(false);
 
             })();
         }
 
     }, [saving]);
 
+    useEffect(() => {
+
+        if (!cancelling)
+            return;
+
+        if (onCancelFunc) {
+            (async function () {
+
+                await onCancelFunc();
+
+                if (mountedRef.current)
+                    setCancelling(false);
+
+            })();
+        }
+
+    }, [cancelling]);
+
     // Event Handlers:
 
     const onSaveButtonPress = () => {
         setSaving(true);
+    };
+
+    const onCancelButtonPress = () => {
+        setCancelling(true);
     };
 
     // Render:
@@ -52,10 +88,11 @@ function MapSavingPanel(props) {
             <View style={styles.cancelContainer}>
                 <PrimaryButton
                     title={cancelTitle ?? Strings.Cancel}
-                    icon="times"
+                    icon={(cancelIcon ?? "times")}
                     style={GlobalStyles.secondaryButton}
-                    disabled={saving}
-                    onPress={onCancelFunc}
+                    isLoading={cancelling}
+                    disabled={saving || cancelling}
+                    onPress={onCancelButtonPress}
                     disabledStyle={GlobalStyles.secondaryButtonDisabled}
                 />
             </View>
@@ -64,7 +101,7 @@ function MapSavingPanel(props) {
                     icon="save"
                     title={saveTitle ?? Strings.Save}
                     isLoading={saving}
-                    disabled={saving}
+                    disabled={saving || cancelling}
                     onPress={onSaveButtonPress}
                 />
             </View>
@@ -95,7 +132,8 @@ MapSavingPanel.propTypes = {
     saveTitle: PropTypes.string,
     onSaveFunc: PropTypes.func,
     cancelTitle: PropTypes.string,
-    onCancelFunc: PropTypes.func
+    onCancelFunc: PropTypes.func,
+    cancelIcon: PropTypes.string
 };
 
 export default MapSavingPanel;

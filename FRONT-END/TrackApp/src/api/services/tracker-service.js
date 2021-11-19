@@ -104,4 +104,13 @@ export default class TrackerService {
 
     }
 
+    static async createFence(dto, token) {
+
+        const url = `${ApiSettings.BaseUrl}/trackers/fence`;
+        const resp = await http(token).post(url, dto);
+        
+        return { done: true, data: resp.data };
+
+    }
+
 }
