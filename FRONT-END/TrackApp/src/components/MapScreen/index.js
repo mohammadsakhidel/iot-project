@@ -246,7 +246,14 @@ const MapScreen = (props) => {
 
         setTimeout(() => {
             const markers = [...parsedFence.map(f => f.id), selectedTracker.id];
-            mapRef.current?.fitToSuppliedMarkers(markers);
+            mapRef.current?.fitToSuppliedMarkers(markers, {
+                edgePadding: {
+                    top: vars.PAD_TRIPPLE,
+                    left: vars.PAD_TRIPPLE,
+                    right: vars.PAD_TRIPPLE,
+                    bottom: vars.PAD_TRIPPLE
+                }
+            });
         }, 250);
 
     }, [fencingEnabled]);
@@ -331,13 +338,16 @@ const MapScreen = (props) => {
 
     const onFitAllPress = () => {
         if (mapRef.current) {
-            const markers = Object.keys(locationUpdates);
+            let markers = Object.keys(locationUpdates);
+            if (fencingEnabled && fence)
+                markers = markers.concat(fence.map(f => f.id));
+
             mapRef.current?.fitToSuppliedMarkers(markers, {
                 edgePadding: {
-                    top: vars.PAD_DOUBLE,
-                    left: vars.PAD_DOUBLE,
-                    right: vars.PAD_DOUBLE,
-                    bottom: vars.PAD_DOUBLE
+                    top: vars.PAD_TRIPPLE,
+                    left: vars.PAD_TRIPPLE,
+                    right: vars.PAD_TRIPPLE,
+                    bottom: vars.PAD_TRIPPLE
                 }
             });
         }
