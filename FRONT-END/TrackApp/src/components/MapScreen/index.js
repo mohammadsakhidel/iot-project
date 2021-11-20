@@ -65,6 +65,40 @@ const MapScreen = (props) => {
         return isonline;
     };
 
+    const updateConfigsFence = (fenceData) => {
+
+        if (!selectedTracker)
+            return;
+
+        // Get:
+        const configs = JSON.parse(selectedTracker.configs);
+
+        // Update:
+        configs.fence = fenceData;
+
+        // Set:
+        selectedTracker.configs = JSON.stringify(configs);
+
+    }
+
+    const parseFenceData = (fenceDataString) => {
+
+        if (!fenceDataString)
+            return [];
+
+        const points = [];
+        fenceDataString.split(';').forEach(pointString => {
+            const splittedPoint = pointString.split(',');
+            points.push({
+                id: getRandom(10),
+                latitude: Number(splittedPoint[0]),
+                longitude: Number(splittedPoint[1])
+            });
+        });
+
+        return points;
+    };
+
     //#endregion
 
     //#region Refs & Contexts:
@@ -198,6 +232,17 @@ const MapScreen = (props) => {
             setFence(null);
             return;
         }
+
+        // Load Fence from selected tracker's configs:
+        if (!selectedTracker?.configs)
+            return;
+
+        const configs = JSON.parse(selectedTracker.configs);
+        if (!configs.fence)
+            return;
+
+        const parsedFence = parseFenceData(configs.fence);
+        setFence(parsedFence);
 
     }, [fencingEnabled]);
 
@@ -370,6 +415,7 @@ const MapScreen = (props) => {
             if (response && response.done) {
                 setFence(null);
                 setFenceHasUnsavedChanges(false);
+                updateConfigsFence('');
             }
 
         } catch (e) {
@@ -391,7 +437,11 @@ const MapScreen = (props) => {
             const response = await TrackerService.createFence(dto, context.user.token);
 
             if (response && response.done) {
+
                 setFenceHasUnsavedChanges(false);
+
+                updateConfigsFence(fenceData);
+
             }
 
         } catch (e) {
