@@ -5,13 +5,15 @@ import MapScreen from '../MapScreen';
 import NotificationsScreen from '../NotificationsScreen';
 import MessagesScreen from '../MessagesScreen';
 import Icon from '../Icon';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, ImageBackground, Image } from 'react-native';
 import Text from '../Text';
 import { Strings } from '../../i18n/strings';
 import * as vars from '../../styles/vars';
 import AppHeader from '../AppHeader';
+import { BottomTabBar } from '@react-navigation/bottom-tabs';
 
 const Tab = createBottomTabNavigator();
+const TAB_BAR_HEIGHT = 60;
 
 export default function HomeScreen(props) {
 
@@ -22,7 +24,7 @@ export default function HomeScreen(props) {
     });
     const getIconStyle = (focused, color) => ({
         color: color,
-        fontSize: (focused ? vars.ICO_BIT_SMALLER : vars.ICO_SMALL)
+        fontSize: (focused ? vars.ICO_NORMAL : vars.ICO_BIT_SMALLER)
     });
     const onHeaderLeftButtonPress = () => {
         props.navigation.openDrawer();
@@ -37,10 +39,25 @@ export default function HomeScreen(props) {
                 onLeftPress={onHeaderLeftButtonPress} />
 
             <Tab.Navigator backBehavior="none"
+                tabBar={(props) => {
+
+                    const bg = require('../../styles/images/bg.png');
+
+                    return (
+                        <ImageBackground
+                            source={bg}
+                            resizeMode="cover"
+                            style={{ flex: 1, maxHeight: TAB_BAR_HEIGHT }}>
+
+                            <BottomTabBar {...props} />
+
+                        </ImageBackground>
+                    );
+                }}
                 tabBarOptions={{
                     style: styles.tabBar,
                     activeTintColor: vars.COLOR_PRIMARY,
-                    inactiveTintColor: vars.COLOR_SECONDARY_LIGHTEST
+                    inactiveTintColor: vars.COLOR_SECONDARY_LIGHTEST,
                 }}
                 sceneContainerStyle={{
                     backgroundColor: vars.COLOR_GRAY_LIGHTEST
@@ -98,14 +115,19 @@ const styles = StyleSheet.create({
         flex: 1
     },
     tabBar: {
-        //height: 55,
-        paddingBottom: 2,
-        backgroundColor: vars.COLOR_SECONDARY,
+        height: TAB_BAR_HEIGHT,
+        backgroundColor: 'transparent',
         borderTopWidth: 5,
-        borderTopColor: vars.COLOR_SECONDARY_L1
+        borderTopColor: vars.COLOR_SECONDARY_D1,
+        position: 'absolute',
+        left: 0,
+        right: 0,
+        bottom: 0,
+        elevation: 0
     },
     tabLabel: {
         fontSize: vars.FS_BIT_SMALLER,
-        color: vars.COLOR_GRAY_LIGHTEST
+        color: vars.COLOR_GRAY_LIGHTEST,
+        paddingBottom: vars.PAD_SMALL
     }
 });
