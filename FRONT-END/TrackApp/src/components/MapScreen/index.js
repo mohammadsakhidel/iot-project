@@ -244,6 +244,11 @@ const MapScreen = (props) => {
         const parsedFence = parseFenceData(configs.fence);
         setFence(parsedFence);
 
+        setTimeout(() => {
+            const markers = [...parsedFence.map(f => f.id), selectedTracker.id];
+            mapRef.current?.fitToSuppliedMarkers(markers);
+        }, 250);
+
     }, [fencingEnabled]);
 
     //#endregion
